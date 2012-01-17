@@ -129,7 +129,7 @@ namespace Holoville.HOTween.Core
 			if ( t != -1 ) {
 				Vector3 pos = GetPoint( t );
 				Gizmos.color = Color.blue;
-//				Gizmos.DrawLine( pos, pos + Velocity( t ) );
+				Gizmos.DrawLine( pos, pos + Velocity( t ) );
 				if ( p_drawTrig ) {
 					Vector3 prevP;
 					Vector3 p = pos;
@@ -158,10 +158,6 @@ namespace Holoville.HOTween.Core
 					normal.Normalize();
 					Vector3 binormal = Vector3.Cross( tangent, normal );
 					binormal.Normalize();
-//					Vector3 binormal = Vector3.Cross( tangent, Vector3.up );
-//					binormal.Normalize();
-//					Vector3 normal = Vector3.Cross( binormal, tangent );
-//					normal.Normalize();
 					// Draw normal.
 					Gizmos.color = Color.black;
 					Gizmos.DrawLine( pos, pos + tangent );
@@ -169,33 +165,6 @@ namespace Holoville.HOTween.Core
 					Gizmos.DrawLine( pos, pos + normal );
 					Gizmos.color = Color.red;
 					Gizmos.DrawLine( pos, pos + binormal );
-					
-					// Addition - normal with given up vector.
-					Vector3 binormal2 = Vector3.Cross( tangent, Vector3.up );
-					binormal2.Normalize();
-					Vector3 normal2 = Vector3.Cross( binormal2, tangent );
-					normal2.Normalize();
-					
-					// Additional addition.
-					Vector3 normCross = Vector3.Cross( normal, normal2 );
-					normCross.Normalize();
-					Vector3 binCross = Vector3.Cross( binormal, binormal2 );
-					binCross.Normalize();
-					
-					binormal2 = Vector3.ClampMagnitude( binormal2, 0.75f );
-					normal2 = Vector3.ClampMagnitude( normal2, 0.75f );
-					normCross = Vector3.ClampMagnitude( binormal2, 0.5f );
-					binCross = Vector3.ClampMagnitude( normal2, 0.5f );
-					
-					Gizmos.color = Color.green;
-					Gizmos.DrawLine( pos, pos + normal2 );
-					Gizmos.color = Color.yellow;
-					Gizmos.DrawLine( pos, pos + binormal2 );
-					
-					Gizmos.color = Color.white;
-					Gizmos.DrawLine( pos, pos + normCross );
-					Gizmos.color = Color.cyan;
-					Gizmos.DrawLine( pos, pos + binCross );
 				}
 			}
 		}

@@ -185,8 +185,8 @@
             Controls all tween types (<see cref="T:Holoville.HOTween.Tweener"/> and <see cref="T:Holoville.HOTween.Sequence"/>),
             and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="T:Holoville.HOTween.Sequence"/> instead).
             <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-            <para>Version: 0.8.001</para>
-            <para>Last update: 2012/01/16</para>
+            <para>Version: 0.8.002</para>
+            <para>Last update: 2012/01/17</para>
             </summary>
         </member>
         <member name="F:Holoville.HOTween.HOTween.VERSION">
