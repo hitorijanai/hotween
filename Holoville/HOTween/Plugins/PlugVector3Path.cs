@@ -307,9 +307,6 @@ namespace Holoville.HOTween.Plugins
 						nextP = path.GetPoint( nextT );
 					}
 					orientTrans.LookAt ( nextP, orientTrans.up );
-					
-					
-					
 					break;
 				}
 			}
