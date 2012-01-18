@@ -62,7 +62,7 @@ namespace Holoville.HOTween.Core
 		public Vector3 GetPoint( float t )
 		{
 			int numSections = path.Length - 3;
-			int tSec = (int)Mathf.Floor( t * numSections );
+			int tSec = Mathf.FloorToInt( t * numSections );
 			int currPt = numSections - 1;
 			if ( currPt > tSec )		currPt = tSec;
 			float u = t * numSections - currPt;

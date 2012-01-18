@@ -296,8 +296,6 @@ namespace Holoville.HOTween.Plugins
 					}
 					break;
 				case OrientType.ToPath:
-					// FIXME world up doesn't work correctly.
-					
 					// Orient transform to path.
 					Vector3 nextP;
 					float nextT = pathPerc + lookAheadVal;
