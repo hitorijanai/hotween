@@ -71,6 +71,11 @@ namespace Holoville.HOTween.Plugins.Core
 		private		IMemberAccessor							valAccessor;
 		private		bool									wasStarted;
 		
+		// IOS-ONLY VARS //////////////////////////////////////////
+		
+		private		PropertyInfo							propInfo;
+		private		FieldInfo								fieldInfo;
+		
 		// REFERENCES /////////////////////////////////////////////
 		
 		/// <summary>
@@ -192,7 +197,12 @@ namespace Holoville.HOTween.Plugins.Core
 				ease = easeInfo.ease;
 			}
 			
-			if ( !ignoreAccessor )		valAccessor = MemberAccessorCacher.Make( p_targetType, p_propertyName, p_propertyInfo, p_fieldInfo );
+			if ( HOTween.isIOS ) {
+				propInfo = p_propertyInfo;
+				fieldInfo = p_fieldInfo;
+			} else {
+				if ( !ignoreAccessor )		valAccessor = MemberAccessorCacher.Make( p_targetType, p_propertyName, p_propertyInfo, p_fieldInfo );
+			}
 			startVal = GetValue();
 		}
 		
@@ -288,11 +298,29 @@ namespace Holoville.HOTween.Plugins.Core
 		/// </param>
 		virtual protected void SetValue( object p_value )
 		{
-			try {
-				valAccessor.Set( tweenObj.target, p_value );
-			} catch ( InvalidCastException ) {
-				// This happens only if a float is being assigned to an int.
-				valAccessor.Set( tweenObj.target, Convert.ToInt32( p_value ) ); // FIXME store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
+			if ( HOTween.isIOS ) {
+				if ( propInfo != null ) {
+					try {
+						propInfo.SetValue( tweenObj.target, p_value, null );
+					} catch ( InvalidCastException ) {
+						// This happens only if a float is being assigned to an int.
+						propInfo.SetValue( tweenObj.target, Convert.ToInt32( p_value ), null );
+					}
+				} else {
+					try {
+						fieldInfo.SetValue( tweenObj.target, p_value );
+					} catch ( InvalidCastException ) {
+						// This happens only if a float is being assigned to an int.
+						fieldInfo.SetValue( tweenObj.target, Convert.ToInt32( p_value ) );
+					}
+				}
+			} else {
+				try {
+					valAccessor.Set( tweenObj.target, p_value );
+				} catch ( InvalidCastException ) {
+					// This happens only if a float is being assigned to an int.
+					valAccessor.Set( tweenObj.target, Convert.ToInt32( p_value ) ); // FIXME store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
+				}
 			}
 		}
 		
@@ -302,6 +330,10 @@ namespace Holoville.HOTween.Plugins.Core
 		/// </summary>
 		virtual protected object GetValue()
 		{
+			if ( HOTween.isIOS ) {
+				if ( propInfo != null )		return propInfo.GetValue( tweenObj.target, null );
+				return fieldInfo.GetValue( tweenObj.target );
+			}
 			return valAccessor.Get( tweenObj.target );
 		}
 	}

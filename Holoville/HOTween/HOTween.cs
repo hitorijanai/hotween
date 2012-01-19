@@ -39,7 +39,7 @@ namespace Holoville.HOTween
 	/// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-	/// <para>Version: 0.8.004</para>
+	/// <para>Version: 0.8.005</para>
 	/// <para>Last update: 2012/01/19</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// HOTween version.
 		/// </summary>
-		public	const		string							VERSION = "0.8.004";
+		public	const		string							VERSION = "0.8.005";
 		/// <summary>
 		/// HOTween author - me! :P
 		/// </summary>
@@ -96,6 +96,13 @@ namespace Holoville.HOTween
 		static	public		WarningLevel					warningLevel = WarningLevel.Verbose;
 		
 		/// <summary>
+		/// <c>true</c> if the current player is iOS (iPhone).
+		/// Used so simple Reflection instead than unsupported MemberAccessorCacher will be applyed
+		/// (iOS doesn't support <c>Reflection.Emit</c>).
+		/// </summary>
+		static	internal	bool							isIOS;
+		
+		/// <summary>
 		/// Filled by tweens that are completed, so that their onCompleteDispatch method can be called AFTER HOTween has eventually removed them
 		/// (otherwise a Kill + To on the same target won't work).
 		/// This field is emptied as soon as all onCompletes are called.
@@ -140,7 +147,7 @@ namespace Holoville.HOTween
 			
 			initialized = true;
 			
-			// FIXME For now Init is useless: find a way to add something here or remove it.
+			isIOS = ( Application.platform == RuntimePlatform.IPhonePlayer );
 		}
 		
 		// ===================================================================================
