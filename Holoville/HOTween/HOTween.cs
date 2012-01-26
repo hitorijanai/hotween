@@ -39,8 +39,8 @@ namespace Holoville.HOTween
 	/// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-	/// <para>Version: 0.8.005</para>
-	/// <para>Last update: 2012/01/19</para>
+	/// <para>Version: 0.8.006</para>
+	/// <para>Last update: 2012/01/20</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
 	{
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// HOTween version.
 		/// </summary>
-		public	const		string							VERSION = "0.8.005";
+		public	const		string							VERSION = "0.8.006";
 		/// <summary>
 		/// HOTween author - me! :P
 		/// </summary>

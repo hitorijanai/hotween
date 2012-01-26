@@ -294,9 +294,6 @@ namespace Holoville.HOTween.Core
 		/// </summary>
 		public void Play()
 		{
-			Tweener thisTweener = ( this is Tweener ? this as Tweener : null );
-			if ( !_isReversed && _isComplete || _isReversed && _fullElapsed <= 0 && ( thisTweener == null || thisTweener.elapsedDelay >= thisTweener.delay ) )	return;
-			
 			bool wasPaused = _isPaused;
 			_isPaused = false;
 			if ( wasPaused )			OnPlay();

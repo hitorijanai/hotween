@@ -295,10 +295,11 @@ namespace Holoville.HOTween
 		/// </returns>
 		override internal bool Update( float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration )
 		{
-			if ( _destroyed )										return true;
-			if ( _isComplete && !_isReversed && !p_forceUpdate )	return true;
-			if ( items == null )									return true;
-			if ( _isPaused && !p_forceUpdate )						return false;
+			if ( _destroyed )											return true;
+			if ( items == null )										return true;
+			if ( _isComplete && !_isReversed && !p_forceUpdate )		return true;
+			if ( _fullElapsed == 0 && _isReversed && !p_forceUpdate )	return false;
+			if ( _isPaused && !p_forceUpdate )							return false;
 			
 			if ( !_isReversed ) {
 				_fullElapsed += p_shortElapsed;
@@ -343,11 +344,8 @@ namespace Holoville.HOTween
 			
 			// Manage eventual pause, complete, update, and stepComplete.
 			if ( !p_forceUpdate )						OnUpdate();
-			if ( _isComplete || _isReversed && _fullElapsed == 0 )
-				Pause();
 			if ( complete ) {
 				OnComplete();
-				Pause();
 			} else if ( stepComplete ) {
 				OnStepComplete();
 			}
@@ -399,10 +397,11 @@ namespace Holoville.HOTween
 				if ( item.twMember != null )				item.twMember.Rewind();
 			}
 			
-			if ( p_play )
+			if ( p_play ) {
 				Play();
-			else
+			} else {
 				Pause();
+			}
 		}
 		
 		/// <summary>

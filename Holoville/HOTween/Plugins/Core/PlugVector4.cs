@@ -112,6 +112,16 @@ namespace Holoville.HOTween.Plugins.Core
 		// METHODS ---------------------------------------------------------------------------
 		
 		/// <summary>
+		/// Returns the speed-based duration based on the given speed x second.
+		/// </summary>
+		override protected float GetSpeedBasedDuration( float p_speed )
+		{
+			float speedDur = changeVal.magnitude / p_speed;
+			if ( speedDur < 0 )		speedDur = -speedDur;
+			return speedDur;
+		}
+		
+		/// <summary>
 		/// Sets the typed changeVal based on the current startVal and endVal.
 		/// </summary>
 		override protected void SetChangeVal()
@@ -128,12 +138,12 @@ namespace Holoville.HOTween.Plugins.Core
 		/// <param name="p_totElapsed">
 		/// The total elapsed time since startup.
 		/// </param>
-		override protected internal void Update ( float p_totElapsed )
+		override protected void DoUpdate ( float p_totElapsed )
 		{
-			float x = ease( p_totElapsed, typedStartVal.x, changeVal.x, tweenObj.duration );
-			float y = ease( p_totElapsed, typedStartVal.y, changeVal.y, tweenObj.duration );
-			float z = ease( p_totElapsed, typedStartVal.z, changeVal.z, tweenObj.duration );
-			float w = ease( p_totElapsed, typedStartVal.w, changeVal.w, tweenObj.duration );
+			float x = ease( p_totElapsed, typedStartVal.x, changeVal.x, _duration );
+			float y = ease( p_totElapsed, typedStartVal.y, changeVal.y, _duration );
+			float z = ease( p_totElapsed, typedStartVal.z, changeVal.z, _duration );
+			float w = ease( p_totElapsed, typedStartVal.w, changeVal.w, _duration );
 			
 			SetValue( new Vector4( x, y, z, w ) );
 		}

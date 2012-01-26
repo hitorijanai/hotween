@@ -112,6 +112,16 @@ namespace Holoville.HOTween.Plugins.Core
 		// METHODS ---------------------------------------------------------------------------
 		
 		/// <summary>
+		/// Returns the speed-based duration based on the given speed x second.
+		/// </summary>
+		override protected float GetSpeedBasedDuration( float p_speed )
+		{
+			float speedDur = changeVal / p_speed;
+			if ( speedDur < 0 )		speedDur = -speedDur;
+			return speedDur;
+		}
+		
+		/// <summary>
 		/// Sets the typed changeVal based on the current startVal and endVal.
 		/// </summary>
 		override protected void SetChangeVal()
@@ -128,9 +138,9 @@ namespace Holoville.HOTween.Plugins.Core
 		/// <param name="p_totElapsed">
 		/// The total elapsed time since startup.
 		/// </param>
-		override protected internal void Update ( float p_totElapsed )
+		override protected void DoUpdate ( float p_totElapsed )
 		{
-			float val = ease( p_totElapsed, 0, changeVal, tweenObj.duration );
+			float val = ease( p_totElapsed, 0, changeVal, _duration );
 			
 			SetValue( Color.Lerp( typedStartVal, typedEndVal, val ) );
 		}

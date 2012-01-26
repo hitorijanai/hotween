@@ -40,6 +40,7 @@ namespace Holoville.HOTween
 	{
 		// VARS ///////////////////////////////////////////////////
 		
+		private		bool					speedBased = false;
 		private		EaseType				easeType = HOTween.defEaseType;
 		private		float					delay = 0;
 		private		List<HOTPropData>		propDatas;
@@ -73,6 +74,8 @@ namespace Holoville.HOTween
 		{
 			InitializeOwner( p_tweenObj );
 			
+			if ( speedBased )		easeType = EaseType.Linear;
+			p_tweenObj._speedBased = speedBased;
 			p_tweenObj.easeType = easeType;
 			p_tweenObj._delay = p_tweenObj.delayCount = delay;
 			
@@ -137,6 +140,10 @@ namespace Holoville.HOTween
 							if ( !ValidateValue( data.endValOrPlugin, PlugColor.validValueTypes ) )			break;
 							plug = new PlugColor( (Color) data.endValOrPlugin, data.isRelative );
 						break;
+						case "String":
+							if ( !ValidateValue( data.endValOrPlugin, PlugString.validValueTypes ) )		break;
+							plug = new PlugString( data.endValOrPlugin.ToString(), data.isRelative );
+						break;
 						default:
 							try {
 								plug = new PlugFloat( Convert.ToSingle( data.endValOrPlugin ), data.isRelative );
@@ -160,7 +167,37 @@ namespace Holoville.HOTween
 		// METHODS ---------------------------------------------------------------------------
 		
 		/// <summary>
+		/// Sets this tween to work by speed instead than time.
+		/// When a tween is based on speed instead than time,
+		/// duration is considered as the amount that the property will change every second,
+		/// and ease is automatically set to Linear.
+		/// In case of Vectors, the amount represents the vector length x second;
+		/// in case of Quaternions, the amount represents the full rotation (360°) speed x second;
+		/// in case of strings, the amount represents the amount of changed letters x second.
+		/// </summary>
+		public TweenParms SpeedBased() { return SpeedBased( true ); }
+		/// <summary>
+		/// Sets whether to tween by speed or not.
+		/// When a tween is based on speed instead than time,
+		/// duration is considered as the amount that the property will change every second,
+		/// and ease is automatically set to Linear.
+		/// In case of Vectors, the amount represents the vector length x second;
+		/// in case of strings, the amount represents the amount of changed letters x second.
+		/// </summary>
+		/// <param name="p_speedBased">
+		/// If <c>true</c> this tween will work by speed instead than by time.
+		/// </param>
+		public TweenParms SpeedBased( bool p_speedBased )
+		{
+			speedBased = p_speedBased;
+			
+			return this;
+		}
+		
+		/// <summary>
 		/// Sets the ease type to use (default = <c>EaseType.easeOutQuad</c>).
+		/// If you set this tween to use speed instead than time,
+		/// this parameter becomes useless, because it will be managed internally.
 		/// </summary>
 		/// <param name="p_easeType">
 		/// The <see cref="EaseType"/> to use.

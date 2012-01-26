@@ -42,11 +42,14 @@ namespace Holoville.HOTween.Plugins.Core
 		/// Untyped start value.
 		/// </summary>
 		protected	object									_startVal = null;
-		
 		/// <summary>
 		/// Untyped end value.
 		/// </summary>
 		protected	object									_endVal = null;
+		/// <summary>
+		/// Stored so it can be set indipendently in case of speed-based tweens.
+		/// </summary>
+		protected	float									_duration;
 		
 		private		bool									_initialized;
 		private		bool									_easeReversed;
@@ -112,6 +115,11 @@ namespace Holoville.HOTween.Plugins.Core
 		internal	bool									initialized
 		{
 			get { return _initialized; }
+		}
+		
+		internal	float									duration
+		{
+			get { return _duration; }
 		}
 		
 		internal	bool									easeReversed
@@ -191,11 +199,12 @@ namespace Holoville.HOTween.Plugins.Core
 			_initialized = true;
 			
 			tweenObj = p_tweenObj;
-			if ( easeInfo == null ) {
+			if ( easeInfo == null || tweenObj.speedBased ) {
 				easeType = p_easeType;
 				easeInfo = EaseInfo.GetEaseInfo( p_easeType );
 				ease = easeInfo.ease;
 			}
+			_duration = tweenObj.duration;
 			
 			if ( HOTween.isIOS ) {
 				propInfo = p_propertyInfo;
@@ -203,6 +212,7 @@ namespace Holoville.HOTween.Plugins.Core
 			} else {
 				if ( !ignoreAccessor )		valAccessor = MemberAccessorCacher.Make( p_targetType, p_propertyName, p_propertyInfo, p_fieldInfo );
 			}
+			
 			startVal = GetValue();
 		}
 		
@@ -220,6 +230,12 @@ namespace Holoville.HOTween.Plugins.Core
 			wasStarted = true;
 			startVal = GetValue();
 			SetChangeVal();
+			
+			if ( tweenObj.speedBased ) {
+				// Get duration based on speed.
+				// Can't be done earlier because it needs changeVal to be set.
+				_duration = GetSpeedBasedDuration( _duration );
+			}
 		}
 		
 		/// <summary>
@@ -235,9 +251,18 @@ namespace Holoville.HOTween.Plugins.Core
 		/// Updates the tween.
 		/// </summary>
 		/// <param name="p_totElapsed">
-		/// The total elapsed time since startup.
+		/// The total elapsed time since startup (loops excluded).
 		/// </param>
-		abstract protected internal void Update( float p_totElapsed );
+		internal void Update( float p_totElapsed )
+		{
+			if ( p_totElapsed > _duration )		p_totElapsed = _duration;
+			DoUpdate( p_totElapsed );
+		}
+		
+		/// <summary>
+		/// Updates the plugin.
+		/// </summary>
+		abstract protected void DoUpdate( float p_totElapsed );
 		
 		/// <summary>
 		/// Rewinds the tween.
@@ -267,6 +292,11 @@ namespace Holoville.HOTween.Plugins.Core
 			_easeReversed = !_easeReversed;
 			ease = ( _easeReversed ? easeInfo.inverseEase : easeInfo.ease );
 		}
+		
+		/// <summary>
+		/// Returns the speed-based duration based on the given speed.
+		/// </summary>
+		abstract protected float GetSpeedBasedDuration( float p_speed );
 		
 		/// <summary>
 		/// Returns a clone of the basic plugin

@@ -26,6 +26,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Holoville.HOTween.Core;
+using Holoville.HOTween.Plugins;
 using Holoville.HOTween.Plugins.Core;
 
 namespace Holoville.HOTween
@@ -40,6 +41,7 @@ namespace Holoville.HOTween
 		
 		private		float						_elapsedDelay = 0;
 		
+		internal	bool						_speedBased = false;
 		internal	float						_delay = 0;
 		internal	EaseType					easeType = HOTween.defEaseType;
 		internal	float						delayCount = 0;
@@ -60,13 +62,19 @@ namespace Holoville.HOTween
 			get { return _target; }
 		}
 		/// <summary>
+		/// <c>true</c> if this tween is animated by speed instead than by duration.
+		/// </summary>
+		public		bool						speedBased
+		{
+			get { return _speedBased; }
+		}
+		/// <summary>
 		/// The delay that was set for this tween.
 		/// </summary>
 		public		float						delay
 		{
 			get { return _delay; }
 		}
-		
 		/// <summary>
 		/// The currently elapsed delay time.
 		/// </summary>
@@ -223,13 +231,14 @@ namespace Holoville.HOTween
 		/// </returns>
 		override internal bool Update( float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration )
 		{
-			if ( _destroyed )										return true;
+			if ( _destroyed )											return true;
 			if ( _target == null || _target.Equals( null ) ) {
 				Kill( false );
 				return true;
 			}
-			if ( _isComplete && !_isReversed && !p_forceUpdate )	return true;
-			if ( _isPaused && !p_forceUpdate )						return false;
+			if ( _isComplete && !_isReversed && !p_forceUpdate )		return true;
+			if ( _fullElapsed == 0 && _isReversed && !p_forceUpdate )	return false;
+			if ( _isPaused && !p_forceUpdate )							return false;
 			
 			if ( delayCount == 0 ) {
 				if ( !_hasStarted )									OnStart();
@@ -277,18 +286,16 @@ namespace Holoville.HOTween
 			ABSTweenPlugin plug;
 			for ( int i = 0; i < plugins.Count; ++i ) {
 				plug = plugins[i];
-				if ( !_isLoopingBack && plug.easeReversed || _isLoopingBack && _loopType == LoopType.YoyoInverse && !plug.easeReversed )
+				if ( !_isLoopingBack && plug.easeReversed || _isLoopingBack && _loopType == LoopType.YoyoInverse && !plug.easeReversed ) {
 					plug.ReverseEase();
+				}
 				plug.Update( plugElapsed );
 			}
 			
 			// Manage eventual pause, complete, update, and stepComplete.
 			if ( !p_forceUpdate )							OnUpdate();
-			if ( _isComplete || _isReversed && _fullElapsed == 0 )
-				Pause();
 			if ( complete ) {
 				OnComplete();
-				Pause();
 			} else if ( stepComplete ) {
 				OnStepComplete();
 			}
@@ -361,6 +368,15 @@ namespace Holoville.HOTween
 		override protected void OnStart()
 		{
 			for ( int i = 0; i < plugins.Count; ++i )		plugins[i].Startup();
+			if ( _speedBased ) {
+				// Reset duration based on value changes and speed.
+				// Can't be done sooner because it needs to startup the plugins first.
+				_duration = 0;
+				foreach ( ABSTweenPlugin plug in plugins ) {
+					if ( plug.duration > _duration )		_duration = plug.duration;
+				}
+				SetFullDuration();
+			}
 			base.OnStart();
 		}
 		

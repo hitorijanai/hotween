@@ -4,7 +4,7 @@
 // Author: Daniele Giardini
 // 
 // Copyright (c) 2012 Daniele Giardini - Holoville - http://www.holoville.com
-// Based on Andeeee's CRSpline (http://forum.unity3d.com/threads/32954-Waypoints-and-constant-variable-speed-problems?p=213942&viewfull=1#post213942)
+// Contains code from Andeeee's CRSpline (http://forum.unity3d.com/threads/32954-Waypoints-and-constant-variable-speed-problems?p=213942&viewfull=1#post213942)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,18 +26,19 @@
 
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace Holoville.HOTween.Core
 {
 	/// <summary>
 	/// Used to manage movement on a Cardinal spline (of Catmull-Rom type).
-	/// Based on Andeeee's CRSpline (http://forum.unity3d.com/threads/32954-Waypoints-and-constant-variable-speed-problems).
+	/// Contains code from Andeeee's CRSpline (http://forum.unity3d.com/threads/32954-Waypoints-and-constant-variable-speed-problems).
 	/// </summary>
 	internal class Path
 	{
 		// VARS ///////////////////////////////////////////////////
 		
-		internal		Vector3[]		path;
+		internal		Vector3[]						path;
 		
 		
 		// ***********************************************************************************
@@ -59,6 +60,9 @@ namespace Holoville.HOTween.Core
 		// ===================================================================================
 		// METHODS ---------------------------------------------------------------------------
 		
+		/// <summary>
+		/// Gets the point on the curve at the given time position.
+		/// </summary>
 		public Vector3 GetPoint( float t )
 		{
 			int numSections = path.Length - 3;
@@ -80,6 +84,9 @@ namespace Holoville.HOTween.Core
 			);
 		}
 		
+		/// <summary>
+		/// Gets the velocity at the given time position.
+		/// </summary>
 		public Vector3 Velocity( float t )
 		{
 			int numSections = path.Length - 3;
@@ -126,47 +133,72 @@ namespace Holoville.HOTween.Core
 				prevPt = currPt;
 			}
 			
-			if ( t != -1 ) {
+			if ( p_drawTrig && t != -1 ) {
 				Vector3 pos = GetPoint( t );
-				Gizmos.color = Color.blue;
-				Gizmos.DrawLine( pos, pos + Velocity( t ) );
-				if ( p_drawTrig ) {
-					Vector3 prevP;
-					Vector3 p = pos;
-					Vector3 nextP;
-					float nextT = t + 0.0001f;
-					if ( nextT > 1 ) {
-						nextP = pos;
-						p = GetPoint( t - 0.0001f );
-						prevP = GetPoint( t - 0.0002f );
+				Vector3 prevP;
+				Vector3 p = pos;
+				Vector3 nextP;
+				float nextT = t + 0.0001f;
+				if ( nextT > 1 ) {
+					nextP = pos;
+					p = GetPoint( t - 0.0001f );
+					prevP = GetPoint( t - 0.0002f );
+				} else {
+					float prevT = t - 0.0001f;
+					if ( prevT < 0 ) {
+						prevP = pos;
+						p = GetPoint( t + 0.0001f );
+						nextP = GetPoint( t + 0.0002f );
 					} else {
-						float prevT = t - 0.0001f;
-						if ( prevT < 0 ) {
-							prevP = pos;
-							p = GetPoint( t + 0.0001f );
-							nextP = GetPoint( t + 0.0002f );
-						} else {
-							prevP = GetPoint( prevT );
-							nextP = GetPoint( nextT );
-						}
+						prevP = GetPoint( prevT );
+						nextP = GetPoint( nextT );
 					}
-					Vector3 tangent = nextP - p;
-					tangent.Normalize();
-					Vector3 tangent2 = p - prevP;
-					tangent2.Normalize();
-					Vector3 normal = Vector3.Cross( tangent, tangent2 );
-					normal.Normalize();
-					Vector3 binormal = Vector3.Cross( tangent, normal );
-					binormal.Normalize();
-					// Draw normal.
-					Gizmos.color = Color.black;
-					Gizmos.DrawLine( pos, pos + tangent );
-					Gizmos.color = Color.blue;
-					Gizmos.DrawLine( pos, pos + normal );
-					Gizmos.color = Color.red;
-					Gizmos.DrawLine( pos, pos + binormal );
+				}
+				Vector3 tangent = nextP - p;
+				tangent.Normalize();
+				Vector3 tangent2 = p - prevP;
+				tangent2.Normalize();
+				Vector3 normal = Vector3.Cross( tangent, tangent2 );
+				normal.Normalize();
+				Vector3 binormal = Vector3.Cross( tangent, normal );
+				binormal.Normalize();
+				// Draw normal.
+				Gizmos.color = Color.black;
+				Gizmos.DrawLine( pos, pos + tangent );
+				Gizmos.color = Color.blue;
+				Gizmos.DrawLine( pos, pos + normal );
+				Gizmos.color = Color.red;
+				Gizmos.DrawLine( pos, pos + binormal );
+			}
+		}
+		
+		// ===================================================================================
+		// INTERNAL METHODS ------------------------------------------------------------------
+		
+		internal Dictionary<float,float> GetTimeToArcLenTable( int p_subdivisions, out float out_fullLen )
+		{
+			float incr = 1f / p_subdivisions;
+			float t;
+			float len = 0;
+			float prevLen = 0;
+			Vector3 p;
+			Vector3 prevP = Vector3.zero;
+			Dictionary<float,float> dc = new Dictionary<float, float>();
+			for ( int i = 0; i < p_subdivisions + 1; ++i ) {
+				if ( i == 0 ) {
+					prevP = GetPoint( 0 );
+					prevLen = 0;
+				} else {
+					t = incr * i;
+					p = GetPoint( t );
+					len = prevLen + Vector3.Distance( p, prevP );
+					dc.Add( t, len );
+					prevP = p;
+					prevLen = len;
 				}
 			}
+			out_fullLen = len;
+			return dc;
 		}
 	}
 }
