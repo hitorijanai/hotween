@@ -40,7 +40,7 @@ namespace Holoville.HOTween
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
 	/// <para>Version: 0.8.006</para>
-	/// <para>Last update: 2012/01/20</para>
+	/// <para>Last update: 2012/01/26</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
 	{
