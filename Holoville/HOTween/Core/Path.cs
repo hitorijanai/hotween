@@ -40,6 +40,8 @@ namespace Holoville.HOTween.Core
 		
 		internal		Vector3[]						path;
 		
+		private			Vector3[]						drawPs; // Used by GizmoDraw to store point only once.
+		
 		
 		// ***********************************************************************************
 		// CONSTRUCTOR
@@ -122,15 +124,29 @@ namespace Holoville.HOTween.Core
 		{
 			Gizmos.color = new Color( 0.6f,0.6f,0.6f,0.6f );
 			
-			float pm;
 			Vector3 currPt;
-			Vector3 prevPt = GetPoint( 0 );
-			int subdivisions = 200;
-			for ( int i = 1; i <= subdivisions; ++i ) {
-				pm = i / (float)subdivisions;
-				currPt = GetPoint( pm );
+			if ( drawPs == null ) {
+				// Store draw points.
+				float pm;
+				int subdivisions = path.Length * 10;
+				drawPs = new Vector3[subdivisions + 1];
+				for ( int i = 0; i <= subdivisions; ++i ) {
+					pm = i / (float)subdivisions;
+					currPt = GetPoint( pm );
+					drawPs[i] = currPt;
+				}
+			}
+			// Draw path.
+			Vector3 prevPt = drawPs[0];
+			for ( int i = 1; i < drawPs.Length; ++i ) {
+				currPt = drawPs[i];
 				Gizmos.DrawLine( currPt, prevPt );
 				prevPt = currPt;
+			}
+			// Draw path control points.
+			Gizmos.color = Color.white;
+			for ( int i = 1; i < path.Length - 1; ++i ) {
+				Gizmos.DrawSphere( path[i], 0.1f );
 			}
 			
 			if ( p_drawTrig && t != -1 ) {
