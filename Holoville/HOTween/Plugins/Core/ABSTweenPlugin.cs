@@ -69,7 +69,7 @@ namespace Holoville.HOTween.Plugins.Core
 		/// </summary>
 		protected	bool									ignoreAccessor;
 		
-		private		EaseType								easeType; // Store so instance can be cloned.
+		private		EaseType								easeType; // Store so instance can be cloned and ease can be changed while playing.
 		private		EaseInfo								easeInfo;
 		private		IMemberAccessor							valAccessor;
 		private		bool									wasStarted;
@@ -200,9 +200,7 @@ namespace Holoville.HOTween.Plugins.Core
 			
 			tweenObj = p_tweenObj;
 			if ( easeInfo == null || tweenObj.speedBased ) {
-				easeType = p_easeType;
-				easeInfo = EaseInfo.GetEaseInfo( p_easeType );
-				ease = easeInfo.ease;
+				SetEase( p_easeType );
 			}
 			_duration = tweenObj.duration;
 			
@@ -291,6 +289,18 @@ namespace Holoville.HOTween.Plugins.Core
 			
 			_easeReversed = !_easeReversed;
 			ease = ( _easeReversed ? easeInfo.inverseEase : easeInfo.ease );
+		}
+		
+		/// <summary>
+		/// Sets the ease type (called during Init, but can also be called by Tweener to change easeType while playing).
+		/// </summary>
+		internal void SetEase( EaseType p_easeType )
+		{
+			easeType = p_easeType;
+			easeInfo = EaseInfo.GetEaseInfo( easeType );
+			ease = easeInfo.ease;
+			
+			if ( _easeReversed && easeInfo.inverseEase != null )	ease = easeInfo.inverseEase;
 		}
 		
 		/// <summary>

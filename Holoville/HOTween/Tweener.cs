@@ -41,9 +41,11 @@ namespace Holoville.HOTween
 		
 		private		float						_elapsedDelay = 0;
 		
+		internal	EaseType					_easeType = HOTween.defEaseType;
+		
 		internal	bool						_speedBased = false;
 		internal	float						_delay = 0;
-		internal	EaseType					easeType = HOTween.defEaseType;
+		
 		internal	float						delayCount = 0;
 		
 		// REFERENCES /////////////////////////////////////////////
@@ -51,6 +53,23 @@ namespace Holoville.HOTween
 		internal	List<ABSTweenPlugin>		plugins;
 		
 		private		object						_target;
+		
+		// GETS/SETS //////////////////////////////////////////////
+		
+		/// <summary>
+		/// Ease type of this tweener
+		/// (consider that the plugins you have set might have different ease types).
+		/// Setting it will change the ease of all the plugins used by this tweener.
+		/// </summary>
+		public		EaseType					easeType
+		{
+			get { return _easeType; }
+			set {
+				_easeType = value;
+				// Change ease type of all existing plugins.
+				for ( int i = 0; i < plugins.Count; ++i )		plugins[i].SetEase( _easeType );
+			}
+		}
 		
 		// READ-ONLY GETS /////////////////////////////////////////
 		

@@ -76,7 +76,7 @@ namespace Holoville.HOTween
 			
 			if ( speedBased )		easeType = EaseType.Linear;
 			p_tweenObj._speedBased = speedBased;
-			p_tweenObj.easeType = easeType;
+			p_tweenObj._easeType = easeType;
 			p_tweenObj._delay = p_tweenObj.delayCount = delay;
 			
 			// Parse properties and create/set plugins.
