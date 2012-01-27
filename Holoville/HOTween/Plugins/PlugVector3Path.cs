@@ -57,7 +57,6 @@ namespace Holoville.HOTween.Plugins
 		private		Vector3					typedStartVal;
 		private		Vector3[]				points;
 		private		bool					isClosedPath = false;
-		private		bool					applyConstantSpeed = false;
 		private		OrientType				orientType = OrientType.None;
 		private		Vector3					orientation; // Used to get correct axis for orientation.
 		private		float					lookAheadVal = 0.0001f;
@@ -143,30 +142,6 @@ namespace Holoville.HOTween.Plugins
 		
 		// ===================================================================================
 		// PARAMETERS ------------------------------------------------------------------------
-		
-		/// <summary>
-		/// Parameter > Applies constant speed along the path
-		/// (more computationally expensive).
-		/// </summary>
-		/// <returns>
-		/// A <see cref="PlugVector3Path"/>
-		/// </returns>
-		public PlugVector3Path ConstantSpeed() { return ConstantSpeed( true ); }
-		/// <summary>
-		/// Parameter > Choose whether to apply constant speed along the path
-		/// (more computationally expensive).
-		/// </summary>
-		/// <param name="p_applyConstantSpeed">
-		/// A <see cref="System.Boolean"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="PlugVector3Path"/>
-		/// </returns>
-		public PlugVector3Path ConstantSpeed( bool p_applyConstantSpeed )
-		{
-			applyConstantSpeed = p_applyConstantSpeed;
-			return this;
-		}
 		
 		/// <summary>
 		/// Parameter > Smoothly closes the path, so that it can be used for cycling loops.
@@ -305,10 +280,8 @@ namespace Holoville.HOTween.Plugins
 			// Create the path.
 			path = new Path( pts );
 			
-			if ( applyConstantSpeed ) {
-				// Store arc lengths table.
-				dcTimeToLen = path.GetTimeToArcLenTable( path.path.Length * 4, out pathLen );
-			}
+			// Store arc lengths table for constant speed.
+			dcTimeToLen = path.GetTimeToArcLenTable( path.path.Length * 4, out pathLen );
 		}
 		
 		/// <summary>
@@ -320,7 +293,9 @@ namespace Holoville.HOTween.Plugins
 		override protected void DoUpdate ( float p_totElapsed )
 		{
 			pathPerc = ease( p_totElapsed, 0, 1, _duration );
-			if ( applyConstantSpeed && pathPerc > 0 && pathPerc < 1 ) {
+			
+			// Apply constant speed
+			if ( pathPerc > 0 && pathPerc < 1 ) {
 				float tLen = pathLen * pathPerc;
 				// Find point in time/lenght table.
 				float t0 = 0;
@@ -331,14 +306,15 @@ namespace Holoville.HOTween.Plugins
 					if ( item.Value > tLen ) {
 						t1 = item.Key;
 						l1 = item.Value;
+						if ( t0 > 0 )	l0 = dcTimeToLen[t0];
 						break;
 					}
 					t0 = item.Key;
-					l0 = item.Value;
 				}
 				// Find correct time.
 				pathPerc = t0 + ( ( tLen - l0 ) / ( l1 - l0 ) ) * ( t1 - t0 );
 			}
+			
 			// Clamp value because path has limited range of 0-1.
 			if ( pathPerc > 1 ) pathPerc = 1; else if ( pathPerc < 0 ) pathPerc = 0;
 			
