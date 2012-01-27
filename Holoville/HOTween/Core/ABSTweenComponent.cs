@@ -40,10 +40,10 @@ namespace Holoville.HOTween.Core
 		internal	string						_id = "";
 		internal	bool						_autoKillOnComplete = true;
 		internal	float						_timeScale = HOTween.defTimeScale;
-		
-		internal	UpdateType					_updateType = HOTween.defUpdateType;
 		internal	int							_loops = 1;
 		internal	LoopType					_loopType = HOTween.defLoopType;
+		
+		internal	UpdateType					_updateType = HOTween.defUpdateType;
 		internal	bool						_isPaused;
 		
 		internal	TweenDelegate.TweenCallback			onStart;
@@ -145,6 +145,22 @@ namespace Holoville.HOTween.Core
 			set { _timeScale = value; }
 		}
 		/// <summary>
+		/// Number of times the Tweener/Sequence will run (<c>-1</c> means the tween has infinite loops).
+		/// </summary>
+		public		int						loops
+		{
+			get { return _loops; }
+			set { _loops = value; SetFullDuration(); }
+		}
+		/// <summary>
+		/// Type of loop for this Tweener/Sequence, in case <see cref="loops"/> is greater than 1 (or infinite).
+		/// </summary>
+		public		LoopType				loopType
+		{
+			get { return _loopType; }
+			set { _loopType = value; }
+		}
+		/// <summary>
 		/// Gets and sets the time position of the Tweener/Sequence (loops are included when not infinite, delay is not).
 		/// </summary>
 		public		float					position
@@ -191,25 +207,11 @@ namespace Holoville.HOTween.Core
 			get { return _updateType; }
 		}
 		/// <summary>
-		/// Number of times the Tweener/Sequence will run (<c>-1</c> means the tween has infinite loops).
-		/// </summary>
-		public		int						loops
-		{
-			get { return _loops; }
-		}
-		/// <summary>
 		/// Number of loops that have been executed.
 		/// </summary>
 		public		int						completedLoops
 		{
 			get { return _completedLoops; }
-		}
-		/// <summary>
-		/// Type of loop for this Tweener/Sequence, in case <see cref="loops"/> is greater than 1 (or infinite).
-		/// </summary>
-		public		LoopType				loopType
-		{
-			get { return _loopType; }
 		}
 		/// <summary>
 		/// Returns a value of <c>true</c> if this Tweener/Sequence was destroyed
@@ -570,7 +572,7 @@ namespace Holoville.HOTween.Core
 		
 		/// <summary>
 		/// Sets the current <c>fullDuration</c>, based on the current <c>duration</c> and <c>loops</c> values.
-		/// Remember to call this method each time you change the duration of a tween.
+		/// Remember to call this method each time you change the duration or loops of a tween.
 		/// </summary>
 		protected void SetFullDuration()
 		{
