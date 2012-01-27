@@ -133,20 +133,6 @@ namespace Holoville.HOTween
 		}
 		
 		/// <summary>
-		/// Sets the Sequence in a paused state.
-		/// </summary>
-		public SequenceParms Pause() { return Pause( true ); }
-		/// <summary>
-		/// Choose whether to set the Sequence in a paused state.
-		/// </summary>
-		public SequenceParms Pause( bool p_pause )
-		{
-			isPaused = p_pause;
-			
-			return this;
-		}
-		
-		/// <summary>
 		/// Function to call when the Sequence is started for the very first time.
 		/// </summary>
 		/// <param name="p_function">

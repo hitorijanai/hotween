@@ -223,6 +223,20 @@ namespace Holoville.HOTween
 		}
 		
 		/// <summary>
+		/// Sets the Tweener in a paused state.
+		/// </summary>
+		public TweenParms Pause() { return Pause( true ); }
+		/// <summary>
+		/// Choose whether to set the Tweener in a paused state.
+		/// </summary>
+		public TweenParms Pause( bool p_pause )
+		{
+			isPaused = p_pause;
+			
+			return this;
+		}
+		
+		/// <summary>
 		/// Sets a property or field to tween,
 		/// directly assigning the given <c>TweenPlugin</c> to it.
 		/// Behaves as <c>Prop()</c>, but removes any other property tween previously set in this <see cref="TweenParms"/>
@@ -393,20 +407,6 @@ namespace Holoville.HOTween
 		{
 			loops = p_loops;
 			loopType = p_loopType;
-			
-			return this;
-		}
-		
-		/// <summary>
-		/// Sets the Tweener in a paused state.
-		/// </summary>
-		public TweenParms Pause() { return Pause( true ); }
-		/// <summary>
-		/// Choose whether to set the Tweener in a paused state.
-		/// </summary>
-		public TweenParms Pause( bool p_pause )
-		{
-			isPaused = p_pause;
 			
 			return this;
 		}

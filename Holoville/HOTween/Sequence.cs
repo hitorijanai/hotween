@@ -57,6 +57,9 @@ namespace Holoville.HOTween
 		{
 			p_parms.InitializeSequence( this );
 			
+			// Automatically pause the sequence.
+			_isPaused = true;
+			
 			// Add this sequence to HOTWeen tweens.
 			HOTween.AddSequence( this );
 		}
