@@ -52,6 +52,16 @@ namespace Holoville.HOTween
 		float				timeScale { get; set; }
 		
 		/// <summary>
+		/// Number of times the Tweener/Sequence will run (<c>-1</c> means the tween has infinite loops, <c>1</c> means the tween will run only once).
+		/// </summary>
+		int					loops { get; set; }
+		
+		/// <summary>
+		/// Type of loop for this Tweener/Sequence, in case <see cref="loops"/> is greater than 1 (or infinite).
+		/// </summary>
+		LoopType			loopType { get; set; }
+		
+		/// <summary>
 		/// Gets and sets the time position of the Tweener/Sequence (loops are included when not infinite, delay is not).
 		/// </summary>
 		float				position { get; set; }
@@ -86,19 +96,9 @@ namespace Holoville.HOTween
 		UpdateType			updateType { get; }
 		
 		/// <summary>
-		/// Number of times the Tweener/Sequence will run (<c>-1</c> means the tween has infinite loops, <c>1</c> means the tween will run only once).
-		/// </summary>
-		int					loops { get; }
-		
-		/// <summary>
 		/// Number of loops that have been executed.
 		/// </summary>
 		int					completedLoops { get; }
-		
-		/// <summary>
-		/// Type of loop for this Tweener/Sequence, in case <see cref="loops"/> is greater than 1 (or infinite).
-		/// </summary>
-		LoopType			loopType { get; }
 		
 		/// <summary>
 		/// Returns a value of <c>true</c> if this Tweener/Sequence contains no tweens
