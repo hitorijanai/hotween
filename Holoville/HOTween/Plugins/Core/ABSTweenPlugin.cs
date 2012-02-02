@@ -146,7 +146,7 @@ namespace Holoville.HOTween.Plugins.Core
 		public ABSTweenPlugin( object p_endVal, bool p_isRelative )
 		{
 			isRelative = p_isRelative;
-			endVal = p_endVal;
+			_endVal = p_endVal;
 		}
 		/// <summary>
 		/// Creates a new instance of this plugin with the given options.
@@ -163,7 +163,7 @@ namespace Holoville.HOTween.Plugins.Core
 		public ABSTweenPlugin( object p_endVal, EaseType p_easeType, bool p_isRelative )
 		{
 			isRelative = p_isRelative;
-			endVal = p_endVal;
+			_endVal = p_endVal;
 			easeType = p_easeType;
 			easeInfo = EaseInfo.GetEaseInfo( p_easeType );
 			ease = easeInfo.ease;
@@ -210,8 +210,6 @@ namespace Holoville.HOTween.Plugins.Core
 			} else {
 				if ( !ignoreAccessor )		valAccessor = MemberAccessorCacher.Make( p_targetType, p_propertyName, p_propertyInfo, p_fieldInfo );
 			}
-			
-			startVal = GetValue();
 		}
 		
 		/// <summary>
@@ -226,7 +224,16 @@ namespace Holoville.HOTween.Plugins.Core
 			}
 			
 			wasStarted = true;
-			startVal = GetValue();
+			
+			// Manage TO or FROM.
+			if ( tweenObj.isFrom ) {
+				startVal = endVal;
+				endVal = GetValue();
+			} else {
+				endVal = endVal;
+				startVal = GetValue();
+			}
+			// Set changeVal.
 			SetChangeVal();
 			
 			if ( tweenObj.speedBased ) {
@@ -317,7 +324,7 @@ namespace Holoville.HOTween.Plugins.Core
 			// FIXME incredibly slow. Possible solutions...
 			// - http://rogeralsing.com/2008/02/28/linq-expressions-creating-objects (but requires Linq, and thus System.Core, which I'd prefer to avoid)
 			// - http://ayende.com/blog/3167/creating-objects-perf-implications (has to know the class to create, thus is useless)
-			return Activator.CreateInstance( this.GetType(), _endVal, easeType, isRelative ) as ABSTweenPlugin;
+			return Activator.CreateInstance( this.GetType(), ( tweenObj != null && tweenObj.isFrom ? _startVal : _endVal ), easeType, isRelative ) as ABSTweenPlugin;
 		}
 		
 		// ===================================================================================

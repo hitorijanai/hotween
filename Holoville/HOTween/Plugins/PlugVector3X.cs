@@ -60,7 +60,13 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected	object		startVal {
 			get { return _startVal; }
-			set { _startVal = value; typedStartVal = ( (Vector3)( _startVal ) ).x; }
+			set {
+				if ( tweenObj.isFrom ) {
+					_startVal = typedStartVal = Convert.ToSingle( value );
+				} else {
+					_startVal = value; typedStartVal = ( (Vector3)( _startVal ) ).x;
+				}
+			}
 		}
 		
 		/// <summary>
@@ -69,7 +75,13 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected	object		endVal {
 			get { return _endVal; }
-			set { _endVal = typedEndVal = Convert.ToSingle( value ); }
+			set {
+				if ( tweenObj.isFrom ) {
+					_endVal = value; typedEndVal = ( (Vector3)( _endVal ) ).x;
+				} else {
+					_endVal = typedEndVal = Convert.ToSingle( value );
+				}
+			}
 		}
 		
 		

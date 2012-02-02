@@ -39,8 +39,8 @@ namespace Holoville.HOTween
 	/// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-	/// <para>Version: 0.8.011</para>
-	/// <para>Last update: 2012/01/29</para>
+	/// <para>Version: 0.8.015</para>
+	/// <para>Last update: 2012/02/02</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
 	{
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// HOTween version.
 		/// </summary>
-		public	const		string							VERSION = "0.8.011";
+		public	const		string							VERSION = "0.8.015";
 		/// <summary>
 		/// HOTween author - me! :P
 		/// </summary>
@@ -267,6 +267,84 @@ namespace Holoville.HOTween
 			if ( !initialized )						Init();
 			
 			Tweener tw = new Tweener( p_target, p_duration, p_parms );
+			
+			// Check if tween is valid.
+			if ( tw.isEmpty )		return null;
+			
+			AddTween( tw );
+			return tw;
+		}
+		
+		/// <summary>
+		/// Creates a new absolute FROM tween with default values, and returns the <see cref="Tweener"/> representing it,
+		/// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+		/// </summary>
+		/// <param name="p_target">
+		/// The tweening target (must be the object containing the properties or fields to tween).
+		/// </param>
+		/// <param name="p_duration">
+		/// The duration in seconds of the tween.
+		/// </param>
+		/// <param name="p_propName">
+		/// The name of the property or field to tween.
+		/// </param>
+		/// <param name="p_endVal">
+		/// The end value the property should reach with the tween.
+		/// </param>
+		/// <returns>
+		/// The newly created <see cref="Tweener"/>,
+		/// or <c>null</c> if the parameters were invalid.
+		/// </returns>
+		static public Tweener From ( object p_target, float p_duration, string p_propName, object p_endVal ) { return From( p_target, p_duration, new TweenParms().Prop( p_propName, p_endVal ) ); }
+		/// <summary>
+		/// Creates a new FROM tween with default values, and returns the <see cref="Tweener"/> representing it,
+		/// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+		/// </summary>
+		/// <param name="p_target">
+		/// The tweening target (must be the object containing the properties or fields to tween).
+		/// </param>
+		/// <param name="p_duration">
+		/// The duration in seconds of the tween.
+		/// </param>
+		/// <param name="p_propName">
+		/// The name of the property or field to tween.
+		/// </param>
+		/// <param name="p_endVal">
+		/// The end value the property should reach with the tween.
+		/// </param>
+		/// <param name="p_isRelative">
+		/// If <c>true</c> treats the end value as relative (tween BY instead than tween TO), otherwise as absolute.
+		/// </param>
+		/// <returns>
+		/// The newly created <see cref="Tweener"/>,
+		/// or <c>null</c> if the parameters were invalid.
+		/// </returns>
+		static public Tweener From ( object p_target, float p_duration, string p_propName, object p_endVal, bool p_isRelative ) { return From( p_target, p_duration, new TweenParms().Prop( p_propName, p_endVal, p_isRelative ) ); }
+		/// <summary>
+		/// Creates a new FROM tween and returns the <see cref="Tweener"/> representing it,
+		/// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+		/// </summary>
+		/// <param name="p_target">
+		/// The tweening target (must be the object containing the properties or fields to tween).
+		/// </param>
+		/// <param name="p_duration">
+		/// The duration in seconds of the tween.
+		/// </param>
+		/// <param name="p_parms">
+		/// A <see cref="TweenParms"/> representing the tween parameters.
+		/// You can pass an existing one, or create a new one inline via method chaining,
+		/// like <c>new TweenParms().Prop("x",10).Loops(2).OnComplete(myFunction)</c>
+		/// </param>
+		/// <returns>
+		/// The newly created <see cref="Tweener"/>,
+		/// or <c>null</c> if the parameters were invalid.
+		/// </returns>
+		static public Tweener From ( object p_target, float p_duration, TweenParms p_parms )
+		{
+			if ( !initialized )						Init();
+			
+			Tweener tw = new Tweener( p_target, p_duration, p_parms );
+			tw.isFrom = true;
 			
 			// Check if tween is valid.
 			if ( tw.isEmpty )		return null;

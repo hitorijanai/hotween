@@ -46,6 +46,7 @@ namespace Holoville.HOTween
 		internal	bool						_speedBased = false;
 		internal	float						_delay = 0;
 		
+		internal	bool						isFrom = false; // Indicates whether this is a FROM or a TO tween.
 		internal	float						delayCount = 0;
 		
 		// REFERENCES /////////////////////////////////////////////

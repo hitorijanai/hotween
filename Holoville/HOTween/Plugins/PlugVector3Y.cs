@@ -42,7 +42,28 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected	object		startVal {
 			get { return _startVal; }
-			set { _startVal = value; typedStartVal = ( (Vector3)( _startVal ) ).y; }
+			set {
+				if ( tweenObj.isFrom ) {
+					_startVal = typedStartVal = Convert.ToSingle( value );
+				} else {
+					_startVal = value; typedStartVal = ( (Vector3)( _startVal ) ).y;
+				}
+			}
+		}
+		
+		/// <summary>
+		/// Gets the untyped end value,
+		/// sets both the untyped and the typed end value.
+		/// </summary>
+		override protected	object		endVal {
+			get { return _endVal; }
+			set {
+				if ( tweenObj.isFrom ) {
+					_endVal = value; typedEndVal = ( (Vector3)( _endVal ) ).y;
+				} else {
+					_endVal = typedEndVal = Convert.ToSingle( value );
+				}
+			}
 		}
 		
 		
