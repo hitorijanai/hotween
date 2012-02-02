@@ -243,7 +243,7 @@ namespace Holoville.HOTween
 		/// but ignores onUpdate, and sends onComplete and onStepComplete calls only if the Tweener wasn't complete before this call.
 		/// </param>
 		/// <param name="p_isStartupIteration">
-		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence OnStart),
+		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence OnStart or HOTween.From),
 		/// and all callbacks will be ignored (except onStart).
 		/// </param>
 		/// <returns>

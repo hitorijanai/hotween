@@ -288,14 +288,14 @@ namespace Holoville.HOTween
 		/// <param name="p_propName">
 		/// The name of the property or field to tween.
 		/// </param>
-		/// <param name="p_endVal">
+		/// <param name="p_fromVal">
 		/// The end value the property should reach with the tween.
 		/// </param>
 		/// <returns>
 		/// The newly created <see cref="Tweener"/>,
 		/// or <c>null</c> if the parameters were invalid.
 		/// </returns>
-		static public Tweener From ( object p_target, float p_duration, string p_propName, object p_endVal ) { return From( p_target, p_duration, new TweenParms().Prop( p_propName, p_endVal ) ); }
+		static public Tweener From ( object p_target, float p_duration, string p_propName, object p_fromVal ) { return From( p_target, p_duration, new TweenParms().Prop( p_propName, p_fromVal ) ); }
 		/// <summary>
 		/// Creates a new FROM tween with default values, and returns the <see cref="Tweener"/> representing it,
 		/// or <c>null</c> if the tween was invalid (no valid property to tween was given).
@@ -309,7 +309,7 @@ namespace Holoville.HOTween
 		/// <param name="p_propName">
 		/// The name of the property or field to tween.
 		/// </param>
-		/// <param name="p_endVal">
+		/// <param name="p_fromVal">
 		/// The end value the property should reach with the tween.
 		/// </param>
 		/// <param name="p_isRelative">
@@ -319,7 +319,7 @@ namespace Holoville.HOTween
 		/// The newly created <see cref="Tweener"/>,
 		/// or <c>null</c> if the parameters were invalid.
 		/// </returns>
-		static public Tweener From ( object p_target, float p_duration, string p_propName, object p_endVal, bool p_isRelative ) { return From( p_target, p_duration, new TweenParms().Prop( p_propName, p_endVal, p_isRelative ) ); }
+		static public Tweener From ( object p_target, float p_duration, string p_propName, object p_fromVal, bool p_isRelative ) { return From( p_target, p_duration, new TweenParms().Prop( p_propName, p_fromVal, p_isRelative ) ); }
 		/// <summary>
 		/// Creates a new FROM tween and returns the <see cref="Tweener"/> representing it,
 		/// or <c>null</c> if the tween was invalid (no valid property to tween was given).
@@ -350,6 +350,9 @@ namespace Holoville.HOTween
 			if ( tw.isEmpty )		return null;
 			
 			AddTween( tw );
+			// Immediately jump to position 0 to avoid flickering of objects before they're punched to FROM position.
+			// p_isStartupIteration is set to FALSE to ignore callbacks.
+			if ( !tw._isPaused )		tw.Update( 0, true, true );
 			return tw;
 		}
 		
