@@ -51,7 +51,13 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected	object		startVal {
 			get { return _startVal; }
-			set { _startVal = typedStartVal = ( value == null ? "" : value.ToString() ); }
+			set {
+				if ( tweenObj.isFrom && isRelative ) {
+					_startVal = typedStartVal = typedEndVal + ( value == null ? "" : value.ToString() );
+				} else {
+					_startVal = typedStartVal = ( value == null ? "" : value.ToString() );
+				}
+			}
 		}
 		
 		/// <summary>
@@ -60,7 +66,7 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected	object		endVal {
 			get { return _endVal; }
-			set { _endVal = typedEndVal = value.ToString(); }
+			set { _endVal = typedEndVal = ( value == null ? "" : value.ToString() ); }
 		}
 		
 		

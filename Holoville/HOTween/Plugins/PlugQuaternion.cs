@@ -53,8 +53,13 @@ namespace Holoville.HOTween.Plugins
 		override protected	object		startVal {
 			get { return _startVal; }
 			set {
-				_startVal = value;
-				typedStartVal = ( value is Quaternion ? ( (Quaternion) value ).eulerAngles : (Vector3) value );
+				if ( tweenObj.isFrom && isRelative ) {
+					typedStartVal = typedEndVal + ( value is Quaternion ? ( (Quaternion)value ).eulerAngles : (Vector3)value );
+					_startVal = Quaternion.Euler( typedStartVal );
+				} else {
+					_startVal = value;
+					typedStartVal = ( value is Quaternion ? ( (Quaternion)value ).eulerAngles : (Vector3)value );
+				}
 			}
 		}
 		
@@ -66,7 +71,7 @@ namespace Holoville.HOTween.Plugins
 			get { return _endVal; }
 			set {
 				_endVal = value;
-				typedEndVal = ( value is Quaternion ? ( (Quaternion) value ).eulerAngles : (Vector3) value );
+				typedEndVal = ( value is Quaternion ? ( (Quaternion)value ).eulerAngles : (Vector3)value );
 			}
 		}
 		
@@ -198,7 +203,7 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected void SetChangeVal()
 		{
-			if ( isRelative ) {
+			if ( isRelative && !tweenObj.isFrom ) {
 				changeVal = typedEndVal;
 			} else {
 				changeVal = new Vector3( typedEndVal.x - typedStartVal.x, typedEndVal.y - typedStartVal.y, typedEndVal.z - typedStartVal.z );

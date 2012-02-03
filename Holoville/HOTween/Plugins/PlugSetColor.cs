@@ -80,7 +80,13 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected	object		startVal {
 			get { return _startVal; }
-			set { _startVal = typedStartVal = (Color) value; }
+			set {
+				if ( tweenObj.isFrom && isRelative ) {
+					_startVal = typedStartVal = typedEndVal + (Color)value;
+				} else {
+					_startVal = typedStartVal = (Color)value;
+				}
+			}
 		}
 		
 		/// <summary>
@@ -89,7 +95,7 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected	object		endVal {
 			get { return _endVal; }
-			set { _endVal = typedEndVal = (Color) value; }
+			set { _endVal = typedEndVal = (Color)value; }
 		}
 		
 		
@@ -212,7 +218,7 @@ namespace Holoville.HOTween.Plugins
 		{
 			changeVal = 1;
 			
-			if ( isRelative )
+			if ( isRelative && !tweenObj.isFrom )
 				typedEndVal = typedStartVal + typedEndVal;
 		}
 		

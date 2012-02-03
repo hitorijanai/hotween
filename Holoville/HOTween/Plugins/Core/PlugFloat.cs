@@ -23,6 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using UnityEngine;
 using System;
 
 namespace Holoville.HOTween.Plugins.Core
@@ -49,7 +50,13 @@ namespace Holoville.HOTween.Plugins.Core
 		/// </summary>
 		override protected	object		startVal {
 			get { return _startVal; }
-			set { _startVal = typedStartVal = Convert.ToSingle( value ); }
+			set {
+				if ( tweenObj.isFrom && isRelative ) {
+					_startVal = typedStartVal = typedEndVal + Convert.ToSingle( value );
+				} else {
+					_startVal = typedStartVal = Convert.ToSingle( value );
+				}
+			}
 		}
 		
 		/// <summary>
@@ -125,7 +132,7 @@ namespace Holoville.HOTween.Plugins.Core
 		/// </summary>
 		override protected void SetChangeVal()
 		{
-			if ( isRelative )
+			if ( isRelative && !tweenObj.isFrom )
 				changeVal = typedEndVal;
 			else
 				changeVal = typedEndVal - typedStartVal;

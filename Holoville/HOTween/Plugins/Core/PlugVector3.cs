@@ -50,7 +50,13 @@ namespace Holoville.HOTween.Plugins.Core
 		/// </summary>
 		override protected	object		startVal {
 			get { return _startVal; }
-			set { _startVal = typedStartVal = (Vector3) value; }
+			set {
+				if ( tweenObj.isFrom && isRelative ) {
+					_startVal = typedStartVal = typedEndVal + (Vector3)value;
+				} else {
+					_startVal = typedStartVal = (Vector3)value;
+				}
+			}
 		}
 		
 		/// <summary>
@@ -59,7 +65,7 @@ namespace Holoville.HOTween.Plugins.Core
 		/// </summary>
 		override protected	object		endVal {
 			get { return _endVal; }
-			set { _endVal = typedEndVal = (Vector3) value; }
+			set { _endVal = typedEndVal = (Vector3)value; }
 		}
 		
 		
@@ -126,7 +132,7 @@ namespace Holoville.HOTween.Plugins.Core
 		/// </summary>
 		override protected void SetChangeVal()
 		{
-			if ( isRelative )
+			if ( isRelative && !tweenObj.isFrom )
 				changeVal = typedEndVal;
 			else
 				changeVal = new Vector3( typedEndVal.x - typedStartVal.x, typedEndVal.y - typedStartVal.y, typedEndVal.z - typedStartVal.z );

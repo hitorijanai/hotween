@@ -227,10 +227,12 @@ namespace Holoville.HOTween.Plugins.Core
 			
 			// Manage TO or FROM.
 			if ( tweenObj.isFrom ) {
-				startVal = endVal;
+				// Order is fundamental (otherwise setters for isRelative get messed up).
+				object prevEndVal = _endVal;
 				endVal = GetValue();
+				startVal = prevEndVal;
 			} else {
-				endVal = endVal;
+				endVal = _endVal;
 				startVal = GetValue();
 			}
 			// Set changeVal.

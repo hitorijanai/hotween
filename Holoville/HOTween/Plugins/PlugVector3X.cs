@@ -62,7 +62,11 @@ namespace Holoville.HOTween.Plugins
 			get { return _startVal; }
 			set {
 				if ( tweenObj.isFrom ) {
-					_startVal = typedStartVal = Convert.ToSingle( value );
+					if ( isRelative ) {
+						_startVal = typedStartVal = typedEndVal + Convert.ToSingle( value );
+					} else {
+						_startVal = typedStartVal = Convert.ToSingle( value );
+					}
 				} else {
 					_startVal = value; typedStartVal = ( (Vector3)( _startVal ) ).x;
 				}
@@ -172,7 +176,7 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected void SetChangeVal()
 		{
-			if ( isRelative )
+			if ( isRelative && !tweenObj.isFrom )
 				changeVal = typedEndVal;
 			else
 				changeVal = typedEndVal - typedStartVal;

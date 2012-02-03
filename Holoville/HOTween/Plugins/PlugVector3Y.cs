@@ -44,7 +44,11 @@ namespace Holoville.HOTween.Plugins
 			get { return _startVal; }
 			set {
 				if ( tweenObj.isFrom ) {
-					_startVal = typedStartVal = Convert.ToSingle( value );
+					if ( isRelative ) {
+						_startVal = typedStartVal = typedEndVal + Convert.ToSingle( value );
+					} else {
+						_startVal = typedStartVal = Convert.ToSingle( value );
+					}
 				} else {
 					_startVal = value; typedStartVal = ( (Vector3)( _startVal ) ).y;
 				}
