@@ -175,6 +175,7 @@ namespace Holoville.HOTween.Plugins.Core
 		/// <summary>
 		/// Initializes the plugin after its instantiation.
 		/// Called by Tweener after a property and plugin have been validated, and the plugin has to be set and added.
+		/// Virtual because some classes (like PlugVector3Path) override it to avoid isRelative being TRUE.
 		/// </summary>
 		/// <param name="p_tweenObj">
 		/// The <see cref="Tweener"/> to refer to.
@@ -194,7 +195,7 @@ namespace Holoville.HOTween.Plugins.Core
 		/// <param name="p_fieldInfo">
 		/// Directly passed from TweenParms to speed up MemberAccessor creation.
 		/// </param>
-		internal void Init( Tweener p_tweenObj, string p_propertyName, EaseType p_easeType, Type p_targetType, PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo )
+		virtual internal void Init( Tweener p_tweenObj, string p_propertyName, EaseType p_easeType, Type p_targetType, PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo )
 		{
 			_initialized = true;
 			

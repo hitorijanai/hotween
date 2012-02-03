@@ -26,6 +26,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Holoville.HOTween.Core;
 using Holoville.HOTween.Plugins.Core;
 
@@ -77,7 +78,17 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected	object			startVal {
 			get { return _startVal; }
-			set { _startVal = typedStartVal = (Vector3) value; }
+			set {
+				if ( tweenObj.isFrom ) {
+					_endVal = value;
+					Vector3[] ps = (Vector3[])value;
+					points = new Vector3[ps.Length];
+					Array.Copy( ps, points, ps.Length );
+					Array.Reverse( points );
+				} else {
+					_startVal = typedStartVal = (Vector3) value;
+				}
+			}
 		}
 		
 		/// <summary>
@@ -87,10 +98,14 @@ namespace Holoville.HOTween.Plugins
 		override protected	object			endVal {
 			get { return _endVal; }
 			set {
-				_endVal = value;
-				Vector3[] ps = (Vector3[])value;
-				points = new Vector3[ps.Length];
-				Array.Copy( ps, points, ps.Length );
+				if ( tweenObj.isFrom ) {
+					_startVal = typedStartVal = (Vector3) value;
+				} else {
+					_endVal = value;
+					Vector3[] ps = (Vector3[])value;
+					points = new Vector3[ps.Length];
+					Array.Copy( ps, points, ps.Length );
+				}
 			}
 		}
 		
@@ -124,6 +139,7 @@ namespace Holoville.HOTween.Plugins
 		/// </param>
 		/// <param name="p_isRelative">
 		/// If <c>true</c>, the path is considered relative to the starting value of the property, instead than absolute.
+		/// Not compatible with <c>HOTween.From</c>.
 		/// </param>
 		public PlugVector3Path( Vector3[] p_path, bool p_isRelative ) : base( p_path, p_isRelative ) {}
 		/// <summary>
@@ -137,8 +153,24 @@ namespace Holoville.HOTween.Plugins
 		/// </param>
 		/// <param name="p_isRelative">
 		/// If <c>true</c>, the path is considered relative to the starting value of the property, instead than absolute.
+		/// Not compatible with <c>HOTween.From</c>.
 		/// </param>
 		public PlugVector3Path( Vector3[] p_path, EaseType p_easeType, bool p_isRelative ) : base( p_path, p_easeType, p_isRelative ) {}
+		
+		/// <summary>
+		/// Init override.
+		/// Used to check that isRelative is FALSE,
+		/// and otherwise use the given parameters to send a decent warning message.
+		/// </summary>
+		override internal void Init( Tweener p_tweenObj, string p_propertyName, EaseType p_easeType, Type p_targetType, PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo )
+		{
+			if ( isRelative && p_tweenObj.isFrom ) {
+				isRelative = false;
+				TweenWarning.Log( "\"" + p_tweenObj.target + "." + p_propertyName + "\": PlugVector3Path \"isRelative\" parameter is incompatible with HOTween.From. The tween will be treated as absolute." );
+			}
+			
+			base.Init( p_tweenObj, p_propertyName, p_easeType, p_targetType, p_propertyInfo, p_fieldInfo );
+		}
 		
 		// ===================================================================================
 		// PARAMETERS ------------------------------------------------------------------------
