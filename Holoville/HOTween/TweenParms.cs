@@ -44,6 +44,7 @@ namespace Holoville.HOTween
 		private		EaseType				easeType = HOTween.defEaseType;
 		private		float					delay = 0;
 		private		List<HOTPropData>		propDatas;
+		private		bool					isFrom;
 		
 		// READ-ONLY GETS /////////////////////////////////////////
 		
@@ -78,6 +79,7 @@ namespace Holoville.HOTween
 			p_tweenObj._speedBased = speedBased;
 			p_tweenObj._easeType = easeType;
 			p_tweenObj._delay = p_tweenObj.delayCount = delay;
+			p_tweenObj.isFrom = isFrom;
 			
 			// Parse properties and create/set plugins.
 			p_tweenObj.plugins = new List<ABSTweenPlugin>();
@@ -576,6 +578,21 @@ namespace Holoville.HOTween
 		{
 			onCompleteWParms = p_function;
 			onCompleteParms = p_funcParms;
+			return this;
+		}
+		
+		// ===================================================================================
+		// INTERNAL METHODS ------------------------------------------------------------------
+		
+		/// <summary>
+		/// Used by HOTween.From to set isFrom property.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="TweenParms"/>
+		/// </returns>
+		internal TweenParms IsFrom()
+		{
+			isFrom = true;
 			return this;
 		}
 		

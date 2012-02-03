@@ -164,6 +164,7 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override internal void Init( Tweener p_tweenObj, string p_propertyName, EaseType p_easeType, Type p_targetType, PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo )
 		{
+			Debug.Log( "HERE " + isRelative + "/" + p_tweenObj.isFrom );
 			if ( isRelative && p_tweenObj.isFrom ) {
 				isRelative = false;
 				TweenWarning.Log( "\"" + p_tweenObj.target + "." + p_propertyName + "\": PlugVector3Path \"isRelative\" parameter is incompatible with HOTween.From. The tween will be treated as absolute." );
@@ -286,8 +287,12 @@ namespace Holoville.HOTween.Plugins
 					pts = new Vector3[points.Length + 2 + pAdd]; // Path length is the same (plus control points).
 				} else {
 					pts = new Vector3[points.Length + 3 + pAdd]; // Path needs additional point for current value as starting point (plus control points).
-					pts[1] = currVal;
-					indMod = 2;
+					if ( tweenObj.isFrom ) {
+						pts[pts.Length - 2] = currVal;
+					} else {
+						pts[1] = currVal;
+						indMod = 2;
+					}
 				}
 				for ( int i = 0; i < points.Length; ++i )
 					pts[i + indMod] = points[i];

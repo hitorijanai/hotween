@@ -343,8 +343,8 @@ namespace Holoville.HOTween
 		{
 			if ( !initialized )						Init();
 			
+			p_parms = p_parms.IsFrom();
 			Tweener tw = new Tweener( p_target, p_duration, p_parms );
-			tw.isFrom = true;
 			
 			// Check if tween is valid.
 			if ( tw.isEmpty )		return null;
