@@ -51,7 +51,7 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected	object		startVal {
 			get { return _startVal; }
-			set { _startVal = typedStartVal = value.ToString(); }
+			set { _startVal = typedStartVal = ( value == null ? "" : value.ToString() ); }
 		}
 		
 		/// <summary>
