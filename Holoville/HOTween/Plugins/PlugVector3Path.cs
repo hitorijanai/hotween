@@ -208,9 +208,31 @@ namespace Holoville.HOTween.Plugins
 		/// <param name="p_orient">
 		/// Set to <c>true</c> to orient the tween target to the path.
 		/// </param>
-		public PlugVector3Path OrientToPath( bool p_orient )
+		public PlugVector3Path OrientToPath( bool p_orient ) { return OrientToPath( p_orient, 0.0001f ); }
+		/// <summary>
+		/// Parameter > If the tween target is a <see cref="Transform"/>, orients the tween target to the path,
+		/// using the given lookAhead percentage.
+		/// </summary>
+		/// <param name="p_lookAhead">
+		/// The look ahead percentage (0 to 1).
+		/// </param>
+		public PlugVector3Path OrientToPath( float p_lookAhead ) { return OrientToPath( true, p_lookAhead ); }
+		/// <summary>
+		/// Parameter > Choose whether to orient the tween target to the path (only if it's a <see cref="Transform"/>),
+		/// and which lookAhead percentage to use.
+		/// </summary>
+		/// <param name="p_orient">
+		/// Set to <c>true</c> to orient the tween target to the path.
+		/// </param>
+		/// <param name="p_lookAhead">
+		/// The look ahead percentage (0 to 1).
+		/// </param>
+		public PlugVector3Path OrientToPath( bool p_orient, float p_lookAhead )
 		{
 			if ( p_orient )		orientType = OrientType.ToPath;
+			lookAheadVal = p_lookAhead;
+			if ( lookAheadVal < 0.0001f )	lookAheadVal = 0.0001f;
+			if ( lookAheadVal > 0.9999f )	lookAheadVal = 0.9999f;
 			return this;
 		}
 		
@@ -369,14 +391,10 @@ namespace Holoville.HOTween.Plugins
 					}
 					break;
 				case OrientType.ToPath:
-					// Orient transform to path.
 					Vector3 nextP;
 					float nextT = pathPerc + lookAheadVal;
-					if ( nextT > 1 ) {
-						nextP = v;
-					} else {
-						nextP = path.GetPoint( nextT );
-					}
+					if ( nextT > 1 )	nextT = nextT - 1;
+					nextP = path.GetPoint( nextT );
 					orientTrans.LookAt ( nextP, orientTrans.up );
 					break;
 				}
