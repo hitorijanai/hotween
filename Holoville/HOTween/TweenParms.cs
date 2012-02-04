@@ -142,6 +142,10 @@ namespace Holoville.HOTween
 							if ( !ValidateValue( data.endValOrPlugin, PlugColor.validValueTypes ) )			break;
 							plug = new PlugColor( (Color) data.endValOrPlugin, data.isRelative );
 						break;
+						case "Rect":
+							if ( !ValidateValue( data.endValOrPlugin, PlugRect.validValueTypes ) )			break;
+							plug = new PlugRect( (Rect) data.endValOrPlugin, data.isRelative );
+						break;
 						case "String":
 							if ( !ValidateValue( data.endValOrPlugin, PlugString.validValueTypes ) )		break;
 							plug = new PlugString( data.endValOrPlugin.ToString(), data.isRelative );
