@@ -40,6 +40,7 @@ namespace Holoville.HOTween
 		string				id { get; set; }
 		
 		/// <summary>
+		/// Default is <c>-1</c>.
 		/// Eventual int ID of this tween
 		/// (more than one tween can share the same intId, thus allowing for grouped operations).
 		/// The main difference from <c>id</c> is that while <c>id</c> is more legible, <c>intId</c> allows for faster operations.

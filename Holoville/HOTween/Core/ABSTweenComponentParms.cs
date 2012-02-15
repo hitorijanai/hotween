@@ -39,7 +39,7 @@ namespace Holoville.HOTween.Core
 		/// <summary>
 		/// Int ID.
 		/// </summary>
-		protected	int								intId = 0;
+		protected	int								intId = -1;
 		/// <summary>
 		/// Auto kill on complete.
 		/// </summary>

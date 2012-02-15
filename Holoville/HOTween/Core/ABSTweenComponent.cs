@@ -38,7 +38,7 @@ namespace Holoville.HOTween.Core
 		// VARS ///////////////////////////////////////////////////
 		
 		internal	string						_id = "";
-		internal	int							_intId = 0;
+		internal	int							_intId = -1;
 		internal	bool						_autoKillOnComplete = true;
 		internal	float						_timeScale = HOTween.defTimeScale;
 		internal	int							_loops = 1;
