@@ -37,6 +37,10 @@ namespace Holoville.HOTween.Core
 		/// </summary>
 		protected	string							id = "";
 		/// <summary>
+		/// Int ID.
+		/// </summary>
+		protected	int								intId = 0;
+		/// <summary>
 		/// Auto kill on complete.
 		/// </summary>
 		protected	bool							autoKillOnComplete = true;
@@ -148,6 +152,7 @@ namespace Holoville.HOTween.Core
 		protected void InitializeOwner( ABSTweenComponent p_owner )
 		{
 			p_owner._id = id;
+			p_owner._intId = intId;
 			p_owner._autoKillOnComplete = autoKillOnComplete;
 			p_owner._updateType = updateType;
 			p_owner._timeScale = timeScale;

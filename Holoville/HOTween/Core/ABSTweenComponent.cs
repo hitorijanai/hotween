@@ -38,6 +38,7 @@ namespace Holoville.HOTween.Core
 		// VARS ///////////////////////////////////////////////////
 		
 		internal	string						_id = "";
+		internal	int							_intId = 0;
 		internal	bool						_autoKillOnComplete = true;
 		internal	float						_timeScale = HOTween.defTimeScale;
 		internal	int							_loops = 1;
@@ -118,13 +119,24 @@ namespace Holoville.HOTween.Core
 		// GETS/SETS //////////////////////////////////////////////
 		
 		/// <summary>
-		/// Eventual ID of this Tweener/Sequence
+		/// Eventual string ID of this Tweener/Sequence
 		/// (more than one Tweener/Sequence can share the same ID, thus allowing for grouped operations).
+		/// You can also use <c>intId</c> instead of <c>id</c> for faster operations.
 		/// </summary>
 		public		string					id
 		{
 			get { return _id; }
 			set { _id = value; }
+		}
+		/// <summary>
+		/// Eventual int ID of this Tweener/Sequence
+		/// (more than one Tweener/Sequence can share the same intId, thus allowing for grouped operations).
+		/// The main difference from <c>id</c> is that while <c>id</c> is more legible, <c>intId</c> allows for faster operations.
+		/// </summary>
+		public		int						intId
+		{
+			get { return _intId; }
+			set { _intId = value; }
 		}
 		/// <summary>
 		/// Default is <c>true</c>, which means this Tweener/Sequence will be killed and removed from HOTween as soon as it's completed.

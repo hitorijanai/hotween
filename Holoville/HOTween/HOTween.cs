@@ -39,8 +39,8 @@ namespace Holoville.HOTween
 	/// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-	/// <para>Version: 0.8.016</para>
-	/// <para>Last update: 2012/02/04</para>
+	/// <para>Version: 0.8.018</para>
+	/// <para>Last update: 2012/02/15</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
 	{
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// HOTween version.
 		/// </summary>
-		public	const		string							VERSION = "0.8.017";
+		public	const		string							VERSION = "0.8.018";
 		/// <summary>
 		/// HOTween author - me! :P
 		/// </summary>
@@ -441,6 +441,16 @@ namespace Holoville.HOTween
 		/// </returns>
 		static public int Pause( string p_id ) { return DoFilteredIteration( p_id, DoFilteredPause, false ); }
 		/// <summary>
+		/// Pauses all the Tweeners/Sequences with the given intId, and returns the total number of paused Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to pause.
+		/// </param>
+		/// <returns>
+		/// The total number of paused Tweeners/Sequences.
+		/// </returns>
+		static public int Pause( int p_intId ) { return DoFilteredIteration( p_intId, DoFilteredPause, false ); }
+		/// <summary>
 		/// Pauses the given Tweener, and returns the total number of paused ones (1 if the Tweener existed, otherwise 0).
 		/// </summary>
 		/// <param name="p_tweener">
@@ -514,6 +524,29 @@ namespace Holoville.HOTween
 		/// The total number of resumed Tweeners/Sequences.
 		/// </returns>
 		static public int Play( string p_id, bool p_skipDelay ) { return DoFilteredIteration( p_id, DoFilteredPlay, false, p_skipDelay ); }
+		/// <summary>
+		/// Resumes all the Tweeners (delays included) and Sequences with the given intId, and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int Play( int p_intId ) { return Play( p_intId, false ); }
+		/// <summary>
+		/// Resumes all the Tweeners/Sequences with the given intId, and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to resume.
+		/// </param>
+		/// <param name="p_skipDelay">
+		/// If <c>true</c> skips any initial tween delay.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int Play( int p_intId, bool p_skipDelay ) { return DoFilteredIteration( p_intId, DoFilteredPlay, false, p_skipDelay ); }
 		/// <summary>
 		/// Resumes the given Tweener (delays included), and returns the total number of resumed ones (1 if the Tweener existed, otherwise 0).
 		/// </summary>
@@ -612,6 +645,29 @@ namespace Holoville.HOTween
 		/// </returns>
 		static public int Rewind( string p_id, bool p_skipDelay ) { return DoFilteredIteration( p_id, DoFilteredRewind, false, p_skipDelay ); }
 		/// <summary>
+		/// Rewinds all the Tweeners (delays included) and Sequences with the given intId, and returns the total number of rewinded Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to rewind.
+		/// </param>
+		/// <returns>
+		/// The total number of rewinded Tweeners/Sequences.
+		/// </returns>
+		static public int Rewind( int p_intId ) { return Rewind( p_intId, false ); }
+		/// <summary>
+		/// Rewinds all the Tweeners/Sequences with the given intId, and returns the total number of rewinded Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to rewind.
+		/// </param>
+		/// <param name="p_skipDelay">
+		/// If <c>true</c> skips any initial tween delay.
+		/// </param>
+		/// <returns>
+		/// The total number of rewinded Tweeners/Sequences.
+		/// </returns>
+		static public int Rewind( int p_intId, bool p_skipDelay ) { return DoFilteredIteration( p_intId, DoFilteredRewind, false, p_skipDelay ); }
+		/// <summary>
 		/// Rewinds the given Tweener (delays included), and returns the total number of rewinded ones (1 if the Tweener existed, otherwise 0).
 		/// </summary>
 		/// <param name="p_tweener">
@@ -709,6 +765,29 @@ namespace Holoville.HOTween
 		/// </returns>
 		static public int Restart( string p_id, bool p_skipDelay ) { return DoFilteredIteration( p_id, DoFilteredRestart, false, p_skipDelay ); }
 		/// <summary>
+		/// Restarts all the Tweeners (delays included) and Sequences with the given intId, and returns the total number of restarted Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to restart.
+		/// </param>
+		/// <returns>
+		/// The total number of restarted Tweeners/Sequences.
+		/// </returns>
+		static public int Restart( int p_intId ) { return Restart( p_intId, false ); }
+		/// <summary>
+		/// Restarts all the Tweeners/Sequences with the given intId, and returns the total number of restarted Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to restart.
+		/// </param>
+		/// <param name="p_skipDelay">
+		/// If <c>true</c> skips any initial tween delay.
+		/// </param>
+		/// <returns>
+		/// The total number of restarted Tweeners/Sequences.
+		/// </returns>
+		static public int Restart( int p_intId, bool p_skipDelay ) { return DoFilteredIteration( p_intId, DoFilteredRestart, false, p_skipDelay ); }
+		/// <summary>
 		/// Restarts the given Tweener (delays included), and returns the total number of restarted ones (1 if the Tweener existed, otherwise 0).
 		/// </summary>
 		/// <param name="p_tweener">
@@ -784,6 +863,18 @@ namespace Holoville.HOTween
 		/// </returns>
 		static public int Reverse( string p_id ) { return DoFilteredIteration( p_id, DoFilteredReverse, false ); }
 		/// <summary>
+		/// Reverses all the Tweeners/Sequences with the given intId,
+		/// animating them from their current value back to the starting one,
+		/// and returns the total number of reversed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to reverse.
+		/// </param>
+		/// <returns>
+		/// The total number of reversed Tweeners/Sequences.
+		/// </returns>
+		static public int Reverse( int p_intId ) { return DoFilteredIteration( p_intId, DoFilteredReverse, false ); }
+		/// <summary>
 		/// Reverses the given Tweener,
 		/// animating it from its current value back to the starting one,
 		/// and returns the total number of reversed Tweeners (1 if the Tweener existed, otherwise 0).
@@ -840,6 +931,18 @@ namespace Holoville.HOTween
 		/// </returns>
 		static public int Complete( string p_id ) { return DoFilteredIteration( p_id, DoFilteredComplete, true ); }
 		/// <summary>
+		/// Completes all the Tweeners/Sequences with the given intId, and returns the total number of completed Tweeners/Sequences.
+		/// Where a loop was involved and not infinite, the relative Tweener/Sequence completes at the position where it would actually be after the set number of loops.
+		/// If there were infinite loops, this method will have no effect.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to complete.
+		/// </param>
+		/// <returns>
+		/// The total number of completed Tweeners/Sequences.
+		/// </returns>
+		static public int Complete( int p_intId ) { return DoFilteredIteration( p_intId, DoFilteredComplete, true ); }
+		/// <summary>
 		/// Completes the given Tweener, and returns the total number of completed ones (1 if the Tweener existed, otherwise 0).
 		/// Where a loop was involved and not infinite, the relative Tweener completes at the position where it would actually be after the set number of loops.
 		/// If there were infinite loops, this method will have no effect.
@@ -894,6 +997,16 @@ namespace Holoville.HOTween
 		/// The total number of killed Tweeners/Sequences.
 		/// </returns>
 		static public int Kill( string p_id ) { return DoFilteredIteration( p_id, DoFilteredKill, true ); }
+		/// <summary>
+		/// Kills all the Tweeners/Sequences with the given intId, and returns the total number of killed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to kill.
+		/// </param>
+		/// <returns>
+		/// The total number of killed Tweeners/Sequences.
+		/// </returns>
+		static public int Kill( int p_intId ) { return DoFilteredIteration( p_intId, DoFilteredKill, true ); }
 		/// <summary>
 		/// Kills the given Tweener, and returns the total number of killed ones (1 if the Tweener existed, otherwise 0).
 		/// </summary>
@@ -1115,6 +1228,15 @@ namespace Holoville.HOTween
 				for ( int i = tweens.Count - 1; i > -1; --i ) {
 					p_operation( i, p_optionalBool );
 					++opCount;
+				}
+			} else if ( p_filter is int ) {
+				// Int ID
+				int f = (int) p_filter;
+				for ( int i = tweens.Count - 1; i > -1; --i ) {
+					if ( tweens[i].intId == f ) {
+						p_operation( i, p_optionalBool );
+						++opCount;
+					}
 				}
 			} else if ( p_filter is string ) {
 				// ID

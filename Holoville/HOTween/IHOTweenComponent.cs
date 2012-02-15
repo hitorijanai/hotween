@@ -35,8 +35,16 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// Eventual ID of this tween
 		/// (more than one tween can share the same ID, thus allowing for grouped operations).
+		/// You can also use <c>intId</c> instead of <c>id</c> for faster operations.
 		/// </summary>
 		string				id { get; set; }
+		
+		/// <summary>
+		/// Eventual int ID of this tween
+		/// (more than one tween can share the same intId, thus allowing for grouped operations).
+		/// The main difference from <c>id</c> is that while <c>id</c> is more legible, <c>intId</c> allows for faster operations.
+		/// </summary>
+		int					intId { get; set; }
 		
 		/// <summary>
 		/// Default is <c>true</c>.

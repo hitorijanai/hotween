@@ -54,6 +54,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// Sets the ID of this Sequence (default = "").
 		/// The same ID can be applied to multiple Sequences, thus allowing for group operations.
+		/// You can also use <c>IntId</c> instead of <c>Id</c> for faster operations.
 		/// </summary>
 		/// <param name="p_id">
 		/// The ID for this Sequence.
@@ -61,6 +62,21 @@ namespace Holoville.HOTween
 		public SequenceParms Id( string p_id )
 		{
 			id = p_id;
+			
+			return this;
+		}
+		
+		/// <summary>
+		/// Sets the int ID of this Tweener (default = 0).
+		/// The same intId can be applied to multiple Tweeners, thus allowing for group operations.
+		/// The main difference from <c>Id</c> is that while <c>Id</c> is more legible, <c>IntId</c> allows for faster operations.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The int ID for this Tweener.
+		/// </param>
+		public SequenceParms IntId( int p_intId )
+		{
+			intId = p_intId;
 			
 			return this;
 		}
