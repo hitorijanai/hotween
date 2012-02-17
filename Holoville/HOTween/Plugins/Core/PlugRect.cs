@@ -43,6 +43,7 @@ namespace Holoville.HOTween.Plugins.Core
 		private		Rect				typedStartVal;
 		private		Rect				typedEndVal;
 		private		float				changeVal;
+		private		Rect				diffChangeVal; // Used for incremental loops.
 		
 		// GETS/SETS //////////////////////////////////////////////
 		
@@ -151,6 +152,37 @@ namespace Holoville.HOTween.Plugins.Core
 				typedEndVal.width += typedStartVal.width;
 				typedEndVal.height += typedStartVal.height;
 			}
+			
+			diffChangeVal = new Rect();
+			diffChangeVal.x = typedEndVal.x - typedStartVal.x;
+			diffChangeVal.y = typedEndVal.y - typedStartVal.y;
+			diffChangeVal.width = typedEndVal.width - typedStartVal.width;
+			diffChangeVal.height = typedEndVal.height - typedStartVal.height;
+		}
+		
+		/// <summary>
+		/// Sets the correct values in case of Incremental loop type.
+		/// </summary>
+		/// <param name="p_diffIncr">
+		/// The difference from the previous loop increment.
+		/// </param>
+		override protected void SetIncremental( int p_diffIncr )
+		{
+			Rect diffR = new Rect( diffChangeVal.x, diffChangeVal.y, diffChangeVal.width, diffChangeVal.height );
+			diffR.x *= p_diffIncr;
+			diffR.y *= p_diffIncr;
+			diffR.width *= p_diffIncr;
+			diffR.height *= p_diffIncr;
+			
+			typedStartVal.x += diffR.x;
+			typedStartVal.y += diffR.y;
+			typedStartVal.width += diffR.width;
+			typedStartVal.height += diffR.height;
+			
+			typedEndVal.x += diffR.x;
+			typedEndVal.y += diffR.y;
+			typedEndVal.width += diffR.width;
+			typedEndVal.height += diffR.height;
 		}
 		
 		/// <summary>

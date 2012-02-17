@@ -73,6 +73,7 @@ namespace Holoville.HOTween.Plugins.Core
 		private		EaseInfo								easeInfo;
 		private		IMemberAccessor							valAccessor;
 		private		bool									wasStarted;
+		private		int										prevCompletedLoops = 0; // Stored only during Incremental loop type.
 		
 		// IOS-ONLY VARS //////////////////////////////////////////
 		
@@ -263,7 +264,22 @@ namespace Holoville.HOTween.Plugins.Core
 		/// </param>
 		internal void Update( float p_totElapsed )
 		{
+			if ( tweenObj.loopType == LoopType.Incremental ) {
+				// prevCompleteLoops is stored only during Incremental loops,
+				// so that if the loop type is changed while the tween is running,
+				// the tween will change and update correctly.
+				if ( prevCompletedLoops != tweenObj.completedLoops ) {
+					SetIncremental( tweenObj.completedLoops - prevCompletedLoops );
+					prevCompletedLoops = tweenObj.completedLoops;
+				}
+			} else if ( prevCompletedLoops != 0 ) {
+				// Readapt to non incremental loop type.
+				SetIncremental( -prevCompletedLoops );
+				prevCompletedLoops = 0;
+			}
+			
 			if ( p_totElapsed > _duration )		p_totElapsed = _duration;
+			
 			DoUpdate( p_totElapsed );
 		}
 		
@@ -338,6 +354,14 @@ namespace Holoville.HOTween.Plugins.Core
 		/// Can only be called once, otherwise some typedEndVal (like HOTPluginColor) will be set incorrectly.
 		/// </summary>
 		abstract protected void SetChangeVal();
+		
+		/// <summary>
+		/// Sets the correct values in case of Incremental loop type.
+		/// </summary>
+		/// <param name="p_diffIncr">
+		/// The difference from the previous loop increment.
+		/// </param>
+		abstract protected void SetIncremental( int p_diffIncr );
 		
 		/// <summary>
 		/// Sets the value of the controlled property.

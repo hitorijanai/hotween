@@ -57,6 +57,7 @@ namespace Holoville.HOTween.Plugins
 		
 		private		Vector3					typedStartVal;
 		private		Vector3[]				points;
+		private		Vector3					diffChangeVal; // Used for incremental loops.
 		private		bool					isClosedPath = false;
 		private		OrientType				orientType = OrientType.None;
 		private		Vector3					orientation; // Used to get correct axis for orientation.
@@ -340,6 +341,28 @@ namespace Holoville.HOTween.Plugins
 			
 			// Store arc lengths table for constant speed.
 			dcTimeToLen = path.GetTimeToArcLenTable( path.path.Length * 4, out pathLen );
+			
+			if ( !isClosedPath ) {
+				// Store the changeVal used for Incremental loops.
+				diffChangeVal = pts[pts.Length - 2] - pts[1];
+			}
+		}
+		
+		/// <summary>
+		/// Sets the correct values in case of Incremental loop type.
+		/// </summary>
+		/// <param name="p_diffIncr">
+		/// The difference from the previous loop increment.
+		/// </param>
+		override protected void SetIncremental( int p_diffIncr )
+		{
+			if ( isClosedPath )			return;
+			
+			Vector3[] pathPs = path.path;
+			for ( int i = 0; i < pathPs.Length; ++i ) {
+				pathPs[i] += ( diffChangeVal * p_diffIncr );
+			}
+			path.changed = true;
 		}
 		
 		/// <summary>

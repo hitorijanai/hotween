@@ -69,7 +69,7 @@ namespace Holoville.HOTween.Core
 		/// <summary>
 		/// Completed loops.
 		/// </summary>
-		protected	int							_completedLoops;
+		protected	int							_completedLoops = 0;
 		/// <summary>
 		/// Duration.
 		/// </summary>
@@ -612,7 +612,7 @@ namespace Holoville.HOTween.Core
 		protected void SetLoops()
 		{
 			_completedLoops = (int) Mathf.Floor( _fullElapsed / _duration ); // TODO can't use (int) or tilde to Floor number because they're imprecise, but I should find a quicker solution.
-			_isLoopingBack = ( _loopType != LoopType.Restart &&
+			_isLoopingBack = ( _loopType != LoopType.Restart && _loopType != LoopType.Incremental &&
 				( _loops > 0 && ( _completedLoops < _loops && _completedLoops % 2 != 0 || _completedLoops >= _loops && _completedLoops % 2 == 0 )
 				|| _loops < 0 && _completedLoops % 2 != 0 ) );
 		}

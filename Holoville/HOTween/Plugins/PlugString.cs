@@ -141,6 +141,24 @@ namespace Holoville.HOTween.Plugins
 		}
 		
 		/// <summary>
+		/// Sets the correct values in case of Incremental loop type.
+		/// </summary>
+		/// <param name="p_diffIncr">
+		/// The difference from the previous loop increment.
+		/// </param>
+		override protected void SetIncremental( int p_diffIncr )
+		{
+			if ( p_diffIncr > 0 ) {
+				while ( p_diffIncr > 0 ) {
+					typedStartVal += typedEndVal;
+					--p_diffIncr;
+				}
+			} else {
+				typedStartVal = typedStartVal.Substring( 0, typedStartVal.Length + ( typedEndVal.Length * p_diffIncr ) );
+			}
+		}
+		
+		/// <summary>
 		/// Updates the tween.
 		/// </summary>
 		/// <param name="p_totElapsed">

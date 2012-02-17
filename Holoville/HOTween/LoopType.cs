@@ -41,7 +41,12 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// Like <see cref="LoopType.Yoyo"/>, but also inverts the easing (meaning if it was <c>easeInSomething</c>, it will become <c>easeOutSomething</c>, and viceversa).
 		/// </summary>
-		YoyoInverse
+		YoyoInverse,
+		/// <summary>
+		/// Continuously increments the tween (X to Y, Y to Y+(Y-X), and so on),
+		/// thus always moving "onward".
+		/// </summary>
+		Incremental
 	}
 }
 

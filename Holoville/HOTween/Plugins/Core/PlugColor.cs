@@ -41,6 +41,7 @@ namespace Holoville.HOTween.Plugins.Core
 		private		Color				typedStartVal;
 		private		Color				typedEndVal;
 		private		float				changeVal;
+		private		Color				diffChangeVal; // Used for incremental loops.
 		
 		// GETS/SETS //////////////////////////////////////////////
 		
@@ -136,6 +137,20 @@ namespace Holoville.HOTween.Plugins.Core
 			
 			if ( isRelative && !tweenObj.isFrom )
 				typedEndVal = typedStartVal + typedEndVal;
+			
+			diffChangeVal = typedEndVal - typedStartVal;
+		}
+		
+		/// <summary>
+		/// Sets the correct values in case of Incremental loop type.
+		/// </summary>
+		/// <param name="p_diffIncr">
+		/// The difference from the previous loop increment.
+		/// </param>
+		override protected void SetIncremental( int p_diffIncr )
+		{
+			typedStartVal += diffChangeVal * p_diffIncr;
+			typedEndVal += diffChangeVal * p_diffIncr;
 		}
 		
 		/// <summary>

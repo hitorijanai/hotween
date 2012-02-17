@@ -39,6 +39,7 @@ namespace Holoville.HOTween.Core
 		// VARS ///////////////////////////////////////////////////
 		
 		internal		Vector3[]						path;
+		internal		bool							changed; // Used by incremental loops to tell that drawPs should be recalculated.
 		
 		private			Vector3[]						drawPs; // Used by GizmoDraw to store point only once.
 		
@@ -125,7 +126,8 @@ namespace Holoville.HOTween.Core
 			Gizmos.color = new Color( 0.6f,0.6f,0.6f,0.6f );
 			
 			Vector3 currPt;
-			if ( drawPs == null ) {
+			if ( changed || drawPs == null ) {
+				changed = false;
 				// Store draw points.
 				float pm;
 				int subdivisions = path.Length * 10;
