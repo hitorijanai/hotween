@@ -39,8 +39,8 @@ namespace Holoville.HOTween
 	/// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-	/// <para>Version: 0.8.102</para>
-	/// <para>Last update: 2012/02/23</para>
+	/// <para>Version: 0.8.103</para>
+	/// <para>Last update: 2012/02/24</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
 	{
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// HOTween version.
 		/// </summary>
-		public	const		string							VERSION = "0.8.102";
+		public	const		string							VERSION = "0.8.103";
 		/// <summary>
 		/// HOTween author - me! :P
 		/// </summary>
@@ -1164,7 +1164,7 @@ namespace Holoville.HOTween
 		{
 			tweenGOInstance = new GameObject( GAMEOBJNAME );
 			it = tweenGOInstance.AddComponent<HOTween>();
-			DontDestroyOnLoad( tweenGOInstance ); // I need to destroy it so I know when the scene changes.
+			DontDestroyOnLoad( tweenGOInstance );
 			
 			time = Time.realtimeSinceStartup;
 			it.StartCoroutine( "NewTweenInstance_StartTimeScaleIndependentUpdate" );

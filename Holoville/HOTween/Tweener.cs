@@ -275,7 +275,7 @@ namespace Holoville.HOTween
 					_fullElapsed = 0;
 			} else {
 				// Manage delay (delay doesn't go backwards).
-				_elapsedDelay += p_shortElapsed / _timeScale;
+				if ( _timeScale != 0 )	_elapsedDelay += p_shortElapsed / _timeScale; // Calculate delay independently of timeScale
 				if ( _elapsedDelay < delayCount ) {
 					return false;
 				} else {
