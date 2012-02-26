@@ -340,7 +340,7 @@ namespace Holoville.HOTween.Plugins.Core
 		/// </summary>
 		internal ABSTweenPlugin CloneBasic()
 		{
-			// FIXME incredibly slow. Possible solutions...
+			// OPTIMIZE incredibly slow. Possible solutions...
 			// - http://rogeralsing.com/2008/02/28/linq-expressions-creating-objects (but requires Linq, and thus System.Core, which I'd prefer to avoid)
 			// - http://ayende.com/blog/3167/creating-objects-perf-implications (has to know the class to create, thus is useless)
 			return Activator.CreateInstance( this.GetType(), ( tweenObj != null && tweenObj.isFrom ? _startVal : _endVal ), easeType, isRelative ) as ABSTweenPlugin;
@@ -393,7 +393,7 @@ namespace Holoville.HOTween.Plugins.Core
 					valAccessor.Set( tweenObj.target, p_value );
 				} catch ( InvalidCastException ) {
 					// This happens only if a float is being assigned to an int.
-					valAccessor.Set( tweenObj.target, Convert.ToInt32( p_value ) ); // FIXME store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
+					valAccessor.Set( tweenObj.target, Convert.ToInt32( p_value ) ); // OPTIMIZE store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
 				}
 			}
 		}

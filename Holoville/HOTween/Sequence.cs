@@ -412,7 +412,7 @@ namespace Holoville.HOTween
 		/// </summary>
 		private void TweenStartupIteration()
 		{
-			// FIXME Find way to speed this up (by applying values directly instead than animating to them?)
+			// OPTIMIZE Find way to speed this up (by applying values directly instead than animating to them?)
 			HOTSeqItem item;
 			for ( int i = 0; i < items.Count; ++i ) {
 				item = items[i];

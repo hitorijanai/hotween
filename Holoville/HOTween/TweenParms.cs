@@ -106,7 +106,7 @@ namespace Holoville.HOTween
 					if ( plug.ValidateTarget( p_target ) ) {
 						if ( plug.initialized ) {
 							// This plugin was already initialized with another Tweener. Clone it.
-							plug = plug.CloneBasic(); // FIXME Uses Activator, which is slow.
+							plug = plug.CloneBasic(); // OPTIMIZE Uses Activator, which is slow.
 						}
 					} else {
 						// Invalid target.

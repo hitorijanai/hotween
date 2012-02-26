@@ -97,5 +97,6 @@
     <Compile Include="Holoville\HOTween\Plugins\PlugVector3Z.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Holoville\HOTween\Plugins\Core\PlugRect.cs" />
+    <Compile Include="Holoville\HOTween\Axis.cs" />
   </ItemGroup>
 </Project>

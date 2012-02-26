@@ -60,8 +60,9 @@ namespace Holoville.HOTween.Plugins
 		private		Vector3					diffChangeVal; // Used for incremental loops.
 		private		bool					isClosedPath = false;
 		private		OrientType				orientType = OrientType.None;
-		private		Vector3					orientation; // Used to get correct axis for orientation.
 		private		float					lookAheadVal = 0.0001f;
+		private		Axis					lockAxis = Axis.None;
+		private		Vector3					lockRot; // Stores initial rotation axis, so they can be locked.
 		private		Dictionary<float,float>	dcTimeToLen; // Stores arc lenghts table, used for constant speed calculations.
 		private		float					pathLen; // Stored when storing dcTimeToLen;
 		
@@ -208,7 +209,7 @@ namespace Holoville.HOTween.Plugins
 		/// <param name="p_orient">
 		/// Set to <c>true</c> to orient the tween target to the path.
 		/// </param>
-		public PlugVector3Path OrientToPath( bool p_orient ) { return OrientToPath( p_orient, 0.0001f ); }
+		public PlugVector3Path OrientToPath( bool p_orient ) { return OrientToPath( p_orient, 0.0001f, Axis.None ); }
 		/// <summary>
 		/// Parameter > If the tween target is a <see cref="Transform"/>, orients the tween target to the path,
 		/// using the given lookAhead percentage.
@@ -216,7 +217,16 @@ namespace Holoville.HOTween.Plugins
 		/// <param name="p_lookAhead">
 		/// The look ahead percentage (0 to 1).
 		/// </param>
-		public PlugVector3Path OrientToPath( float p_lookAhead ) { return OrientToPath( true, p_lookAhead ); }
+		public PlugVector3Path OrientToPath( float p_lookAhead ) { return OrientToPath( true, p_lookAhead, Axis.None ); }
+		/// <summary>
+		/// Parameter > If the tween target is a <see cref="Transform"/>, orients the tween target to the path,
+		/// locking it's rotation on the given axis.
+		/// </summary>
+		/// <param name="p_lockAxis">
+		/// Sets one or more axis to lock while rotating.
+		/// To lock more than one axis, use the bitwise OR operator (ex: <c>Axis.X | Axis.Y</c>).
+		/// </param>
+		public PlugVector3Path OrientToPath( Axis p_lockAxis ) { return OrientToPath( true, 0.0001f, p_lockAxis ); }
 		/// <summary>
 		/// Parameter > Choose whether to orient the tween target to the path (only if it's a <see cref="Transform"/>),
 		/// and which lookAhead percentage to use.
@@ -227,12 +237,17 @@ namespace Holoville.HOTween.Plugins
 		/// <param name="p_lookAhead">
 		/// The look ahead percentage (0 to 1).
 		/// </param>
-		public PlugVector3Path OrientToPath( bool p_orient, float p_lookAhead )
+		/// <param name="p_lockAxis">
+		/// Sets one or more axis to lock while rotating.
+		/// To lock more than one axis, use the bitwise OR operator (ex: <c>Axis.X | Axis.Y</c>).
+		/// </param>
+		public PlugVector3Path OrientToPath( bool p_orient, float p_lookAhead, Axis p_lockAxis )
 		{
 			if ( p_orient )		orientType = OrientType.ToPath;
 			lookAheadVal = p_lookAhead;
 			if ( lookAheadVal < 0.0001f )	lookAheadVal = 0.0001f;
 			if ( lookAheadVal > 0.9999f )	lookAheadVal = 0.9999f;
+			lockAxis = p_lockAxis;
 			return this;
 		}
 		
@@ -282,15 +297,15 @@ namespace Holoville.HOTween.Plugins
 		override protected void SetChangeVal()
 		{
 			if ( orientType != OrientType.None ) {
-				// Store orient transform and orientation.
+				// Store orient transform and lockRot.
 				if ( orientTrans == null ) {
 					if ( tweenObj.target is Transform )
 						orientTrans = tweenObj.target as Transform;
 					else
 						orientTrans = null;
 				}
-				if ( orientTrans != null && !orientTrans.Equals( null ) ) {
-					orientation = orientTrans.rotation.eulerAngles;
+				if ( lockAxis != Axis.None && orientTrans != null && !orientTrans.Equals( null ) ) {
+					lockRot = orientTrans.rotation.eulerAngles;
 				}
 			}
 			
@@ -418,6 +433,14 @@ namespace Holoville.HOTween.Plugins
 					if ( nextT > 1 )	nextT = nextT - 1;
 					nextP = path.GetPoint( nextT );
 					orientTrans.LookAt ( nextP, orientTrans.up );
+					if ( lockAxis != Axis.None ) {
+						// FIXME LockAxis
+						Vector3 rot = orientTrans.eulerAngles;
+						if ( ( lockAxis & Axis.X ) == Axis.X )	rot.x = lockRot.x;
+						if ( ( lockAxis & Axis.Y ) == Axis.Y )	rot.y = lockRot.y;
+						if ( ( lockAxis & Axis.Z ) == Axis.Z )	rot.z = lockRot.z;
+						orientTrans.rotation = Quaternion.Euler( rot );
+					}
 					break;
 				}
 			}
