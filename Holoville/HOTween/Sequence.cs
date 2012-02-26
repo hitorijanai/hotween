@@ -36,6 +36,10 @@ namespace Holoville.HOTween
 	/// </summary>
 	public class Sequence : ABSTweenComponent
 	{
+		// VARS ///////////////////////////////////////////////////
+
+		private		int						prevCompletedLoops = 0; // Stored only during Incremental loop type.
+		
 		// REFERENCES /////////////////////////////////////////////
 		
 		private		List<HOTSeqItem>		items;
@@ -329,6 +333,21 @@ namespace Holoville.HOTween
 			_isComplete = ( !_isReversed && _loops >= 0 && _completedLoops >= _loops );
 			bool complete = ( !wasComplete && _isComplete ? true : false );
 			
+			// Manage Incremental loops.
+			if ( _loopType == LoopType.Incremental ) {
+				// prevCompleteLoops is stored only during Incremental loops,
+				// so that if the loop type is changed while the tween is running,
+				// the tween will change and update correctly.
+				if ( prevCompletedLoops != _completedLoops ) {
+					SetIncremental( _completedLoops - prevCompletedLoops );
+					prevCompletedLoops = _completedLoops;
+				}
+			} else if ( prevCompletedLoops != 0 ) {
+				// Readapt to non incremental loop type.
+				SetIncremental( -prevCompletedLoops );
+				prevCompletedLoops = 0;
+			}
+			
 			// Update the elements...
 			HOTSeqItem item;
 			float twElapsed = ( !_isLoopingBack ? _elapsed : _duration - _elapsed );
@@ -356,6 +375,23 @@ namespace Holoville.HOTween
 			ignoreCallbacks = false;
 			
 			return complete;
+		}
+		
+		/// <summary>
+		/// Sets the correct values in case of Incremental loop type.
+		/// Also called by Tweener.ApplySequenceIncrement (used by Sequences during Incremental loops).
+		/// </summary>
+		/// <param name="p_diffIncr">
+		/// The difference from the previous loop increment.
+		/// </param>
+		override internal void SetIncremental( int p_diffIncr )
+		{
+			HOTSeqItem item;
+			for ( int i = 0; i < items.Count; ++i ) {
+				item = items[i];
+				if ( item.twMember == null )	continue;
+				item.twMember.SetIncremental( p_diffIncr );
+			}
 		}
 		
 		// ===================================================================================

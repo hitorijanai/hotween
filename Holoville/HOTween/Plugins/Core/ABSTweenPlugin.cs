@@ -357,11 +357,12 @@ namespace Holoville.HOTween.Plugins.Core
 		
 		/// <summary>
 		/// Sets the correct values in case of Incremental loop type.
+		/// Also called by Tweener.ApplySequenceIncrement (used by Sequences during Incremental loops).
 		/// </summary>
 		/// <param name="p_diffIncr">
 		/// The difference from the previous loop increment.
 		/// </param>
-		abstract protected void SetIncremental( int p_diffIncr );
+		abstract internal void SetIncremental( int p_diffIncr );
 		
 		/// <summary>
 		/// Sets the value of the controlled property.

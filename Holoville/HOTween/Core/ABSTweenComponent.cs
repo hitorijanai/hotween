@@ -484,6 +484,15 @@ namespace Holoville.HOTween.Core
 		/// </returns>
 		abstract internal bool Update( float p_elapsed, bool p_forceUpdate, bool p_isStartupIteration );
 		
+		/// <summary>
+		/// Applies the correct Incremental Sequence loop value.
+		/// Called by Sequences when they need to change the increment value of nested Sequences/Tweeners.
+		/// </summary>
+		/// <param name="p_diffIncr">
+		/// The difference from the previous main Sequence loop increment.
+		/// </param>
+		abstract internal void SetIncremental( int p_diffIncr );
+		
 		// ===================================================================================
 		// PRIVATE METHODS -------------------------------------------------------------------
 		

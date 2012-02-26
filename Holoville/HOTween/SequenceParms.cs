@@ -139,6 +139,9 @@ namespace Holoville.HOTween
 		/// </param>
 		/// <param name="p_loopType">
 		/// The <see cref="LoopType"/> behaviour to use.
+		/// Note the <see cref="LoopType.Incremental"/> is available, but as an experimental feature.
+		/// It works with simple Sequences, but you should check that your animation
+		/// works as intended with more complex Sequences.
 		/// </param>
 		public SequenceParms Loops( int p_loops, LoopType p_loopType )
 		{

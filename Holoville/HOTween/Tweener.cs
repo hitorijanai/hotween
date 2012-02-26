@@ -325,6 +325,19 @@ namespace Holoville.HOTween
 			return complete;
 		}
 		
+		/// <summary>
+		/// Sets the correct values in case of Incremental loop type.
+		/// Also called by Tweener.ApplySequenceIncrement (used by Sequences during Incremental loops).
+		/// </summary>
+		/// <param name="p_diffIncr">
+		/// The difference from the previous loop increment.
+		/// </param>
+		override internal void SetIncremental( int p_diffIncr )
+		{
+			if ( plugins == null )		return;
+			for ( int i = 0; i < plugins.Count; ++i )		plugins[i].SetIncremental( p_diffIncr );
+		}
+		
 		// ===================================================================================
 		// PRIVATE METHODS -------------------------------------------------------------------
 		

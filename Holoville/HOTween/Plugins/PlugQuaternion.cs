@@ -232,7 +232,7 @@ namespace Holoville.HOTween.Plugins
 		/// <param name="p_diffIncr">
 		/// The difference from the previous loop increment.
 		/// </param>
-		override protected void SetIncremental( int p_diffIncr )
+		override internal void SetIncremental( int p_diffIncr )
 		{
 			typedStartVal += changeVal * p_diffIncr;
 		}
