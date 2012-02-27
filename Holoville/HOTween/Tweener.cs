@@ -154,7 +154,8 @@ namespace Holoville.HOTween
 		/// </param>
 		public void Play( bool p_skipDelay )
 		{
-			if ( p_skipDelay )		SkipDelay();
+			if ( !_enabled )			return;
+			if ( p_skipDelay )			SkipDelay();
 			base.Play();
 		}
 		
@@ -189,6 +190,7 @@ namespace Holoville.HOTween
 		/// </summary>
 		override internal void Complete( bool p_autoRemoveFromHOTween )
 		{
+			if ( !_enabled )				return;
 			if ( _loops < 0 )				return;
 			
 			_fullElapsed = ( _fullDuration == Mathf.Infinity ? _duration : _fullDuration );
@@ -209,6 +211,7 @@ namespace Holoville.HOTween
 		/// </returns>
 		override public bool IsTweening( object p_target )
 		{
+			if ( !_enabled )				return false;
 			if ( p_target == _target )		return !_isPaused;
 			return false;
 		}
@@ -256,6 +259,7 @@ namespace Holoville.HOTween
 				Kill( false );
 				return true;
 			}
+			if ( !_enabled )											return false;
 			if ( _isComplete && !_isReversed && !p_forceUpdate )		return true;
 			if ( _fullElapsed == 0 && _isReversed && !p_forceUpdate )	return false;
 			if ( _isPaused && !p_forceUpdate )							return false;
@@ -350,6 +354,8 @@ namespace Holoville.HOTween
 		/// </returns>
 		override protected bool GoTo( float p_time, bool p_play, bool p_forceUpdate )
 		{
+			if ( !_enabled )									return false;
+			
 			if ( p_time > _fullDuration )
 				p_time = _fullDuration;
 			else if ( p_time < 0 )
@@ -367,6 +373,8 @@ namespace Holoville.HOTween
 		
 		private void Rewind( bool p_play, bool p_skipDelay )
 		{
+			if ( !_enabled )					return;
+			
 			if ( !_hasStarted )					OnStart();
 			
 			_isComplete = false;

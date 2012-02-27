@@ -56,6 +56,14 @@ namespace Holoville.HOTween
 		bool				autoKillOnComplete { get; set; }
 		
 		/// <summary>
+		/// Default is <c>true</c>.
+		/// If set to <c>false</c>, this Tweener/Sequence will not be updated,
+		/// and any use of animation methods (Play/Pause/Rewind/etc) will be ignored
+		/// (both if called directly via this instance, than if using HOTween.Play/Pause/Rewind/etc.).
+		/// </summary>
+		bool				enabled { get; set; }
+		
+		/// <summary>
 		/// Time scale that will be used by this Tweener/Sequence.
 		/// </summary>
 		float				timeScale { get; set; }

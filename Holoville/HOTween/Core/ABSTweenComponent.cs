@@ -40,6 +40,7 @@ namespace Holoville.HOTween.Core
 		internal	string						_id = "";
 		internal	int							_intId = -1;
 		internal	bool						_autoKillOnComplete = true;
+		internal	bool						_enabled = true;
 		internal	float						_timeScale = HOTween.defTimeScale;
 		internal	int							_loops = 1;
 		internal	LoopType					_loopType = HOTween.defLoopType;
@@ -147,6 +148,17 @@ namespace Holoville.HOTween.Core
 		{
 			get { return _autoKillOnComplete; }
 			set { _autoKillOnComplete = value; }
+		}
+		/// <summary>
+		/// Default is <c>true</c>.
+		/// If set to <c>false</c>, this Tweener/Sequence will not be updated,
+		/// and any use of animation methods (Play/Pause/Rewind/etc) will be ignored
+		/// (both if called directly via this instance, than if using HOTween.Play/Pause/Rewind/etc.).
+		/// </summary>
+		public		bool					enabled
+		{
+			get { return _enabled; }
+			set { _enabled = value; }
 		}
 		/// <summary>
 		/// Time scale that will be used by this Tweener/Sequence.
@@ -308,6 +320,7 @@ namespace Holoville.HOTween.Core
 		/// </summary>
 		public void Play()
 		{
+			if ( !_enabled )			return;
 			bool wasPaused = _isPaused;
 			_isPaused = false;
 			if ( wasPaused )			OnPlay();
@@ -318,6 +331,7 @@ namespace Holoville.HOTween.Core
 		/// </summary>
 		public void Pause()
 		{
+			if ( !_enabled )			return;
 			bool wasPaused = _isPaused;
 			_isPaused = true;
 			if ( !wasPaused )			OnPause();
@@ -339,6 +353,7 @@ namespace Holoville.HOTween.Core
 		/// </summary>
 		public void Reverse()
 		{
+			if ( !_enabled )			return;
 			_isReversed = !_isReversed;
 		}
 		

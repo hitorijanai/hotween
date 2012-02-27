@@ -171,7 +171,6 @@ namespace Holoville.HOTween
 				items.Add( newItem );
 				_duration = newItem.startTime + newItem.duration;
 				SetFullDuration();
-				Debug.Log( "> " + _duration + "/" + _fullDuration );
 				return _duration;
 			}
 			
@@ -232,7 +231,7 @@ namespace Holoville.HOTween
 		/// </returns>
 		override public bool IsTweening( object p_target )
 		{
-			if ( items == null )			return false;
+			if ( !_enabled || items == null )		return false;
 			
 			HOTSeqItem item;
 			for ( int i = 0; i < items.Count; ++i ) {
@@ -277,6 +276,7 @@ namespace Holoville.HOTween
 		/// </summary>
 		override internal void Complete( bool p_autoRemoveFromHOTween )
 		{
+			if ( !_enabled )						return;
 			if ( items == null || _loops < 0 )		return;
 			
 			_fullElapsed = _fullDuration;
@@ -306,6 +306,7 @@ namespace Holoville.HOTween
 		{
 			if ( _destroyed )											return true;
 			if ( items == null )										return true;
+			if ( !_enabled )											return false;
 			if ( _isComplete && !_isReversed && !p_forceUpdate )		return true;
 			if ( _fullElapsed == 0 && _isReversed && !p_forceUpdate )	return false;
 			if ( _isPaused && !p_forceUpdate )							return false;
@@ -408,6 +409,8 @@ namespace Holoville.HOTween
 		/// </returns>
 		override protected bool GoTo( float p_time, bool p_play, bool p_forceUpdate )
 		{
+			if ( !_enabled )									return false;
+			
 			if ( p_time > _fullDuration )
 				p_time = _fullDuration;
 			else if ( p_time < 0 )
@@ -423,6 +426,7 @@ namespace Holoville.HOTween
 		
 		private void Rewind( bool p_play )
 		{
+			if ( !_enabled )							return;
 			if ( items == null )						return;
 			
 			if ( !_hasStarted )							OnStart();
