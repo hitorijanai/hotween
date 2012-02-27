@@ -95,9 +95,9 @@ namespace Holoville.HOTween
 		public float Append( IHOTweenComponent p_twMember ) { return Append( p_twMember, 0 ); }
 		private float Append( IHOTweenComponent p_twMember, float p_duration )
 		{
-			if ( items == null )							return Insert( 0, p_twMember );
+			if ( items == null )							return ( p_twMember != null ? Insert( 0, p_twMember ) : Insert( 0, null, p_duration ) );
 			
-			HOTween.Kill( p_twMember );
+			if ( p_twMember != null )						HOTween.Kill( p_twMember );
 			
 			HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( _duration, p_twMember as ABSTweenComponent ) : new HOTSeqItem( _duration, p_duration ) );
 			items.Add( newItem );
@@ -134,7 +134,7 @@ namespace Holoville.HOTween
 		{
 			if ( items == null )							return Insert( 0, p_twMember );
 			
-			HOTween.Kill( p_twMember );
+			if ( p_twMember != null )						HOTween.Kill( p_twMember );
 			
 			HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( 0, p_twMember as ABSTweenComponent ) : new HOTSeqItem( 0, p_duration ) );
 			float itemDur = newItem.duration;
@@ -159,17 +159,19 @@ namespace Holoville.HOTween
 		/// <returns>
 		/// The new Sequence total time length (loops excluded).
 		/// </returns>
-		public float Insert( float p_time, IHOTweenComponent p_twMember )
+		public float Insert( float p_time, IHOTweenComponent p_twMember ) { return Insert( p_time, p_twMember, 0 ); }
+		private float Insert( float p_time, IHOTweenComponent p_twMember, float p_duration )
 		{
-			HOTween.Kill( p_twMember );
+			if ( p_twMember != null )						HOTween.Kill( p_twMember );
 			
-			HOTSeqItem newItem = new HOTSeqItem( p_time, p_twMember as ABSTweenComponent );
+			HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( p_time, p_twMember as ABSTweenComponent ) : new HOTSeqItem( p_time, p_duration ) );
 			
 			if ( items == null ) {
 				items = new List<HOTSeqItem>();
 				items.Add( newItem );
 				_duration = newItem.startTime + newItem.duration;
 				SetFullDuration();
+				Debug.Log( "> " + _duration + "/" + _fullDuration );
 				return _duration;
 			}
 			
