@@ -116,6 +116,10 @@ namespace Holoville.HOTween.Core
 		/// and reset to FALSE in the last line of Update().
 		/// </summary>
 		protected	bool						ignoreCallbacks;
+		/// <summary>
+		/// Used to determine if OnUpdate callbacks should be called.
+		/// </summary>
+		protected	float						prevFullElapsed = 0;
 		
 		// GETS/SETS //////////////////////////////////////////////
 		

@@ -317,7 +317,8 @@ namespace Holoville.HOTween
 			}
 			
 			// Manage eventual pause, complete, update, and stepComplete.
-			if ( !p_forceUpdate )							OnUpdate();
+//			if ( !p_forceUpdate )							OnUpdate();
+			if ( _fullElapsed != prevFullElapsed )			OnUpdate();
 			if ( complete ) {
 				OnComplete();
 			} else if ( stepComplete ) {
@@ -325,6 +326,7 @@ namespace Holoville.HOTween
 			}
 			
 			ignoreCallbacks = false;
+			prevFullElapsed = _fullElapsed;
 			
 			return complete;
 		}
