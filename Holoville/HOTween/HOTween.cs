@@ -24,6 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
+// Last update: 2012/02/29
 
 using UnityEngine;
 using System.Collections;
@@ -40,7 +41,6 @@ namespace Holoville.HOTween
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
 	/// <para>Version: 0.8.120</para>
-	/// <para>Last update: 2012/02/27</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
 	{

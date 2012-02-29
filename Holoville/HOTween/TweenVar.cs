@@ -170,7 +170,7 @@ namespace Holoville.HOTween
 		/// </param>
 		public float UpdateRelative( float p_relativeElapsed )
 		{
-			Update( _elapsed + p_relativeElapsed );
+			return Update( _elapsed + p_relativeElapsed );
 		}
 		
 		// ===================================================================================
