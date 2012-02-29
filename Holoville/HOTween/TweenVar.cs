@@ -32,7 +32,7 @@ namespace Holoville.HOTween
 	/// <summary>
 	/// A special class used to setup a "virtual" tween,
 	/// which will not actually be tweened nor updated,
-	/// but will just set and return a value when you call <see cref="Update"/> or <see cref="UpdateRelative"/>.
+	/// but will just set and return a value when you call <see cref="Update"/>.
 	/// </summary>
 	public class TweenVar
 	{
@@ -145,32 +145,33 @@ namespace Holoville.HOTween
 		
 		/// <summary>
 		/// Sets and returns the value at which this <see cref="TweenVar"/>
+		/// would be after the given absolute time.
+		/// </summary>
+		/// <param name="p_elapsed">
+		/// The elapsed time to calculate.
+		/// </param>
+		public float Update( float p_elapsed ) { return Update( p_elapsed, false ); }
+		/// <summary>
+		/// Sets and returns the value at which this <see cref="TweenVar"/>
 		/// would be after the given time.
 		/// </summary>
-		/// <param name="p_totElapsed">
-		/// The total elapsed time since startup.
+		/// <param name="p_elapsed">
+		/// The elapsed time to calculate.
 		/// </param>
-		public float Update( float p_totElapsed )
+		/// <param name="p_relative">
+		/// If <c>true</c> consideres p_elapsed as relative,
+		/// meaning it will be added to the previous elapsed time,
+		/// otherwise it is considered absolute.
+		/// </param>
+		public float Update( float p_elapsed, bool p_relative )
 		{
-			_elapsed = p_totElapsed;
+			_elapsed = ( p_relative ? _elapsed + p_elapsed : p_elapsed );
 			if ( _elapsed > duration )
 				_elapsed = duration;
 			else if ( _elapsed < 0 )
 				_elapsed = 0;
 			_value = ease( _elapsed, _startVal, changeVal, duration );
 			return _value;
-		}
-		
-		/// <summary>
-		/// Sets and returns the value at which this <see cref="TweenVar"/>
-		/// would be after the given time.
-		/// </summary>
-		/// <param name="p_relativeElapsed">
-		/// The relative elapsed time since the last update.
-		/// </param>
-		public float UpdateRelative( float p_relativeElapsed )
-		{
-			return Update( _elapsed + p_relativeElapsed );
 		}
 		
 		// ===================================================================================
