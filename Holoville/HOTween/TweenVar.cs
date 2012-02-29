@@ -1,0 +1,185 @@
+// 
+// TweenVar.cs
+//  
+// Author: Daniele Giardini
+// 
+// Copyright (c) 2012 Daniele Giardini - Holoville s.a.s. - http://www.holoville.com
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+using System;
+using Holoville.HOTween;
+using Holoville.HOTween.Core;
+
+namespace Holoville.HOTween
+{
+	/// <summary>
+	/// A special class used to setup a "virtual" tween,
+	/// which will not actually be tweened nor updated,
+	/// but will just set and return a value when you call <see cref="Update"/> or <see cref="UpdateRelative"/>.
+	/// </summary>
+	public class TweenVar
+	{
+		// VARS ///////////////////////////////////////////////////
+		
+		/// <summary>
+		/// Virtual duration
+		/// (you could also set it to 1 or 100 to treat it as a percentage).
+		/// </summary>
+		public		float					duration;
+		
+		private		float					_value;
+		private		float					_startVal;
+		private		float					_endVal;
+		private		EaseType				_easeType;
+		private		float					_elapsed = 0;
+		
+		private		float					changeVal;
+		private		TweenDelegate.EaseFunc	ease;
+		
+		// GETS/SETS //////////////////////////////////////////////
+		
+		/// <summary>
+		/// Start value (TO).
+		/// </summary>
+		public		float					startVal
+		{
+			get { return _startVal; }
+			set { _startVal = value; SetChangeVal(); }
+		}
+		/// <summary>
+		/// End value (FROM).
+		/// </summary>
+		public		float					endVal
+		{
+			get { return _endVal; }
+			set { _endVal = value; SetChangeVal(); }
+		}
+		/// <summary>
+		/// Ease type.
+		/// </summary>
+		public		EaseType				easeType
+		{
+			get { return _easeType; }
+			set { _easeType = value; ease = EaseInfo.GetEaseInfo( _easeType ).ease; }
+		}
+		
+		// READ-ONLY GETS /////////////////////////////////////////
+
+		/// <summary>
+		/// The current value of this <see cref="TweenVar"/>
+		/// </summary>
+		public		float					value
+		{
+			get { return _value; }
+		}
+		/// <summary>
+		/// The current elapsed time.
+		/// </summary>
+		public		float					elapsed
+		{
+			get { return _elapsed; }
+		}
+		
+		
+		// ***********************************************************************************
+		// CONSTRUCTOR
+		// ***********************************************************************************
+		
+		/// <summary>
+		/// Creates a new TweenVar instance using Linear ease.
+		/// </summary>
+		/// <param name="p_startVal">
+		/// Start value (FROM).
+		/// </param>
+		/// <param name="p_endVal">
+		/// End value (TO).
+		/// </param>
+		/// <param name="p_duration">
+		/// Virtual duration.
+		/// (you could also set it to 1 or 100 to treat it as a percentage).
+		/// </param>
+		public TweenVar( float p_startVal, float p_endVal, float p_duration ) : this( p_startVal, p_endVal, p_duration, EaseType.Linear ) {}
+		/// <summary>
+		/// Creates a new TweenVar instance.
+		/// </summary>
+		/// <param name="p_startVal">
+		/// Start value (FROM).
+		/// </param>
+		/// <param name="p_endVal">
+		/// End value (TO).
+		/// </param>
+		/// <param name="p_duration">
+		/// Virtual duration.
+		/// (you could also set it to 1 or 100 to treat it as a percentage).
+		/// </param>
+		/// <param name="p_easeType">
+		/// Ease type.
+		/// </param>
+		public TweenVar( float p_startVal, float p_endVal, float p_duration, EaseType p_easeType )
+		{
+			startVal = _value = p_startVal;
+			endVal = p_endVal;
+			duration = p_duration;
+			easeType = p_easeType;
+		}
+		
+		// ===================================================================================
+		// METHODS ---------------------------------------------------------------------------
+		
+		/// <summary>
+		/// Sets and returns the value at which this <see cref="TweenVar"/>
+		/// would be after the given time.
+		/// </summary>
+		/// <param name="p_totElapsed">
+		/// The total elapsed time since startup.
+		/// </param>
+		public float Update( float p_totElapsed )
+		{
+			_elapsed = p_totElapsed;
+			if ( _elapsed > duration )
+				_elapsed = duration;
+			else if ( _elapsed < 0 )
+				_elapsed = 0;
+			_value = ease( _elapsed, _startVal, changeVal, duration );
+			return _value;
+		}
+		
+		/// <summary>
+		/// Sets and returns the value at which this <see cref="TweenVar"/>
+		/// would be after the given time.
+		/// </summary>
+		/// <param name="p_relativeElapsed">
+		/// The relative elapsed time since the last update.
+		/// </param>
+		public float UpdateRelative( float p_relativeElapsed )
+		{
+			Update( _elapsed + p_relativeElapsed );
+		}
+		
+		// ===================================================================================
+		// PRIVATE METHODS -------------------------------------------------------------------
+
+		private void SetChangeVal()
+		{
+			changeVal = endVal - startVal;
+		}
+	}
+}
+

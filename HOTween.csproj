@@ -98,5 +98,6 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Holoville\HOTween\Plugins\Core\PlugRect.cs" />
     <Compile Include="Holoville\HOTween\Axis.cs" />
+    <Compile Include="Holoville\HOTween\TweenVar.cs" />
   </ItemGroup>
 </Project>
