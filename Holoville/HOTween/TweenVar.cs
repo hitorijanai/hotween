@@ -32,7 +32,7 @@ namespace Holoville.HOTween
 	/// <summary>
 	/// A special class used to setup a "virtual" tween,
 	/// which will not actually be tweened nor updated,
-	/// but will just set and return a value when you call <see cref="Update"/>.
+	/// but will just set and return a value when you call Update.
 	/// </summary>
 	public class TweenVar
 	{
@@ -56,7 +56,7 @@ namespace Holoville.HOTween
 		// GETS/SETS //////////////////////////////////////////////
 		
 		/// <summary>
-		/// Start value (TO).
+		/// Start value (FROM).
 		/// </summary>
 		public		float					startVal
 		{
@@ -64,7 +64,7 @@ namespace Holoville.HOTween
 			set { _startVal = value; SetChangeVal(); }
 		}
 		/// <summary>
-		/// End value (FROM).
+		/// End value (TO).
 		/// </summary>
 		public		float					endVal
 		{
