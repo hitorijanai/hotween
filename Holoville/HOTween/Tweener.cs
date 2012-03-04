@@ -231,6 +231,30 @@ namespace Holoville.HOTween
 			return ( p_target == _target );
 		}
 		
+		/// <summary>
+		/// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
+		/// returns a point on the path at the given percentage (0 to 1).
+		/// Returns a <c>zero Vector</c> if there's no path tween associated with this tween.
+		/// Note that, if the tween wasn't started, the OnStart callback will be called
+		/// the first time you call this method, because the tween needs to be initialized.
+		/// </summary>
+		/// <param name="t">
+		/// The percentage (0 to 1) at which to get the point.
+		/// </param>
+		public Vector3 GetPointOnPath( float t )
+		{
+			if ( plugins == null )			return Vector3.zero;
+			
+			foreach ( ABSTweenPlugin plug in plugins ) {
+				if ( plug is PlugVector3Path ) {
+					if ( !hasStarted )		OnStart(); // Startup the tween to get the path data.
+					return ( plug as PlugVector3Path ).GetConstPointOnPath( t );
+				}
+			}
+			
+			return Vector3.zero;
+		}
+		
 		// ===================================================================================
 		// INTERNAL METHODS ------------------------------------------------------------------
 		

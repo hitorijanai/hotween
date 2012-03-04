@@ -64,8 +64,11 @@ namespace Holoville.HOTween.Core
 		// METHODS ---------------------------------------------------------------------------
 		
 		/// <summary>
-		/// Gets the point on the curve at the given time position.
+		/// Gets the point on the curve at the given percentage (0 to 1).
 		/// </summary>
+		/// <param name="t">
+		/// The percentage (0 to 1) at which to get the point.
+		/// </param>
 		public Vector3 GetPoint( float t )
 		{
 			int numSections = path.Length - 3;
@@ -89,6 +92,7 @@ namespace Holoville.HOTween.Core
 		
 		/// <summary>
 		/// Gets the velocity at the given time position.
+		/// OBSOLETE since path now uses constant velocity.
 		/// </summary>
 		public Vector3 Velocity( float t )
 		{

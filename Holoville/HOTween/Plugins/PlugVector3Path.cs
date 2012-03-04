@@ -238,6 +238,7 @@ namespace Holoville.HOTween.Plugins
 		/// The look ahead percentage (0 to 1).
 		/// </param>
 		/// <param name="p_lockAxis">
+		/// WARNING: do NOT use, still in alpha.
 		/// Sets one or more axis to lock while rotating.
 		/// To lock more than one axis, use the bitwise OR operator (ex: <c>Axis.X | Axis.Y</c>).
 		/// </param>
@@ -389,33 +390,7 @@ namespace Holoville.HOTween.Plugins
 		override protected void DoUpdate ( float p_totElapsed )
 		{
 			pathPerc = ease( p_totElapsed, 0, 1, _duration );
-			
-			// Apply constant speed
-			if ( pathPerc > 0 && pathPerc < 1 ) {
-				float tLen = pathLen * pathPerc;
-				// Find point in time/lenght table.
-				float t0 = 0;
-				float l0 = 0;
-				float t1 = 0;
-				float l1 = 0;
-				foreach ( KeyValuePair<float,float> item in dcTimeToLen ) {
-					if ( item.Value > tLen ) {
-						t1 = item.Key;
-						l1 = item.Value;
-						if ( t0 > 0 )	l0 = dcTimeToLen[t0];
-						break;
-					}
-					t0 = item.Key;
-				}
-				// Find correct time.
-				pathPerc = t0 + ( ( tLen - l0 ) / ( l1 - l0 ) ) * ( t1 - t0 );
-			}
-			
-			// Clamp value because path has limited range of 0-1.
-			if ( pathPerc > 1 ) pathPerc = 1; else if ( pathPerc < 0 ) pathPerc = 0;
-			
-			Vector3 v = path.GetPoint( pathPerc );
-			SetValue( v );
+			SetValue( GetConstPointOnPath( pathPerc ) );
 			
 			if ( orientType != OrientType.None && orientTrans != null && !orientTrans.Equals( null ) ) {
 				switch ( orientType ) {
@@ -444,6 +419,43 @@ namespace Holoville.HOTween.Plugins
 					break;
 				}
 			}
+		}
+		
+		/// <summary>
+		/// Returns the point at the given percentage (0 to 1),
+		/// considering the path at constant speed.
+		/// Used by DoUpdate and by Tweener.GetPointOnPath.
+		/// </summary>
+		/// <param name="t">
+		/// The percentage (0 to 1) at which to get the point.
+		/// </param>
+		internal Vector3 GetConstPointOnPath( float t )
+		{
+			// Apply constant speed
+			if ( t > 0 && t < 1 ) {
+				float tLen = pathLen * t;
+				// Find point in time/lenght table.
+				float t0 = 0;
+				float l0 = 0;
+				float t1 = 0;
+				float l1 = 0;
+				foreach ( KeyValuePair<float,float> item in dcTimeToLen ) {
+					if ( item.Value > tLen ) {
+						t1 = item.Key;
+						l1 = item.Value;
+						if ( t0 > 0 )	l0 = dcTimeToLen[t0];
+						break;
+					}
+					t0 = item.Key;
+				}
+				// Find correct time.
+				t = t0 + ( ( tLen - l0 ) / ( l1 - l0 ) ) * ( t1 - t0 );
+			}
+			
+			// Clamp value because path has limited range of 0-1.
+			if ( t > 1 ) t = 1; else if ( t < 0 ) t = 0;
+			
+			return path.GetPoint( t );
 		}
 	}
 }
