@@ -334,7 +334,6 @@ namespace Holoville.HOTween
 			SetLoops();
 			SetElapsed();
 			_isComplete = ( !_isReversed && _loops >= 0 && _completedLoops >= _loops );
-			Debug.Log( _isComplete + " / " + _completedLoops );
 			bool complete = ( !wasComplete && _isComplete ? true : false );
 			
 			// Manage Incremental loops.
