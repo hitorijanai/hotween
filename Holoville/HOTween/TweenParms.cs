@@ -121,35 +121,39 @@ namespace Holoville.HOTween
 					switch ( shortPropType ) {
 						case "Vector2":
 							if ( !ValidateValue( data.endValOrPlugin, PlugVector2.validValueTypes ) )		break;
-							plug = new PlugVector2( (Vector2) data.endValOrPlugin, data.isRelative );
-						break;
+							plug = new PlugVector2( (Vector2)data.endValOrPlugin, data.isRelative );
+							break;
 						case "Vector3":
 							if ( !ValidateValue( data.endValOrPlugin, PlugVector3.validValueTypes ) )		break;
-							plug = new PlugVector3( (Vector3) data.endValOrPlugin, data.isRelative );
-						break;
+							plug = new PlugVector3( (Vector3)data.endValOrPlugin, data.isRelative );
+							break;
 						case "Vector4":
 							if ( !ValidateValue( data.endValOrPlugin, PlugVector4.validValueTypes ) )		break;
-							plug = new PlugVector4( (Vector4) data.endValOrPlugin, data.isRelative );
-						break;
+							plug = new PlugVector4( (Vector4)data.endValOrPlugin, data.isRelative );
+							break;
 						case "Quaternion":
 							if ( !ValidateValue( data.endValOrPlugin, PlugQuaternion.validValueTypes ) )	break;
 							if ( data.endValOrPlugin is Vector3 )
 								plug = new PlugQuaternion( (Vector3)data.endValOrPlugin, data.isRelative );
 							else
 								plug = new PlugQuaternion( (Quaternion)data.endValOrPlugin, data.isRelative );
-						break;
+							break;
 						case "Color":
 							if ( !ValidateValue( data.endValOrPlugin, PlugColor.validValueTypes ) )			break;
-							plug = new PlugColor( (Color) data.endValOrPlugin, data.isRelative );
-						break;
+							plug = new PlugColor( (Color)data.endValOrPlugin, data.isRelative );
+							break;
 						case "Rect":
 							if ( !ValidateValue( data.endValOrPlugin, PlugRect.validValueTypes ) )			break;
-							plug = new PlugRect( (Rect) data.endValOrPlugin, data.isRelative );
-						break;
+							plug = new PlugRect( (Rect)data.endValOrPlugin, data.isRelative );
+							break;
 						case "String":
 							if ( !ValidateValue( data.endValOrPlugin, PlugString.validValueTypes ) )		break;
 							plug = new PlugString( data.endValOrPlugin.ToString(), data.isRelative );
-						break;
+							break;
+						case "Int32":
+							if ( !ValidateValue( data.endValOrPlugin, PlugInt.validValueTypes ) )			break;
+							plug = new PlugInt( (int)data.endValOrPlugin, data.isRelative );
+							break;
 						default:
 							try {
 								plug = new PlugFloat( Convert.ToSingle( data.endValOrPlugin ), data.isRelative );
@@ -157,7 +161,7 @@ namespace Holoville.HOTween
 								TweenWarning.Log( "No valid plugin for animating \"" + p_target + "." + data.propName + "\" (of type " + propType + "). The tween for this property will not be created." );
 								continue;
 							}
-						break;
+							break;
 					}
 					if ( plug == null ) {
 						TweenWarning.Log( "The end value set for \"" + p_target + "." + data.propName + "\" tween is invalid. The tween for this property will not be created." );
