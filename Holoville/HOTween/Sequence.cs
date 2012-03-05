@@ -334,6 +334,7 @@ namespace Holoville.HOTween
 			SetLoops();
 			SetElapsed();
 			_isComplete = ( !_isReversed && _loops >= 0 && _completedLoops >= _loops );
+			Debug.Log( _isComplete + " / " + _completedLoops );
 			bool complete = ( !wasComplete && _isComplete ? true : false );
 			
 			// Manage Incremental loops.
@@ -342,8 +343,13 @@ namespace Holoville.HOTween
 				// so that if the loop type is changed while the tween is running,
 				// the tween will change and update correctly.
 				if ( prevCompletedLoops != _completedLoops ) {
-					SetIncremental( _completedLoops - prevCompletedLoops );
-					prevCompletedLoops = _completedLoops;
+					int currLoops = _completedLoops;
+					if ( currLoops >= _loops )		--currLoops; // Avoid to calculate completion loop increment
+					int diff = currLoops - prevCompletedLoops;
+					if ( diff != 0 ) {
+						SetIncremental( diff );
+						prevCompletedLoops = currLoops;
+					}
 				}
 			} else if ( prevCompletedLoops != 0 ) {
 				// Readapt to non incremental loop type.

@@ -269,8 +269,13 @@ namespace Holoville.HOTween.Plugins.Core
 				// so that if the loop type is changed while the tween is running,
 				// the tween will change and update correctly.
 				if ( prevCompletedLoops != tweenObj.completedLoops ) {
-					SetIncremental( tweenObj.completedLoops - prevCompletedLoops );
-					prevCompletedLoops = tweenObj.completedLoops;
+					int currLoops = tweenObj.completedLoops;
+					if ( currLoops >= tweenObj._loops )		--currLoops; // Avoid to calculate completion loop increment
+					int diff = currLoops - prevCompletedLoops;
+					if ( diff != 0 ) {
+						SetIncremental( diff );
+						prevCompletedLoops = currLoops;
+					}
 				}
 			} else if ( prevCompletedLoops != 0 ) {
 				// Readapt to non incremental loop type.
