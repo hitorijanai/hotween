@@ -23,6 +23,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.Collections;
+
 namespace Holoville.HOTween
 {
 	/// <summary>
@@ -215,6 +217,13 @@ namespace Holoville.HOTween
 		/// Returns <c>true</c> if the Tweener/Sequence reached its end and was completed.
 		/// </returns>
 		bool GoToAndPlay( float p_time );
+		
+		/// <summary>
+		/// A coroutine that waits until the Tweener/Sequence is complete (delays and loops included).
+		/// You can use it inside a coroutin as a yield. Ex:
+		/// yield return StartCoroutine( myTweenComponent.WaitForCompletion() );
+		/// </summary>
+		IEnumerator WaitForCompletion();
 		
 		/// <summary>
 		/// Returns <c>true</c> if the given target is currently involved in this Tweener/Sequence (taking into account also nested tweens).

@@ -24,6 +24,7 @@
 // THE SOFTWARE.
 
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using Holoville.HOTween.Plugins.Core;
 
@@ -424,6 +425,17 @@ namespace Holoville.HOTween.Core
 		/// Returns <c>true</c> if the Tweener/Sequence reached its end and was completed.
 		/// </returns>
 		public bool GoToAndPlay( float p_time, bool p_forceUpdate ) { return GoTo( p_time, true, p_forceUpdate ); }
+		
+		/// <summary>
+		/// A coroutine that waits until the Tweener/Sequence is complete (delays and loops included).
+		/// You can use it inside a coroutin as a yield. Ex:
+		/// yield return StartCoroutine( myTweenComponent.WaitForCompletion() );
+		/// </summary>
+		public IEnumerator WaitForCompletion()
+		{
+			while ( !_isComplete )		yield return 0;
+			yield break;
+		}
 		
 		/// <summary>
 		/// Returns <c>true</c> if the given target is currently involved in a running tween or sequence.
