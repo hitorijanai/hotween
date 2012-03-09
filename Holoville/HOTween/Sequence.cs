@@ -99,8 +99,10 @@ namespace Holoville.HOTween
 			
 			if ( p_twMember != null )						HOTween.Kill( p_twMember );
 			
+			if ( p_twMember != null )						CheckSpeedBasedTween( p_twMember );
 			HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( _duration, p_twMember as ABSTweenComponent ) : new HOTSeqItem( _duration, p_duration ) );
 			items.Add( newItem );
+			
 			_duration += newItem.duration;
 			
 			SetFullDuration();
@@ -136,7 +138,9 @@ namespace Holoville.HOTween
 			
 			if ( p_twMember != null )						HOTween.Kill( p_twMember );
 			
+			if ( p_twMember != null )						CheckSpeedBasedTween( p_twMember );
 			HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( 0, p_twMember as ABSTweenComponent ) : new HOTSeqItem( 0, p_duration ) );
+			
 			float itemDur = newItem.duration;
 			for ( int i = 0; i < items.Count; ++i )		items[i].startTime += itemDur;
 			items.Insert( 0, newItem );
@@ -162,8 +166,9 @@ namespace Holoville.HOTween
 		public float Insert( float p_time, IHOTweenComponent p_twMember ) { return Insert( p_time, p_twMember, 0 ); }
 		private float Insert( float p_time, IHOTweenComponent p_twMember, float p_duration )
 		{
-			if ( p_twMember != null )						HOTween.Kill( p_twMember );
+			if ( p_twMember != null )				HOTween.Kill( p_twMember );
 			
+			if ( p_twMember != null )				CheckSpeedBasedTween( p_twMember );
 			HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( p_time, p_twMember as ABSTweenComponent ) : new HOTSeqItem( p_time, p_duration ) );
 			
 			if ( items == null ) {
@@ -182,7 +187,7 @@ namespace Holoville.HOTween
 					break;
 				}
 			}
-			if ( !placed )		items.Add( newItem );
+			if ( !placed )							items.Add( newItem );
 			_duration = Mathf.Max( newItem.startTime + newItem.duration, _duration );
 			
 			SetFullDuration();
@@ -457,6 +462,7 @@ namespace Holoville.HOTween
 		
 		/// <summary>
 		/// Iterates through all the elements in order, to startup the plugins correctly.
+		/// Called at OnStart and during Append/Insert/Prepend for speedBased tweens (to calculate correct duration).
 		/// </summary>
 		private void TweenStartupIteration()
 		{
@@ -469,8 +475,18 @@ namespace Holoville.HOTween
 			}
 			for ( int i = items.Count - 1; i > - 1; --i ) {
 				item = items[i];
-				if ( item.twMember != null )				item.twMember.Rewind();
+				if ( item.twMember != null )			item.twMember.Rewind();
 			}
+		}
+		
+		/// <summary>
+		/// If the given <see cref="IHOTweenComponent"/> is a speedBased <see cref="Tweener"/>,
+		/// forces it to calculate the correct duration.
+		/// </summary>
+		private void CheckSpeedBasedTween( IHOTweenComponent p_twMember )
+		{
+			Tweener tw = p_twMember as Tweener;
+			if ( tw != null && tw._speedBased )		tw.ForceSetSpeedBasedDuration();
 		}
 		
 		/// <summary>

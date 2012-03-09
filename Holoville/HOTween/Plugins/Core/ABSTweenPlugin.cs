@@ -73,6 +73,7 @@ namespace Holoville.HOTween.Plugins.Core
 		private		EaseInfo								easeInfo;
 		private		IMemberAccessor							valAccessor;
 		private		bool									wasStarted;
+		private		bool									speedBasedDurationWasSet;
 		private		int										prevCompletedLoops = 0; // Stored only during Incremental loop type.
 		
 		// IOS-ONLY VARS //////////////////////////////////////////
@@ -218,14 +219,33 @@ namespace Holoville.HOTween.Plugins.Core
 		/// Starts up the plugin, getting the actual start and change values.
 		/// Called by Tweener right before starting the effective animations.
 		/// </summary>
-		internal void Startup()
+		internal void Startup() { Startup( false ); }
+		/// <summary>
+		/// Starts up the plugin, getting the actual start and change values.
+		/// Called by Tweener right before starting the effective animations.
+		/// </summary>
+		/// <param name="p_onlyCalcSpeedBasedDur">
+		/// Set to <c>true</c> by <see cref="ForceSetSpeedBasedDuration"/>,
+		/// to calculate only the speed based duration and then reset any startup changes
+		/// (so Startup can be called from scratch when truly starting up).
+		/// </param>
+		internal void Startup( bool p_onlyCalcSpeedBasedDur )
 		{
 			if ( wasStarted ) {
 				TweenWarning.Log( "Startup() for plugin " + this + " (target: " + tweenObj.target + ") has already been called. Startup() won't execute twice." );
-				return; // Startup can't be executed twice otherwise some typedEndVal (like for HOTPluginColor) will be set incorrectly
+				return; // Startup can't be executed twice otherwise some typedEndVal (like for PlugColor) will be set incorrectly
 			}
 			
-			wasStarted = true;
+			object orStartVal = null, orEndVal = null;
+			if ( p_onlyCalcSpeedBasedDur ) {
+				if ( tweenObj.speedBased && !speedBasedDurationWasSet ) {
+					// Get original values so they can be reset.
+					orStartVal = _startVal;
+					orEndVal = _endVal;
+				}
+			} else {
+				wasStarted = true;
+			}
 			
 			// Manage TO or FROM.
 			if ( tweenObj.isFrom ) {
@@ -240,11 +260,28 @@ namespace Holoville.HOTween.Plugins.Core
 			// Set changeVal.
 			SetChangeVal();
 			
-			if ( tweenObj.speedBased ) {
+			if ( tweenObj.speedBased && !speedBasedDurationWasSet ) {
 				// Get duration based on speed.
 				// Can't be done earlier because it needs changeVal to be set.
 				_duration = GetSpeedBasedDuration( _duration );
+				speedBasedDurationWasSet = true;
+				// Reset.
+				if ( p_onlyCalcSpeedBasedDur ) {
+					_startVal = orStartVal;
+					_endVal = orEndVal;
+				}
 			}
+		}
+		
+		/// <summary>
+		/// If speed based duration was not already set (meaning Startup has not yet been called),
+		/// calculates the duration and then resets the plugin so that Startup will restart from scratch.
+		/// Used by <see cref="Tweener.ForceSetSpeedBasedDuration"/>.
+		/// </summary>
+		internal void ForceSetSpeedBasedDuration()
+		{
+			if ( speedBasedDurationWasSet )		return;
+			Startup( true );
 		}
 		
 		/// <summary>

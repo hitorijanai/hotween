@@ -367,6 +367,23 @@ namespace Holoville.HOTween
 			for ( int i = 0; i < plugins.Count; ++i )		plugins[i].SetIncremental( p_diffIncr );
 		}
 		
+		/// <summary>
+		/// If speed based duration was not already set (meaning OnStart has not yet been called),
+		/// calculates the duration and then resets the tween so that OnStart can be called from scratch.
+		/// Used by Sequences when Appending/Prepending/Inserting speed based tweens.
+		/// </summary>
+		internal void ForceSetSpeedBasedDuration()
+		{
+			if ( !_speedBased || plugins == null )			return;
+			
+			for ( int i = 0; i < plugins.Count; ++i )		plugins[i].ForceSetSpeedBasedDuration();
+			_duration = 0;
+			foreach ( ABSTweenPlugin plug in plugins ) {
+				if ( plug.duration > _duration )			_duration = plug.duration;
+			}
+			SetFullDuration();
+		}
+		
 		// ===================================================================================
 		// PRIVATE METHODS -------------------------------------------------------------------
 		
