@@ -305,9 +305,9 @@ namespace Holoville.HOTween.Plugins
 					else
 						orientTrans = null;
 				}
-				if ( lockAxis != Axis.None && orientTrans != null && !orientTrans.Equals( null ) ) {
-					lockRot = orientTrans.rotation.eulerAngles;
-				}
+//				if ( lockAxis != Axis.None && orientTrans != null && !orientTrans.Equals( null ) ) {
+//					lockRot = orientTrans.rotation.eulerAngles;
+//				}
 			}
 			
 			// Create path.
@@ -390,7 +390,7 @@ namespace Holoville.HOTween.Plugins
 		override protected void DoUpdate ( float p_totElapsed )
 		{
 			pathPerc = ease( p_totElapsed, 0, 1, _duration );
-			SetValue( GetConstPointOnPath( pathPerc ) );
+			SetValue( GetConstPointOnPath( pathPerc, true ) );
 			
 			if ( orientType != OrientType.None && orientTrans != null && !orientTrans.Equals( null ) ) {
 				switch ( orientType ) {
@@ -408,14 +408,14 @@ namespace Holoville.HOTween.Plugins
 					if ( nextT > 1 )	nextT = nextT - 1;
 					nextP = path.GetPoint( nextT );
 					orientTrans.LookAt ( nextP, orientTrans.up );
-					if ( lockAxis != Axis.None ) {
-						// FIXME LockAxis
-						Vector3 rot = orientTrans.eulerAngles;
-						if ( ( lockAxis & Axis.X ) == Axis.X )	rot.x = lockRot.x;
-						if ( ( lockAxis & Axis.Y ) == Axis.Y )	rot.y = lockRot.y;
-						if ( ( lockAxis & Axis.Z ) == Axis.Z )	rot.z = lockRot.z;
-						orientTrans.rotation = Quaternion.Euler( rot );
-					}
+//					if ( lockAxis != Axis.None ) {
+//						// FIXME LockAxis
+//						Vector3 rot = orientTrans.eulerAngles;
+//						if ( ( lockAxis & Axis.X ) == Axis.X )	rot.x = lockRot.x;
+//						if ( ( lockAxis & Axis.Y ) == Axis.Y )	rot.y = lockRot.y;
+//						if ( ( lockAxis & Axis.Z ) == Axis.Z )	rot.z = lockRot.z;
+//						orientTrans.rotation = Quaternion.Euler( rot );
+//					}
 					break;
 				}
 			}
@@ -429,7 +429,20 @@ namespace Holoville.HOTween.Plugins
 		/// <param name="t">
 		/// The percentage (0 to 1) at which to get the point.
 		/// </param>
-		internal Vector3 GetConstPointOnPath( float t )
+		internal Vector3 GetConstPointOnPath( float t ) { return GetConstPointOnPath( t, false ); }
+		/// <summary>
+		/// Returns the point at the given percentage (0 to 1),
+		/// considering the path at constant speed.
+		/// Used by DoUpdate and by Tweener.GetPointOnPath.
+		/// </summary>
+		/// <param name="t">
+		/// The percentage (0 to 1) at which to get the point.
+		/// </param>
+		/// <param name="p_updatePathPerc">
+		/// IF <c>true</c> updates also <see cref="pathPerc"/> value
+		/// (necessary if this method is called for an update).
+		/// </param>
+		internal Vector3 GetConstPointOnPath( float t, bool p_updatePathPerc )
 		{
 			// Apply constant speed
 			if ( t > 0 && t < 1 ) {
@@ -454,6 +467,8 @@ namespace Holoville.HOTween.Plugins
 			
 			// Clamp value because path has limited range of 0-1.
 			if ( t > 1 ) t = 1; else if ( t < 0 ) t = 0;
+			// Update pathPerc.
+			if ( p_updatePathPerc )		pathPerc = t;
 			
 			return path.GetPoint( t );
 		}
