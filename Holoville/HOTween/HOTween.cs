@@ -1181,7 +1181,10 @@ namespace Holoville.HOTween
 		static private void AddTween( ABSTweenComponent p_tween )
 		{
 			if ( tweenGOInstance == null )			NewTweenInstance();
-			if ( tweens == null )					tweens = new List<ABSTweenComponent>();
+			if ( tweens == null ) {
+				tweens = new List<ABSTweenComponent>();
+				it.StartCoroutines();
+			}
 			tweens.Add( p_tween );
 			SetGOName();
 		}
@@ -1191,15 +1194,18 @@ namespace Holoville.HOTween
 			tweenGOInstance = new GameObject( GAMEOBJNAME );
 			it = tweenGOInstance.AddComponent<HOTween>();
 			DontDestroyOnLoad( tweenGOInstance );
-			
-			time = Time.realtimeSinceStartup;
-			it.StartCoroutine( "NewTweenInstance_StartTimeScaleIndependentUpdate" );
 		}
-		private IEnumerator NewTweenInstance_StartTimeScaleIndependentUpdate()
+		
+		private void StartCoroutines()
+		{
+			time = Time.realtimeSinceStartup;
+			StartCoroutine( StartCoroutines_StartTimeScaleIndependentUpdate() );
+		}
+		private IEnumerator StartCoroutines_StartTimeScaleIndependentUpdate()
 		{
 			yield return null;
 			
-			it.StartCoroutine( "TimeScaleIndependentUpdate" );
+			StartCoroutine( TimeScaleIndependentUpdate() );
 			
 			yield break;
 		}
