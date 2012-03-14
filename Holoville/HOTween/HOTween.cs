@@ -40,7 +40,7 @@ namespace Holoville.HOTween
 	/// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-	/// <para>Version: 0.8.132</para>
+	/// <para>Version: 0.8.140</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
 	{
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// HOTween version.
 		/// </summary>
-		public	const		string							VERSION = "0.8.132";
+		public	const		string							VERSION = "0.8.140";
 		/// <summary>
 		/// HOTween author - me! :P
 		/// </summary>
@@ -101,7 +101,10 @@ namespace Holoville.HOTween
 		/// (iOS doesn't support <c>Reflection.Emit</c>).
 		/// </summary>
 		static	internal	bool							isIOS;
-		
+		/// <summary>
+		/// <c>true</c> if the current player is running in the Editor.
+		/// </summary>
+		static	internal	bool							isEditor;
 		/// <summary>
 		/// Filled by tweens that are completed, so that their onCompleteDispatch method can be called AFTER HOTween has eventually removed them
 		/// (otherwise a Kill + To on the same target won't work).
@@ -110,6 +113,7 @@ namespace Holoville.HOTween
 		static	internal	List<ABSTweenComponent>			onCompletes = new List<ABSTweenComponent>();
 		
 		static	private		bool							initialized;
+		static	private		bool							isPermanent; // If TRUE doesn't destroy HOTween when all tweens are killed.
 		static	private		float							time;
 		
 		// REFERENCES /////////////////////////////////////////////
@@ -136,18 +140,39 @@ namespace Holoville.HOTween
 		// ***********************************************************************************
 		
 		/// <summary>
+		/// Initializes <see cref="HOTween"/> and sets it as non-permanent
+		/// (meaning HOTween instance will be destroyed when all tweens are killed,
+		/// and re-created when needed).
+		/// Call this method once when your application starts up,
+		/// to avoid auto-initialization when the first tween is started or created,
+		/// and to set options.
+		/// </summary>
+		static public void Init() { Init( false ); }
+		/// <summary>
 		/// Initializes <see cref="HOTween"/>.
 		/// Call this method once when your application starts up,
-		/// to avoid auto-initialization when the first tween is started or created.
-		/// Currently, nothing happens during Init, but it's here in case I should need it in the future.
+		/// to avoid auto-initialization when the first tween is started or created,
+		/// and to set options.
 		/// </summary>
-		static public void Init()
+		/// <param name="p_permanentInstance">
+		/// If set to <c>true</c>, doesn't destroy HOTween manager when no tween is present,
+		/// otherwise the manager is destroyed when all tweens have been killed,
+		/// and re-created when needed.
+		/// </param>
+		static public void Init( bool p_permanentInstance )
 		{
 			if ( initialized )						return;
 			
 			initialized = true;
 			
 			isIOS = ( Application.platform == RuntimePlatform.IPhonePlayer );
+			isEditor = Application.isEditor;
+			isPermanent = p_permanentInstance;
+			
+			if ( isPermanent && tweenGOInstance == null ) {
+				NewTweenInstance();
+				SetGOName();
+			}
 		}
 		
 		// ===================================================================================
@@ -177,7 +202,8 @@ namespace Holoville.HOTween
 		{
 			// Clear everything if this was the currenlty running HOTween.
 			// HINT I can use OnDestroy also to check for scene changes, and instantiate another HOTween instance if I need to keep it running.
-			// TODO For now HOTween is NOT destroyed when a scene is loaded, - add option to set it as destroyable?.
+			// TODO For now HOTween is NOT destroyed when a scene is loaded, - add option to set it as destroyable?
+			// (consider also isPermanent option if doing that).
 			if ( this == it )			Clear();
 		}
 		
@@ -1180,6 +1206,7 @@ namespace Holoville.HOTween
 		
 		static private void SetGOName()
 		{
+			if ( !isEditor )		return;
 			tweenGOInstance.name = GAMEOBJNAME + " : " + totTweens;
 		}
 		
@@ -1187,6 +1214,7 @@ namespace Holoville.HOTween
 		{
 			if ( tweens == null || tweens.Count == 0 ) {
 				Clear();
+				if ( isPermanent )	SetGOName();
 				return true;
 			}
 			
@@ -1196,13 +1224,15 @@ namespace Holoville.HOTween
 		
 		static private void Clear()
 		{
-			if ( it != null )					it.StopAllCoroutines();
+			if ( it != null )						it.StopAllCoroutines();
 			
 			tweens = null;
 			
-			if ( tweenGOInstance != null )		Destroy( tweenGOInstance );
-			tweenGOInstance = null;
-			it = null;
+			if ( !isPermanent ) {
+				if ( tweenGOInstance != null )		Destroy( tweenGOInstance );
+				tweenGOInstance = null;
+				it = null;
+			}
 		}
 		
 		// ===================================================================================
