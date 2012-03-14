@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
-// Last update: 2012/03/10
+// Last update: 2012/03/14
 
 using UnityEngine;
 using System.Collections;
@@ -40,7 +40,7 @@ namespace Holoville.HOTween
 	/// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-	/// <para>Version: 0.8.140</para>
+	/// <para>Version: 0.8.141</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
 	{
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// HOTween version.
 		/// </summary>
-		public	const		string							VERSION = "0.8.140";
+		public	const		string							VERSION = "0.8.141";
 		/// <summary>
 		/// HOTween author - me! :P
 		/// </summary>
@@ -114,6 +114,7 @@ namespace Holoville.HOTween
 		
 		static	private		bool							initialized;
 		static	private		bool							isPermanent; // If TRUE doesn't destroy HOTween when all tweens are killed.
+		static	private		bool							renameInstToCountTw; // If TRUE renames HOTween's instance to show running tweens.
 		static	private		float							time;
 		
 		// REFERENCES /////////////////////////////////////////////
@@ -147,7 +148,7 @@ namespace Holoville.HOTween
 		/// to avoid auto-initialization when the first tween is started or created,
 		/// and to set options.
 		/// </summary>
-		static public void Init() { Init( false ); }
+		static public void Init() { Init( false, true ); }
 		/// <summary>
 		/// Initializes <see cref="HOTween"/>.
 		/// Call this method once when your application starts up,
@@ -159,7 +160,23 @@ namespace Holoville.HOTween
 		/// otherwise the manager is destroyed when all tweens have been killed,
 		/// and re-created when needed.
 		/// </param>
-		static public void Init( bool p_permanentInstance )
+		static public void Init( bool p_permanentInstance ) { Init( p_permanentInstance, true ); }
+		/// <summary>
+		/// Initializes <see cref="HOTween"/>.
+		/// Call this method once when your application starts up,
+		/// to avoid auto-initialization when the first tween is started or created,
+		/// and to set options.
+		/// </summary>
+		/// <param name="p_permanentInstance">
+		/// If set to <c>true</c>, doesn't destroy HOTween manager when no tween is present,
+		/// otherwise the manager is destroyed when all tweens have been killed,
+		/// and re-created when needed.
+		/// </param>
+		/// <param name="p_renameInstanceToCountTweens">
+		/// If <c>true</c>, renames HOTween's instance to show
+		/// the current number of running tweens (only while in the Editor).
+		/// </param>
+		static public void Init( bool p_permanentInstance, bool p_renameInstanceToCountTweens )
 		{
 			if ( initialized )						return;
 			
@@ -168,6 +185,7 @@ namespace Holoville.HOTween
 			isIOS = ( Application.platform == RuntimePlatform.IPhonePlayer );
 			isEditor = Application.isEditor;
 			isPermanent = p_permanentInstance;
+			renameInstToCountTw = p_renameInstanceToCountTweens;
 			
 			if ( isPermanent && tweenGOInstance == null ) {
 				NewTweenInstance();
@@ -1212,7 +1230,7 @@ namespace Holoville.HOTween
 		
 		static private void SetGOName()
 		{
-			if ( !isEditor )		return;
+			if ( !isEditor || !renameInstToCountTw )		return;
 			tweenGOInstance.name = GAMEOBJNAME + " : " + totTweens;
 		}
 		
