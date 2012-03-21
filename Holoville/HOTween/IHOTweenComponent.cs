@@ -167,6 +167,16 @@ namespace Holoville.HOTween
 		void Play();
 		
 		/// <summary>
+		/// Resumes this Tweener/Sequence (tween delay included) and plays it forward.
+		/// </summary>
+		void PlayForward();
+		
+		/// <summary>
+		/// Resumes this Tweener/Sequence and plays it backwards.
+		/// </summary>
+		void PlayBackwards();
+		
+		/// <summary>
 		/// Pauses this Tweener/Sequence.
 		/// </summary>
 		void Pause();

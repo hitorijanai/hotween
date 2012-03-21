@@ -332,6 +332,30 @@ namespace Holoville.HOTween.Core
 		}
 		
 		/// <summary>
+		/// Resumes this Tweener/Sequence (tween delay included) and plays it forward.
+		/// </summary>
+		public void PlayForward()
+		{
+			if ( !_enabled )			return;
+			bool wasPaused = _isPaused;
+			_isPaused = false;
+			if ( _isReversed )			Reverse();
+			if ( wasPaused )			OnPlay();
+		}
+		
+		/// <summary>
+		/// Resumes this Tweener/Sequence and plays it backwards.
+		/// </summary>
+		public void PlayBackwards()
+		{
+			if ( !_enabled )			return;
+			bool wasPaused = _isPaused;
+			_isPaused = false;
+			if ( !_isReversed )			Reverse();
+			if ( wasPaused )			OnPlay();
+		}
+		
+		/// <summary>
 		/// Pauses this Tweener/Sequence.
 		/// </summary>
 		public void Pause()

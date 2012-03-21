@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
-// Last update: 2012/03/14
+// Last update: 2012/03/21
 
 using UnityEngine;
 using System.Collections;
@@ -643,6 +643,218 @@ namespace Holoville.HOTween
 		static public int Play( bool p_skipDelay ) { return DoFilteredIteration( null, DoFilteredPlay, false, p_skipDelay ); }
 		
 		/// <summary>
+		/// Resumes all the tweens (delays included) for the given target,
+		/// sets the tweens so that they move forward and not backwards,
+		/// and returns the total number of resumed Tweeners.
+		/// </summary>
+		/// <param name="p_target">
+		/// The target whose tweens to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners.
+		/// </returns>
+		static public int PlayForward( object p_target ) { return PlayForward( p_target, false ); }
+		/// <summary>
+		/// Resumes all the tweens for the given target,
+		/// sets the tweens so that they move forward and not backwards,
+		/// and returns the total number of resumed Tweeners.
+		/// </summary>
+		/// <param name="p_target">
+		/// The target whose tweens to resume.
+		/// </param>
+		/// <param name="p_skipDelay">
+		/// If <c>true</c> skips any initial delay.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners.
+		/// </returns>
+		static public int PlayForward( object p_target, bool p_skipDelay ) { return DoFilteredIteration( p_target, DoFilteredPlayForward, false, p_skipDelay ); }
+		/// <summary>
+		/// Resumes all the Tweeners (delays included) and Sequences with the given ID,
+		/// sets the tweens so that they move forward and not backwards,
+		/// and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_id">
+		/// The ID of the Tweeners/Sequences to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int PlayForward( string p_id ) { return PlayForward( p_id, false ); }
+		/// <summary>
+		/// Resumes all the Tweeners/Sequences with the given ID,
+		/// sets the tweens so that they move forward and not backwards,
+		/// and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_id">
+		/// The ID of the Tweeners/Sequences to resume.
+		/// </param>
+		/// <param name="p_skipDelay">
+		/// If <c>true</c> skips any initial tween delay.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int PlayForward( string p_id, bool p_skipDelay ) { return DoFilteredIteration( p_id, DoFilteredPlayForward, false, p_skipDelay ); }
+		/// <summary>
+		/// Resumes all the Tweeners (delays included) and Sequences with the given intId,
+		/// sets the tweens so that they move forward and not backwards,
+		/// and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int PlayForward( int p_intId ) { return PlayForward( p_intId, false ); }
+		/// <summary>
+		/// Resumes all the Tweeners/Sequences with the given intId,
+		/// sets the tweens so that they move forward and not backwards,
+		/// and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to resume.
+		/// </param>
+		/// <param name="p_skipDelay">
+		/// If <c>true</c> skips any initial tween delay.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int PlayForward( int p_intId, bool p_skipDelay ) { return DoFilteredIteration( p_intId, DoFilteredPlayForward, false, p_skipDelay ); }
+		/// <summary>
+		/// Resumes the given Tweener (delays included),
+		/// sets it so that it moves forward and not backwards,
+		/// and returns the total number of resumed ones (1 if the Tweener existed, otherwise 0).
+		/// </summary>
+		/// <param name="p_tweener">
+		/// The Tweener to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners (1 if the Tweener existed, otherwise 0).
+		/// </returns>
+		static public int PlayForward( Tweener p_tweener ) { return PlayForward( p_tweener, false ); }
+		/// <summary>
+		/// Resumes the given Tweener,
+		/// sets it so that it moves forward and not backwards,
+		/// and returns the total number of resumed ones (1 if the Tweener existed, otherwise 0).
+		/// </summary>
+		/// <param name="p_tweener">
+		/// The Tweener to resume.
+		/// </param>
+		/// <param name="p_skipDelay">
+		/// If <c>true</c> skips any initial delay.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners (1 if the Tweener existed, otherwise 0).
+		/// </returns>
+		static public int PlayForward( Tweener p_tweener, bool p_skipDelay ) { return DoFilteredIteration( p_tweener, DoFilteredPlayForward, false, p_skipDelay ); }
+		/// <summary>
+		/// Resumes the given Sequence,
+		/// sets it so that it moves forward and not backwards,
+		/// and returns the total number of resumed ones (1 if the Sequence existed, otherwise 0).
+		/// </summary>
+		/// <param name="p_sequence">
+		/// The Sequence to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Sequences (1 if the Sequence existed, otherwise 0).
+		/// </returns>
+		static public int PlayForward( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredPlayForward, false ); }
+		/// <summary>
+		/// Resumes all Tweeners (delays included) and Sequences,
+		/// sets the tweens so that they move forward and not backwards,
+		/// and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int PlayForward() { return PlayForward( false ); }
+		/// <summary>
+		/// Resumes all Tweeners/Sequences,
+		/// sets the tweens so that they move forward and not backwards,
+		/// and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_skipDelay">
+		/// If <c>true</c> skips any initial tween delay.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int PlayForward( bool p_skipDelay ) { return DoFilteredIteration( null, DoFilteredPlayForward, false, p_skipDelay ); }
+		
+		/// <summary>
+		/// Resumes all the tweens for the given target,
+		/// sets the tweens so that they move backwards instead than forward,
+		/// and returns the total number of resumed Tweeners.
+		/// </summary>
+		/// <param name="p_target">
+		/// The target whose tweens to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners.
+		/// </returns>
+		static public int PlayBackwards( object p_target ) { return DoFilteredIteration( p_target, DoFilteredPlayBackwards, false ); }
+		/// <summary>
+		/// Resumes all the Tweeners/Sequences with the given ID,
+		/// sets the tweens so that they move backwards instead than forward,
+		/// and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_id">
+		/// The ID of the Tweeners/Sequences to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int PlayBackwards( string p_id ) { return DoFilteredIteration( p_id, DoFilteredPlayBackwards, false ); }
+		/// <summary>
+		/// Resumes all the Tweeners/Sequences with the given intId,
+		/// sets the tweens so that they move backwards instead than forward,
+		/// and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <param name="p_intId">
+		/// The intId of the Tweeners/Sequences to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int PlayBackwards( int p_intId ) { return DoFilteredIteration( p_intId, DoFilteredPlayBackwards, false ); }
+		/// <summary>
+		/// Resumes the given Tweener,
+		/// sets it so that it moves backwards instead than forward,
+		/// and returns the total number of resumed ones (1 if the Tweener existed, otherwise 0).
+		/// </summary>
+		/// <param name="p_tweener">
+		/// The Tweener to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Tweeners (1 if the Tweener existed, otherwise 0).
+		/// </returns>
+		static public int PlayBackwards( Tweener p_tweener ) { return DoFilteredIteration( p_tweener, DoFilteredPlayBackwards, false ); }
+		/// <summary>
+		/// Resumes the given Sequence,
+		/// sets it so that it moves backwards instead than forward,
+		/// and returns the total number of resumed ones (1 if the Sequence existed, otherwise 0).
+		/// </summary>
+		/// <param name="p_sequence">
+		/// The Sequence to resume.
+		/// </param>
+		/// <returns>
+		/// The total number of resumed Sequences (1 if the Sequence existed, otherwise 0).
+		/// </returns>
+		static public int PlayBackwards( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredPlayBackwards, false ); }
+		/// <summary>
+		/// Resumes all Tweeners/Sequences,
+		/// sets the tweens so that they move backwards instead than forward,
+		/// and returns the total number of resumed Tweeners/Sequences.
+		/// </summary>
+		/// <returns>
+		/// The total number of resumed Tweeners/Sequences.
+		/// </returns>
+		static public int PlayBackwards() { return DoFilteredIteration( null, DoFilteredPlayBackwards, false ); }
+		
+		/// <summary>
 		/// Rewinds all the tweens (delays included) for the given target, and returns the total number of rewinded Tweeners.
 		/// </summary>
 		/// <param name="p_target">
@@ -1164,6 +1376,24 @@ namespace Holoville.HOTween
 			ABSTweenComponent tw = tweens[p_index];
 			if ( tw is Tweener )
 				( tw as Tweener ).Play( p_skipDelay );
+			else
+				tw.Play();
+		}
+		
+		static private void DoFilteredPlayForward( int p_index, bool p_skipDelay )
+		{
+			ABSTweenComponent tw = tweens[p_index];
+			if ( tw is Tweener )
+				( tw as Tweener ).Play( p_skipDelay );
+			else
+				tw.Play();
+		}
+		
+		static private void DoFilteredPlayBackwards( int p_index, bool p_optionalBool )
+		{
+			ABSTweenComponent tw = tweens[p_index];
+			if ( tw is Tweener )
+				( tw as Tweener ).Play();
 			else
 				tw.Play();
 		}

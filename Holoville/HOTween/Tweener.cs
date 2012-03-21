@@ -160,6 +160,19 @@ namespace Holoville.HOTween
 		}
 		
 		/// <summary>
+		/// Resumes this Tweener and plays it forward.
+		/// </summary>
+		/// <param name="p_skipDelay">
+		/// If <c>true</c> skips any initial delay.
+		/// </param>
+		public void PlayForward( bool p_skipDelay )
+		{
+			if ( !_enabled )			return;
+			if ( p_skipDelay )			SkipDelay();
+			base.PlayForward();
+		}
+		
+		/// <summary>
 		/// Rewinds this Tweener (loops and tween delay included), and pauses it.
 		/// </summary>
 		override public void Rewind() { Rewind( false ); }
