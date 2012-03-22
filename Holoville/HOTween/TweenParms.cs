@@ -550,6 +550,38 @@ namespace Holoville.HOTween
 		}
 		
 		/// <summary>
+		/// Function to call each time the Tweener is rewinded from a non-rewinded state
+		/// (either because of a direct call to Rewind,
+		/// or because the tween's virtual playehead reached the start due to a playing backwards behaviour).
+		/// </summary>
+		/// <param name="p_function">
+		/// The function to call, who must return <c>void</c> and accept no parameters.
+		/// </param>
+		public TweenParms OnRewinded( TweenDelegate.TweenCallback p_function )
+		{
+			onRewinded = p_function;
+			return this;
+		}
+		/// <summary>
+		/// Function to call each time the Tweener is rewinded from a non-rewinded state
+		/// (either because of a direct call to Rewind,
+		/// or because the tween's virtual playehead reached the start due to a playing backwards behaviour).
+		/// </summary>
+		/// <param name="p_function">
+		/// The function to call.
+		/// It must return <c>void</c> and has to accept a single parameter of type <see cref="TweenEvent"/>.
+		/// </param>
+		/// <param name="p_funcParms">
+		/// Additional comma separated parameters to pass to the function.
+		/// </param>
+		public TweenParms OnRewinded( TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms )
+		{
+			onRewindedWParms = p_function;
+			onRewindedParms = p_funcParms;
+			return this;
+		}
+		
+		/// <summary>
 		/// Function to call each time a single loop of the Tweener is completed.
 		/// </summary>
 		/// <param name="p_function">

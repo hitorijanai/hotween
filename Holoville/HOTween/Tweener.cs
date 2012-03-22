@@ -353,8 +353,11 @@ namespace Holoville.HOTween
 				plug.Update( plugElapsed );
 			}
 			
-			// Manage eventual pause, complete, update, and stepComplete.
-			if ( _fullElapsed != prevFullElapsed )			OnUpdate();
+			// Manage eventual pause, complete, update, rewinded, and stepComplete.
+			if ( _fullElapsed != prevFullElapsed ) {
+				OnUpdate();
+				if ( _fullElapsed == 0 )		OnRewinded();
+			}
 			if ( complete ) {
 				OnComplete();
 			} else if ( stepComplete ) {
@@ -445,6 +448,13 @@ namespace Holoville.HOTween
 				if ( plug.easeReversed )		plug.ReverseEase();
 				plug.Rewind();
 			}
+			
+			// Manage OnUpdate and OnRewinded.
+			if ( _fullElapsed != prevFullElapsed ) {
+				OnUpdate();
+				if ( _fullElapsed == 0 )		OnRewinded();
+			}
+			prevFullElapsed = _fullElapsed;
 			
 			if ( p_play ) Play(); else Pause();
 		}

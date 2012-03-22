@@ -316,6 +316,7 @@ namespace Holoville.HOTween
 			if ( _fullElapsed == 0 && _isReversed && !p_forceUpdate )	return false;
 			if ( _isPaused && !p_forceUpdate )							return false;
 			
+			
 			if ( !_isReversed ) {
 				_fullElapsed += p_shortElapsed;
 				_elapsed += p_shortElapsed;
@@ -339,7 +340,7 @@ namespace Holoville.HOTween
 			SetLoops();
 			SetElapsed();
 			_isComplete = ( !_isReversed && _loops >= 0 && _completedLoops >= _loops );
-			bool complete = ( !wasComplete && _isComplete ? true : false );
+			bool complete = ( !wasComplete && _isComplete );
 			
 			// Manage Incremental loops.
 			if ( _loopType == LoopType.Incremental ) {
@@ -378,7 +379,10 @@ namespace Holoville.HOTween
 			}
 			
 			// Manage eventual pause, complete, update, and stepComplete.
-			if ( _fullElapsed != prevFullElapsed )		OnUpdate();
+			if ( _fullElapsed != prevFullElapsed ) {
+				OnUpdate();
+				if ( _fullElapsed == 0 )	OnRewinded();
+			}
 			if ( complete ) {
 				OnComplete();
 			} else if ( stepComplete ) {
@@ -450,8 +454,15 @@ namespace Holoville.HOTween
 			HOTSeqItem item;
 			for ( int i = items.Count - 1; i > - 1; --i ) {
 				item = items[i];
-				if ( item.twMember != null )				item.twMember.Rewind();
+				if ( item.twMember != null )			item.twMember.Rewind();
 			}
+			
+			// Manage OnUpdate and OnRewinded.
+			if ( _fullElapsed != prevFullElapsed ) {
+				OnUpdate();
+				if ( _fullElapsed == 0 )		OnRewinded();
+			}
+			prevFullElapsed = _fullElapsed;
 			
 			if ( p_play ) {
 				Play();

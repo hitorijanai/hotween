@@ -114,6 +114,18 @@ namespace Holoville.HOTween.Core
 		/// </summary>
 		protected	object[]								onPlayParms;
 		/// <summary>
+		/// On rewinded.
+		/// </summary>
+		protected	TweenDelegate.TweenCallback				onRewinded;
+		/// <summary>
+		/// On rewinded with parms.
+		/// </summary>
+		protected	TweenDelegate.TweenCallbackWParms		onRewindedWParms;
+		/// <summary>
+		/// On rewinded parameters.
+		/// </summary>
+		protected	object[]								onRewindedParms;
+		/// <summary>
 		/// On step complete.
 		/// </summary>
 		protected	TweenDelegate.TweenCallback				onStepComplete;
@@ -172,6 +184,9 @@ namespace Holoville.HOTween.Core
 			p_owner.onPlay = onPlay;
 			p_owner.onPlayWParms = onPlayWParms;
 			p_owner.onPlayParms = onPlayParms;
+			p_owner.onRewinded = onRewinded;
+			p_owner.onRewindedWParms = onRewindedWParms;
+			p_owner.onRewindedParms = onRewindedParms;
 			p_owner.onStepComplete = onStepComplete;
 			p_owner.onStepCompleteWParms = onStepCompleteWParms;
 			p_owner.onStepCompleteParms = onStepCompleteParms;

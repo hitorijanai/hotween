@@ -61,6 +61,9 @@ namespace Holoville.HOTween.Core
 		internal	TweenDelegate.TweenCallback			onPlay;
 		internal	TweenDelegate.TweenCallbackWParms	onPlayWParms;
 		internal	object[]							onPlayParms;
+		internal	TweenDelegate.TweenCallback			onRewinded;
+		internal	TweenDelegate.TweenCallbackWParms	onRewindedWParms;
+		internal	object[]							onRewindedParms;
 		internal	TweenDelegate.TweenCallback			onStepComplete;
 		internal	TweenDelegate.TweenCallbackWParms	onStepCompleteWParms;
 		internal	object[]							onStepCompleteParms;
@@ -610,6 +613,19 @@ namespace Holoville.HOTween.Core
 		}
 		
 		/// <summary>
+		/// Manages on rewinded behaviour.
+		/// </summary>
+		protected void OnRewinded()
+		{
+			if ( ignoreCallbacks )							return;
+			if ( onRewinded != null ) {
+				onRewinded();
+			} else if ( onRewindedWParms != null ) {
+				onRewindedWParms( new TweenEvent( this, onRewindedParms ) );
+			}
+		}
+		
+		/// <summary>
 		/// Manages step on complete behaviour.
 		/// </summary>
 		protected void OnStepComplete()
@@ -630,7 +646,6 @@ namespace Holoville.HOTween.Core
 			_isComplete = true;
 			OnStepComplete();
 			if ( ignoreCallbacks )									return;
-//			if ( onComplete != null )								onComplete( new TweenEvent( this, onCompleteParms ) );
 			if ( onComplete != null || onCompleteWParms != null )	HOTween.onCompletes.Add( this ); // delegate to HOTween which will call OnCompleteDispatch after this tween is eventually destroyed.
 		}
 		
