@@ -99,6 +99,7 @@ namespace Holoville.HOTween
 			
 			if ( p_twMember != null ) {
 				HOTween.Kill( p_twMember );
+				( p_twMember as ABSTweenComponent ).contSequence = this;
 				CheckSpeedBasedTween( p_twMember );
 			}
 			
@@ -140,6 +141,7 @@ namespace Holoville.HOTween
 			
 			if ( p_twMember != null ) {
 				HOTween.Kill( p_twMember );
+				( p_twMember as ABSTweenComponent ).contSequence = this;
 				CheckSpeedBasedTween( p_twMember );
 			}
 			
@@ -172,6 +174,7 @@ namespace Holoville.HOTween
 		{
 			if ( p_twMember != null ) {
 				HOTween.Kill( p_twMember );
+				( p_twMember as ABSTweenComponent ).contSequence = this;
 				CheckSpeedBasedTween( p_twMember );
 			}
 			
@@ -279,6 +282,29 @@ namespace Holoville.HOTween
 		
 		// ===================================================================================
 		// INTERNAL METHODS ------------------------------------------------------------------
+		
+		/// <summary>
+		/// Removes the given tween from this Sequence,
+		/// and eventually kills the Sequence if all items have been removed.
+		/// Used by <see cref="OverwriteManager"/> to remove overwritten tweens.
+		/// </summary>
+		internal void Remove( ABSTweenComponent p_tween )
+		{
+			if ( items == null )					return;
+			
+			HOTSeqItem item;
+			for ( int i = 0; i < items.Count; ++i ) {
+				item = items[i];
+				if ( item.twMember != null && item.twMember == p_tween ) {
+					items.RemoveAt( i );
+					break;
+				}
+			}
+			if ( items.Count == 0 ) {
+				if ( isSequenced )		contSequence.Remove( this );
+				Kill( !isSequenced );
+			}
+		}
 		
 		/// <summary>
 		/// Completes this Sequence.

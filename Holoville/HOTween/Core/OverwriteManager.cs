@@ -86,6 +86,7 @@ namespace Holoville.HOTween.Core
 								// Check if whole tween needs to be removed.
 								if ( tw.plugins.Count == 0 ) {
 									Debug.Log( "Killing TWEEN" );
+									if ( tw.isSequenced )	tw.contSequence.Remove( tw );
 									runningTweens.RemoveAt( i );
 									tw.Kill();
 									goto NEXT_TWEEN;

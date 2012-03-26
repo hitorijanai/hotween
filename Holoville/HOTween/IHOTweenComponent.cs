@@ -152,6 +152,11 @@ namespace Holoville.HOTween
 		/// </summary>
 		bool				isComplete { get; }
 		
+		/// <summary>
+		/// Returns a value of <c>true</c> if this Tweener/Sequence was added to a Sequence.
+		/// </summary>
+		bool				isSequenced { get; }
+		
 		
 		// ===================================================================================
 		// METHODS ---------------------------------------------------------------------------

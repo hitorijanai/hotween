@@ -49,6 +49,8 @@ namespace Holoville.HOTween.Core
 		internal	UpdateType					_updateType = HOTween.defUpdateType;
 		internal	bool						_isPaused;
 		
+		internal	Sequence					contSequence; // Eventual sequence containing this tween.
+		
 		internal	TweenDelegate.TweenCallback			onStart;
 		internal	TweenDelegate.TweenCallbackWParms	onStartWParms;
 		internal	object[]							onStartParms;
@@ -298,6 +300,14 @@ namespace Holoville.HOTween.Core
 		public		bool					isComplete
 		{
 			get { return _isComplete; }
+		}
+		
+		/// <summary>
+		/// Returns a value of <c>true</c> if this Tweener/Sequence was added to a Sequence.
+		/// </summary>
+		public		bool					isSequenced
+		{
+			get { return contSequence != null; }
 		}
 		
 		
