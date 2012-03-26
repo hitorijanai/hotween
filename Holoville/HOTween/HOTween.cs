@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
-// Last update: 2012/03/22
+// Last update: 2012/03/26
 
 using UnityEngine;
 using System.Collections;
@@ -40,7 +40,7 @@ namespace Holoville.HOTween
 	/// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-	/// <para>Version: 0.8.142</para>
+	/// <para>Version: 0.9.001</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
 	{
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// HOTween version.
 		/// </summary>
-		public	const		string							VERSION = "0.8.142";
+		public	const		string							VERSION = "0.9.001";
 		/// <summary>
 		/// HOTween author - me! :P
 		/// </summary>
@@ -119,6 +119,11 @@ namespace Holoville.HOTween
 		
 		// REFERENCES /////////////////////////////////////////////
 		
+		/// <summary>
+		/// Reference to overwrite manager (if in use).
+		/// </summary>
+		static	internal	OverwriteManager				overwriteMngr;
+		
 		static	private		List<ABSTweenComponent>			tweens; // Contains both Tweeners than Sequences
 		static	private		GameObject						tweenGOInstance;
 		static	private		HOTween							it;
@@ -186,6 +191,7 @@ namespace Holoville.HOTween
 			isEditor = Application.isEditor;
 			isPermanent = p_permanentInstance;
 			renameInstToCountTw = p_renameInstanceToCountTweens;
+			overwriteMngr = new OverwriteManager();
 			
 			if ( isPermanent && tweenGOInstance == null ) {
 				NewTweenInstance();

@@ -38,6 +38,7 @@ namespace Holoville.HOTween.Plugins
 		
 		static internal	Type[]			validPropTypes = { typeof(Vector3) };
 		static internal	Type[]			validValueTypes = { typeof(Single) };
+		override internal	int			pluginId { get { return 1; } }
 		
 		/// <summary>
 		/// Start val.

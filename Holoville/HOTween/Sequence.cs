@@ -97,9 +97,11 @@ namespace Holoville.HOTween
 		{
 			if ( items == null )							return ( p_twMember != null ? Insert( 0, p_twMember ) : Insert( 0, null, p_duration ) );
 			
-			if ( p_twMember != null )						HOTween.Kill( p_twMember );
+			if ( p_twMember != null ) {
+				HOTween.Kill( p_twMember );
+				CheckSpeedBasedTween( p_twMember );
+			}
 			
-			if ( p_twMember != null )						CheckSpeedBasedTween( p_twMember );
 			HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( _duration, p_twMember as ABSTweenComponent ) : new HOTSeqItem( _duration, p_duration ) );
 			items.Add( newItem );
 			
@@ -136,9 +138,11 @@ namespace Holoville.HOTween
 		{
 			if ( items == null )							return Insert( 0, p_twMember );
 			
-			if ( p_twMember != null )						HOTween.Kill( p_twMember );
+			if ( p_twMember != null ) {
+				HOTween.Kill( p_twMember );
+				CheckSpeedBasedTween( p_twMember );
+			}
 			
-			if ( p_twMember != null )						CheckSpeedBasedTween( p_twMember );
 			HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( 0, p_twMember as ABSTweenComponent ) : new HOTSeqItem( 0, p_duration ) );
 			
 			float itemDur = newItem.duration;
@@ -166,9 +170,11 @@ namespace Holoville.HOTween
 		public float Insert( float p_time, IHOTweenComponent p_twMember ) { return Insert( p_time, p_twMember, 0 ); }
 		private float Insert( float p_time, IHOTweenComponent p_twMember, float p_duration )
 		{
-			if ( p_twMember != null )				HOTween.Kill( p_twMember );
+			if ( p_twMember != null ) {
+				HOTween.Kill( p_twMember );
+				CheckSpeedBasedTween( p_twMember );
+			}
 			
-			if ( p_twMember != null )				CheckSpeedBasedTween( p_twMember );
 			HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( p_time, p_twMember as ABSTweenComponent ) : new HOTSeqItem( p_time, p_duration ) );
 			
 			if ( items == null ) {

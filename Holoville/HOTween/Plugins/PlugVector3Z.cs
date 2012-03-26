@@ -34,6 +34,10 @@ namespace Holoville.HOTween.Plugins
 	/// </summary>
 	public class PlugVector3Z : PlugVector3X
 	{
+		// VARS ///////////////////////////////////////////////////
+
+		override internal	int			pluginId { get { return 3; } }
+		
 		// GETS/SETS //////////////////////////////////////////////
 		
 		/// <summary>

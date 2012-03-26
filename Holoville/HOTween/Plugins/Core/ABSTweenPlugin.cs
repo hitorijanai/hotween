@@ -53,6 +53,7 @@ namespace Holoville.HOTween.Plugins.Core
 		
 		private		bool									_initialized;
 		private		bool									_easeReversed;
+		private		string									_propName; // Stored during Init, used by overwrite manager.
 		
 		/// <summary>
 		/// Ease type.
@@ -129,6 +130,29 @@ namespace Holoville.HOTween.Plugins.Core
 			get { return _easeReversed; }
 		}
 		
+		/// <summary>
+		/// Used by <see cref="OverwriteManager"/> to get the property name.
+		/// </summary>
+		internal		string								propName
+		{
+			get { return _propName; }
+		}
+		
+		/// <summary>
+		/// Some plugins might override this to specify a different ID (like PlugVector3X).
+		/// Used by <see cref="OverwriteManager"/> to check if two plugins are the same (for overwrite purposes).
+		/// Plugins with -1 ids always overwrite and are overwritten.
+		/// Plugins with different ids are always overwritten by plugins with -1 ids,
+		/// but overwrite only identical ids.
+		/// </summary>
+		/// <value>
+		/// The plugin identifier.
+		/// </value>
+		virtual internal		int							pluginId
+		{
+			get { return -1; }
+		}
+		
 		
 		// ***********************************************************************************
 		// CONSTRUCTOR
@@ -202,6 +226,7 @@ namespace Holoville.HOTween.Plugins.Core
 			_initialized = true;
 			
 			tweenObj = p_tweenObj;
+			_propName = p_propertyName;
 			if ( easeInfo == null || tweenObj.speedBased ) {
 				SetEase( p_easeType );
 			}

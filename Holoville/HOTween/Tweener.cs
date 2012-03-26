@@ -483,6 +483,9 @@ namespace Holoville.HOTween
 				}
 				SetFullDuration();
 			}
+			// Add tween to OverwriteManager.
+			HOTween.overwriteMngr.AddTween( this );
+			
 			base.OnStart();
 		}
 		

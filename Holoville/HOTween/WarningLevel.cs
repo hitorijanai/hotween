@@ -37,6 +37,11 @@ namespace Holoville.HOTween
 		/// </summary>
 		None,
 		/// <summary>
+		/// Only important messages will be logged
+		/// (this will exclude warnings when a tween is overwritten).
+		/// </summary>
+		Important,
+		/// <summary>
 		/// All messages will be logged.
 		/// </summary>
 		Verbose
