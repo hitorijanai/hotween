@@ -260,7 +260,7 @@ namespace Holoville.HOTween
 			
 			foreach ( ABSTweenPlugin plug in plugins ) {
 				if ( plug is PlugVector3Path ) {
-					if ( !hasStarted )		OnStart(); // Startup the tween to get the path data.
+					if ( !startupDone )		Startup(); // Startup the tween to get the path data.
 					return ( plug as PlugVector3Path ).GetConstPointOnPath( t );
 				}
 			}
@@ -283,7 +283,7 @@ namespace Holoville.HOTween
 		/// but ignores onUpdate, and sends onComplete and onStepComplete calls only if the Tweener wasn't complete before this call.
 		/// </param>
 		/// <param name="p_isStartupIteration">
-		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence OnStart or HOTween.From),
+		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence Startup or HOTween.From),
 		/// and all callbacks will be ignored (except onStart).
 		/// </param>
 		/// <returns>
@@ -302,6 +302,7 @@ namespace Holoville.HOTween
 			if ( _isPaused && !p_forceUpdate )							return false;
 			
 			if ( delayCount == 0 ) {
+				if ( !startupDone )									Startup();
 				if ( !_hasStarted )									OnStart();
 				if ( !_isReversed ) {
 					_fullElapsed += p_shortElapsed;
@@ -328,6 +329,7 @@ namespace Holoville.HOTween
 					}
 					_elapsedDelay = delayCount;
 					delayCount = 0;
+					if ( !startupDone )								Startup();
 					if ( !_hasStarted )								OnStart();
 				}
 			}
@@ -433,6 +435,7 @@ namespace Holoville.HOTween
 		{
 			if ( !_enabled )					return;
 			
+			if ( !startupDone )					Startup();
 			if ( !_hasStarted )					OnStart();
 			
 			_isComplete = false;
@@ -469,10 +472,14 @@ namespace Holoville.HOTween
 		}
 		
 		/// <summary>
-		/// Manages on first start behaviour.
+		/// Startup this tween
+		/// (might or might not all OnStart, depending if the tween is in a Sequence or not).
+		/// Can be executed only once per tween.
 		/// </summary>
-		override protected void OnStart()
+		override protected void Startup()
 		{
+			if ( startupDone )		return;
+			
 			for ( int i = 0; i < plugins.Count; ++i )		plugins[i].Startup();
 			if ( _speedBased ) {
 				// Reset duration based on value changes and speed.
@@ -483,6 +490,15 @@ namespace Holoville.HOTween
 				}
 				SetFullDuration();
 			}
+			
+			base.Startup();
+		}
+		
+		/// <summary>
+		/// Manages on first start behaviour.
+		/// </summary>
+		override protected void OnStart()
+		{
 			// Add tween to OverwriteManager.
 			HOTween.overwriteMngr.AddTween( this );
 			

@@ -50,6 +50,7 @@ namespace Holoville.HOTween.Core
 		internal	bool						_isPaused;
 		
 		internal	Sequence					contSequence; // Eventual sequence containing this tween.
+		internal	bool						startupDone = false;
 		
 		internal	TweenDelegate.TweenCallback			onStart;
 		internal	TweenDelegate.TweenCallbackWParms	onStartWParms;
@@ -544,7 +545,7 @@ namespace Holoville.HOTween.Core
 		/// but ignores onUpdate, and sends onComplete and onStepComplete calls only if the Tweener/Sequence wasn't complete before this call.
 		/// </param>
 		/// <param name="p_isStartupIteration">
-		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence OnStart),
+		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence Startup),
 		/// and all callbacks will be ignored (except onStart).
 		/// </param>
 		/// <returns>
@@ -569,6 +570,16 @@ namespace Holoville.HOTween.Core
 		/// If the time is bigger than the total Tweener/Sequence duration, it goes to the end.
 		/// </summary>
 		abstract protected bool GoTo( float p_time, bool p_play, bool p_forceUpdate );
+		
+		/// <summary>
+		/// Startup this tween
+		/// (might or might not all OnStart, depending if the tween is in a Sequence or not).
+		/// Can be executed only once per tween.
+		/// </summary>
+		virtual protected void Startup()
+		{
+			startupDone = true;
+		}
 		
 		/// <summary>
 		/// Manages on first start behaviour.

@@ -333,7 +333,7 @@ namespace Holoville.HOTween
 		/// but ignores onUpdate, and sends onComplete and onStepComplete calls only if the Sequence wasn't complete before this call.
 		/// </param>
 		/// <param name="p_isStartupIteration">
-		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence OnStart),
+		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence Startup),
 		/// and all callbacks will be ignored (except onStart).
 		/// </param>
 		/// <returns>
@@ -362,6 +362,7 @@ namespace Holoville.HOTween
 				_fullElapsed = 0;
 			
 			// Manage eventual OnStart.
+			if ( !startupDone )								Startup();
 			if ( !_hasStarted )								OnStart();
 			
 			ignoreCallbacks = p_isStartupIteration;
@@ -476,6 +477,7 @@ namespace Holoville.HOTween
 			if ( !_enabled )							return;
 			if ( items == null )						return;
 			
+			if ( !startupDone )							Startup();
 			if ( !_hasStarted )							OnStart();
 			
 			_isComplete = false;
@@ -533,13 +535,25 @@ namespace Holoville.HOTween
 		}
 		
 		/// <summary>
+		/// Startup this tween
+		/// (might or might not all OnStart, depending if the tween is in a Sequence or not).
+		/// Can be executed only once per tween.
+		/// </summary>
+		override protected void Startup()
+		{
+			if ( startupDone )		return;
+			
+			// Move through all the elements in order, so the initial values are initialized.
+			TweenStartupIteration();
+			
+			base.Startup();
+		}
+		
+		/// <summary>
 		/// Manages on first start behaviour.
 		/// </summary>
 		override protected void OnStart()
 		{
-			// Move through all the elements in order, so the initial values are initialized.
-			TweenStartupIteration();
-			
 			base.OnStart();
 		}
 		
