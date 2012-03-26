@@ -140,6 +140,7 @@ namespace Holoville.HOTween
 		{
 			if ( _destroyed )					return;
 			
+			HOTween.overwriteMngr.RemoveTween( this );
 			plugins = null;
 			_target = null;
 			
@@ -284,7 +285,7 @@ namespace Holoville.HOTween
 		/// </param>
 		/// <param name="p_isStartupIteration">
 		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence Startup or HOTween.From),
-		/// and all callbacks will be ignored (except onStart).
+		/// and all callbacks will be ignored.
 		/// </param>
 		/// <returns>
 		/// A value of <c>true</c> if the Tweener is not reversed and is complete (or the tween target doesn't exist anymore), otherwise <c>false</c>.
@@ -300,6 +301,8 @@ namespace Holoville.HOTween
 			if ( _isComplete && !_isReversed && !p_forceUpdate )		return true;
 			if ( _fullElapsed == 0 && _isReversed && !p_forceUpdate )	return false;
 			if ( _isPaused && !p_forceUpdate )							return false;
+			
+			ignoreCallbacks = p_isStartupIteration;
 			
 			if ( delayCount == 0 ) {
 				if ( !startupDone )									Startup();
@@ -333,8 +336,6 @@ namespace Holoville.HOTween
 					if ( !_hasStarted )								OnStart();
 				}
 			}
-			
-			ignoreCallbacks = p_isStartupIteration;
 			
 			// Set all elapsed and loops values.
 			bool wasComplete = _isComplete;
@@ -499,6 +500,8 @@ namespace Holoville.HOTween
 		/// </summary>
 		override protected void OnStart()
 		{
+			if ( ignoreCallbacks )		return;
+			
 			// Add tween to OverwriteManager.
 			HOTween.overwriteMngr.AddTween( this );
 			

@@ -471,6 +471,22 @@ namespace Holoville.HOTween
 		// METHODS ---------------------------------------------------------------------------
 		
 		/// <summary>
+		/// Enables the overwrite manager (disabled by default).
+		/// </summary>
+		static public void EnableOverwriteManager()
+		{
+			overwriteMngr.enabled = true;
+		}
+		
+		/// <summary>
+		/// Disables the overwrite manager (disabled by default).
+		/// </summary>
+		static public void DisableOverwriteManager()
+		{
+			overwriteMngr.enabled = false;
+		}
+		
+		/// <summary>
 		/// Pauses all the tweens for the given target, and returns the total number of paused Tweeners.
 		/// </summary>
 		/// <param name="p_target">

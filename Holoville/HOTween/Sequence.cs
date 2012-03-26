@@ -217,7 +217,12 @@ namespace Holoville.HOTween
 		{
 			if ( _destroyed )					return;
 			
-			items = null;
+			if ( items != null ) {
+				foreach ( HOTSeqItem item in items ) {
+					if ( item.twMember != null )	item.twMember.Kill( false );
+				}
+				items = null;
+			}
 			
 			base.Kill( p_autoRemoveFromHOTween );
 		}
@@ -334,7 +339,7 @@ namespace Holoville.HOTween
 		/// </param>
 		/// <param name="p_isStartupIteration">
 		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence Startup),
-		/// and all callbacks will be ignored (except onStart).
+		/// and all callbacks will be ignored.
 		/// </param>
 		/// <returns>
 		/// A value of <c>true</c> if the Sequence is not reversed and is complete (or all the Sequence tween targets don't exist anymore), otherwise <c>false</c>.
@@ -348,6 +353,7 @@ namespace Holoville.HOTween
 			if ( _fullElapsed == 0 && _isReversed && !p_forceUpdate )	return false;
 			if ( _isPaused && !p_forceUpdate )							return false;
 			
+			ignoreCallbacks = p_isStartupIteration;
 			
 			if ( !_isReversed ) {
 				_fullElapsed += p_shortElapsed;
@@ -364,8 +370,6 @@ namespace Holoville.HOTween
 			// Manage eventual OnStart.
 			if ( !startupDone )								Startup();
 			if ( !_hasStarted )								OnStart();
-			
-			ignoreCallbacks = p_isStartupIteration;
 			
 			// Set all elapsed and loops values.
 			bool wasComplete = _isComplete;
@@ -520,7 +524,11 @@ namespace Holoville.HOTween
 			}
 			for ( int i = items.Count - 1; i > - 1; --i ) {
 				item = items[i];
-				if ( item.twMember != null )			item.twMember.Rewind();
+				if ( item.twMember != null ) {
+					item.twMember.ignoreCallbacks = true;
+					item.twMember.Rewind();
+					item.twMember.ignoreCallbacks = false;
+				}
 			}
 		}
 		

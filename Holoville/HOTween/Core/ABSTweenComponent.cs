@@ -49,6 +49,13 @@ namespace Holoville.HOTween.Core
 		internal	UpdateType					_updateType = HOTween.defUpdateType;
 		internal	bool						_isPaused;
 		
+		/// <summary>
+		/// Always set to TRUE by Update(), if isStartupIteration is true,
+		/// and reset to FALSE in the last line of Update().
+		/// Can also be set to TRUE by Sequence.TweenStartupIteration,
+		/// and then immediately reset to FALSE.
+		/// </summary>
+		internal	bool						ignoreCallbacks;
 		internal	Sequence					contSequence; // Eventual sequence containing this tween.
 		internal	bool						startupDone = false;
 		
@@ -118,11 +125,6 @@ namespace Holoville.HOTween.Core
 		/// Is complete.
 		/// </summary>
 		protected	bool						_isComplete;
-		/// <summary>
-		/// Always set to TRUE by Update(), if isStartupIteration is true,
-		/// and reset to FALSE in the last line of Update().
-		/// </summary>
-		protected	bool						ignoreCallbacks;
 		/// <summary>
 		/// Used to determine if OnUpdate callbacks should be called.
 		/// </summary>
@@ -546,7 +548,7 @@ namespace Holoville.HOTween.Core
 		/// </param>
 		/// <param name="p_isStartupIteration">
 		/// If <c>true</c> means the update is due to a startup iteration (managed by Sequence Startup),
-		/// and all callbacks will be ignored (except onStart).
+		/// and all callbacks will be ignored.
 		/// </param>
 		/// <returns>
 		/// A value of <c>true</c> if the tween is not reversed and complete (or the tween target doesn't exist anymore), otherwise <c>false</c>.
@@ -586,6 +588,7 @@ namespace Holoville.HOTween.Core
 		/// </summary>
 		virtual protected void OnStart()
 		{
+			if ( ignoreCallbacks )							return;
 			_hasStarted = true;
 			if ( onStart != null ) {
 				onStart();
