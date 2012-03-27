@@ -72,7 +72,7 @@ namespace Holoville.HOTween.Core
 		public Vector3 GetPoint( float t )
 		{
 			int numSections = path.Length - 3;
-			int tSec = Mathf.FloorToInt( t * numSections );
+			int tSec = (int)Math.Floor( t * numSections );
 			int currPt = numSections - 1;
 			if ( currPt > tSec )		currPt = tSec;
 			float u = t * numSections - currPt;
@@ -97,7 +97,7 @@ namespace Holoville.HOTween.Core
 		public Vector3 Velocity( float t )
 		{
 			int numSections = path.Length - 3;
-			int tSec = (int)Mathf.Floor( t * numSections );
+			int tSec = (int)Math.Floor( t * numSections );
 			int currPt = numSections - 1;
 			if ( currPt > tSec )		currPt = tSec;
 			float u = t * numSections - currPt;

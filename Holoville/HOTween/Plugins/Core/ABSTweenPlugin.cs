@@ -446,20 +446,20 @@ namespace Holoville.HOTween.Plugins.Core
 						propInfo.SetValue( tweenObj.target, p_value, null );
 					} catch ( InvalidCastException ) {
 						// This happens only if a float is being assigned to an int.
-						propInfo.SetValue( tweenObj.target, Mathf.FloorToInt( (float)p_value ), null );
+						propInfo.SetValue( tweenObj.target, (int)Math.Floor( (double)p_value ), null );
 					} catch ( ArgumentException ) {
 						// This happens only on iOS if a float is being assigned to an int.
-						propInfo.SetValue( tweenObj.target, Mathf.FloorToInt( (float)p_value ), null );
+						propInfo.SetValue( tweenObj.target, (int)Math.Floor( (double)p_value ), null );
 					}
 				} else {
 					try {
 						fieldInfo.SetValue( tweenObj.target, p_value );
 					} catch ( InvalidCastException ) {
 						// This happens only if a float is being assigned to an int.
-						fieldInfo.SetValue( tweenObj.target, Mathf.FloorToInt( (float)p_value ) );
+						fieldInfo.SetValue( tweenObj.target, (int)Math.Floor( (double)p_value ) );
 					} catch ( ArgumentException ) {
 						// This happens only on iOS if a float is being assigned to an int.
-						fieldInfo.SetValue( tweenObj.target, Mathf.FloorToInt( (float)p_value ) );
+						fieldInfo.SetValue( tweenObj.target, (int)Math.Floor( (double)p_value ) );
 					}
 				}
 			} else {
@@ -467,10 +467,10 @@ namespace Holoville.HOTween.Plugins.Core
 					valAccessor.Set( tweenObj.target, p_value );
 				} catch ( InvalidCastException ) {
 					// This happens only if a float is being assigned to an int.
-					valAccessor.Set( tweenObj.target, Mathf.FloorToInt( (float)p_value ) ); // OPTIMIZE store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
+					valAccessor.Set( tweenObj.target, (int)Math.Floor( (double)p_value ) ); // OPTIMIZE store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
 				} catch ( ArgumentException ) {
 					// This happens only on iOS if a float is being assigned to an int, but is also here just to be sure.
-					valAccessor.Set( tweenObj.target, Mathf.FloorToInt( (float)p_value ) );
+					valAccessor.Set( tweenObj.target, (int)Math.Floor( (double)p_value ) );
 				}
 			}
 		}
