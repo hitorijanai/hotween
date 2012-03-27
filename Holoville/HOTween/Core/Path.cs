@@ -199,28 +199,25 @@ namespace Holoville.HOTween.Core
 		
 		internal Dictionary<float,float> GetTimeToArcLenTable( int p_subdivisions, out float out_fullLen )
 		{
+			// Code optimized by stfxmail.
+			
+			out_fullLen = 0;
 			float incr = 1f / p_subdivisions;
-			float t;
-			float len = 0;
-			float prevLen = 0;
-			Vector3 p;
-			Vector3 prevP = Vector3.zero;
-			Dictionary<float,float> dc = new Dictionary<float, float>();
-			for ( int i = 0; i < p_subdivisions + 1; ++i ) {
-				if ( i == 0 ) {
-					prevP = GetPoint( 0 );
-					prevLen = 0;
-				} else {
-					t = incr * i;
-					p = GetPoint( t );
-					len = prevLen + Vector3.Distance( p, prevP );
-					dc.Add( t, len );
-					prevP = p;
-					prevLen = len;
-				}
+			Dictionary<float, float> timeLenTable = new Dictionary<float, float>();
+			
+			Vector3 prevP = GetPoint( 0 );
+			
+			for ( int i = 1; i < p_subdivisions + 1; ++i ) {
+				float time = incr * i;
+				
+				Vector3 currP = GetPoint( time );
+				out_fullLen += Vector3.Distance( currP, prevP );
+				prevP = currP;
+				
+				timeLenTable.Add( time, out_fullLen );
 			}
-			out_fullLen = len;
-			return dc;
+			
+			return timeLenTable;
 		}
 	}
 }
