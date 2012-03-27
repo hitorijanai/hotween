@@ -199,7 +199,7 @@ namespace Holoville.HOTween.Core
 		
 		internal Dictionary<float,float> GetTimeToArcLenTable( int p_subdivisions, out float out_fullLen )
 		{
-			// Code optimized by stfxmail.
+			// Code optimized by Stfx.
 			
 			out_fullLen = 0;
 			float incr = 1f / p_subdivisions;
