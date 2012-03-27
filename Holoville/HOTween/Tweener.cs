@@ -195,7 +195,13 @@ namespace Holoville.HOTween
 		/// <param name="p_skipDelay">
 		/// If <c>true</c> skips any initial delay.
 		/// </param>
-		public void Restart( bool p_skipDelay ) { Rewind( true, p_skipDelay ); }
+		public void Restart( bool p_skipDelay )
+		{
+			if ( _fullElapsed == 0 )
+				PlayForward( p_skipDelay );
+			else
+				Rewind( true, p_skipDelay );
+		}
 		
 		/// <summary>
 		/// Completes this Tweener.

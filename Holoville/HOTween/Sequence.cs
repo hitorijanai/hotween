@@ -235,7 +235,13 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// Restarts this Sequence from the beginning (loops included).
 		/// </summary>
-		override public void Restart() { Rewind( true ); }
+		override public void Restart()
+		{
+			if ( _fullElapsed == 0 )
+				PlayForward();
+			else
+				Rewind( true );
+		}
 		
 		/// <summary>
 		/// Returns <c>true</c> if the given target is currently involved in a running tween of this Sequence (taking into account also nested tweens).
