@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
-// Last update: 2012/03/27
+// Last update: 2012/03/29
 
 using UnityEngine;
 using System.Collections;
@@ -40,7 +40,7 @@ namespace Holoville.HOTween
 	/// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
 	/// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
 	/// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-	/// <para>Version: 0.9.002</para>
+	/// <para>Version: 0.9.003</para>
 	/// </summary>
 	public class HOTween : MonoBehaviour
 	{
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// HOTween version.
 		/// </summary>
-		public	const		string							VERSION = "0.9.002";
+		public	const		string							VERSION = "0.9.003";
 		/// <summary>
 		/// HOTween author - me! :P
 		/// </summary>
@@ -1406,18 +1406,18 @@ namespace Holoville.HOTween
 		{
 			ABSTweenComponent tw = tweens[p_index];
 			if ( tw is Tweener )
-				( tw as Tweener ).Play( p_skipDelay );
+				( tw as Tweener ).PlayForward( p_skipDelay );
 			else
-				tw.Play();
+				tw.PlayForward();
 		}
 		
 		static private void DoFilteredPlayBackwards( int p_index, bool p_optionalBool )
 		{
 			ABSTweenComponent tw = tweens[p_index];
 			if ( tw is Tweener )
-				( tw as Tweener ).Play();
+				( tw as Tweener ).PlayBackwards();
 			else
-				tw.Play();
+				tw.PlayBackwards();
 		}
 		
 		static private void DoFilteredRewind( int p_index, bool p_skipDelay )
