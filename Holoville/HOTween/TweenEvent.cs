@@ -23,8 +23,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
-
 namespace Holoville.HOTween
 {
 	/// <summary>
@@ -34,8 +32,8 @@ namespace Holoville.HOTween
 	{
 		// VARS ///////////////////////////////////////////////////
 		
-		private		IHOTweenComponent			_tween;
-		private		object[]					_parms;
+		private readonly IHOTweenComponent		_tween;
+		private readonly object[]				_parms;
 		
 		// READ-ONLY GETS /////////////////////////////////////////
 		

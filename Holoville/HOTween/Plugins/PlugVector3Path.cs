@@ -23,12 +23,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Holoville.HOTween.Core;
 using Holoville.HOTween.Plugins.Core;
+using UnityEngine;
 
 namespace Holoville.HOTween.Plugins
 {
@@ -403,10 +403,9 @@ namespace Holoville.HOTween.Plugins
 					}
 					break;
 				case OrientType.ToPath:
-					Vector3 nextP;
 					float nextT = pathPerc + lookAheadVal;
 					if ( nextT > 1 )	nextT = nextT - 1;
-					nextP = path.GetPoint( nextT );
+					Vector3 nextP = path.GetPoint( nextT );
 					orientTrans.LookAt ( nextP, orientTrans.up );
 //					if ( lockAxis != Axis.None ) {
 //						// FIXME LockAxis

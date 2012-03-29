@@ -23,9 +23,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using UnityEngine;
 using System;
 using Holoville.HOTween.Plugins.Core;
+using UnityEngine;
 
 namespace Holoville.HOTween.Plugins
 {
@@ -36,8 +36,8 @@ namespace Holoville.HOTween.Plugins
 	{
 		// VARS ///////////////////////////////////////////////////
 		
-		static internal	Type[]			validPropTypes = { typeof(System.String) };
-		static internal	Type[]			validValueTypes = { typeof(System.String) };
+		static internal	Type[]			validPropTypes = { typeof(String) };
+		static internal	Type[]			validValueTypes = { typeof(String) };
 		
 		private		string				typedStartVal;
 		private		string				typedEndVal;

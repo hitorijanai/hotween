@@ -1,4 +1,4 @@
-// 
+﻿// 
 // Elastic.cs
 //  
 // Author: Daniele Giardini (C# port of the easing equations created by Robert Penner - http://robertpenner.com/easing)
@@ -28,7 +28,6 @@
 // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System;
 using UnityEngine;
 
 namespace Holoville.HOTween.Core.Easing

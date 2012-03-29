@@ -28,8 +28,6 @@
 // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using System;
-
 namespace Holoville.HOTween.Core.Easing
 {
 	/// <summary>
@@ -82,15 +80,16 @@ namespace Holoville.HOTween.Core.Easing
 		{
 			if ((t/=d) < (1/2.75f)) {
 				return c*(7.5625f*t*t) + b;
-			} else if (t < (2/2.75f)) {
-				return c*(7.5625f*(t-=(1.5f/2.75f))*t + 0.75f) + b;
-			} else if (t < (2.5f/2.75f)) {
-				return c*(7.5625f*(t-=(2.25f/2.75f))*t + 0.9375f) + b;
-			} else {
-				return c*(7.5625f*(t-=(2.625f/2.75f))*t + 0.984375f) + b;
 			}
+			if (t < (2/2.75f)) {
+				return c*(7.5625f*(t-=(1.5f/2.75f))*t + 0.75f) + b;
+			}
+			if (t < (2.5f/2.75f)) {
+				return c*(7.5625f*(t-=(2.25f/2.75f))*t + 0.9375f) + b;
+			}
+			return c*(7.5625f*(t-=(2.625f/2.75f))*t + 0.984375f) + b;
 		}
-		
+
 		/// <summary>
 		/// Tween. 
 		/// </summary>
@@ -112,7 +111,7 @@ namespace Holoville.HOTween.Core.Easing
 		public static float EaseInOut ( float t, float b, float c, float d )
 		{
 			if (t < d*0.5f) return EaseIn (t*2, 0, c, d) * 0.5f + b;
-			else return EaseOut (t*2-d, 0, c, d) * 0.5f + c*0.5f + b;
+			return EaseOut (t*2-d, 0, c, d) * 0.5f + c*0.5f + b;
 		}
 	}
 }

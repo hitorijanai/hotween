@@ -24,9 +24,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Holoville.HOTween.Core
 {
@@ -133,11 +133,10 @@ namespace Holoville.HOTween.Core
 			if ( changed || drawPs == null ) {
 				changed = false;
 				// Store draw points.
-				float pm;
 				int subdivisions = path.Length * 10;
 				drawPs = new Vector3[subdivisions + 1];
 				for ( int i = 0; i <= subdivisions; ++i ) {
-					pm = i / (float)subdivisions;
+					float pm = i / (float)subdivisions;
 					currPt = GetPoint( pm );
 					drawPs[i] = currPt;
 				}

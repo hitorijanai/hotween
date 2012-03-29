@@ -23,11 +23,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Holoville.HOTween;
-using Holoville.HOTween.Core;
 using Holoville.HOTween.Core.Easing;
 
 namespace Holoville.HOTween.Core

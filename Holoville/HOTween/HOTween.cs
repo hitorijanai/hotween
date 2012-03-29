@@ -26,12 +26,12 @@
 // Created: 2011/12/13
 // Last update: 2012/03/29
 
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Holoville.HOTween.Core;
 using Holoville.HOTween.Plugins;
 using Holoville.HOTween.Plugins.Core;
+using UnityEngine;
 
 namespace Holoville.HOTween
 {
@@ -210,12 +210,10 @@ namespace Holoville.HOTween
 			List<ABSTweenPlugin> plugs = GetPlugins();
 			
 			// Find path plugins and draw paths.
-			ABSTweenPlugin plug;
-			PlugVector3Path pathPlug;
 			for ( int i = 0; i < plugs.Count; ++i ) {
-				plug = plugs[i];
+				ABSTweenPlugin plug = plugs[i];
 				if ( plug is PlugVector3Path ) {
-					pathPlug = ( plug as PlugVector3Path );
+					PlugVector3Path pathPlug = ( plug as PlugVector3Path );
 					if ( pathPlug.path != null )
 						pathPlug.path.GizmoDraw( pathPlug.pathPerc, false );
 				}
@@ -451,7 +449,7 @@ namespace Holoville.HOTween
 		/// <summary>
 		/// Updates timeScaleIndependent tweens.
 		/// </summary>
-		private IEnumerator TimeScaleIndependentUpdate()
+		private static IEnumerator TimeScaleIndependentUpdate()
 		{
 			while ( tweens != null )
 			{
@@ -1327,13 +1325,12 @@ namespace Holoville.HOTween
 		static public bool IsTweening( object p_target )
 		{
 			if ( tweens == null )						return false;
-			
-			ABSTweenComponent tw;
+
 			for ( int i = 0; i < tweens.Count; ++i ) {
-				tw = tweens[i];
+				ABSTweenComponent tw = tweens[i];
 				if ( tw.IsTweening( p_target ) )		return true;
 			}
-			
+
 			return false;
 		}
 		
@@ -1349,13 +1346,12 @@ namespace Holoville.HOTween
 		static public bool IsLinkedTo( object p_target )
 		{
 			if ( tweens == null )						return false;
-			
-			ABSTweenComponent tw;
+
 			for ( int i = 0; i < tweens.Count; ++i ) {
-				tw = tweens[i];
+				ABSTweenComponent tw = tweens[i];
 				if ( tw.IsLinkedTo( p_target ) )		return true;
 			}
-			
+
 			return false;
 		}
 		
@@ -1364,9 +1360,8 @@ namespace Holoville.HOTween
 		
 		static private void DoUpdate( UpdateType p_updateType, float p_elapsed )
 		{
-			ABSTweenComponent tw;
 			for ( int i = tweens.Count - 1; i > -1; --i ) {
-				tw = tweens[i];
+				ABSTweenComponent tw = tweens[i];
 				if ( tw.updateType == p_updateType && tw.Update( p_elapsed * tw.timeScale ) ) {
 					// Tween complete...
 					if ( tw.destroyed || tw.autoKillOnComplete ) {

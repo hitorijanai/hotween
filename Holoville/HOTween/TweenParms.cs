@@ -1,4 +1,4 @@
-// 
+﻿// 
 // TweenParms.cs
 //  
 // Author: Daniele Giardini
@@ -23,13 +23,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Holoville.HOTween.Core;
 using Holoville.HOTween.Plugins;
 using Holoville.HOTween.Plugins.Core;
+using UnityEngine;
 
 namespace Holoville.HOTween
 {
@@ -84,14 +84,10 @@ namespace Holoville.HOTween
 			// Parse properties and create/set plugins.
 			p_tweenObj.plugins = new List<ABSTweenPlugin>();
 			Type targetType = p_target.GetType();
-			PropertyInfo propInfo = null;
 			FieldInfo fieldInfo = null;
-			string propType;
-			string shortPropType;
-			ABSTweenPlugin plug;
 			foreach ( HOTPropData data in propDatas ) {
 				// Store propInfo and fieldInfo to see if they exist, and then pass them to plugin init.
-				propInfo = targetType.GetProperty( data.propName );
+				PropertyInfo propInfo = targetType.GetProperty( data.propName );
 				if ( propInfo == null ) {
 					fieldInfo = targetType.GetField( data.propName );
 					if ( fieldInfo == null ) {
@@ -100,6 +96,7 @@ namespace Holoville.HOTween
 					}
 				}
 				// Store correct plugin.
+				ABSTweenPlugin plug;
 				if ( data.endValOrPlugin is ABSTweenPlugin ) {
 					// Use existing plugin.
 					plug = data.endValOrPlugin as ABSTweenPlugin;
@@ -116,8 +113,8 @@ namespace Holoville.HOTween
 				} else {
 					// Parse value to find correct plugin to use.
 					plug = null;
-					propType = ( propInfo != null ? propInfo.PropertyType.ToString() : fieldInfo.FieldType.ToString() );
-					shortPropType = propType.Substring( propType.IndexOf( "." ) + 1 );
+					string propType = ( propInfo != null ? propInfo.PropertyType.ToString() : fieldInfo.FieldType.ToString() );
+					string shortPropType = propType.Substring( propType.IndexOf( "." ) + 1 );
 					switch ( shortPropType ) {
 						case "Vector2":
 							if ( !ValidateValue( data.endValOrPlugin, PlugVector2.validValueTypes ) )		break;
@@ -655,7 +652,7 @@ namespace Holoville.HOTween
 		// ===================================================================================
 		// PRIVATE METHODS -------------------------------------------------------------------
 		
-		private bool ValidateValue( object p_val, Type[] p_validVals )
+		private static bool ValidateValue( object p_val, Type[] p_validVals )
 		{
 			return ( Array.IndexOf( p_validVals, p_val.GetType() ) != -1 );
 		}
@@ -669,9 +666,9 @@ namespace Holoville.HOTween
 		{
 			// VARS ///////////////////////////////////////////////////
 			
-			public		string				propName;
-			public		object				endValOrPlugin;
-			public		bool				isRelative;
+			public readonly string			propName;
+			public readonly object			endValOrPlugin;
+			public readonly bool			isRelative;
 			
 			// ***********************************************************************************
 			// CONSTRUCTOR

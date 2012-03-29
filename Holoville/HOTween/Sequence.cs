@@ -23,10 +23,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using UnityEngine;
 using System.Collections.Generic;
 using Holoville.HOTween.Core;
 using Holoville.HOTween.Plugins.Core;
+using UnityEngine;
 
 namespace Holoville.HOTween
 {
@@ -99,7 +99,7 @@ namespace Holoville.HOTween
 			
 			if ( p_twMember != null ) {
 				HOTween.Kill( p_twMember );
-				( p_twMember as ABSTweenComponent ).contSequence = this;
+				( (ABSTweenComponent)p_twMember ).contSequence = this;
 				CheckSpeedBasedTween( p_twMember );
 			}
 			
@@ -141,7 +141,7 @@ namespace Holoville.HOTween
 			
 			if ( p_twMember != null ) {
 				HOTween.Kill( p_twMember );
-				( p_twMember as ABSTweenComponent ).contSequence = this;
+				( (ABSTweenComponent)p_twMember ).contSequence = this;
 				CheckSpeedBasedTween( p_twMember );
 			}
 			
@@ -174,15 +174,14 @@ namespace Holoville.HOTween
 		{
 			if ( p_twMember != null ) {
 				HOTween.Kill( p_twMember );
-				( p_twMember as ABSTweenComponent ).contSequence = this;
+				( (ABSTweenComponent)p_twMember ).contSequence = this;
 				CheckSpeedBasedTween( p_twMember );
 			}
 			
 			HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( p_time, p_twMember as ABSTweenComponent ) : new HOTSeqItem( p_time, p_duration ) );
 			
 			if ( items == null ) {
-				items = new List<HOTSeqItem>();
-				items.Add( newItem );
+				items = new List<HOTSeqItem> { newItem };
 				_duration = newItem.startTime + newItem.duration;
 				SetFullDuration();
 				return _duration;
@@ -257,14 +256,13 @@ namespace Holoville.HOTween
 		override public bool IsTweening( object p_target )
 		{
 			if ( !_enabled || items == null )		return false;
-			
-			HOTSeqItem item;
+
 			for ( int i = 0; i < items.Count; ++i ) {
-				item = items[i];
+				HOTSeqItem item = items[i];
 				if ( item.twMember != null && item.twMember.IsTweening( p_target ) )
 					return true;
 			}
-			
+
 			return false;
 		}
 		
@@ -280,14 +278,13 @@ namespace Holoville.HOTween
 		override public bool IsLinkedTo( object p_target )
 		{
 			if ( items == null )			return false;
-			
-			HOTSeqItem item;
+
 			for ( int i = 0; i < items.Count; ++i ) {
-				item = items[i];
+				HOTSeqItem item = items[i];
 				if ( item.twMember != null && item.twMember.IsLinkedTo( p_target ) )
 					return true;
 			}
-			
+
 			return false;
 		}
 		
@@ -302,10 +299,9 @@ namespace Holoville.HOTween
 		internal void Remove( ABSTweenComponent p_tween )
 		{
 			if ( items == null )					return;
-			
-			HOTSeqItem item;
+
 			for ( int i = 0; i < items.Count; ++i ) {
-				item = items[i];
+				HOTSeqItem item = items[i];
 				if ( item.twMember != null && item.twMember == p_tween ) {
 					items.RemoveAt( i );
 					break;
@@ -447,9 +443,8 @@ namespace Holoville.HOTween
 		/// </param>
 		override internal void SetIncremental( int p_diffIncr )
 		{
-			HOTSeqItem item;
 			for ( int i = 0; i < items.Count; ++i ) {
-				item = items[i];
+				HOTSeqItem item = items[i];
 				if ( item.twMember == null )	continue;
 				item.twMember.SetIncremental( p_diffIncr );
 			}
@@ -494,13 +489,12 @@ namespace Holoville.HOTween
 			_isLoopingBack = false;
 			_completedLoops = 0;
 			_fullElapsed = _elapsed = 0;
-			
-			HOTSeqItem item;
+
 			for ( int i = items.Count - 1; i > - 1; --i ) {
-				item = items[i];
+				HOTSeqItem item = items[i];
 				if ( item.twMember != null )			item.twMember.Rewind();
 			}
-			
+
 			// Manage OnUpdate and OnRewinded.
 			if ( _fullElapsed != prevFullElapsed ) {
 				OnUpdate();
@@ -542,7 +536,7 @@ namespace Holoville.HOTween
 		/// If the given <see cref="IHOTweenComponent"/> is a speedBased <see cref="Tweener"/>,
 		/// forces it to calculate the correct duration.
 		/// </summary>
-		private void CheckSpeedBasedTween( IHOTweenComponent p_twMember )
+		private static void CheckSpeedBasedTween( IHOTweenComponent p_twMember )
 		{
 			Tweener tw = p_twMember as Tweener;
 			if ( tw != null && tw._speedBased )		tw.ForceSetSpeedBasedDuration();
@@ -582,15 +576,15 @@ namespace Holoville.HOTween
 		override internal void FillPluginsList( List<ABSTweenPlugin> p_plugs )
 		{
 			if ( items == null )				return;
-			
-			HOTSeqItem itm;
+
 			for ( int i = 0; i < items.Count; ++i ) {
-				itm = items[i];
+				HOTSeqItem itm = items[i];
 				if ( itm.twMember == null )		continue;
-				if ( itm.twMember is Sequence )
-					( itm.twMember as Sequence ).FillPluginsList( p_plugs );
+				var sequence = itm.twMember as Sequence;
+				if ( sequence != null )
+					sequence.FillPluginsList( p_plugs );
 				else
-					( itm.twMember as Tweener ).FillPluginsList( p_plugs );
+					itm.twMember.FillPluginsList( p_plugs );
 			}
 		}
 		
@@ -608,11 +602,11 @@ namespace Holoville.HOTween
 			
 			public		float				startTime;
 			
-			private		float				_duration;
+			private readonly float			_duration;
 			
 			// REFERENCES /////////////////////////////////////////////
 			
-			public		ABSTweenComponent	twMember;
+			public readonly ABSTweenComponent	twMember;
 			
 			// READ-ONLY GETS /////////////////////////////////////////
 			

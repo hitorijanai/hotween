@@ -23,9 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using UnityEngine;
 using System.Collections.Generic;
-using Holoville.HOTween;
 using Holoville.HOTween.Plugins.Core;
 
 namespace Holoville.HOTween.Core
@@ -44,7 +42,7 @@ namespace Holoville.HOTween.Core
 		/// List of currently running Tweeners
 		/// (meaning all Tweeners whose OnStart has been called, paused or not).
 		/// </summary>
-		private		List<Tweener>			runningTweens;
+		private readonly List<Tweener>		runningTweens;
 		
 		
 		// ***********************************************************************************
@@ -64,27 +62,22 @@ namespace Holoville.HOTween.Core
 			if ( enabled ) {
 				// Check running tweens for eventual overwrite.
 				List<ABSTweenPlugin> addPlugs = p_tween.plugins;
-				Tweener tw;
-				ABSTweenPlugin addPlug;
-				ABSTweenPlugin plug;
-				string t0;
-				string t1;
 				for ( int i = runningTweens.Count - 1; i > -1; --i ) {
-					tw = runningTweens[i];
+					Tweener tw = runningTweens[i];
 					if ( tw.target == p_tween.target ) {
 						// Check internal plugins.
 						for ( int n = 0; n < addPlugs.Count; ++n ) {
-							addPlug = addPlugs[n];
+							ABSTweenPlugin addPlug = addPlugs[n];
 							for ( int c = tw.plugins.Count - 1; c > -1; --c ) {
-								plug = tw.plugins[c];
+								ABSTweenPlugin plug = tw.plugins[c];
 								if ( plug.propName == addPlug.propName && ( addPlug.pluginId == -1 || plug.pluginId == -1 || plug.pluginId == addPlug.pluginId ) ) {
 									if ( !tw.isSequenced || !tw.isComplete ) {
 										// Overwrite old plugin.
 										tw.plugins.RemoveAt( c );
 										if ( HOTween.isEditor && HOTween.warningLevel == WarningLevel.Verbose ) {
-											t0 = addPlug.GetType().ToString();
+											string t0 = addPlug.GetType().ToString();
 											t0 = t0.Substring( t0.LastIndexOf( "." ) + 1 );
-											t1 = plug.GetType().ToString();
+											string t1 = plug.GetType().ToString();
 											t1 = t1.Substring( t1.LastIndexOf( "." ) + 1 );
 											TweenWarning.Log( t0 + " is overwriting " + t1 + " for " + tw.target + "." + plug.propName );
 										}

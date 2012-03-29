@@ -23,7 +23,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using UnityEngine;
 using System;
 using System.Reflection;
 using FastDynamicMemberAccessor;
@@ -169,7 +168,7 @@ namespace Holoville.HOTween.Plugins.Core
 		/// <param name="p_isRelative">
 		/// If <c>true</c>, the given end value is considered relative instead than absolute.
 		/// </param>
-		public ABSTweenPlugin( object p_endVal, bool p_isRelative )
+		protected ABSTweenPlugin( object p_endVal, bool p_isRelative )
 		{
 			isRelative = p_isRelative;
 			_endVal = p_endVal;
@@ -186,7 +185,7 @@ namespace Holoville.HOTween.Plugins.Core
 		/// <param name="p_isRelative">
 		/// If <c>true</c>, the given end value is considered relative instead than absolute.
 		/// </param>
-		public ABSTweenPlugin( object p_endVal, EaseType p_easeType, bool p_isRelative )
+		protected ABSTweenPlugin( object p_endVal, EaseType p_easeType, bool p_isRelative )
 		{
 			isRelative = p_isRelative;
 			_endVal = p_endVal;
@@ -410,7 +409,7 @@ namespace Holoville.HOTween.Plugins.Core
 			// OPTIMIZE incredibly slow. Possible solutions...
 			// - http://rogeralsing.com/2008/02/28/linq-expressions-creating-objects (but requires Linq, and thus System.Core, which I'd prefer to avoid)
 			// - http://ayende.com/blog/3167/creating-objects-perf-implications (has to know the class to create, thus is useless)
-			return Activator.CreateInstance( this.GetType(), ( tweenObj != null && tweenObj.isFrom ? _startVal : _endVal ), easeType, isRelative ) as ABSTweenPlugin;
+			return Activator.CreateInstance( GetType(), ( tweenObj != null && tweenObj.isFrom ? _startVal : _endVal ), easeType, isRelative ) as ABSTweenPlugin;
 		}
 		
 		// ===================================================================================

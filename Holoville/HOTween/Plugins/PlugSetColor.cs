@@ -23,9 +23,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using UnityEngine;
 using System;
 using Holoville.HOTween.Plugins.Core;
+using UnityEngine;
 
 namespace Holoville.HOTween.Plugins
 {
@@ -246,7 +246,7 @@ namespace Holoville.HOTween.Plugins
 		/// </param>
 		override protected void SetValue( object p_value )
 		{
-			( tweenObj.target as Material ).SetColor( colorName, (Color)p_value );
+			( (Material)tweenObj.target ).SetColor( colorName, (Color)p_value );
 		}
 		
 		/// <summary>
@@ -255,7 +255,7 @@ namespace Holoville.HOTween.Plugins
 		/// </summary>
 		override protected object GetValue()
 		{
-			return ( tweenObj.target as Material ).GetColor( colorName );
+			return ( (Material)tweenObj.target ).GetColor( colorName );
 		}
 	}
 }

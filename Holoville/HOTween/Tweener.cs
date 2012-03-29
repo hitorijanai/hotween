@@ -23,11 +23,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using UnityEngine;
 using System.Collections.Generic;
 using Holoville.HOTween.Core;
 using Holoville.HOTween.Plugins;
 using Holoville.HOTween.Plugins.Core;
+using UnityEngine;
 
 namespace Holoville.HOTween
 {
@@ -157,7 +157,7 @@ namespace Holoville.HOTween
 		{
 			if ( !_enabled )			return;
 			if ( p_skipDelay )			SkipDelay();
-			base.Play();
+			Play();
 		}
 		
 		/// <summary>
@@ -170,7 +170,7 @@ namespace Holoville.HOTween
 		{
 			if ( !_enabled )			return;
 			if ( p_skipDelay )			SkipDelay();
-			base.PlayForward();
+			PlayForward();
 		}
 		
 		/// <summary>
@@ -329,18 +329,17 @@ namespace Holoville.HOTween
 				if ( _timeScale != 0 )	_elapsedDelay += p_shortElapsed / _timeScale; // Calculate delay independently of timeScale
 				if ( _elapsedDelay < delayCount ) {
 					return false;
-				} else {
-					if ( _isReversed ) {
-						_fullElapsed = _elapsed = 0;
-					} else {
-						_fullElapsed = _elapsed = _elapsedDelay - delayCount;
-						if ( _fullElapsed > _fullDuration )		_fullElapsed = _fullDuration;
-					}
-					_elapsedDelay = delayCount;
-					delayCount = 0;
-					if ( !startupDone )								Startup();
-					if ( !_hasStarted )								OnStart();
 				}
+				if ( _isReversed ) {
+					_fullElapsed = _elapsed = 0;
+				} else {
+					_fullElapsed = _elapsed = _elapsedDelay - delayCount;
+					if ( _fullElapsed > _fullDuration )		_fullElapsed = _fullDuration;
+				}
+				_elapsedDelay = delayCount;
+				delayCount = 0;
+				if ( !startupDone )								Startup();
+				if ( !_hasStarted )								OnStart();
 			}
 			
 			// Set all elapsed and loops values.
@@ -349,13 +348,12 @@ namespace Holoville.HOTween
 			SetLoops();
 			SetElapsed();
 			_isComplete = ( !_isReversed && _loops >= 0 && _completedLoops >= _loops );
-			bool complete = ( !wasComplete && _isComplete ? true : false );
+			bool complete = ( !wasComplete && _isComplete );
 			
 			// Update the plugins.
 			float plugElapsed = ( !_isLoopingBack ? _elapsed : _duration - _elapsed );
-			ABSTweenPlugin plug;
 			for ( int i = 0; i < plugins.Count; ++i ) {
-				plug = plugins[i];
+				ABSTweenPlugin plug = plugins[i];
 				if ( !_isLoopingBack && plug.easeReversed || _isLoopingBack && _loopType == LoopType.YoyoInverse && !plug.easeReversed ) {
 					plug.ReverseEase();
 				}
@@ -451,10 +449,9 @@ namespace Holoville.HOTween
 			_elapsedDelay = ( p_skipDelay ? _delay : 0 );
 			_completedLoops = 0;
 			_fullElapsed = _elapsed = 0;
-			
-			ABSTweenPlugin plug;
+
 			for ( int i = 0; i < plugins.Count; ++i ) {
-				plug = plugins[i];
+				ABSTweenPlugin plug = plugins[i];
 				if ( plug.easeReversed )		plug.ReverseEase();
 				plug.Rewind();
 			}

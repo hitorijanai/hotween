@@ -25,8 +25,8 @@
 
 // Original PlugRect code contributed by Romain Giraud
 
-using UnityEngine;
 using System;
+using UnityEngine;
 
 namespace Holoville.HOTween.Plugins.Core
 {
