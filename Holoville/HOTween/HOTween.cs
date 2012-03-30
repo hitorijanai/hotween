@@ -211,11 +211,9 @@ namespace Holoville.HOTween
 			
 			// Find path plugins and draw paths.
 			for ( int i = 0; i < plugs.Count; ++i ) {
-				ABSTweenPlugin plug = plugs[i];
-				if ( plug is PlugVector3Path ) {
-					PlugVector3Path pathPlug = ( plug as PlugVector3Path );
-					if ( pathPlug.path != null )
-						pathPlug.path.GizmoDraw( pathPlug.pathPerc, false );
+				var pathPlug = plugs[i] as PlugVector3Path;
+				if (pathPlug != null && pathPlug.path != null ) {
+					pathPlug.path.GizmoDraw( pathPlug.pathPerc, false );
 				}
 			}
 		}
@@ -1391,8 +1389,9 @@ namespace Holoville.HOTween
 		static private void DoFilteredPlay( int p_index, bool p_skipDelay )
 		{
 			ABSTweenComponent tw = tweens[p_index];
-			if ( tw is Tweener )
-				( tw as Tweener ).Play( p_skipDelay );
+			var tweener = tw as Tweener;
+			if ( tweener != null )
+				tweener.Play( p_skipDelay );
 			else
 				tw.Play();
 		}
@@ -1400,8 +1399,9 @@ namespace Holoville.HOTween
 		static private void DoFilteredPlayForward( int p_index, bool p_skipDelay )
 		{
 			ABSTweenComponent tw = tweens[p_index];
-			if ( tw is Tweener )
-				( tw as Tweener ).PlayForward( p_skipDelay );
+			var tweener = tw as Tweener;
+			if ( tweener != null )
+				tweener.PlayForward( p_skipDelay );
 			else
 				tw.PlayForward();
 		}
@@ -1409,8 +1409,9 @@ namespace Holoville.HOTween
 		static private void DoFilteredPlayBackwards( int p_index, bool p_optionalBool )
 		{
 			ABSTweenComponent tw = tweens[p_index];
-			if ( tw is Tweener )
-				( tw as Tweener ).PlayBackwards();
+			var tweener = tw as Tweener;
+			if ( tweener != null )
+				tweener.PlayBackwards();
 			else
 				tw.PlayBackwards();
 		}
@@ -1418,8 +1419,9 @@ namespace Holoville.HOTween
 		static private void DoFilteredRewind( int p_index, bool p_skipDelay )
 		{
 			ABSTweenComponent tw = tweens[p_index];
-			if ( tw is Tweener ) {
-				( tw as Tweener ).Rewind( p_skipDelay );
+			var tweener = tw as Tweener;
+			if ( tweener != null ) {
+				tweener.Rewind( p_skipDelay );
 			} else
 				tw.Rewind();
 		}
@@ -1427,8 +1429,9 @@ namespace Holoville.HOTween
 		static private void DoFilteredRestart( int p_index, bool p_skipDelay )
 		{
 			ABSTweenComponent tw = tweens[p_index];
-			if ( tw is Tweener )
-				( tw as Tweener ).Restart( p_skipDelay );
+			var tweener = tw as Tweener;
+			if ( tweener != null )
+				tweener.Restart( p_skipDelay );
 			else
 				tw.Restart();
 		}
@@ -1568,10 +1571,9 @@ namespace Holoville.HOTween
 				}
 			} else {
 				// Target
-				ABSTweenComponent tw;
 				for ( int i = tweens.Count - 1; i > -1; --i ) {
-					tw = tweens[i];
-					if ( tw is Tweener && ( tw as Tweener ).target == p_filter ) {
+					Tweener tw = tweens[i] as Tweener;
+					if ( tw != null && tw.target == p_filter ) {
 						p_operation( i, p_optionalBool );
 						++opCount;
 					}

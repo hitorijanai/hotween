@@ -266,9 +266,10 @@ namespace Holoville.HOTween
 			if ( plugins == null )			return Vector3.zero;
 			
 			foreach ( ABSTweenPlugin plug in plugins ) {
-				if ( plug is PlugVector3Path ) {
+				var plugVector3Path = plug as PlugVector3Path;
+				if ( plugVector3Path != null ) {
 					if ( !startupDone )		Startup(); // Startup the tween to get the path data.
-					return ( plug as PlugVector3Path ).GetConstPointOnPath( t );
+					return plugVector3Path.GetConstPointOnPath( t );
 				}
 			}
 			

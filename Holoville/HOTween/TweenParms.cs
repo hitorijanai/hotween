@@ -97,9 +97,10 @@ namespace Holoville.HOTween
 				}
 				// Store correct plugin.
 				ABSTweenPlugin plug;
-				if ( data.endValOrPlugin is ABSTweenPlugin ) {
+				var absTweenPlugin = data.endValOrPlugin as ABSTweenPlugin;
+				if ( absTweenPlugin != null ) {
 					// Use existing plugin.
-					plug = data.endValOrPlugin as ABSTweenPlugin;
+					plug = absTweenPlugin;
 					if ( plug.ValidateTarget( p_target ) ) {
 						if ( plug.initialized ) {
 							// This plugin was already initialized with another Tweener. Clone it.

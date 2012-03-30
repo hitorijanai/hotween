@@ -299,11 +299,9 @@ namespace Holoville.HOTween.Plugins
 		{
 			if ( orientType != OrientType.None ) {
 				// Store orient transform and lockRot.
-				if ( orientTrans == null ) {
-					if ( tweenObj.target is Transform )
-						orientTrans = tweenObj.target as Transform;
-					else
-						orientTrans = null;
+				if ( orientTrans == null )
+				{
+					orientTrans = tweenObj.target as Transform;
 				}
 //				if ( lockAxis != Axis.None && orientTrans != null && !orientTrans.Equals( null ) ) {
 //					lockRot = orientTrans.rotation.eulerAngles;
