@@ -1,6 +1,6 @@
-// 
+//
 // FastDynamicMemberAccessor.cs
-//  
+//
 // Author: James Nies
 // Licensed under The Code Project Open License (CPOL): http://www.codeproject.com/info/cpol10.aspx
 
@@ -17,7 +17,7 @@ namespace FastDynamicMemberAccessor
     {
         private readonly IMemberAccessor _pimp;
         private readonly IMemberAccessor _chain;
-		
+
         internal ChainingAccessor(IMemberAccessor impl, IMemberAccessor chain)
         {
             _pimp = impl;
@@ -54,8 +54,8 @@ namespace FastDynamicMemberAccessor
 //            //
 //            // Make sure the member exists
 //            //
-//            MemberInfo[] matches = targetType.GetMember(member, 
-//                MemberTypes.Field | MemberTypes.Property, 
+//            MemberInfo[] matches = targetType.GetMember(member,
+//                MemberTypes.Field | MemberTypes.Property,
 //                BindingFlags.Public | BindingFlags.Instance);
 //
 //            if((matches == null) || (matches.Length==0))
@@ -81,39 +81,39 @@ namespace FastDynamicMemberAccessor
 //                        throw new InvalidProgramException("Unreachable code executed");
 //                }
 //            }
-//            
+//
 //            return (MemberAccessor) _cache[member];
-//			
-//			// DG MOD - remove cache (my MemberAccessorCacher is more efficient)
-//			
-//			switch ( member.MemberType ) {
-//			case MemberTypes.Field:
-//				return new FieldAccessor((FieldInfo) member);
-//			case MemberTypes.Property:
-//				return new PropertyAccessor((PropertyInfo) member);
-//			default:
-//				throw new InvalidProgramException("Unreachable code executed");
-//			}
+//
+//            // DG MOD - remove cache (my MemberAccessorCacher is more efficient)
+//
+//            switch ( member.MemberType ) {
+//            case MemberTypes.Field:
+//                return new FieldAccessor((FieldInfo) member);
+//            case MemberTypes.Property:
+//                return new PropertyAccessor((PropertyInfo) member);
+//            default:
+//                throw new InvalidProgramException("Unreachable code executed");
+//            }
 //        }
-		
-		/// <summary>
-		/// Added by Daniele Giardini for HOTween,
-		/// because if a Make is called we already know that a PropertyInfo or FieldInfo exist,
-		/// and we can directly pass them as parameters.
-		/// </summary>
-		internal static MemberAccessor Make( PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo )
-		{
-			if ( p_propertyInfo != null )
-				return new PropertyAccessor( p_propertyInfo );
-			
-			return new FieldAccessor( p_fieldInfo );
-		}
+
+        /// <summary>
+        /// Added by Daniele Giardini for HOTween,
+        /// because if a Make is called we already know that a PropertyInfo or FieldInfo exist,
+        /// and we can directly pass them as parameters.
+        /// </summary>
+        internal static MemberAccessor Make( PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo )
+        {
+            if ( p_propertyInfo != null )
+                return new PropertyAccessor( p_propertyInfo );
+
+            return new FieldAccessor( p_fieldInfo );
+        }
 
         /// <summary>
         /// Thanks to Ben Ratzlaff for this snippet of code
         /// http://www.codeproject.com/cs/miscctrl/CustomPropGrid.asp
-        /// 
-        /// "Initialize a private hashtable with type-opCode pairs 
+        ///
+        /// "Initialize a private hashtable with type-opCode pairs
         /// so i dont have to write a long if/else statement when outputting msil"
         /// </summary>
         static MemberAccessor()
@@ -229,7 +229,7 @@ namespace FastDynamicMemberAccessor
         {
             if(_emittedMemberAccessor == null)
             {
-                // Create the assembly and an instance of the 
+                // Create the assembly and an instance of the
                 // member accessor class.
                 Assembly assembly = EmitAssembly();
 
@@ -259,14 +259,14 @@ namespace FastDynamicMemberAccessor
             AssemblyBuilder newAssembly = Thread.GetDomain().DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
             ModuleBuilder newModule = newAssembly.DefineDynamicModule("Module");
 
-            //		
+            //
             //  Define a public class named emmitedTypeName in the assembly.
-            //			
-            TypeBuilder myType = 
+            //
+            TypeBuilder myType =
                 newModule.DefineType(emmitedTypeName, TypeAttributes.Public | TypeAttributes.Sealed);
 
             //
-            // Mark the class as implementing IMemberAccessor. 
+            // Mark the class as implementing IMemberAccessor.
             //
             myType.AddInterfaceImplementation(typeof(IMemberAccessor));
 

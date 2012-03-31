@@ -1,20 +1,20 @@
-// 
+//
 // ABSTweenComponentParms.cs
-//  
+//
 // Author: Daniele Giardini
-// 
+//
 // Copyright (c) 2012 Daniele Giardini - Holoville - http://www.holoville.com
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,175 +25,175 @@
 
 namespace Holoville.HOTween.Core
 {
-	/// <summary>
-	/// Base class for all HOTParms.
-	/// </summary>
-	abstract public class ABSTweenComponentParms
-	{
-		// VARS ///////////////////////////////////////////////////
-		
-		/// <summary>
-		/// ID.
-		/// </summary>
-		protected	string							id = "";
-		/// <summary>
-		/// Int ID.
-		/// </summary>
-		protected	int								intId = -1;
-		/// <summary>
-		/// Auto kill on complete.
-		/// </summary>
-		protected	bool							autoKillOnComplete = true;
-		/// <summary>
-		/// Update type.
-		/// </summary>
-		protected	UpdateType						updateType = HOTween.defUpdateType;
-		/// <summary>
-		/// Time scale.
-		/// </summary>
-		protected	float							timeScale = HOTween.defTimeScale;
-		/// <summary>
-		/// Loops
-		/// </summary>
-		protected	int								loops = 1;
-		/// <summary>
-		/// Loop type. 
-		/// </summary>
-		protected	LoopType						loopType = HOTween.defLoopType;
-		/// <summary>
-		/// Paused. 
-		/// </summary>
-		protected	bool							isPaused;
-		
-		/// <summary>
-		/// On start.
-		/// </summary>
-		protected	TweenDelegate.TweenCallback				onStart;
-		/// <summary>
-		/// On start with parms.
-		/// </summary>
-		protected	TweenDelegate.TweenCallbackWParms		onStartWParms;
-		/// <summary>
-		/// On start parameters.
-		/// </summary>
-		protected	object[]								onStartParms;
-		/// <summary>
-		/// On update.
-		/// </summary>
-		protected	TweenDelegate.TweenCallback				onUpdate;
-		/// <summary>
-		/// On update with parms.
-		/// </summary>
-		protected	TweenDelegate.TweenCallbackWParms		onUpdateWParms;
-		/// <summary>
-		/// On update parameters.
-		/// </summary>
-		protected	object[]								onUpdateParms;
-		/// <summary>
-		/// On pause.
-		/// </summary>
-		protected	TweenDelegate.TweenCallback				onPause;
-		/// <summary>
-		/// On pause with parms.
-		/// </summary>
-		protected	TweenDelegate.TweenCallbackWParms		onPauseWParms;
-		/// <summary>
-		/// On pause parameters.
-		/// </summary>
-		protected	object[]								onPauseParms;
-		/// <summary>
-		/// On play.
-		/// </summary>
-		protected	TweenDelegate.TweenCallback				onPlay;
-		/// <summary>
-		/// On play with parms.
-		/// </summary>
-		protected	TweenDelegate.TweenCallbackWParms		onPlayWParms;
-		/// <summary>
-		/// On play parameters.
-		/// </summary>
-		protected	object[]								onPlayParms;
-		/// <summary>
-		/// On rewinded.
-		/// </summary>
-		protected	TweenDelegate.TweenCallback				onRewinded;
-		/// <summary>
-		/// On rewinded with parms.
-		/// </summary>
-		protected	TweenDelegate.TweenCallbackWParms		onRewindedWParms;
-		/// <summary>
-		/// On rewinded parameters.
-		/// </summary>
-		protected	object[]								onRewindedParms;
-		/// <summary>
-		/// On step complete.
-		/// </summary>
-		protected	TweenDelegate.TweenCallback				onStepComplete;
-		/// <summary>
-		/// On step complete with parms.
-		/// </summary>
-		protected	TweenDelegate.TweenCallbackWParms		onStepCompleteWParms;
-		/// <summary>
-		/// On step complete parameters.
-		/// </summary>
-		protected	object[]								onStepCompleteParms;
-		/// <summary>
-		/// On complete.
-		/// </summary>
-		protected	TweenDelegate.TweenCallback				onComplete;
-		/// <summary>
-		/// On complete with parms.
-		/// </summary>
-		protected	TweenDelegate.TweenCallbackWParms		onCompleteWParms;
-		/// <summary>
-		/// On complete parameters.
-		/// </summary>
-		protected	object[]								onCompleteParms;
-		
-		
-		// ***********************************************************************************
-		// INIT
-		// ***********************************************************************************
-		
-		/// <summary>
-		/// Initializes the given owner with the stored parameters.
-		/// </summary>
-		/// <param name="p_owner">
-		/// The <see cref="ABSTweenComponent"/> to initialize.
-		/// </param>
-		protected void InitializeOwner( ABSTweenComponent p_owner )
-		{
-			p_owner._id = id;
-			p_owner._intId = intId;
-			p_owner._autoKillOnComplete = autoKillOnComplete;
-			p_owner._updateType = updateType;
-			p_owner._timeScale = timeScale;
-			p_owner._loops = loops;
-			p_owner._loopType = loopType;
-			p_owner._isPaused = isPaused;
-			
-			p_owner.onStart = onStart;
-			p_owner.onStartWParms = onStartWParms;
-			p_owner.onStartParms = onStartParms;
-			p_owner.onUpdate = onUpdate;
-			p_owner.onUpdateWParms = onUpdateWParms;
-			p_owner.onUpdateParms = onUpdateParms;
-			p_owner.onPause = onPause;
-			p_owner.onPauseWParms = onPauseWParms;
-			p_owner.onPauseParms = onPauseParms;
-			p_owner.onPlay = onPlay;
-			p_owner.onPlayWParms = onPlayWParms;
-			p_owner.onPlayParms = onPlayParms;
-			p_owner.onRewinded = onRewinded;
-			p_owner.onRewindedWParms = onRewindedWParms;
-			p_owner.onRewindedParms = onRewindedParms;
-			p_owner.onStepComplete = onStepComplete;
-			p_owner.onStepCompleteWParms = onStepCompleteWParms;
-			p_owner.onStepCompleteParms = onStepCompleteParms;
-			p_owner.onComplete = onComplete;
-			p_owner.onCompleteWParms = onCompleteWParms;
-			p_owner.onCompleteParms = onCompleteParms;
-		}
-	}
+    /// <summary>
+    /// Base class for all HOTParms.
+    /// </summary>
+    abstract public class ABSTweenComponentParms
+    {
+        // VARS ///////////////////////////////////////////////////
+
+        /// <summary>
+        /// ID.
+        /// </summary>
+        protected    string                            id = "";
+        /// <summary>
+        /// Int ID.
+        /// </summary>
+        protected    int                                intId = -1;
+        /// <summary>
+        /// Auto kill on complete.
+        /// </summary>
+        protected    bool                            autoKillOnComplete = true;
+        /// <summary>
+        /// Update type.
+        /// </summary>
+        protected    UpdateType                        updateType = HOTween.defUpdateType;
+        /// <summary>
+        /// Time scale.
+        /// </summary>
+        protected    float                            timeScale = HOTween.defTimeScale;
+        /// <summary>
+        /// Loops
+        /// </summary>
+        protected    int                                loops = 1;
+        /// <summary>
+        /// Loop type.
+        /// </summary>
+        protected    LoopType                        loopType = HOTween.defLoopType;
+        /// <summary>
+        /// Paused.
+        /// </summary>
+        protected    bool                            isPaused;
+
+        /// <summary>
+        /// On start.
+        /// </summary>
+        protected    TweenDelegate.TweenCallback                onStart;
+        /// <summary>
+        /// On start with parms.
+        /// </summary>
+        protected    TweenDelegate.TweenCallbackWParms        onStartWParms;
+        /// <summary>
+        /// On start parameters.
+        /// </summary>
+        protected    object[]                                onStartParms;
+        /// <summary>
+        /// On update.
+        /// </summary>
+        protected    TweenDelegate.TweenCallback                onUpdate;
+        /// <summary>
+        /// On update with parms.
+        /// </summary>
+        protected    TweenDelegate.TweenCallbackWParms        onUpdateWParms;
+        /// <summary>
+        /// On update parameters.
+        /// </summary>
+        protected    object[]                                onUpdateParms;
+        /// <summary>
+        /// On pause.
+        /// </summary>
+        protected    TweenDelegate.TweenCallback                onPause;
+        /// <summary>
+        /// On pause with parms.
+        /// </summary>
+        protected    TweenDelegate.TweenCallbackWParms        onPauseWParms;
+        /// <summary>
+        /// On pause parameters.
+        /// </summary>
+        protected    object[]                                onPauseParms;
+        /// <summary>
+        /// On play.
+        /// </summary>
+        protected    TweenDelegate.TweenCallback                onPlay;
+        /// <summary>
+        /// On play with parms.
+        /// </summary>
+        protected    TweenDelegate.TweenCallbackWParms        onPlayWParms;
+        /// <summary>
+        /// On play parameters.
+        /// </summary>
+        protected    object[]                                onPlayParms;
+        /// <summary>
+        /// On rewinded.
+        /// </summary>
+        protected    TweenDelegate.TweenCallback                onRewinded;
+        /// <summary>
+        /// On rewinded with parms.
+        /// </summary>
+        protected    TweenDelegate.TweenCallbackWParms        onRewindedWParms;
+        /// <summary>
+        /// On rewinded parameters.
+        /// </summary>
+        protected    object[]                                onRewindedParms;
+        /// <summary>
+        /// On step complete.
+        /// </summary>
+        protected    TweenDelegate.TweenCallback                onStepComplete;
+        /// <summary>
+        /// On step complete with parms.
+        /// </summary>
+        protected    TweenDelegate.TweenCallbackWParms        onStepCompleteWParms;
+        /// <summary>
+        /// On step complete parameters.
+        /// </summary>
+        protected    object[]                                onStepCompleteParms;
+        /// <summary>
+        /// On complete.
+        /// </summary>
+        protected    TweenDelegate.TweenCallback                onComplete;
+        /// <summary>
+        /// On complete with parms.
+        /// </summary>
+        protected    TweenDelegate.TweenCallbackWParms        onCompleteWParms;
+        /// <summary>
+        /// On complete parameters.
+        /// </summary>
+        protected    object[]                                onCompleteParms;
+
+
+        // ***********************************************************************************
+        // INIT
+        // ***********************************************************************************
+
+        /// <summary>
+        /// Initializes the given owner with the stored parameters.
+        /// </summary>
+        /// <param name="p_owner">
+        /// The <see cref="ABSTweenComponent"/> to initialize.
+        /// </param>
+        protected void InitializeOwner( ABSTweenComponent p_owner )
+        {
+            p_owner._id = id;
+            p_owner._intId = intId;
+            p_owner._autoKillOnComplete = autoKillOnComplete;
+            p_owner._updateType = updateType;
+            p_owner._timeScale = timeScale;
+            p_owner._loops = loops;
+            p_owner._loopType = loopType;
+            p_owner._isPaused = isPaused;
+
+            p_owner.onStart = onStart;
+            p_owner.onStartWParms = onStartWParms;
+            p_owner.onStartParms = onStartParms;
+            p_owner.onUpdate = onUpdate;
+            p_owner.onUpdateWParms = onUpdateWParms;
+            p_owner.onUpdateParms = onUpdateParms;
+            p_owner.onPause = onPause;
+            p_owner.onPauseWParms = onPauseWParms;
+            p_owner.onPauseParms = onPauseParms;
+            p_owner.onPlay = onPlay;
+            p_owner.onPlayWParms = onPlayWParms;
+            p_owner.onPlayParms = onPlayParms;
+            p_owner.onRewinded = onRewinded;
+            p_owner.onRewindedWParms = onRewindedWParms;
+            p_owner.onRewindedParms = onRewindedParms;
+            p_owner.onStepComplete = onStepComplete;
+            p_owner.onStepCompleteWParms = onStepCompleteWParms;
+            p_owner.onStepCompleteParms = onStepCompleteParms;
+            p_owner.onComplete = onComplete;
+            p_owner.onCompleteWParms = onCompleteWParms;
+            p_owner.onCompleteParms = onCompleteParms;
+        }
+    }
 }
 

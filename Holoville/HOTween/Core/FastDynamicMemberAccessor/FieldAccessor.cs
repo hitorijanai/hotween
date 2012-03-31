@@ -1,6 +1,6 @@
-// 
+//
 // FieldAccessor.cs
-//  
+//
 // Author: James Nies
 // Licensed under The Code Project Open License (CPOL): http://www.codeproject.com/info/cpol10.aspx
 
@@ -19,7 +19,7 @@ namespace FastDynamicMemberAccessor
         /// <summary>
         /// Creates a new property accessor.
         /// </summary>
-        internal FieldAccessor(FieldInfo fieldInfo) 
+        internal FieldAccessor(FieldInfo fieldInfo)
             : base(fieldInfo)
         {
             _canRead = true;
@@ -37,7 +37,7 @@ namespace FastDynamicMemberAccessor
                 return _propertyType;
             }
         }
-        
+
         /// <summary>
         /// Whether or not the Property supports read access.
         /// </summary>
@@ -72,39 +72,39 @@ namespace FastDynamicMemberAccessor
             //
             Type[] setParamTypes = new Type[] {typeof(object), typeof(object)};
             Type setReturnType = null;
-            MethodBuilder setMethod = 
-                myType.DefineMethod("Set", 
-                MethodAttributes.Public | MethodAttributes.Virtual, 
-                setReturnType, 
+            MethodBuilder setMethod =
+                myType.DefineMethod("Set",
+                MethodAttributes.Public | MethodAttributes.Virtual,
+                setReturnType,
                 setParamTypes);
-    
+
             //
             // From the method, get an ILGenerator. This is used to
             // emit the IL that we want.
             //
             ILGenerator setIL = setMethod.GetILGenerator();
             //
-            // Emit the IL. 
+            // Emit the IL.
             //
-    
+
             FieldInfo targetField = _targetType.GetField(_fieldName);
             if(targetField != null)
             {
                 Type paramType = targetField.FieldType;
 
                 setIL.DeclareLocal(paramType);
-                setIL.Emit(OpCodes.Ldarg_1);						//Load the first argument 
+                setIL.Emit(OpCodes.Ldarg_1);                        //Load the first argument
                 //(target object)
 
-                setIL.Emit(OpCodes.Castclass, _targetType);	        //Cast to the source type
+                setIL.Emit(OpCodes.Castclass, _targetType);            //Cast to the source type
 
-                setIL.Emit(OpCodes.Ldarg_2);						//Load the second argument 
+                setIL.Emit(OpCodes.Ldarg_2);                        //Load the second argument
                 //(value object)
 
                 if(paramType.IsValueType)
                 {
-                    setIL.Emit(OpCodes.Unbox, paramType);			//Unbox it 	
-                    if(s_TypeHash[paramType]!=null)					//and load
+                    setIL.Emit(OpCodes.Unbox, paramType);            //Unbox it
+                    if(s_TypeHash[paramType]!=null)                    //and load
                     {
                         OpCode load = (OpCode)s_TypeHash[paramType];
                         setIL.Emit(load);
@@ -116,68 +116,68 @@ namespace FastDynamicMemberAccessor
                 }
                 else
                 {
-                    setIL.Emit(OpCodes.Castclass, paramType);		//Cast class
+                    setIL.Emit(OpCodes.Castclass, paramType);        //Cast class
                 }
-			
+
                   setIL.Emit(OpCodes.Stfld, targetField);           //Set the property value
             }
             else
             {
                 setIL.ThrowException(typeof(MissingMethodException));
             }
-    
+
             setIL.Emit(OpCodes.Ret);
         }
 
         protected override void _EmitGetter(TypeBuilder myType)
         {
             //
-            // Define a method for the get operation. 
+            // Define a method for the get operation.
             //
             Type[] getParamTypes = new Type[] {typeof(object)};
             Type getReturnType = typeof(object);
-            MethodBuilder getMethod = 
-                myType.DefineMethod("Get", 
-                MethodAttributes.Public | MethodAttributes.Virtual, 
-                getReturnType, 
+            MethodBuilder getMethod =
+                myType.DefineMethod("Get",
+                MethodAttributes.Public | MethodAttributes.Virtual,
+                getReturnType,
                 getParamTypes);
-    
+
             //
             // From the method, get an ILGenerator. This is used to
             // emit the IL that we want.
             //
             ILGenerator getIL = getMethod.GetILGenerator();
-    
-    
+
+
             //
-            // Emit the IL. 
+            // Emit the IL.
             //
             FieldInfo targetField = _targetType.GetField(_fieldName);
-    
+
             if(targetField != null)
             {
                 getIL.DeclareLocal(typeof(object));
-                getIL.Emit(OpCodes.Ldarg_1);								//Load the first argument 
+                getIL.Emit(OpCodes.Ldarg_1);                                //Load the first argument
                 //(target object)
 
-                getIL.Emit(OpCodes.Castclass, _targetType);			        //Cast to the source type
+                getIL.Emit(OpCodes.Castclass, _targetType);                    //Cast to the source type
 
                 getIL.Emit(OpCodes.Ldfld, targetField);                     //Get the property value
 
                 if(targetField.FieldType.IsValueType)
                 {
-                    getIL.Emit(OpCodes.Box, targetField.FieldType);	        //Box if necessary
+                    getIL.Emit(OpCodes.Box, targetField.FieldType);            //Box if necessary
                 }
 
-                getIL.Emit(OpCodes.Stloc_0);								//Store it
-			
+                getIL.Emit(OpCodes.Stloc_0);                                //Store it
+
                 getIL.Emit(OpCodes.Ldloc_0);
             }
             else
             {
                 getIL.ThrowException(typeof(MissingMethodException));
             }
-    
+
             getIL.Emit(OpCodes.Ret);
         }
     }

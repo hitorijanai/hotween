@@ -1,14 +1,14 @@
-// 
+//
 //  AssemblyInfo.cs
-//  
+//
 //  Author: Daniele Giardini
-//  
+//
 //  Copyright (c) 2011 Daniele Giardini - Holoville s.a.s.
 
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-// Information about this assembly is defined by the following attributes. 
+// Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle( "HOTween" )]
@@ -26,7 +26,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyVersion( "0.1.000" )]
 
-// The following attributes are used to specify the signing key for the assembly, 
+// The following attributes are used to specify the signing key for the assembly,
 // if desired. See the Mono documentation for more information about signing.
 
 //[assembly: AssemblyDelaySign(false)]
