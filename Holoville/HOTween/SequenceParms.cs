@@ -43,9 +43,9 @@ namespace Holoville.HOTween
         /// <param name="p_sequence">
         /// The <see cref="Sequence"/> to initialize.
         /// </param>
-        internal void InitializeSequence( Sequence p_sequence )
+        internal void InitializeSequence(Sequence p_sequence)
         {
-            InitializeOwner( p_sequence );
+            InitializeOwner(p_sequence);
         }
 
         // ===================================================================================
@@ -59,7 +59,7 @@ namespace Holoville.HOTween
         /// <param name="p_id">
         /// The ID for this Sequence.
         /// </param>
-        public SequenceParms Id( string p_id )
+        public SequenceParms Id(string p_id)
         {
             id = p_id;
 
@@ -74,7 +74,7 @@ namespace Holoville.HOTween
         /// <param name="p_intId">
         /// The int ID for this Tweener.
         /// </param>
-        public SequenceParms IntId( int p_intId )
+        public SequenceParms IntId(int p_intId)
         {
             intId = p_intId;
 
@@ -89,7 +89,7 @@ namespace Holoville.HOTween
         /// If <c>false</c> doesn't remove this Sequence from HOTween when it is completed,
         /// and you will need to call an <c>HOTween.Kill</c> to remove this Sequence.
         /// </param>
-        public SequenceParms AutoKill( bool p_active )
+        public SequenceParms AutoKill(bool p_active)
         {
             autoKillOnComplete = p_active;
 
@@ -102,7 +102,7 @@ namespace Holoville.HOTween
         /// <param name="p_updateType">
         /// The type of update to use.
         /// </param>
-        public SequenceParms UpdateType( UpdateType p_updateType )
+        public SequenceParms UpdateType(UpdateType p_updateType)
         {
             updateType = p_updateType;
 
@@ -115,7 +115,7 @@ namespace Holoville.HOTween
         /// <param name="p_timeScale">
         /// The time scale to use.
         /// </param>
-        public SequenceParms TimeScale( float p_timeScale )
+        public SequenceParms TimeScale(float p_timeScale)
         {
             timeScale = p_timeScale;
 
@@ -128,7 +128,11 @@ namespace Holoville.HOTween
         /// <param name="p_loops">
         /// Number of loops (set it to <c>-1</c> or <see cref="Mathf.Infinity"/> to apply infinite loops).
         /// </param>
-        public SequenceParms Loops( int p_loops ) { return Loops( p_loops, HOTween.defLoopType ); }
+        public SequenceParms Loops(int p_loops)
+        {
+            return Loops(p_loops, HOTween.defLoopType);
+        }
+
         /// <summary>
         /// Sets the number of times the Sequence will run,
         /// and the type of loop behaviour to apply
@@ -143,7 +147,7 @@ namespace Holoville.HOTween
         /// It works with simple Sequences, but you should check that your animation
         /// works as intended with more complex Sequences.
         /// </param>
-        public SequenceParms Loops( int p_loops, LoopType p_loopType )
+        public SequenceParms Loops(int p_loops, LoopType p_loopType)
         {
             loops = p_loops;
             loopType = p_loopType;
@@ -157,11 +161,12 @@ namespace Holoville.HOTween
         /// <param name="p_function">
         /// The function to call, who must return <c>void</c> and accept no parameters.
         /// </param>
-        public SequenceParms OnStart( TweenDelegate.TweenCallback p_function )
+        public SequenceParms OnStart(TweenDelegate.TweenCallback p_function)
         {
             onStart = p_function;
             return this;
         }
+
         /// <summary>
         /// Function to call when the Sequence is started for the very first time.
         /// </summary>
@@ -172,7 +177,7 @@ namespace Holoville.HOTween
         /// <param name="p_funcParms">
         /// Additional comma separated parameters to pass to the function.
         /// </param>
-        public SequenceParms OnStart( TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms )
+        public SequenceParms OnStart(TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms)
         {
             onStartWParms = p_function;
             onStartParms = p_funcParms;
@@ -185,11 +190,12 @@ namespace Holoville.HOTween
         /// <param name="p_function">
         /// The function to call, who must return <c>void</c> and accept no parameters.
         /// </param>
-        public SequenceParms OnUpdate( TweenDelegate.TweenCallback p_function )
+        public SequenceParms OnUpdate(TweenDelegate.TweenCallback p_function)
         {
             onUpdate = p_function;
             return this;
         }
+
         /// <summary>
         /// Function to call each time the Sequence is updated.
         /// </summary>
@@ -200,7 +206,7 @@ namespace Holoville.HOTween
         /// <param name="p_funcParms">
         /// Additional comma separated parameters to pass to the function.
         /// </param>
-        public SequenceParms OnUpdate( TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms )
+        public SequenceParms OnUpdate(TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms)
         {
             onUpdateWParms = p_function;
             onUpdateParms = p_funcParms;
@@ -213,11 +219,12 @@ namespace Holoville.HOTween
         /// <param name="p_function">
         /// The function to call, who must return <c>void</c> and accept no parameters.
         /// </param>
-        public SequenceParms OnPause( TweenDelegate.TweenCallback p_function )
+        public SequenceParms OnPause(TweenDelegate.TweenCallback p_function)
         {
             onPause = p_function;
             return this;
         }
+
         /// <summary>
         /// Function to call when the Sequence switches from a playing state to a paused state.
         /// </summary>
@@ -228,7 +235,7 @@ namespace Holoville.HOTween
         /// <param name="p_funcParms">
         /// Additional comma separated parameters to pass to the function.
         /// </param>
-        public SequenceParms OnPause( TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms )
+        public SequenceParms OnPause(TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms)
         {
             onPauseWParms = p_function;
             onPauseParms = p_funcParms;
@@ -241,11 +248,12 @@ namespace Holoville.HOTween
         /// <param name="p_function">
         /// The function to call, who must return <c>void</c> and accept no parameters.
         /// </param>
-        public SequenceParms OnPlay( TweenDelegate.TweenCallback p_function )
+        public SequenceParms OnPlay(TweenDelegate.TweenCallback p_function)
         {
             onPlay = p_function;
             return this;
         }
+
         /// <summary>
         /// Function to call when the Sequence switches from a paused state to a playing state.
         /// </summary>
@@ -256,7 +264,7 @@ namespace Holoville.HOTween
         /// <param name="p_funcParms">
         /// Additional comma separated parameters to pass to the function.
         /// </param>
-        public SequenceParms OnPlay( TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms )
+        public SequenceParms OnPlay(TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms)
         {
             onPlayWParms = p_function;
             onPlayParms = p_funcParms;
@@ -271,11 +279,12 @@ namespace Holoville.HOTween
         /// <param name="p_function">
         /// The function to call, who must return <c>void</c> and accept no parameters.
         /// </param>
-        public SequenceParms OnRewinded( TweenDelegate.TweenCallback p_function )
+        public SequenceParms OnRewinded(TweenDelegate.TweenCallback p_function)
         {
             onRewinded = p_function;
             return this;
         }
+
         /// <summary>
         /// Function to call each time the sequence is rewinded from a non-rewinded state
         /// (either because of a direct call to Rewind,
@@ -288,7 +297,7 @@ namespace Holoville.HOTween
         /// <param name="p_funcParms">
         /// Additional comma separated parameters to pass to the function.
         /// </param>
-        public SequenceParms OnRewinded( TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms )
+        public SequenceParms OnRewinded(TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms)
         {
             onRewindedWParms = p_function;
             onRewindedParms = p_funcParms;
@@ -301,11 +310,12 @@ namespace Holoville.HOTween
         /// <param name="p_function">
         /// The function to call, who must return <c>void</c> and accept no parameters.
         /// </param>
-        public SequenceParms OnStepComplete( TweenDelegate.TweenCallback p_function )
+        public SequenceParms OnStepComplete(TweenDelegate.TweenCallback p_function)
         {
             onStepComplete = p_function;
             return this;
         }
+
         /// <summary>
         /// Function to call each time a single loop of the Sequence is completed.
         /// </summary>
@@ -316,7 +326,7 @@ namespace Holoville.HOTween
         /// <param name="p_funcParms">
         /// Additional comma separated parameters to pass to the function.
         /// </param>
-        public SequenceParms OnStepComplete( TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms )
+        public SequenceParms OnStepComplete(TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms)
         {
             onStepCompleteWParms = p_function;
             onStepCompleteParms = p_funcParms;
@@ -329,11 +339,12 @@ namespace Holoville.HOTween
         /// <param name="p_function">
         /// The function to call, who must return <c>void</c> and accept no parameters.
         /// </param>
-        public SequenceParms OnComplete( TweenDelegate.TweenCallback p_function )
+        public SequenceParms OnComplete(TweenDelegate.TweenCallback p_function)
         {
             onComplete = p_function;
             return this;
         }
+
         /// <summary>
         /// Function to call when the full Sequence, loops included, is completed.
         /// </summary>
@@ -344,7 +355,7 @@ namespace Holoville.HOTween
         /// <param name="p_funcParms">
         /// Additional comma separated parameters to pass to the function.
         /// </param>
-        public SequenceParms OnComplete( TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms )
+        public SequenceParms OnComplete(TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms)
         {
             onCompleteWParms = p_function;
             onCompleteParms = p_funcParms;
@@ -352,24 +363,23 @@ namespace Holoville.HOTween
         }
 
 
-
         // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         // ||| INTERNAL CLASSES ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
         // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        private class HOTPropData
+        class HOTPropData
         {
             // VARS ///////////////////////////////////////////////////
 
-            public        string                propName;
-            public        object                endValOrPlugin;
-            public        bool                isRelative;
+            public string propName;
+            public object endValOrPlugin;
+            public bool isRelative;
 
             // ***********************************************************************************
             // CONSTRUCTOR
             // ***********************************************************************************
 
-            public HOTPropData( string p_propName, object p_endValOrPlugin, bool p_isRelative )
+            public HOTPropData(string p_propName, object p_endValOrPlugin, bool p_isRelative)
             {
                 propName = p_propName;
                 endValOrPlugin = p_endValOrPlugin;
@@ -378,4 +388,3 @@ namespace Holoville.HOTween
         }
     }
 }
-

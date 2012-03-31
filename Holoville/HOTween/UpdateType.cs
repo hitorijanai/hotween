@@ -34,14 +34,17 @@ namespace Holoville.HOTween
         /// Normal update.
         /// </summary>
         Update,
+
         /// <summary>
         /// Late update.
         /// </summary>
         LateUpdate,
+
         /// <summary>
         /// Fixed update (useful for rigidBodies).
         /// </summary>
         FixedUpdate,
+
         /// <summary>
         /// Timescale independent update.
         /// Contrary to the other types, this one is not subject to changes in Time.timeScale,
@@ -51,4 +54,3 @@ namespace Holoville.HOTween
         TimeScaleIndependentUpdate
     }
 }
-

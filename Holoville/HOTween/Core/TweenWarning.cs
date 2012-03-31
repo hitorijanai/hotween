@@ -30,14 +30,23 @@ namespace Holoville.HOTween.Core
     /// <summary>
     /// Used internally to generate warnings that are managed without throwing exceptions.
     /// </summary>
-    static internal class TweenWarning
+    internal static class TweenWarning
     {
-        static internal void Log( string p_message ) { Log( p_message, false ); }
-        static internal void Log( string p_message, bool p_verbose )
+        internal static void Log(string p_message)
         {
-            if ( HOTween.warningLevel == WarningLevel.None )                        return;
-            if ( !p_verbose || HOTween.warningLevel == WarningLevel.Verbose )        Debug.LogWarning( "HOTween : " + p_message );
+            Log(p_message, false);
+        }
+
+        internal static void Log(string p_message, bool p_verbose)
+        {
+            if (HOTween.warningLevel == WarningLevel.None)
+            {
+                return;
+            }
+            if (!p_verbose || HOTween.warningLevel == WarningLevel.Verbose)
+            {
+                Debug.LogWarning("HOTween : " + p_message);
+            }
         }
     }
 }
-

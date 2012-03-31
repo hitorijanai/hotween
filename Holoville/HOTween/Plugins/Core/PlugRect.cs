@@ -37,13 +37,13 @@ namespace Holoville.HOTween.Plugins.Core
     {
         // VARS ///////////////////////////////////////////////////
 
-        static internal Type[]            validPropTypes = { typeof(Rect) };
-        static internal    Type[]            validValueTypes = { typeof(Rect) };
+        internal static Type[] validPropTypes = {typeof(Rect)};
+        internal static Type[] validValueTypes = {typeof(Rect)};
 
-        private        Rect                typedStartVal;
-        private        Rect                typedEndVal;
-        private        float                changeVal;
-        private        Rect                diffChangeVal; // Used for incremental loops.
+        Rect typedStartVal;
+        Rect typedEndVal;
+        float changeVal;
+        Rect diffChangeVal; // Used for incremental loops.
 
         // GETS/SETS //////////////////////////////////////////////
 
@@ -51,17 +51,25 @@ namespace Holoville.HOTween.Plugins.Core
         /// Gets the untyped start value,
         /// sets both the untyped and the typed start value.
         /// </summary>
-        override protected    object        startVal {
-            get { return _startVal; }
-            set {
-                if ( tweenObj.isFrom && isRelative ) {
+        protected override object startVal
+        {
+            get
+            {
+                return _startVal;
+            }
+            set
+            {
+                if (tweenObj.isFrom && isRelative)
+                {
                     typedStartVal = (Rect)value;
                     typedStartVal.x += typedEndVal.x;
                     typedStartVal.y += typedEndVal.y;
                     typedStartVal.width += typedEndVal.width;
                     typedStartVal.height += typedEndVal.height;
                     _startVal = typedStartVal;
-                } else {
+                }
+                else
+                {
                     _startVal = typedStartVal = (Rect)value;
                 }
             }
@@ -71,9 +79,16 @@ namespace Holoville.HOTween.Plugins.Core
         /// Gets the untyped end value,
         /// sets both the untyped and the typed end value.
         /// </summary>
-        override protected    object        endVal {
-            get { return _endVal; }
-            set { _endVal = typedEndVal = (Rect)value; }
+        protected override object endVal
+        {
+            get
+            {
+                return _endVal;
+            }
+            set
+            {
+                _endVal = typedEndVal = (Rect)value;
+            }
         }
 
 
@@ -87,7 +102,11 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_endVal">
         /// The <see cref="Rect"/> value to tween to.
         /// </param>
-        public PlugRect( Rect p_endVal ) : base( p_endVal, false ) {}
+        public PlugRect(Rect p_endVal)
+            : base(p_endVal, false)
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of this plugin.
         /// </summary>
@@ -97,7 +116,11 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_easeType">
         /// The <see cref="EaseType"/> to use.
         /// </param>
-        public PlugRect( Rect p_endVal, EaseType p_easeType ) : base( p_endVal, p_easeType, false ) {}
+        public PlugRect(Rect p_endVal, EaseType p_easeType)
+            : base(p_endVal, p_easeType, false)
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of this plugin using the main ease type.
         /// </summary>
@@ -107,7 +130,11 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_isRelative">
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
-        public PlugRect( Rect p_endVal, bool p_isRelative ) : base( p_endVal, p_isRelative ) {}
+        public PlugRect(Rect p_endVal, bool p_isRelative)
+            : base(p_endVal, p_isRelative)
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of this plugin.
         /// </summary>
@@ -120,7 +147,10 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_isRelative">
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
-        public PlugRect( Rect p_endVal, EaseType p_easeType, bool p_isRelative ) : base( p_endVal, p_easeType, p_isRelative ) {}
+        public PlugRect(Rect p_endVal, EaseType p_easeType, bool p_isRelative)
+            : base(p_endVal, p_easeType, p_isRelative)
+        {
+        }
 
         // ===================================================================================
         // METHODS ---------------------------------------------------------------------------
@@ -128,25 +158,29 @@ namespace Holoville.HOTween.Plugins.Core
         /// <summary>
         /// Returns the speed-based duration based on the given speed x second.
         /// </summary>
-        override protected float GetSpeedBasedDuration( float p_speed )
+        protected override float GetSpeedBasedDuration(float p_speed)
         {
             // Uses length of diagonal to calculate units.
             float diffW = typedEndVal.width - typedStartVal.width;
             float diffH = typedEndVal.height - typedStartVal.height;
-            float diag = Mathf.Sqrt( diffW * diffW + diffH * diffH );
-            float speedDur = diag / p_speed;
-            if ( speedDur < 0 )        speedDur = -speedDur;
+            float diag = Mathf.Sqrt(diffW*diffW + diffH*diffH);
+            float speedDur = diag/p_speed;
+            if (speedDur < 0)
+            {
+                speedDur = -speedDur;
+            }
             return speedDur;
         }
 
         /// <summary>
         /// Sets the typed changeVal based on the current startVal and endVal.
         /// </summary>
-        override protected void SetChangeVal()
+        protected override void SetChangeVal()
         {
             changeVal = 1;
 
-            if ( isRelative && !tweenObj.isFrom ) {
+            if (isRelative && !tweenObj.isFrom)
+            {
                 typedEndVal.x += typedStartVal.x;
                 typedEndVal.y += typedStartVal.y;
                 typedEndVal.width += typedStartVal.width;
@@ -166,9 +200,9 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_diffIncr">
         /// The difference from the previous loop increment.
         /// </param>
-        override internal void SetIncremental( int p_diffIncr )
+        internal override void SetIncremental(int p_diffIncr)
         {
-            Rect diffR = new Rect( diffChangeVal.x, diffChangeVal.y, diffChangeVal.width, diffChangeVal.height );
+            Rect diffR = new Rect(diffChangeVal.x, diffChangeVal.y, diffChangeVal.width, diffChangeVal.height);
             diffR.x *= p_diffIncr;
             diffR.y *= p_diffIncr;
             diffR.width *= p_diffIncr;
@@ -191,18 +225,17 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_totElapsed">
         /// The total elapsed time since startup.
         /// </param>
-        override protected void DoUpdate ( float p_totElapsed )
+        protected override void DoUpdate(float p_totElapsed)
         {
-            float val = ease( p_totElapsed, 0, changeVal, _duration );
+            float val = ease(p_totElapsed, 0, changeVal, _duration);
 
             Rect r = new Rect();
-            r.x = Mathf.Lerp( typedStartVal.x, typedEndVal.x, val );
-            r.y = Mathf.Lerp( typedStartVal.y, typedEndVal.y, val );
-            r.width  = Mathf.Lerp( typedStartVal.width, typedEndVal.width, val );
-            r.height = Mathf.Lerp( typedStartVal.height, typedEndVal.height, val );
+            r.x = Mathf.Lerp(typedStartVal.x, typedEndVal.x, val);
+            r.y = Mathf.Lerp(typedStartVal.y, typedEndVal.y, val);
+            r.width = Mathf.Lerp(typedStartVal.width, typedEndVal.width, val);
+            r.height = Mathf.Lerp(typedStartVal.height, typedEndVal.height, val);
 
-            SetValue( r );
+            SetValue(r);
         }
     }
 }
-

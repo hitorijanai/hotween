@@ -4,7 +4,6 @@
 // Author: James Nies
 // Licensed under The Code Project Open License (CPOL): http://www.codeproject.com/info/cpol10.aspx
 
-using UnityEngine;
 using System;
 using System.Collections;
 using System.Reflection;
@@ -15,8 +14,8 @@ namespace FastDynamicMemberAccessor
 {
     internal sealed class ChainingAccessor : IMemberAccessor
     {
-        private readonly IMemberAccessor _pimp;
-        private readonly IMemberAccessor _chain;
+        readonly IMemberAccessor _pimp;
+        readonly IMemberAccessor _chain;
 
         internal ChainingAccessor(IMemberAccessor impl, IMemberAccessor chain)
         {
@@ -37,7 +36,7 @@ namespace FastDynamicMemberAccessor
 
     internal abstract class MemberAccessor : IMemberAccessor
     {
-        private const string emmitedTypeName = "Member";
+        const string emmitedTypeName = "Member";
 
         /// <summary>
         /// Creates a new member accessor.
@@ -101,12 +100,14 @@ namespace FastDynamicMemberAccessor
         /// because if a Make is called we already know that a PropertyInfo or FieldInfo exist,
         /// and we can directly pass them as parameters.
         /// </summary>
-        internal static MemberAccessor Make( PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo )
+        internal static MemberAccessor Make(PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo)
         {
-            if ( p_propertyInfo != null )
-                return new PropertyAccessor( p_propertyInfo );
+            if (p_propertyInfo != null)
+            {
+                return new PropertyAccessor(p_propertyInfo);
+            }
 
-            return new FieldAccessor( p_fieldInfo );
+            return new FieldAccessor(p_fieldInfo);
         }
 
         /// <summary>
@@ -119,18 +120,18 @@ namespace FastDynamicMemberAccessor
         static MemberAccessor()
         {
             s_TypeHash = new Hashtable();
-            s_TypeHash[typeof(sbyte)]   = OpCodes.Ldind_I1;
-            s_TypeHash[typeof(byte)]    = OpCodes.Ldind_U1;
-            s_TypeHash[typeof(char)]    = OpCodes.Ldind_U2;
-            s_TypeHash[typeof(short)]   = OpCodes.Ldind_I2;
-            s_TypeHash[typeof(ushort)]  = OpCodes.Ldind_U2;
-            s_TypeHash[typeof(int)]     = OpCodes.Ldind_I4;
-            s_TypeHash[typeof(uint)]    = OpCodes.Ldind_U4;
-            s_TypeHash[typeof(long)]    = OpCodes.Ldind_I8;
-            s_TypeHash[typeof(ulong)]   = OpCodes.Ldind_I8;
-            s_TypeHash[typeof(bool)]    = OpCodes.Ldind_I1;
-            s_TypeHash[typeof(double)]  = OpCodes.Ldind_R8;
-            s_TypeHash[typeof(float)]   = OpCodes.Ldind_R4;
+            s_TypeHash[typeof(sbyte)] = OpCodes.Ldind_I1;
+            s_TypeHash[typeof(byte)] = OpCodes.Ldind_U1;
+            s_TypeHash[typeof(char)] = OpCodes.Ldind_U2;
+            s_TypeHash[typeof(short)] = OpCodes.Ldind_I2;
+            s_TypeHash[typeof(ushort)] = OpCodes.Ldind_U2;
+            s_TypeHash[typeof(int)] = OpCodes.Ldind_I4;
+            s_TypeHash[typeof(uint)] = OpCodes.Ldind_U4;
+            s_TypeHash[typeof(long)] = OpCodes.Ldind_I8;
+            s_TypeHash[typeof(ulong)] = OpCodes.Ldind_I8;
+            s_TypeHash[typeof(bool)] = OpCodes.Ldind_I1;
+            s_TypeHash[typeof(double)] = OpCodes.Ldind_R8;
+            s_TypeHash[typeof(float)] = OpCodes.Ldind_R4;
         }
 
         /// <summary>
@@ -140,7 +141,7 @@ namespace FastDynamicMemberAccessor
         /// <returns>Member value.</returns>
         public object Get(object target)
         {
-            if(CanRead)
+            if (CanRead)
             {
                 EnsureInit();
 
@@ -161,7 +162,7 @@ namespace FastDynamicMemberAccessor
         /// <param name="value">Value to set.</param>
         public void Set(object target, object value)
         {
-            if(CanWrite)
+            if (CanWrite)
             {
                 EnsureInit();
 
@@ -181,18 +182,12 @@ namespace FastDynamicMemberAccessor
         /// <summary>
         /// Whether or not the Member supports read access.
         /// </summary>
-        abstract internal bool CanRead
-        {
-            get;
-        }
+        internal abstract bool CanRead { get; }
 
         /// <summary>
         /// Whether or not the Member supports write access.
         /// </summary>
-        abstract internal bool CanWrite
-        {
-            get;
-        }
+        internal abstract bool CanWrite { get; }
 
         /// <summary>
         /// The Type of object this member accessor was
@@ -209,25 +204,22 @@ namespace FastDynamicMemberAccessor
         /// <summary>
         /// The Type of the Member being accessed.
         /// </summary>
-        abstract internal Type MemberType
-        {
-            get;
-        }
+        internal abstract Type MemberType { get; }
 
         //
         protected readonly Type _targetType;
         protected readonly string _fieldName;
-        protected readonly static Hashtable s_TypeHash;
+        protected static readonly Hashtable s_TypeHash;
         //
-        private IMemberAccessor _emittedMemberAccessor;
+        IMemberAccessor _emittedMemberAccessor;
 
         /// <summary>
         /// This method generates creates a new assembly containing
         /// the Type that will provide dynamic access.
         /// </summary>
-        private void EnsureInit()
+        void EnsureInit()
         {
-            if(_emittedMemberAccessor == null)
+            if (_emittedMemberAccessor == null)
             {
                 // Create the assembly and an instance of the
                 // member accessor class.
@@ -235,7 +227,7 @@ namespace FastDynamicMemberAccessor
 
                 _emittedMemberAccessor = assembly.CreateInstance(emmitedTypeName) as IMemberAccessor;
 
-                if(_emittedMemberAccessor == null)
+                if (_emittedMemberAccessor == null)
                 {
                     throw new Exception("Unable to create member accessor.");
                 }
@@ -245,7 +237,7 @@ namespace FastDynamicMemberAccessor
         /// <summary>
         /// Create an assembly that will provide the get and set methods.
         /// </summary>
-        private Assembly EmitAssembly()
+        Assembly EmitAssembly()
         {
             //
             // Create an assembly name

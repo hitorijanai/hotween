@@ -28,22 +28,23 @@ namespace Holoville.HOTween.Core
     /// <summary>
     /// Enum of delegates used by HOTween.
     /// </summary>
-    static public class TweenDelegate
+    public static class TweenDelegate
     {
         /// <summary>
         /// Delegate used to store OnEvent (OnStart, OnComplete, etc) functions that will accept a <see cref="TweenEvent"/> parameter.
         /// </summary>
-        public        delegate    void                            TweenCallbackWParms( TweenEvent p_callbackData );
+        public delegate void TweenCallbackWParms(TweenEvent p_callbackData);
+
         /// <summary>
         /// Delegate used to store OnEvent (OnStart, OnComplete, etc) functions without parameters.
         /// </summary>
-        public        delegate    void                            TweenCallback();
+        public delegate void TweenCallback();
+
         /// <summary>
         /// Delegate used internally for ease functions.
         /// </summary>
-        public        delegate    float                            EaseFunc( float t, float b, float c, float d );
+        public delegate float EaseFunc(float t, float b, float c, float d);
 
-        internal    delegate    void                            FilterFunc( int p_index, bool p_optionalBool );
+        internal delegate void FilterFunc(int p_index, bool p_optionalBool);
     }
 }
-

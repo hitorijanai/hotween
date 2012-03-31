@@ -13,7 +13,8 @@ namespace FastDynamicMemberAccessor
     /// </summary>
     internal class MemberAccessorException : Exception
     {
-        internal MemberAccessorException(string message) : base(message)
+        internal MemberAccessorException(string message)
+            : base(message)
         {
         }
     }

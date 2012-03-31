@@ -38,11 +38,11 @@ namespace Holoville.HOTween
     {
         // VARS ///////////////////////////////////////////////////
 
-        private        int                        prevCompletedLoops = 0; // Stored only during Incremental loop type.
+        int prevCompletedLoops; // Stored only during Incremental loop type.
 
         // REFERENCES /////////////////////////////////////////////
 
-        private        List<HOTSeqItem>        items;
+        List<HOTSeqItem> items;
 
 
         // ***********************************************************************************
@@ -57,15 +57,15 @@ namespace Holoville.HOTween
         /// You can pass an existing one, or create a new one inline via method chaining,
         /// like <c>new SequenceParms().Id("sequence1").Loops(2).OnComplete(myFunction)</c>
         /// </param>
-        public Sequence ( SequenceParms p_parms )
+        public Sequence(SequenceParms p_parms)
         {
-            p_parms.InitializeSequence( this );
+            p_parms.InitializeSequence(this);
 
             // Automatically pause the sequence.
             _isPaused = true;
 
             // Add this sequence to HOTWeen tweens.
-            HOTween.AddSequence( this );
+            HOTween.AddSequence(this);
         }
 
         // ===================================================================================
@@ -81,7 +81,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The new Sequence total time length (loops excluded).
         /// </returns>
-        public float AppendInterval( float p_duration ) { return Append( null, p_duration ); }
+        public float AppendInterval(float p_duration)
+        {
+            return Append(null, p_duration);
+        }
+
         /// <summary>
         /// Adds the given <see cref="IHOTweenComponent"/> to the right of the sequence,
         /// and returns the new Sequence total time length (loops excluded).
@@ -92,19 +96,27 @@ namespace Holoville.HOTween
         /// <returns>
         /// The new Sequence total time length (loops excluded).
         /// </returns>
-        public float Append( IHOTweenComponent p_twMember ) { return Append( p_twMember, 0 ); }
-        private float Append( IHOTweenComponent p_twMember, float p_duration )
+        public float Append(IHOTweenComponent p_twMember)
         {
-            if ( items == null )                            return ( p_twMember != null ? Insert( 0, p_twMember ) : Insert( 0, null, p_duration ) );
+            return Append(p_twMember, 0);
+        }
 
-            if ( p_twMember != null ) {
-                HOTween.Kill( p_twMember );
-                ( (ABSTweenComponent)p_twMember ).contSequence = this;
-                CheckSpeedBasedTween( p_twMember );
+        float Append(IHOTweenComponent p_twMember, float p_duration)
+        {
+            if (items == null)
+            {
+                return (p_twMember != null ? Insert(0, p_twMember) : Insert(0, null, p_duration));
             }
 
-            HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( _duration, p_twMember as ABSTweenComponent ) : new HOTSeqItem( _duration, p_duration ) );
-            items.Add( newItem );
+            if (p_twMember != null)
+            {
+                HOTween.Kill(p_twMember);
+                ((ABSTweenComponent)p_twMember).contSequence = this;
+                CheckSpeedBasedTween(p_twMember);
+            }
+
+            HOTSeqItem newItem = (p_twMember != null ? new HOTSeqItem(_duration, p_twMember as ABSTweenComponent) : new HOTSeqItem(_duration, p_duration));
+            items.Add(newItem);
 
             _duration += newItem.duration;
 
@@ -122,7 +134,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The new Sequence total time length (loops excluded).
         /// </returns>
-        public float PrependInterval( float p_duration ) { return Prepend( null, p_duration ); }
+        public float PrependInterval(float p_duration)
+        {
+            return Prepend(null, p_duration);
+        }
+
         /// <summary>
         /// Adds the given <see cref="IHOTweenComponent"/> to the left of the sequence,
         /// moving all the existing sequence elements to the right,
@@ -134,22 +150,33 @@ namespace Holoville.HOTween
         /// <returns>
         /// The new Sequence total time length (loops excluded).
         /// </returns>
-        public float Prepend( IHOTweenComponent p_twMember ) { return Prepend( p_twMember, 0 ); }
-        private float Prepend( IHOTweenComponent p_twMember, float p_duration )
+        public float Prepend(IHOTweenComponent p_twMember)
         {
-            if ( items == null )                            return Insert( 0, p_twMember );
+            return Prepend(p_twMember, 0);
+        }
 
-            if ( p_twMember != null ) {
-                HOTween.Kill( p_twMember );
-                ( (ABSTweenComponent)p_twMember ).contSequence = this;
-                CheckSpeedBasedTween( p_twMember );
+        float Prepend(IHOTweenComponent p_twMember, float p_duration)
+        {
+            if (items == null)
+            {
+                return Insert(0, p_twMember);
             }
 
-            HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( 0, p_twMember as ABSTweenComponent ) : new HOTSeqItem( 0, p_duration ) );
+            if (p_twMember != null)
+            {
+                HOTween.Kill(p_twMember);
+                ((ABSTweenComponent)p_twMember).contSequence = this;
+                CheckSpeedBasedTween(p_twMember);
+            }
+
+            HOTSeqItem newItem = (p_twMember != null ? new HOTSeqItem(0, p_twMember as ABSTweenComponent) : new HOTSeqItem(0, p_duration));
 
             float itemDur = newItem.duration;
-            for ( int i = 0; i < items.Count; ++i )        items[i].startTime += itemDur;
-            items.Insert( 0, newItem );
+            for (int i = 0; i < items.Count; ++i)
+            {
+                items[i].startTime += itemDur;
+            }
+            items.Insert(0, newItem);
             _duration += itemDur;
 
             SetFullDuration();
@@ -169,34 +196,48 @@ namespace Holoville.HOTween
         /// <returns>
         /// The new Sequence total time length (loops excluded).
         /// </returns>
-        public float Insert( float p_time, IHOTweenComponent p_twMember ) { return Insert( p_time, p_twMember, 0 ); }
-        private float Insert( float p_time, IHOTweenComponent p_twMember, float p_duration )
+        public float Insert(float p_time, IHOTweenComponent p_twMember)
         {
-            if ( p_twMember != null ) {
-                HOTween.Kill( p_twMember );
-                ( (ABSTweenComponent)p_twMember ).contSequence = this;
-                CheckSpeedBasedTween( p_twMember );
+            return Insert(p_time, p_twMember, 0);
+        }
+
+        float Insert(float p_time, IHOTweenComponent p_twMember, float p_duration)
+        {
+            if (p_twMember != null)
+            {
+                HOTween.Kill(p_twMember);
+                ((ABSTweenComponent)p_twMember).contSequence = this;
+                CheckSpeedBasedTween(p_twMember);
             }
 
-            HOTSeqItem newItem = ( p_twMember != null ? new HOTSeqItem( p_time, p_twMember as ABSTweenComponent ) : new HOTSeqItem( p_time, p_duration ) );
+            HOTSeqItem newItem = (p_twMember != null ? new HOTSeqItem(p_time, p_twMember as ABSTweenComponent) : new HOTSeqItem(p_time, p_duration));
 
-            if ( items == null ) {
-                items = new List<HOTSeqItem> { newItem };
+            if (items == null)
+            {
+                items = new List<HOTSeqItem>
+                    {
+                        newItem
+                    };
                 _duration = newItem.startTime + newItem.duration;
                 SetFullDuration();
                 return _duration;
             }
 
             bool placed = false;
-            for ( int i = 0; i < items.Count; ++i ) {
-                if ( items[i].startTime >= p_time ) {
-                    items.Insert( i, newItem );
+            for (int i = 0; i < items.Count; ++i)
+            {
+                if (items[i].startTime >= p_time)
+                {
+                    items.Insert(i, newItem);
                     placed = true;
                     break;
                 }
             }
-            if ( !placed )                            items.Add( newItem );
-            _duration = Mathf.Max( newItem.startTime + newItem.duration, _duration );
+            if (!placed)
+            {
+                items.Add(newItem);
+            }
+            _duration = Mathf.Max(newItem.startTime + newItem.duration, _duration);
 
             SetFullDuration();
             return _duration;
@@ -212,34 +253,49 @@ namespace Holoville.HOTween
         /// If <c>true</c> also calls <c>HOTween.Kill(this)</c> to remove it from HOTween.
         /// Set internally to <c>false</c> when I already know that HOTween is going to remove it.
         /// </param>
-        override internal void Kill( bool p_autoRemoveFromHOTween )
+        internal override void Kill(bool p_autoRemoveFromHOTween)
         {
-            if ( _destroyed )                    return;
+            if (_destroyed)
+            {
+                return;
+            }
 
-            if ( items != null ) {
-                foreach ( HOTSeqItem item in items ) {
-                    if ( item.twMember != null )    item.twMember.Kill( false );
+            if (items != null)
+            {
+                foreach (HOTSeqItem item in items)
+                {
+                    if (item.twMember != null)
+                    {
+                        item.twMember.Kill(false);
+                    }
                 }
                 items = null;
             }
 
-            base.Kill( p_autoRemoveFromHOTween );
+            base.Kill(p_autoRemoveFromHOTween);
         }
 
         /// <summary>
         /// Rewinds this Sequence (loops included), and pauses it.
         /// </summary>
-        override public void Rewind() { Rewind( false ); }
+        public override void Rewind()
+        {
+            Rewind(false);
+        }
 
         /// <summary>
         /// Restarts this Sequence from the beginning (loops included).
         /// </summary>
-        override public void Restart()
+        public override void Restart()
         {
-            if ( _fullElapsed == 0 )
+            if (_fullElapsed == 0)
+            {
                 PlayForward();
+            }
             else
-                Rewind( true );
+            {
+                Rewind(true);
+            }
         }
 
         /// <summary>
@@ -253,14 +309,20 @@ namespace Holoville.HOTween
         /// <returns>
         /// A value of <c>true</c> if the given target is currently involved in a running tween of this Sequence (taking into account also nested tweens).
         /// </returns>
-        override public bool IsTweening( object p_target )
+        public override bool IsTweening(object p_target)
         {
-            if ( !_enabled || items == null )        return false;
+            if (!_enabled || items == null)
+            {
+                return false;
+            }
 
-            for ( int i = 0; i < items.Count; ++i ) {
+            for (int i = 0; i < items.Count; ++i)
+            {
                 HOTSeqItem item = items[i];
-                if ( item.twMember != null && item.twMember.IsTweening( p_target ) )
+                if (item.twMember != null && item.twMember.IsTweening(p_target))
+                {
                     return true;
+                }
             }
 
             return false;
@@ -275,14 +337,20 @@ namespace Holoville.HOTween
         /// <returns>
         /// A value of <c>true</c> if the given target is linked to a tween of this Sequence (running or not, taking into account also nested tweens).
         /// </returns>
-        override public bool IsLinkedTo( object p_target )
+        public override bool IsLinkedTo(object p_target)
         {
-            if ( items == null )            return false;
+            if (items == null)
+            {
+                return false;
+            }
 
-            for ( int i = 0; i < items.Count; ++i ) {
+            for (int i = 0; i < items.Count; ++i)
+            {
                 HOTSeqItem item = items[i];
-                if ( item.twMember != null && item.twMember.IsLinkedTo( p_target ) )
+                if (item.twMember != null && item.twMember.IsLinkedTo(p_target))
+                {
                     return true;
+                }
             }
 
             return false;
@@ -296,20 +364,29 @@ namespace Holoville.HOTween
         /// and eventually kills the Sequence if all items have been removed.
         /// Used by <see cref="OverwriteManager"/> to remove overwritten tweens.
         /// </summary>
-        internal void Remove( ABSTweenComponent p_tween )
+        internal void Remove(ABSTweenComponent p_tween)
         {
-            if ( items == null )                    return;
+            if (items == null)
+            {
+                return;
+            }
 
-            for ( int i = 0; i < items.Count; ++i ) {
+            for (int i = 0; i < items.Count; ++i)
+            {
                 HOTSeqItem item = items[i];
-                if ( item.twMember != null && item.twMember == p_tween ) {
-                    items.RemoveAt( i );
+                if (item.twMember != null && item.twMember == p_tween)
+                {
+                    items.RemoveAt(i);
                     break;
                 }
             }
-            if ( items.Count == 0 ) {
-                if ( isSequenced )        contSequence.Remove( this );
-                Kill( !isSequenced );
+            if (items.Count == 0)
+            {
+                if (isSequenced)
+                {
+                    contSequence.Remove(this);
+                }
+                Kill(!isSequenced);
             }
         }
 
@@ -318,14 +395,23 @@ namespace Holoville.HOTween
         /// Where a loop was involved, the Sequence completes at the position where it would actually be after the set number of loops.
         /// If there were infinite loops, this method will have no effect.
         /// </summary>
-        override internal void Complete( bool p_autoRemoveFromHOTween )
+        internal override void Complete(bool p_autoRemoveFromHOTween)
         {
-            if ( !_enabled )                        return;
-            if ( items == null || _loops < 0 )        return;
+            if (!_enabled)
+            {
+                return;
+            }
+            if (items == null || _loops < 0)
+            {
+                return;
+            }
 
             _fullElapsed = _fullDuration;
-            Update( 0, true );
-            if ( _autoKillOnComplete )                Kill( p_autoRemoveFromHOTween );
+            Update(0, true);
+            if (_autoKillOnComplete)
+            {
+                Kill(p_autoRemoveFromHOTween);
+            }
         }
 
         /// <summary>
@@ -346,85 +432,135 @@ namespace Holoville.HOTween
         /// <returns>
         /// A value of <c>true</c> if the Sequence is not reversed and is complete (or all the Sequence tween targets don't exist anymore), otherwise <c>false</c>.
         /// </returns>
-        override internal bool Update( float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration )
+        internal override bool Update(float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration)
         {
-            if ( _destroyed )                                            return true;
-            if ( items == null )                                        return true;
-            if ( !_enabled )                                            return false;
-            if ( _isComplete && !_isReversed && !p_forceUpdate )        return true;
-            if ( _fullElapsed == 0 && _isReversed && !p_forceUpdate )    return false;
-            if ( _isPaused && !p_forceUpdate )                            return false;
+            if (_destroyed)
+            {
+                return true;
+            }
+            if (items == null)
+            {
+                return true;
+            }
+            if (!_enabled)
+            {
+                return false;
+            }
+            if (_isComplete && !_isReversed && !p_forceUpdate)
+            {
+                return true;
+            }
+            if (_fullElapsed == 0 && _isReversed && !p_forceUpdate)
+            {
+                return false;
+            }
+            if (_isPaused && !p_forceUpdate)
+            {
+                return false;
+            }
 
             ignoreCallbacks = p_isStartupIteration;
 
-            if ( !_isReversed ) {
+            if (!_isReversed)
+            {
                 _fullElapsed += p_shortElapsed;
                 _elapsed += p_shortElapsed;
-            } else {
+            }
+            else
+            {
                 _fullElapsed -= p_shortElapsed;
                 _elapsed -= p_shortElapsed;
             }
-            if ( _fullElapsed > _fullDuration )
+            if (_fullElapsed > _fullDuration)
+            {
                 _fullElapsed = _fullDuration;
-            else if ( _fullElapsed < 0 )
+            }
+            else if (_fullElapsed < 0)
+            {
                 _fullElapsed = 0;
+            }
 
             // Manage eventual OnStart.
-            if ( !startupDone )                                Startup();
-            if ( !_hasStarted )                                OnStart();
+            if (!startupDone)
+            {
+                Startup();
+            }
+            if (!_hasStarted)
+            {
+                OnStart();
+            }
 
             // Set all elapsed and loops values.
             bool wasComplete = _isComplete;
-            bool stepComplete = ( !_isReversed && !wasComplete && _elapsed >= _duration );
+            bool stepComplete = (!_isReversed && !wasComplete && _elapsed >= _duration);
             SetLoops();
             SetElapsed();
-            _isComplete = ( !_isReversed && _loops >= 0 && _completedLoops >= _loops );
-            bool complete = ( !wasComplete && _isComplete );
+            _isComplete = (!_isReversed && _loops >= 0 && _completedLoops >= _loops);
+            bool complete = (!wasComplete && _isComplete);
 
             // Manage Incremental loops.
-            if ( _loopType == LoopType.Incremental ) {
+            if (_loopType == LoopType.Incremental)
+            {
                 // prevCompleteLoops is stored only during Incremental loops,
                 // so that if the loop type is changed while the tween is running,
                 // the tween will change and update correctly.
-                if ( prevCompletedLoops != _completedLoops ) {
+                if (prevCompletedLoops != _completedLoops)
+                {
                     int currLoops = _completedLoops;
-                    if ( currLoops >= _loops )        --currLoops; // Avoid to calculate completion loop increment
+                    if (currLoops >= _loops)
+                    {
+                        --currLoops; // Avoid to calculate completion loop increment
+                    }
                     int diff = currLoops - prevCompletedLoops;
-                    if ( diff != 0 ) {
-                        SetIncremental( diff );
+                    if (diff != 0)
+                    {
+                        SetIncremental(diff);
                         prevCompletedLoops = currLoops;
                     }
                 }
-            } else if ( prevCompletedLoops != 0 ) {
+            }
+            else if (prevCompletedLoops != 0)
+            {
                 // Readapt to non incremental loop type.
-                SetIncremental( -prevCompletedLoops );
+                SetIncremental(-prevCompletedLoops);
                 prevCompletedLoops = 0;
             }
 
             // Update the elements...
             HOTSeqItem item;
-            float twElapsed = ( !_isLoopingBack ? _elapsed : _duration - _elapsed );
-            for ( int i = items.Count - 1; i > -1; --i ) {
+            float twElapsed = (!_isLoopingBack ? _elapsed : _duration - _elapsed);
+            for (int i = items.Count - 1; i > -1; --i)
+            {
                 item = items[i];
-                if ( item.twMember != null && item.startTime > twElapsed ) {
-                    item.twMember.GoTo( twElapsed - item.startTime, p_forceUpdate );
+                if (item.twMember != null && item.startTime > twElapsed)
+                {
+                    item.twMember.GoTo(twElapsed - item.startTime, p_forceUpdate);
                 }
             }
-            for ( int i = 0; i < items.Count; ++i ) {
+            for (int i = 0; i < items.Count; ++i)
+            {
                 item = items[i];
-                if ( item.twMember != null && item.startTime <= twElapsed ) {
-                    item.twMember.GoTo( twElapsed - item.startTime, p_forceUpdate );
+                if (item.twMember != null && item.startTime <= twElapsed)
+                {
+                    item.twMember.GoTo(twElapsed - item.startTime, p_forceUpdate);
                 }
             }
 
             // Manage eventual pause, complete, update, and stepComplete.
-            if ( _fullElapsed != prevFullElapsed ) {
+            if (_fullElapsed != prevFullElapsed)
+            {
                 OnUpdate();
-                if ( _fullElapsed == 0 )    OnRewinded();
+                if (_fullElapsed == 0)
+                {
+                    OnRewinded();
+                }
             }
-            if ( complete ) {
+            if (complete)
+            {
                 OnComplete();
-            } else if ( stepComplete ) {
+            }
+            else if (stepComplete)
+            {
                 OnStepComplete();
             }
 
@@ -441,12 +577,16 @@ namespace Holoville.HOTween
         /// <param name="p_diffIncr">
         /// The difference from the previous loop increment.
         /// </param>
-        override internal void SetIncremental( int p_diffIncr )
+        internal override void SetIncremental(int p_diffIncr)
         {
-            for ( int i = 0; i < items.Count; ++i ) {
+            for (int i = 0; i < items.Count; ++i)
+            {
                 HOTSeqItem item = items[i];
-                if ( item.twMember == null )    continue;
-                item.twMember.SetIncremental( p_diffIncr );
+                if (item.twMember == null)
+                {
+                    continue;
+                }
+                item.twMember.SetIncremental(p_diffIncr);
             }
         }
 
@@ -460,51 +600,87 @@ namespace Holoville.HOTween
         /// <returns>
         /// Returns <c>true</c> if the sequence reached its end and was completed.
         /// </returns>
-        override protected bool GoTo( float p_time, bool p_play, bool p_forceUpdate )
+        protected override bool GoTo(float p_time, bool p_play, bool p_forceUpdate)
         {
-            if ( !_enabled )                                    return false;
+            if (!_enabled)
+            {
+                return false;
+            }
 
-            if ( p_time > _fullDuration )
+            if (p_time > _fullDuration)
+            {
                 p_time = _fullDuration;
-            else if ( p_time < 0 )
+            }
+            else if (p_time < 0)
+            {
                 p_time = 0;
-            if ( _fullElapsed == p_time && !p_forceUpdate )        return _isComplete;
+            }
+            if (_fullElapsed == p_time && !p_forceUpdate)
+            {
+                return _isComplete;
+            }
 
             _fullElapsed = p_time;
-            Update( 0, true );
-            if ( !_isComplete && p_play )        Play();
+            Update(0, true);
+            if (!_isComplete && p_play)
+            {
+                Play();
+            }
 
             return _isComplete;
         }
 
-        private void Rewind( bool p_play )
+        void Rewind(bool p_play)
         {
-            if ( !_enabled )                            return;
-            if ( items == null )                        return;
+            if (!_enabled)
+            {
+                return;
+            }
+            if (items == null)
+            {
+                return;
+            }
 
-            if ( !startupDone )                            Startup();
-            if ( !_hasStarted )                            OnStart();
+            if (!startupDone)
+            {
+                Startup();
+            }
+            if (!_hasStarted)
+            {
+                OnStart();
+            }
 
             _isComplete = false;
             _isLoopingBack = false;
             _completedLoops = 0;
             _fullElapsed = _elapsed = 0;
 
-            for ( int i = items.Count - 1; i > - 1; --i ) {
+            for (int i = items.Count - 1; i > - 1; --i)
+            {
                 HOTSeqItem item = items[i];
-                if ( item.twMember != null )            item.twMember.Rewind();
+                if (item.twMember != null)
+                {
+                    item.twMember.Rewind();
+                }
             }
 
             // Manage OnUpdate and OnRewinded.
-            if ( _fullElapsed != prevFullElapsed ) {
+            if (_fullElapsed != prevFullElapsed)
+            {
                 OnUpdate();
-                if ( _fullElapsed == 0 )        OnRewinded();
+                if (_fullElapsed == 0)
+                {
+                    OnRewinded();
+                }
             }
             prevFullElapsed = _fullElapsed;
 
-            if ( p_play ) {
+            if (p_play)
+            {
                 Play();
-            } else {
+            }
+            else
+            {
                 Pause();
             }
         }
@@ -513,18 +689,24 @@ namespace Holoville.HOTween
         /// Iterates through all the elements in order, to startup the plugins correctly.
         /// Called at OnStart and during Append/Insert/Prepend for speedBased tweens (to calculate correct duration).
         /// </summary>
-        private void TweenStartupIteration()
+        void TweenStartupIteration()
         {
             // OPTIMIZE Find way to speed this up (by applying values directly instead than animating to them?)
             HOTSeqItem item;
-            for ( int i = 0; i < items.Count; ++i ) {
+            for (int i = 0; i < items.Count; ++i)
+            {
                 item = items[i];
-                if ( item.twMember == null )            continue;
-                item.twMember.Update( item.twMember.duration, true, true );
+                if (item.twMember == null)
+                {
+                    continue;
+                }
+                item.twMember.Update(item.twMember.duration, true, true);
             }
-            for ( int i = items.Count - 1; i > - 1; --i ) {
+            for (int i = items.Count - 1; i > - 1; --i)
+            {
                 item = items[i];
-                if ( item.twMember != null ) {
+                if (item.twMember != null)
+                {
                     item.twMember.ignoreCallbacks = true;
                     item.twMember.Rewind();
                     item.twMember.ignoreCallbacks = false;
@@ -536,10 +718,13 @@ namespace Holoville.HOTween
         /// If the given <see cref="IHOTweenComponent"/> is a speedBased <see cref="Tweener"/>,
         /// forces it to calculate the correct duration.
         /// </summary>
-        private static void CheckSpeedBasedTween( IHOTweenComponent p_twMember )
+        static void CheckSpeedBasedTween(IHOTweenComponent p_twMember)
         {
             Tweener tw = p_twMember as Tweener;
-            if ( tw != null && tw._speedBased )        tw.ForceSetSpeedBasedDuration();
+            if (tw != null && tw._speedBased)
+            {
+                tw.ForceSetSpeedBasedDuration();
+            }
         }
 
         /// <summary>
@@ -547,9 +732,12 @@ namespace Holoville.HOTween
         /// (might or might not all OnStart, depending if the tween is in a Sequence or not).
         /// Can be executed only once per tween.
         /// </summary>
-        override protected void Startup()
+        protected override void Startup()
         {
-            if ( startupDone )        return;
+            if (startupDone)
+            {
+                return;
+            }
 
             // Move through all the elements in order, so the initial values are initialized.
             TweenStartupIteration();
@@ -560,7 +748,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// Manages on first start behaviour.
         /// </summary>
-        override protected void OnStart()
+        protected override void OnStart()
         {
             base.OnStart();
         }
@@ -573,18 +761,29 @@ namespace Holoville.HOTween
         /// while also looking for them recursively through inner sequences.
         /// Used by <c>HOTween.GetPlugins</c>.
         /// </summary>
-        override internal void FillPluginsList( List<ABSTweenPlugin> p_plugs )
+        internal override void FillPluginsList(List<ABSTweenPlugin> p_plugs)
         {
-            if ( items == null )                return;
+            if (items == null)
+            {
+                return;
+            }
 
-            for ( int i = 0; i < items.Count; ++i ) {
+            for (int i = 0; i < items.Count; ++i)
+            {
                 HOTSeqItem itm = items[i];
-                if ( itm.twMember == null )        continue;
-                var sequence = itm.twMember as Sequence;
-                if ( sequence != null )
-                    sequence.FillPluginsList( p_plugs );
+                if (itm.twMember == null)
+                {
+                    continue;
+                }
+                Sequence sequence = itm.twMember as Sequence;
+                if (sequence != null)
+                {
+                    sequence.FillPluginsList(p_plugs);
+                }
                 else
-                    itm.twMember.FillPluginsList( p_plugs );
+                {
+                    itm.twMember.FillPluginsList(p_plugs);
+                }
             }
         }
 
@@ -596,24 +795,28 @@ namespace Holoville.HOTween
         /// Single sequencer item.
         /// Tween value can be null (in case this is simply used as a spacer).
         /// </summary>
-        private class HOTSeqItem
+        class HOTSeqItem
         {
             // VARS ///////////////////////////////////////////////////
 
-            public        float                startTime;
+            public float startTime;
 
-            private readonly float            _duration;
+            readonly float _duration;
 
             // REFERENCES /////////////////////////////////////////////
 
-            public readonly ABSTweenComponent    twMember;
+            public readonly ABSTweenComponent twMember;
 
             // READ-ONLY GETS /////////////////////////////////////////
 
-            public        float                duration
+            public float duration
             {
-                get {
-                    if ( twMember == null )    return _duration;
+                get
+                {
+                    if (twMember == null)
+                    {
+                        return _duration;
+                    }
                     return twMember.duration;
                 }
             }
@@ -623,12 +826,13 @@ namespace Holoville.HOTween
             // CONSTRUCTOR
             // ***********************************************************************************
 
-            public HOTSeqItem( float p_startTime, ABSTweenComponent p_twMember )
+            public HOTSeqItem(float p_startTime, ABSTweenComponent p_twMember)
             {
                 startTime = p_startTime;
                 twMember = p_twMember;
             }
-            public HOTSeqItem( float p_startTime, float p_duration )
+
+            public HOTSeqItem(float p_startTime, float p_duration)
             {
                 startTime = p_startTime;
                 _duration = p_duration;
@@ -636,4 +840,3 @@ namespace Holoville.HOTween
         }
     }
 }
-

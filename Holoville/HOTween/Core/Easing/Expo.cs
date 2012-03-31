@@ -35,7 +35,7 @@ namespace Holoville.HOTween.Core.Easing
     /// <summary>
     /// This class contains a C# port of the easing equations created by Robert Penner (http://http://robertpenner.com/easing).
     /// </summary>
-    static public class Expo
+    public static class Expo
     {
         /// <summary>
         /// Tween.
@@ -55,9 +55,9 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseIn ( float t, float b, float c, float d )
+        public static float EaseIn(float t, float b, float c, float d)
         {
-            return (t==0) ? b : c * Mathf.Pow(2, 10 * (t/d - 1)) + b - c * 0.001f;
+            return (t == 0) ? b : c*Mathf.Pow(2, 10*(t/d - 1)) + b - c*0.001f;
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseOut ( float t, float b, float c, float d )
+        public static float EaseOut(float t, float b, float c, float d)
         {
-            return (t==d) ? b+c : c * (-Mathf.Pow(2, -10 * t/d) + 1) + b;
+            return (t == d) ? b + c : c*(-Mathf.Pow(2, -10*t/d) + 1) + b;
         }
 
         /// <summary>
@@ -101,13 +101,21 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseInOut ( float t, float b, float c, float d )
+        public static float EaseInOut(float t, float b, float c, float d)
         {
-            if (t==0) return b;
-            if (t==d) return b+c;
-            if ((t/=d*0.5f) < 1) return c*0.5f * Mathf.Pow(2, 10 * (t - 1)) + b;
-            return c*0.5f * (-Mathf.Pow(2, -10 * --t) + 2) + b;
+            if (t == 0)
+            {
+                return b;
+            }
+            if (t == d)
+            {
+                return b + c;
+            }
+            if ((t /= d*0.5f) < 1)
+            {
+                return c*0.5f*Mathf.Pow(2, 10*(t - 1)) + b;
+            }
+            return c*0.5f*(-Mathf.Pow(2, -10*--t) + 2) + b;
         }
     }
 }
-

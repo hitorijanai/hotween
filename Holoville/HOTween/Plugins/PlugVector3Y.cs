@@ -35,7 +35,13 @@ namespace Holoville.HOTween.Plugins
     {
         // VARS ///////////////////////////////////////////////////
 
-        override internal    int            pluginId { get { return 2; } }
+        internal override int pluginId
+        {
+            get
+            {
+                return 2;
+            }
+        }
 
         // GETS/SETS //////////////////////////////////////////////
 
@@ -43,17 +49,29 @@ namespace Holoville.HOTween.Plugins
         /// Gets the untyped start value,
         /// sets both the untyped and the typed start value.
         /// </summary>
-        override protected    object        startVal {
-            get { return _startVal; }
-            set {
-                if ( tweenObj.isFrom ) {
-                    if ( isRelative ) {
-                        _startVal = typedStartVal = typedEndVal + Convert.ToSingle( value );
-                    } else {
-                        _startVal = typedStartVal = Convert.ToSingle( value );
+        protected override object startVal
+        {
+            get
+            {
+                return _startVal;
+            }
+            set
+            {
+                if (tweenObj.isFrom)
+                {
+                    if (isRelative)
+                    {
+                        _startVal = typedStartVal = typedEndVal + Convert.ToSingle(value);
                     }
-                } else {
-                    _startVal = value; typedStartVal = ( (Vector3)( _startVal ) ).y;
+                    else
+                    {
+                        _startVal = typedStartVal = Convert.ToSingle(value);
+                    }
+                }
+                else
+                {
+                    _startVal = value;
+                    typedStartVal = ((Vector3)(_startVal)).y;
                 }
             }
         }
@@ -62,13 +80,22 @@ namespace Holoville.HOTween.Plugins
         /// Gets the untyped end value,
         /// sets both the untyped and the typed end value.
         /// </summary>
-        override protected    object        endVal {
-            get { return _endVal; }
-            set {
-                if ( tweenObj.isFrom ) {
-                    _endVal = value; typedEndVal = ( (Vector3)( _endVal ) ).y;
-                } else {
-                    _endVal = typedEndVal = Convert.ToSingle( value );
+        protected override object endVal
+        {
+            get
+            {
+                return _endVal;
+            }
+            set
+            {
+                if (tweenObj.isFrom)
+                {
+                    _endVal = value;
+                    typedEndVal = ((Vector3)(_endVal)).y;
+                }
+                else
+                {
+                    _endVal = typedEndVal = Convert.ToSingle(value);
                 }
             }
         }
@@ -84,7 +111,11 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_endVal">
         /// The value to tween to.
         /// </param>
-        public PlugVector3Y( float p_endVal ) : base( p_endVal, false ) {}
+        public PlugVector3Y(float p_endVal)
+            : base(p_endVal, false)
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of this plugin.
         /// </summary>
@@ -94,7 +125,11 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_easeType">
         /// The <see cref="EaseType"/> to use.
         /// </param>
-        public PlugVector3Y( float p_endVal, EaseType p_easeType ) : base( p_endVal, p_easeType, false ) {}
+        public PlugVector3Y(float p_endVal, EaseType p_easeType)
+            : base(p_endVal, p_easeType, false)
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of this plugin using the main ease type.
         /// </summary>
@@ -104,7 +139,11 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_isRelative">
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
-        public PlugVector3Y( float p_endVal, bool p_isRelative ) : base( p_endVal, p_isRelative ) {}
+        public PlugVector3Y(float p_endVal, bool p_isRelative)
+            : base(p_endVal, p_isRelative)
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of this plugin.
         /// </summary>
@@ -117,7 +156,10 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_isRelative">
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
-        public PlugVector3Y( float p_endVal, EaseType p_easeType, bool p_isRelative ) : base( p_endVal, p_easeType, p_isRelative ) {}
+        public PlugVector3Y(float p_endVal, EaseType p_easeType, bool p_isRelative)
+            : base(p_endVal, p_easeType, p_isRelative)
+        {
+        }
 
         // ===================================================================================
         // METHODS ---------------------------------------------------------------------------
@@ -126,24 +168,24 @@ namespace Holoville.HOTween.Plugins
         /// Rewinds the tween.
         /// Should be overriden by tweens that control only part of the property (like HOTPluginVector3X).
         /// </summary>
-        override internal void Rewind()
+        internal override void Rewind()
         {
-            Vector3 curV = (Vector3)( GetValue() );
+            Vector3 curV = (Vector3)(GetValue());
             curV.y = typedStartVal;
 
-            SetValue( curV );
+            SetValue(curV);
         }
 
         /// <summary>
         /// Completes the tween.
         /// Should be overriden by tweens that control only part of the property (like HOTPluginVector3X).
         /// </summary>
-        override internal void Complete()
+        internal override void Complete()
         {
-            Vector3 curV = (Vector3)( GetValue() );
+            Vector3 curV = (Vector3)(GetValue());
             curV.y = typedEndVal;
 
-            SetValue( curV );
+            SetValue(curV);
         }
 
         /// <summary>
@@ -152,13 +194,12 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_totElapsed">
         /// The total elapsed time since startup.
         /// </param>
-        override protected void DoUpdate ( float p_totElapsed )
+        protected override void DoUpdate(float p_totElapsed)
         {
-            Vector3 curV = (Vector3)( GetValue() );
-            curV.y = ease( p_totElapsed, typedStartVal, changeVal, _duration );
+            Vector3 curV = (Vector3)(GetValue());
+            curV.y = ease(p_totElapsed, typedStartVal, changeVal, _duration);
 
-            SetValue( curV );
+            SetValue(curV);
         }
     }
 }
-

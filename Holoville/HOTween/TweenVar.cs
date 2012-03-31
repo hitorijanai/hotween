@@ -40,42 +40,65 @@ namespace Holoville.HOTween
         /// Virtual duration
         /// (you could also set it to 1 or 100 to treat it as a percentage).
         /// </summary>
-        public        float                    duration;
+        public float duration;
 
-        private        float                    _value;
-        private        float                    _startVal;
-        private        float                    _endVal;
-        private        EaseType                _easeType;
-        private        float                    _elapsed = 0;
+        float _value;
+        float _startVal;
+        float _endVal;
+        EaseType _easeType;
+        float _elapsed;
 
-        private        float                    changeVal;
-        private        TweenDelegate.EaseFunc    ease;
+        float changeVal;
+        TweenDelegate.EaseFunc ease;
 
         // GETS/SETS //////////////////////////////////////////////
 
         /// <summary>
         /// Start value (FROM).
         /// </summary>
-        public        float                    startVal
+        public float startVal
         {
-            get { return _startVal; }
-            set { _startVal = value; SetChangeVal(); }
+            get
+            {
+                return _startVal;
+            }
+            set
+            {
+                _startVal = value;
+                SetChangeVal();
+            }
         }
+
         /// <summary>
         /// End value (TO).
         /// </summary>
-        public        float                    endVal
+        public float endVal
         {
-            get { return _endVal; }
-            set { _endVal = value; SetChangeVal(); }
+            get
+            {
+                return _endVal;
+            }
+            set
+            {
+                _endVal = value;
+                SetChangeVal();
+            }
         }
+
         /// <summary>
         /// Ease type.
         /// </summary>
-        public        EaseType                easeType
+        public EaseType easeType
         {
-            get { return _easeType; }
-            set { _easeType = value; ease = EaseInfo.GetEaseInfo( _easeType ).ease; }
+            get
+            {
+                return _easeType;
+            }
+            set
+            {
+                _easeType = value;
+                ease = EaseInfo.GetEaseInfo(_easeType).ease;
+            }
         }
 
         // READ-ONLY GETS /////////////////////////////////////////
@@ -83,16 +106,23 @@ namespace Holoville.HOTween
         /// <summary>
         /// The current value of this <see cref="TweenVar"/>
         /// </summary>
-        public        float                    value
+        public float value
         {
-            get { return _value; }
+            get
+            {
+                return _value;
+            }
         }
+
         /// <summary>
         /// The current elapsed time.
         /// </summary>
-        public        float                    elapsed
+        public float elapsed
         {
-            get { return _elapsed; }
+            get
+            {
+                return _elapsed;
+            }
         }
 
 
@@ -113,7 +143,11 @@ namespace Holoville.HOTween
         /// Virtual duration.
         /// (you could also set it to 1 or 100 to treat it as a percentage).
         /// </param>
-        public TweenVar( float p_startVal, float p_endVal, float p_duration ) : this( p_startVal, p_endVal, p_duration, EaseType.Linear ) {}
+        public TweenVar(float p_startVal, float p_endVal, float p_duration)
+            : this(p_startVal, p_endVal, p_duration, EaseType.Linear)
+        {
+        }
+
         /// <summary>
         /// Creates a new TweenVar instance.
         /// </summary>
@@ -130,7 +164,7 @@ namespace Holoville.HOTween
         /// <param name="p_easeType">
         /// Ease type.
         /// </param>
-        public TweenVar( float p_startVal, float p_endVal, float p_duration, EaseType p_easeType )
+        public TweenVar(float p_startVal, float p_endVal, float p_duration, EaseType p_easeType)
         {
             startVal = _value = p_startVal;
             endVal = p_endVal;
@@ -148,7 +182,11 @@ namespace Holoville.HOTween
         /// <param name="p_elapsed">
         /// The elapsed time to calculate.
         /// </param>
-        public float Update( float p_elapsed ) { return Update( p_elapsed, false ); }
+        public float Update(float p_elapsed)
+        {
+            return Update(p_elapsed, false);
+        }
+
         /// <summary>
         /// Sets and returns the value at which this <see cref="TweenVar"/>
         /// would be after the given time.
@@ -161,24 +199,27 @@ namespace Holoville.HOTween
         /// meaning it will be added to the previous elapsed time,
         /// otherwise it is considered absolute.
         /// </param>
-        public float Update( float p_elapsed, bool p_relative )
+        public float Update(float p_elapsed, bool p_relative)
         {
-            _elapsed = ( p_relative ? _elapsed + p_elapsed : p_elapsed );
-            if ( _elapsed > duration )
+            _elapsed = (p_relative ? _elapsed + p_elapsed : p_elapsed);
+            if (_elapsed > duration)
+            {
                 _elapsed = duration;
-            else if ( _elapsed < 0 )
+            }
+            else if (_elapsed < 0)
+            {
                 _elapsed = 0;
-            _value = ease( _elapsed, _startVal, changeVal, duration );
+            }
+            _value = ease(_elapsed, _startVal, changeVal, duration);
             return _value;
         }
 
         // ===================================================================================
         // PRIVATE METHODS -------------------------------------------------------------------
 
-        private void SetChangeVal()
+        void SetChangeVal()
         {
             changeVal = endVal - startVal;
         }
     }
 }
-

@@ -33,60 +33,64 @@ namespace Holoville.HOTween.Plugins.Core
     /// <summary>
     /// ABSTRACT base class for all <see cref="ABSTweenPlugin"/> classes.
     /// </summary>
-    abstract public class ABSTweenPlugin
+    public abstract class ABSTweenPlugin
     {
         // VARS ///////////////////////////////////////////////////
 
         /// <summary>
         /// Untyped start value.
         /// </summary>
-        protected    object                                    _startVal = null;
+        protected object _startVal;
+
         /// <summary>
         /// Untyped end value.
         /// </summary>
-        protected    object                                    _endVal = null;
+        protected object _endVal;
+
         /// <summary>
         /// Stored so it can be set indipendently in case of speed-based tweens.
         /// </summary>
-        protected    float                                    _duration;
+        protected float _duration;
 
-        private        bool                                    _initialized;
-        private        bool                                    _easeReversed;
-        private        string                                    _propName; // Stored during Init, used by overwrite manager.
+        bool _initialized;
+        bool _easeReversed;
+        string _propName; // Stored during Init, used by overwrite manager.
 
         /// <summary>
         /// Ease type.
         /// </summary>
-        protected    TweenDelegate.EaseFunc                    ease;
+        protected TweenDelegate.EaseFunc ease;
+
         /// <summary>
         /// Indicates that the end value is relative instead than absolute.
         /// Default: <c>false</c>.
         /// </summary>
-        protected    bool                                    isRelative;
+        protected bool isRelative;
+
         /// <summary>
         /// Some plugins (like PlugSetColor) may set this to <c>false</c> when instantiated,
         /// to prevent the creation of a useless valAccessor.
         /// </summary>
-        protected    bool                                    ignoreAccessor;
+        protected bool ignoreAccessor;
 
-        private        EaseType                                easeType; // Store so instance can be cloned and ease can be changed while playing.
-        private        EaseInfo                                easeInfo;
-        private        IMemberAccessor                            valAccessor;
-        private        bool                                    wasStarted;
-        private        bool                                    speedBasedDurationWasSet;
-        private        int                                        prevCompletedLoops = 0; // Stored only during Incremental loop type.
+        EaseType easeType; // Store so instance can be cloned and ease can be changed while playing.
+        EaseInfo easeInfo;
+        IMemberAccessor valAccessor;
+        bool wasStarted;
+        bool speedBasedDurationWasSet;
+        int prevCompletedLoops; // Stored only during Incremental loop type.
 
         // IOS-ONLY VARS //////////////////////////////////////////
 
-        private        PropertyInfo                            propInfo;
-        private        FieldInfo                                fieldInfo;
+        PropertyInfo propInfo;
+        FieldInfo fieldInfo;
 
         // REFERENCES /////////////////////////////////////////////
 
         /// <summary>
         /// Reference to the Tweener controlling this plugin.
         /// </summary>
-        protected    Tweener                                    tweenObj;
+        protected Tweener tweenObj;
 
         // GETS/SETS //////////////////////////////////////////////
 
@@ -94,19 +98,13 @@ namespace Holoville.HOTween.Plugins.Core
         /// Gets the untyped start value,
         /// sets both the untyped and the typed start value.
         /// </summary>
-        abstract protected    object                            startVal {
-            get;
-            set;
-        }
+        protected abstract object startVal { get; set; }
 
         /// <summary>
         /// Gets the untyped end value,
         /// sets both the untyped and the typed end value.
         /// </summary>
-        abstract protected    object                            endVal {
-            get;
-            set;
-        }
+        protected abstract object endVal { get; set; }
 
         // READ-ONLY GETS /////////////////////////////////////////
 
@@ -114,27 +112,39 @@ namespace Holoville.HOTween.Plugins.Core
         /// Used by TweenParms to understand if this plugin was initialized with
         /// another Tweener, and thus clone it.
         /// </summary>
-        internal    bool                                    initialized
+        internal bool initialized
         {
-            get { return _initialized; }
+            get
+            {
+                return _initialized;
+            }
         }
 
-        internal    float                                    duration
+        internal float duration
         {
-            get { return _duration; }
+            get
+            {
+                return _duration;
+            }
         }
 
-        internal    bool                                    easeReversed
+        internal bool easeReversed
         {
-            get { return _easeReversed; }
+            get
+            {
+                return _easeReversed;
+            }
         }
 
         /// <summary>
         /// Used by <see cref="OverwriteManager"/> to get the property name.
         /// </summary>
-        internal        string                                propName
+        internal string propName
         {
-            get { return _propName; }
+            get
+            {
+                return _propName;
+            }
         }
 
         /// <summary>
@@ -147,9 +157,12 @@ namespace Holoville.HOTween.Plugins.Core
         /// <value>
         /// The plugin identifier.
         /// </value>
-        virtual internal        int                            pluginId
+        internal virtual int pluginId
         {
-            get { return -1; }
+            get
+            {
+                return -1;
+            }
         }
 
 
@@ -168,11 +181,12 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_isRelative">
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
-        protected ABSTweenPlugin( object p_endVal, bool p_isRelative )
+        protected ABSTweenPlugin(object p_endVal, bool p_isRelative)
         {
             isRelative = p_isRelative;
             _endVal = p_endVal;
         }
+
         /// <summary>
         /// Creates a new instance of this plugin with the given options.
         /// </summary>
@@ -185,12 +199,12 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_isRelative">
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
-        protected ABSTweenPlugin( object p_endVal, EaseType p_easeType, bool p_isRelative )
+        protected ABSTweenPlugin(object p_endVal, EaseType p_easeType, bool p_isRelative)
         {
             isRelative = p_isRelative;
             _endVal = p_endVal;
             easeType = p_easeType;
-            easeInfo = EaseInfo.GetEaseInfo( p_easeType );
+            easeInfo = EaseInfo.GetEaseInfo(p_easeType);
             ease = easeInfo.ease;
         }
 
@@ -220,22 +234,29 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_fieldInfo">
         /// Directly passed from TweenParms to speed up MemberAccessor creation.
         /// </param>
-        virtual internal void Init( Tweener p_tweenObj, string p_propertyName, EaseType p_easeType, Type p_targetType, PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo )
+        internal virtual void Init(Tweener p_tweenObj, string p_propertyName, EaseType p_easeType, Type p_targetType, PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo)
         {
             _initialized = true;
 
             tweenObj = p_tweenObj;
             _propName = p_propertyName;
-            if ( easeInfo == null || tweenObj.speedBased ) {
-                SetEase( p_easeType );
+            if (easeInfo == null || tweenObj.speedBased)
+            {
+                SetEase(p_easeType);
             }
             _duration = tweenObj.duration;
 
-            if ( HOTween.isIOS ) {
+            if (HOTween.isIOS)
+            {
                 propInfo = p_propertyInfo;
                 fieldInfo = p_fieldInfo;
-            } else {
-                if ( !ignoreAccessor )        valAccessor = MemberAccessorCacher.Make( p_targetType, p_propertyName, p_propertyInfo, p_fieldInfo );
+            }
+            else
+            {
+                if (!ignoreAccessor)
+                {
+                    valAccessor = MemberAccessorCacher.Make(p_targetType, p_propertyName, p_propertyInfo, p_fieldInfo);
+                }
             }
         }
 
@@ -243,7 +264,11 @@ namespace Holoville.HOTween.Plugins.Core
         /// Starts up the plugin, getting the actual start and change values.
         /// Called by Tweener right before starting the effective animations.
         /// </summary>
-        internal void Startup() { Startup( false ); }
+        internal void Startup()
+        {
+            Startup(false);
+        }
+
         /// <summary>
         /// Starts up the plugin, getting the actual start and change values.
         /// Called by Tweener right before starting the effective animations.
@@ -253,44 +278,54 @@ namespace Holoville.HOTween.Plugins.Core
         /// to calculate only the speed based duration and then reset any startup changes
         /// (so Startup can be called from scratch when truly starting up).
         /// </param>
-        internal void Startup( bool p_onlyCalcSpeedBasedDur )
+        internal void Startup(bool p_onlyCalcSpeedBasedDur)
         {
-            if ( wasStarted ) {
-                TweenWarning.Log( "Startup() for plugin " + this + " (target: " + tweenObj.target + ") has already been called. Startup() won't execute twice." );
+            if (wasStarted)
+            {
+                TweenWarning.Log("Startup() for plugin " + this + " (target: " + tweenObj.target + ") has already been called. Startup() won't execute twice.");
                 return; // Startup can't be executed twice otherwise some typedEndVal (like for PlugColor) will be set incorrectly
             }
 
             object orStartVal = null, orEndVal = null;
-            if ( p_onlyCalcSpeedBasedDur ) {
-                if ( tweenObj.speedBased && !speedBasedDurationWasSet ) {
+            if (p_onlyCalcSpeedBasedDur)
+            {
+                if (tweenObj.speedBased && !speedBasedDurationWasSet)
+                {
                     // Get original values so they can be reset.
                     orStartVal = _startVal;
                     orEndVal = _endVal;
                 }
-            } else {
+            }
+            else
+            {
                 wasStarted = true;
             }
 
             // Manage TO or FROM.
-            if ( tweenObj.isFrom ) {
+            if (tweenObj.isFrom)
+            {
                 // Order is fundamental (otherwise setters for isRelative get messed up).
                 object prevEndVal = _endVal;
                 endVal = GetValue();
                 startVal = prevEndVal;
-            } else {
+            }
+            else
+            {
                 endVal = _endVal;
                 startVal = GetValue();
             }
             // Set changeVal.
             SetChangeVal();
 
-            if ( tweenObj.speedBased && !speedBasedDurationWasSet ) {
+            if (tweenObj.speedBased && !speedBasedDurationWasSet)
+            {
                 // Get duration based on speed.
                 // Can't be done earlier because it needs changeVal to be set.
-                _duration = GetSpeedBasedDuration( _duration );
+                _duration = GetSpeedBasedDuration(_duration);
                 speedBasedDurationWasSet = true;
                 // Reset.
-                if ( p_onlyCalcSpeedBasedDur ) {
+                if (p_onlyCalcSpeedBasedDur)
+                {
                     _startVal = orStartVal;
                     _endVal = orEndVal;
                 }
@@ -304,15 +339,18 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         internal void ForceSetSpeedBasedDuration()
         {
-            if ( speedBasedDurationWasSet )        return;
-            Startup( true );
+            if (speedBasedDurationWasSet)
+            {
+                return;
+            }
+            Startup(true);
         }
 
         /// <summary>
         /// Overridden by plugins that need a specific type of target, to check it and validate it.
         /// Returns <c>true</c> if the tween target is valid.
         /// </summary>
-        virtual internal bool ValidateTarget( object p_target )
+        internal virtual bool ValidateTarget(object p_target)
         {
             return true;
         }
@@ -323,53 +361,64 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_totElapsed">
         /// The total elapsed time since startup (loops excluded).
         /// </param>
-        internal void Update( float p_totElapsed )
+        internal void Update(float p_totElapsed)
         {
-            if ( tweenObj.loopType == LoopType.Incremental ) {
+            if (tweenObj.loopType == LoopType.Incremental)
+            {
                 // prevCompleteLoops is stored only during Incremental loops,
                 // so that if the loop type is changed while the tween is running,
                 // the tween will change and update correctly.
-                if ( prevCompletedLoops != tweenObj.completedLoops ) {
+                if (prevCompletedLoops != tweenObj.completedLoops)
+                {
                     int currLoops = tweenObj.completedLoops;
-                    if ( currLoops >= tweenObj._loops )        --currLoops; // Avoid to calculate completion loop increment
+                    if (currLoops >= tweenObj._loops)
+                    {
+                        --currLoops; // Avoid to calculate completion loop increment
+                    }
                     int diff = currLoops - prevCompletedLoops;
-                    if ( diff != 0 ) {
-                        SetIncremental( diff );
+                    if (diff != 0)
+                    {
+                        SetIncremental(diff);
                         prevCompletedLoops = currLoops;
                     }
                 }
-            } else if ( prevCompletedLoops != 0 ) {
+            }
+            else if (prevCompletedLoops != 0)
+            {
                 // Readapt to non incremental loop type.
-                SetIncremental( -prevCompletedLoops );
+                SetIncremental(-prevCompletedLoops);
                 prevCompletedLoops = 0;
             }
 
-            if ( p_totElapsed > _duration )        p_totElapsed = _duration;
+            if (p_totElapsed > _duration)
+            {
+                p_totElapsed = _duration;
+            }
 
-            DoUpdate( p_totElapsed );
+            DoUpdate(p_totElapsed);
         }
 
         /// <summary>
         /// Updates the plugin.
         /// </summary>
-        abstract protected void DoUpdate( float p_totElapsed );
+        protected abstract void DoUpdate(float p_totElapsed);
 
         /// <summary>
         /// Rewinds the tween.
         /// Should be overriden by tweens that control only part of the property (like HOTPluginVector3X).
         /// </summary>
-        virtual internal void Rewind()
+        internal virtual void Rewind()
         {
-            SetValue( startVal );
+            SetValue(startVal);
         }
 
         /// <summary>
         /// Completes the tween.
         /// Should be overriden by tweens that control only part of the property (like HOTPluginVector3X).
         /// </summary>
-        virtual internal void Complete()
+        internal virtual void Complete()
         {
-            SetValue( _endVal );
+            SetValue(_endVal);
         }
 
         /// <summary>
@@ -377,28 +426,34 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         internal void ReverseEase()
         {
-            if ( easeInfo.inverseEase == null )        return; // No inverse for this ease.
+            if (easeInfo.inverseEase == null)
+            {
+                return; // No inverse for this ease.
+            }
 
             _easeReversed = !_easeReversed;
-            ease = ( _easeReversed ? easeInfo.inverseEase : easeInfo.ease );
+            ease = (_easeReversed ? easeInfo.inverseEase : easeInfo.ease);
         }
 
         /// <summary>
         /// Sets the ease type (called during Init, but can also be called by Tweener to change easeType while playing).
         /// </summary>
-        internal void SetEase( EaseType p_easeType )
+        internal void SetEase(EaseType p_easeType)
         {
             easeType = p_easeType;
-            easeInfo = EaseInfo.GetEaseInfo( easeType );
+            easeInfo = EaseInfo.GetEaseInfo(easeType);
             ease = easeInfo.ease;
 
-            if ( _easeReversed && easeInfo.inverseEase != null )    ease = easeInfo.inverseEase;
+            if (_easeReversed && easeInfo.inverseEase != null)
+            {
+                ease = easeInfo.inverseEase;
+            }
         }
 
         /// <summary>
         /// Returns the speed-based duration based on the given speed.
         /// </summary>
-        abstract protected float GetSpeedBasedDuration( float p_speed );
+        protected abstract float GetSpeedBasedDuration(float p_speed);
 
         /// <summary>
         /// Returns a clone of the basic plugin
@@ -409,7 +464,7 @@ namespace Holoville.HOTween.Plugins.Core
             // OPTIMIZE incredibly slow. Possible solutions...
             // - http://rogeralsing.com/2008/02/28/linq-expressions-creating-objects (but requires Linq, and thus System.Core, which I'd prefer to avoid)
             // - http://ayende.com/blog/3167/creating-objects-perf-implications (has to know the class to create, thus is useless)
-            return Activator.CreateInstance( GetType(), ( tweenObj != null && tweenObj.isFrom ? _startVal : _endVal ), easeType, isRelative ) as ABSTweenPlugin;
+            return Activator.CreateInstance(GetType(), (tweenObj != null && tweenObj.isFrom ? _startVal : _endVal), easeType, isRelative) as ABSTweenPlugin;
         }
 
         // ===================================================================================
@@ -419,7 +474,7 @@ namespace Holoville.HOTween.Plugins.Core
         /// Sets the typed changeVal based on the current startVal and endVal.
         /// Can only be called once, otherwise some typedEndVal (like HOTPluginColor) will be set incorrectly.
         /// </summary>
-        abstract protected void SetChangeVal();
+        protected abstract void SetChangeVal();
 
         /// <summary>
         /// Sets the correct values in case of Incremental loop type.
@@ -428,7 +483,7 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_diffIncr">
         /// The difference from the previous loop increment.
         /// </param>
-        abstract internal void SetIncremental( int p_diffIncr );
+        internal abstract void SetIncremental(int p_diffIncr);
 
         /// <summary>
         /// Sets the value of the controlled property.
@@ -437,39 +492,60 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_value">
         /// The new value.
         /// </param>
-        virtual protected void SetValue( object p_value )
+        protected virtual void SetValue(object p_value)
         {
-            if ( HOTween.isIOS ) {
-                if ( propInfo != null ) {
-                    try {
-                        propInfo.SetValue( tweenObj.target, p_value, null );
-                    } catch ( InvalidCastException ) {
-                        // This happens only if a float is being assigned to an int.
-                        propInfo.SetValue( tweenObj.target, (int)Math.Floor( (double)p_value ), null );
-                    } catch ( ArgumentException ) {
-                        // This happens only on iOS if a float is being assigned to an int.
-                        propInfo.SetValue( tweenObj.target, (int)Math.Floor( (double)p_value ), null );
+            if (HOTween.isIOS)
+            {
+                if (propInfo != null)
+                {
+                    try
+                    {
+                        propInfo.SetValue(tweenObj.target, p_value, null);
                     }
-                } else {
-                    try {
-                        fieldInfo.SetValue( tweenObj.target, p_value );
-                    } catch ( InvalidCastException ) {
+                    catch (InvalidCastException)
+                    {
                         // This happens only if a float is being assigned to an int.
-                        fieldInfo.SetValue( tweenObj.target, (int)Math.Floor( (double)p_value ) );
-                    } catch ( ArgumentException ) {
+                        propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)p_value), null);
+                    }
+                    catch (ArgumentException)
+                    {
                         // This happens only on iOS if a float is being assigned to an int.
-                        fieldInfo.SetValue( tweenObj.target, (int)Math.Floor( (double)p_value ) );
+                        propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)p_value), null);
                     }
                 }
-            } else {
-                try {
-                    valAccessor.Set( tweenObj.target, p_value );
-                } catch ( InvalidCastException ) {
+                else
+                {
+                    try
+                    {
+                        fieldInfo.SetValue(tweenObj.target, p_value);
+                    }
+                    catch (InvalidCastException)
+                    {
+                        // This happens only if a float is being assigned to an int.
+                        fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)p_value));
+                    }
+                    catch (ArgumentException)
+                    {
+                        // This happens only on iOS if a float is being assigned to an int.
+                        fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)p_value));
+                    }
+                }
+            }
+            else
+            {
+                try
+                {
+                    valAccessor.Set(tweenObj.target, p_value);
+                }
+                catch (InvalidCastException)
+                {
                     // This happens only if a float is being assigned to an int.
-                    valAccessor.Set( tweenObj.target, (int)Math.Floor( (double)p_value ) ); // OPTIMIZE store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
-                } catch ( ArgumentException ) {
+                    valAccessor.Set(tweenObj.target, (int)Math.Floor((double)p_value)); // OPTIMIZE store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
+                }
+                catch (ArgumentException)
+                {
                     // This happens only on iOS if a float is being assigned to an int, but is also here just to be sure.
-                    valAccessor.Set( tweenObj.target, (int)Math.Floor( (double)p_value ) );
+                    valAccessor.Set(tweenObj.target, (int)Math.Floor((double)p_value));
                 }
             }
         }
@@ -478,14 +554,17 @@ namespace Holoville.HOTween.Plugins.Core
         /// Gets the current value of the controlled property.
         /// Some plugins (like PlugSetColor) might override this to set values on different properties.
         /// </summary>
-        virtual protected object GetValue()
+        protected virtual object GetValue()
         {
-            if ( HOTween.isIOS ) {
-                if ( propInfo != null )        return propInfo.GetValue( tweenObj.target, null );
-                return fieldInfo.GetValue( tweenObj.target );
+            if (HOTween.isIOS)
+            {
+                if (propInfo != null)
+                {
+                    return propInfo.GetValue(tweenObj.target, null);
+                }
+                return fieldInfo.GetValue(tweenObj.target);
             }
-            return valAccessor.Get( tweenObj.target );
+            return valAccessor.Get(tweenObj.target);
         }
     }
 }
-

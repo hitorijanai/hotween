@@ -39,10 +39,12 @@ namespace Holoville.HOTween
         /// Ease in sine.
         /// </summary>
         EaseInSine,
+
         /// <summary>
         /// Ease out sine.
         /// </summary>
         EaseOutSine,
+
         /// <summary>
         /// Ease in out sine.
         /// </summary>
@@ -52,10 +54,12 @@ namespace Holoville.HOTween
         /// Ease in quad.
         /// </summary>
         EaseInQuad,
+
         /// <summary>
         /// Ease out quad.
         /// </summary>
         EaseOutQuad,
+
         /// <summary>
         /// Ease in out quad.
         /// </summary>
@@ -65,10 +69,12 @@ namespace Holoville.HOTween
         /// Ease in cubic.
         /// </summary>
         EaseInCubic,
+
         /// <summary>
         /// Ease out cubic.
         /// </summary>
         EaseOutCubic,
+
         /// <summary>
         /// Ease in out cubic.
         /// </summary>
@@ -78,10 +84,12 @@ namespace Holoville.HOTween
         /// Ease in quart.
         /// </summary>
         EaseInQuart,
+
         /// <summary>
         /// Ease out quart.
         /// </summary>
         EaseOutQuart,
+
         /// <summary>
         /// Ease in out quart.
         /// </summary>
@@ -91,10 +99,12 @@ namespace Holoville.HOTween
         /// Ease in quint.
         /// </summary>
         EaseInQuint,
+
         /// <summary>
         /// Ease out quint.
         /// </summary>
         EaseOutQuint,
+
         /// <summary>
         /// Ease in out quint.
         /// </summary>
@@ -104,10 +114,12 @@ namespace Holoville.HOTween
         /// Ease in expo.
         /// </summary>
         EaseInExpo,
+
         /// <summary>
         /// Ease out expo.
         /// </summary>
         EaseOutExpo,
+
         /// <summary>
         /// Ease in out expo.
         /// </summary>
@@ -117,10 +129,12 @@ namespace Holoville.HOTween
         /// Ease in circ.
         /// </summary>
         EaseInCirc,
+
         /// <summary>
         /// Ease out circ.
         /// </summary>
         EaseOutCirc,
+
         /// <summary>
         /// Ease in out circ.
         /// </summary>
@@ -130,10 +144,12 @@ namespace Holoville.HOTween
         /// Ease in elastic.
         /// </summary>
         EaseInElastic,
+
         /// <summary>
         /// Ease out elastic.
         /// </summary>
         EaseOutElastic,
+
         /// <summary>
         /// Ease in out elastic.
         /// </summary>
@@ -143,10 +159,12 @@ namespace Holoville.HOTween
         /// Ease in back.
         /// </summary>
         EaseInBack,
+
         /// <summary>
         /// Ease out back.
         /// </summary>
         EaseOutBack,
+
         /// <summary>
         /// Ease in out back.
         /// </summary>
@@ -156,10 +174,12 @@ namespace Holoville.HOTween
         /// Ease in bounce.
         /// </summary>
         EaseInBounce,
+
         /// <summary>
         /// Ease out bounce.
         /// </summary>
         EaseOutBounce,
+
         /// <summary>
         /// Ease in out bounce.
         /// </summary>
@@ -169,14 +189,15 @@ namespace Holoville.HOTween
         /// Ease in strong.
         /// </summary>
         EaseInStrong,
+
         /// <summary>
         /// Ease out strong.
         /// </summary>
         EaseOutStrong,
+
         /// <summary>
         /// Ease in out strong.
         /// </summary>
         EaseInOutStrong
     }
 }
-

@@ -39,21 +39,21 @@ namespace Holoville.HOTween
     {
         // VARS ///////////////////////////////////////////////////
 
-        private        float                        _elapsedDelay = 0;
+        float _elapsedDelay;
 
-        internal    EaseType                    _easeType = HOTween.defEaseType;
+        internal EaseType _easeType = HOTween.defEaseType;
 
-        internal    bool                        _speedBased = false;
-        internal    float                        _delay = 0;
+        internal bool _speedBased;
+        internal float _delay;
 
-        internal    bool                        isFrom = false; // Indicates whether this is a FROM or a TO tween.
-        internal    float                        delayCount = 0;
+        internal bool isFrom; // Indicates whether this is a FROM or a TO tween.
+        internal float delayCount;
 
         // REFERENCES /////////////////////////////////////////////
 
-        internal    List<ABSTweenPlugin>        plugins;
+        internal List<ABSTweenPlugin> plugins;
 
-        private        object                        _target;
+        object _target;
 
         // GETS/SETS //////////////////////////////////////////////
 
@@ -62,13 +62,20 @@ namespace Holoville.HOTween
         /// (consider that the plugins you have set might have different ease types).
         /// Setting it will change the ease of all the plugins used by this tweener.
         /// </summary>
-        public        EaseType                    easeType
+        public EaseType easeType
         {
-            get { return _easeType; }
-            set {
+            get
+            {
+                return _easeType;
+            }
+            set
+            {
                 _easeType = value;
                 // Change ease type of all existing plugins.
-                for ( int i = 0; i < plugins.Count; ++i )        plugins[i].SetEase( _easeType );
+                for (int i = 0; i < plugins.Count; ++i)
+                {
+                    plugins[i].SetEase(_easeType);
+                }
             }
         }
 
@@ -77,30 +84,45 @@ namespace Holoville.HOTween
         /// <summary>
         /// Target of this tween.
         /// </summary>
-        public        object                        target
+        public object target
         {
-            get { return _target; }
+            get
+            {
+                return _target;
+            }
         }
+
         /// <summary>
         /// <c>true</c> if this tween is animated by speed instead than by duration.
         /// </summary>
-        public        bool                        speedBased
+        public bool speedBased
         {
-            get { return _speedBased; }
+            get
+            {
+                return _speedBased;
+            }
         }
+
         /// <summary>
         /// The delay that was set for this tween.
         /// </summary>
-        public        float                        delay
+        public float delay
         {
-            get { return _delay; }
+            get
+            {
+                return _delay;
+            }
         }
+
         /// <summary>
         /// The currently elapsed delay time.
         /// </summary>
-        public        float                        elapsedDelay
+        public float elapsedDelay
         {
-            get { return _elapsedDelay; }
+            get
+            {
+                return _elapsedDelay;
+            }
         }
 
 
@@ -111,14 +133,15 @@ namespace Holoville.HOTween
         /// <summary>
         /// Called by HOTween each time a new tween is generated via <c>To</c> or similar methods.
         /// </summary>
-        internal Tweener( object p_target, float p_duration, TweenParms p_parms )
+        internal Tweener(object p_target, float p_duration, TweenParms p_parms)
         {
             _target = p_target;
             _duration = p_duration;
 
-            p_parms.InitializeObject( this, _target );
+            p_parms.InitializeObject(this, _target);
 
-            if ( plugins != null && plugins.Count > 0 ) {
+            if (plugins != null && plugins.Count > 0)
+            {
                 // Valid plugins were added: mark this as not empty anymore.
                 _isEmpty = false;
             }
@@ -136,15 +159,18 @@ namespace Holoville.HOTween
         /// If <c>true</c> also calls <c>HOTween.Kill(this)</c> to remove it from HOTween.
         /// Set internally to <c>false</c> when I already know that HOTween is going to remove it.
         /// </param>
-        override internal void Kill( bool p_autoRemoveFromHOTween )
+        internal override void Kill(bool p_autoRemoveFromHOTween)
         {
-            if ( _destroyed )                    return;
+            if (_destroyed)
+            {
+                return;
+            }
 
-            HOTween.overwriteMngr.RemoveTween( this );
+            HOTween.overwriteMngr.RemoveTween(this);
             plugins = null;
             _target = null;
 
-            base.Kill( p_autoRemoveFromHOTween );
+            base.Kill(p_autoRemoveFromHOTween);
         }
 
         /// <summary>
@@ -153,10 +179,16 @@ namespace Holoville.HOTween
         /// <param name="p_skipDelay">
         /// If <c>true</c> skips any initial delay.
         /// </param>
-        public void Play( bool p_skipDelay )
+        public void Play(bool p_skipDelay)
         {
-            if ( !_enabled )            return;
-            if ( p_skipDelay )            SkipDelay();
+            if (!_enabled)
+            {
+                return;
+            }
+            if (p_skipDelay)
+            {
+                SkipDelay();
+            }
             Play();
         }
 
@@ -166,41 +198,62 @@ namespace Holoville.HOTween
         /// <param name="p_skipDelay">
         /// If <c>true</c> skips any initial delay.
         /// </param>
-        public void PlayForward( bool p_skipDelay )
+        public void PlayForward(bool p_skipDelay)
         {
-            if ( !_enabled )            return;
-            if ( p_skipDelay )            SkipDelay();
+            if (!_enabled)
+            {
+                return;
+            }
+            if (p_skipDelay)
+            {
+                SkipDelay();
+            }
             PlayForward();
         }
 
         /// <summary>
         /// Rewinds this Tweener (loops and tween delay included), and pauses it.
         /// </summary>
-        override public void Rewind() { Rewind( false ); }
+        public override void Rewind()
+        {
+            Rewind(false);
+        }
+
         /// <summary>
         /// Rewinds this Tweener (loops included), and pauses it.
         /// </summary>
         /// <param name="p_skipDelay">
         /// If <c>true</c> skips any initial delay.
         /// </param>
-        public void Rewind( bool p_skipDelay ) { Rewind( false, p_skipDelay ); }
+        public void Rewind(bool p_skipDelay)
+        {
+            Rewind(false, p_skipDelay);
+        }
 
         /// <summary>
         /// Restarts this Tweener from the beginning (loops and tween delay included).
         /// </summary>
-        override public void Restart() { Restart( false ); }
+        public override void Restart()
+        {
+            Restart(false);
+        }
+
         /// <summary>
         /// Restarts this Tweener from the beginning (loops and tween delay included).
         /// </summary>
         /// <param name="p_skipDelay">
         /// If <c>true</c> skips any initial delay.
         /// </param>
-        public void Restart( bool p_skipDelay )
+        public void Restart(bool p_skipDelay)
         {
-            if ( _fullElapsed == 0 )
-                PlayForward( p_skipDelay );
+            if (_fullElapsed == 0)
+            {
+                PlayForward(p_skipDelay);
+            }
             else
-                Rewind( true, p_skipDelay );
+            {
+                Rewind(true, p_skipDelay);
+            }
         }
 
         /// <summary>
@@ -208,14 +261,23 @@ namespace Holoville.HOTween
         /// Where a loop was involved, the Tweener completes at the position where it would actually be after the set number of loops.
         /// If there were infinite loops, this method will have no effect.
         /// </summary>
-        override internal void Complete( bool p_autoRemoveFromHOTween )
+        internal override void Complete(bool p_autoRemoveFromHOTween)
         {
-            if ( !_enabled )                return;
-            if ( _loops < 0 )                return;
+            if (!_enabled)
+            {
+                return;
+            }
+            if (_loops < 0)
+            {
+                return;
+            }
 
-            _fullElapsed = ( _fullDuration == Mathf.Infinity ? _duration : _fullDuration );
-            Update( 0, true );
-            if ( _autoKillOnComplete )        Kill( p_autoRemoveFromHOTween );
+            _fullElapsed = (_fullDuration == Mathf.Infinity ? _duration : _fullDuration);
+            Update(0, true);
+            if (_autoKillOnComplete)
+            {
+                Kill(p_autoRemoveFromHOTween);
+            }
         }
 
         /// <summary>
@@ -229,10 +291,16 @@ namespace Holoville.HOTween
         /// <returns>
         /// A value of <c>true</c> if the given target and this Tweener target are the same, and this Tweener is running.
         /// </returns>
-        override public bool IsTweening( object p_target )
+        public override bool IsTweening(object p_target)
         {
-            if ( !_enabled )                return false;
-            if ( p_target == _target )        return !_isPaused;
+            if (!_enabled)
+            {
+                return false;
+            }
+            if (p_target == _target)
+            {
+                return !_isPaused;
+            }
             return false;
         }
 
@@ -246,9 +314,9 @@ namespace Holoville.HOTween
         /// <returns>
         /// A value of <c>true</c> if the given target and this Tweener target are the same.
         /// </returns>
-        override public bool IsLinkedTo( object p_target )
+        public override bool IsLinkedTo(object p_target)
         {
-            return ( p_target == _target );
+            return (p_target == _target);
         }
 
         /// <summary>
@@ -261,15 +329,23 @@ namespace Holoville.HOTween
         /// <param name="t">
         /// The percentage (0 to 1) at which to get the point.
         /// </param>
-        public Vector3 GetPointOnPath( float t )
+        public Vector3 GetPointOnPath(float t)
         {
-            if ( plugins == null )            return Vector3.zero;
+            if (plugins == null)
+            {
+                return Vector3.zero;
+            }
 
-            foreach ( ABSTweenPlugin plug in plugins ) {
-                var plugVector3Path = plug as PlugVector3Path;
-                if ( plugVector3Path != null ) {
-                    if ( !startupDone )        Startup(); // Startup the tween to get the path data.
-                    return plugVector3Path.GetConstPointOnPath( t );
+            foreach (ABSTweenPlugin plug in plugins)
+            {
+                PlugVector3Path plugVector3Path = plug as PlugVector3Path;
+                if (plugVector3Path != null)
+                {
+                    if (!startupDone)
+                    {
+                        Startup(); // Startup the tween to get the path data.
+                    }
+                    return plugVector3Path.GetConstPointOnPath(t);
                 }
             }
 
@@ -297,78 +373,135 @@ namespace Holoville.HOTween
         /// <returns>
         /// A value of <c>true</c> if the Tweener is not reversed and is complete (or the tween target doesn't exist anymore), otherwise <c>false</c>.
         /// </returns>
-        override internal bool Update( float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration )
+        internal override bool Update(float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration)
         {
-            if ( _destroyed )                                            return true;
-            if ( _target == null || _target.Equals( null ) ) {
-                Kill( false );
+            if (_destroyed)
+            {
                 return true;
             }
-            if ( !_enabled )                                            return false;
-            if ( _isComplete && !_isReversed && !p_forceUpdate )        return true;
-            if ( _fullElapsed == 0 && _isReversed && !p_forceUpdate )    return false;
-            if ( _isPaused && !p_forceUpdate )                            return false;
+            if (_target == null || _target.Equals(null))
+            {
+                Kill(false);
+                return true;
+            }
+            if (!_enabled)
+            {
+                return false;
+            }
+            if (_isComplete && !_isReversed && !p_forceUpdate)
+            {
+                return true;
+            }
+            if (_fullElapsed == 0 && _isReversed && !p_forceUpdate)
+            {
+                return false;
+            }
+            if (_isPaused && !p_forceUpdate)
+            {
+                return false;
+            }
 
             ignoreCallbacks = p_isStartupIteration;
 
-            if ( delayCount == 0 ) {
-                if ( !startupDone )                                    Startup();
-                if ( !_hasStarted )                                    OnStart();
-                if ( !_isReversed ) {
+            if (delayCount == 0)
+            {
+                if (!startupDone)
+                {
+                    Startup();
+                }
+                if (!_hasStarted)
+                {
+                    OnStart();
+                }
+                if (!_isReversed)
+                {
                     _fullElapsed += p_shortElapsed;
                     _elapsed += p_shortElapsed;
-                } else {
+                }
+                else
+                {
                     _fullElapsed -= p_shortElapsed;
                     _elapsed -= p_shortElapsed;
                 }
-                if ( _fullElapsed > _fullDuration )
+                if (_fullElapsed > _fullDuration)
+                {
                     _fullElapsed = _fullDuration;
-                else if ( _fullElapsed < 0 )
+                }
+                else if (_fullElapsed < 0)
+                {
                     _fullElapsed = 0;
-            } else {
+                }
+            }
+            else
+            {
                 // Manage delay (delay doesn't go backwards).
-                if ( _timeScale != 0 )    _elapsedDelay += p_shortElapsed / _timeScale; // Calculate delay independently of timeScale
-                if ( _elapsedDelay < delayCount ) {
+                if (_timeScale != 0)
+                {
+                    _elapsedDelay += p_shortElapsed/_timeScale; // Calculate delay independently of timeScale
+                }
+                if (_elapsedDelay < delayCount)
+                {
                     return false;
                 }
-                if ( _isReversed ) {
+                if (_isReversed)
+                {
                     _fullElapsed = _elapsed = 0;
-                } else {
+                }
+                else
+                {
                     _fullElapsed = _elapsed = _elapsedDelay - delayCount;
-                    if ( _fullElapsed > _fullDuration )        _fullElapsed = _fullDuration;
+                    if (_fullElapsed > _fullDuration)
+                    {
+                        _fullElapsed = _fullDuration;
+                    }
                 }
                 _elapsedDelay = delayCount;
                 delayCount = 0;
-                if ( !startupDone )                                Startup();
-                if ( !_hasStarted )                                OnStart();
+                if (!startupDone)
+                {
+                    Startup();
+                }
+                if (!_hasStarted)
+                {
+                    OnStart();
+                }
             }
 
             // Set all elapsed and loops values.
             bool wasComplete = _isComplete;
-            bool stepComplete = ( !_isReversed && !wasComplete && _elapsed >= _duration );
+            bool stepComplete = (!_isReversed && !wasComplete && _elapsed >= _duration);
             SetLoops();
             SetElapsed();
-            _isComplete = ( !_isReversed && _loops >= 0 && _completedLoops >= _loops );
-            bool complete = ( !wasComplete && _isComplete );
+            _isComplete = (!_isReversed && _loops >= 0 && _completedLoops >= _loops);
+            bool complete = (!wasComplete && _isComplete);
 
             // Update the plugins.
-            float plugElapsed = ( !_isLoopingBack ? _elapsed : _duration - _elapsed );
-            for ( int i = 0; i < plugins.Count; ++i ) {
+            float plugElapsed = (!_isLoopingBack ? _elapsed : _duration - _elapsed);
+            for (int i = 0; i < plugins.Count; ++i)
+            {
                 ABSTweenPlugin plug = plugins[i];
-                if ( !_isLoopingBack && plug.easeReversed || _isLoopingBack && _loopType == LoopType.YoyoInverse && !plug.easeReversed ) {
+                if (!_isLoopingBack && plug.easeReversed || _isLoopingBack && _loopType == LoopType.YoyoInverse && !plug.easeReversed)
+                {
                     plug.ReverseEase();
                 }
-                plug.Update( plugElapsed );
+                plug.Update(plugElapsed);
             }
 
             // Manage eventual pause, complete, update, rewinded, and stepComplete.
-            if ( _fullElapsed != prevFullElapsed ) {
+            if (_fullElapsed != prevFullElapsed)
+            {
                 OnUpdate();
-                if ( _fullElapsed == 0 )        OnRewinded();
+                if (_fullElapsed == 0)
+                {
+                    OnRewinded();
+                }
             }
-            if ( complete ) {
+            if (complete)
+            {
                 OnComplete();
-            } else if ( stepComplete ) {
+            }
+            else if (stepComplete)
+            {
                 OnStepComplete();
             }
 
@@ -385,10 +518,16 @@ namespace Holoville.HOTween
         /// <param name="p_diffIncr">
         /// The difference from the previous loop increment.
         /// </param>
-        override internal void SetIncremental( int p_diffIncr )
+        internal override void SetIncremental(int p_diffIncr)
         {
-            if ( plugins == null )        return;
-            for ( int i = 0; i < plugins.Count; ++i )        plugins[i].SetIncremental( p_diffIncr );
+            if (plugins == null)
+            {
+                return;
+            }
+            for (int i = 0; i < plugins.Count; ++i)
+            {
+                plugins[i].SetIncremental(p_diffIncr);
+            }
         }
 
         /// <summary>
@@ -398,12 +537,22 @@ namespace Holoville.HOTween
         /// </summary>
         internal void ForceSetSpeedBasedDuration()
         {
-            if ( !_speedBased || plugins == null )            return;
+            if (!_speedBased || plugins == null)
+            {
+                return;
+            }
 
-            for ( int i = 0; i < plugins.Count; ++i )        plugins[i].ForceSetSpeedBasedDuration();
+            for (int i = 0; i < plugins.Count; ++i)
+            {
+                plugins[i].ForceSetSpeedBasedDuration();
+            }
             _duration = 0;
-            foreach ( ABSTweenPlugin plug in plugins ) {
-                if ( plug.duration > _duration )            _duration = plug.duration;
+            foreach (ABSTweenPlugin plug in plugins)
+            {
+                if (plug.duration > _duration)
+                {
+                    _duration = plug.duration;
+                }
             }
             SetFullDuration();
         }
@@ -418,58 +567,96 @@ namespace Holoville.HOTween
         /// <returns>
         /// Returns <c>true</c> if the tween reached its end and was completed.
         /// </returns>
-        override protected bool GoTo( float p_time, bool p_play, bool p_forceUpdate )
+        protected override bool GoTo(float p_time, bool p_play, bool p_forceUpdate)
         {
-            if ( !_enabled )                                    return false;
+            if (!_enabled)
+            {
+                return false;
+            }
 
-            if ( p_time > _fullDuration )
+            if (p_time > _fullDuration)
+            {
                 p_time = _fullDuration;
-            else if ( p_time < 0 )
+            }
+            else if (p_time < 0)
+            {
                 p_time = 0;
-            if ( !p_forceUpdate && _fullElapsed == p_time )        return _isComplete;
+            }
+            if (!p_forceUpdate && _fullElapsed == p_time)
+            {
+                return _isComplete;
+            }
 
             _fullElapsed = p_time;
             delayCount = 0;
             _elapsedDelay = _delay;
-            Update( 0, true );
-            if ( !_isComplete && p_play )        Play();
+            Update(0, true);
+            if (!_isComplete && p_play)
+            {
+                Play();
+            }
 
             return _isComplete;
         }
 
-        private void Rewind( bool p_play, bool p_skipDelay )
+        void Rewind(bool p_play, bool p_skipDelay)
         {
-            if ( !_enabled )                    return;
+            if (!_enabled)
+            {
+                return;
+            }
 
-            if ( !startupDone )                    Startup();
-            if ( !_hasStarted )                    OnStart();
+            if (!startupDone)
+            {
+                Startup();
+            }
+            if (!_hasStarted)
+            {
+                OnStart();
+            }
 
             _isComplete = false;
             _isLoopingBack = false;
-            delayCount = ( p_skipDelay ? 0 : _delay );
-            _elapsedDelay = ( p_skipDelay ? _delay : 0 );
+            delayCount = (p_skipDelay ? 0 : _delay);
+            _elapsedDelay = (p_skipDelay ? _delay : 0);
             _completedLoops = 0;
             _fullElapsed = _elapsed = 0;
 
-            for ( int i = 0; i < plugins.Count; ++i ) {
+            for (int i = 0; i < plugins.Count; ++i)
+            {
                 ABSTweenPlugin plug = plugins[i];
-                if ( plug.easeReversed )        plug.ReverseEase();
+                if (plug.easeReversed)
+                {
+                    plug.ReverseEase();
+                }
                 plug.Rewind();
             }
 
             // Manage OnUpdate and OnRewinded.
-            if ( _fullElapsed != prevFullElapsed ) {
+            if (_fullElapsed != prevFullElapsed)
+            {
                 OnUpdate();
-                if ( _fullElapsed == 0 )        OnRewinded();
+                if (_fullElapsed == 0)
+                {
+                    OnRewinded();
+                }
             }
             prevFullElapsed = _fullElapsed;
 
-            if ( p_play ) Play(); else Pause();
+            if (p_play)
+            {
+                Play();
+            }
+            else
+            {
+                Pause();
+            }
         }
 
-        private void SkipDelay()
+        void SkipDelay()
         {
-            if ( delayCount > 0 ) {
+            if (delayCount > 0)
+            {
                 delayCount = 0;
                 _elapsedDelay = _delay;
                 _elapsed = _fullElapsed = 0;
@@ -481,17 +668,28 @@ namespace Holoville.HOTween
         /// (might or might not all OnStart, depending if the tween is in a Sequence or not).
         /// Can be executed only once per tween.
         /// </summary>
-        override protected void Startup()
+        protected override void Startup()
         {
-            if ( startupDone )        return;
+            if (startupDone)
+            {
+                return;
+            }
 
-            for ( int i = 0; i < plugins.Count; ++i )        plugins[i].Startup();
-            if ( _speedBased ) {
+            for (int i = 0; i < plugins.Count; ++i)
+            {
+                plugins[i].Startup();
+            }
+            if (_speedBased)
+            {
                 // Reset duration based on value changes and speed.
                 // Can't be done sooner because it needs to startup the plugins first.
                 _duration = 0;
-                foreach ( ABSTweenPlugin plug in plugins ) {
-                    if ( plug.duration > _duration )        _duration = plug.duration;
+                foreach (ABSTweenPlugin plug in plugins)
+                {
+                    if (plug.duration > _duration)
+                    {
+                        _duration = plug.duration;
+                    }
                 }
                 SetFullDuration();
             }
@@ -502,12 +700,15 @@ namespace Holoville.HOTween
         /// <summary>
         /// Manages on first start behaviour.
         /// </summary>
-        override protected void OnStart()
+        protected override void OnStart()
         {
-            if ( ignoreCallbacks )        return;
+            if (ignoreCallbacks)
+            {
+                return;
+            }
 
             // Add tween to OverwriteManager.
-            HOTween.overwriteMngr.AddTween( this );
+            HOTween.overwriteMngr.AddTween(this);
 
             base.OnStart();
         }
@@ -519,12 +720,17 @@ namespace Holoville.HOTween
         /// Fills the given list with all the plugins inside this tween.
         /// Used by <c>HOTween.GetPlugins</c>.
         /// </summary>
-        override internal void FillPluginsList( List<ABSTweenPlugin> p_plugs )
+        internal override void FillPluginsList(List<ABSTweenPlugin> p_plugs)
         {
-            if ( plugins == null )                return;
+            if (plugins == null)
+            {
+                return;
+            }
 
-            for ( int i = 0; i < plugins.Count; ++i )        p_plugs.Add( plugins[i] );
+            for (int i = 0; i < plugins.Count; ++i)
+            {
+                p_plugs.Add(plugins[i]);
+            }
         }
     }
 }
-

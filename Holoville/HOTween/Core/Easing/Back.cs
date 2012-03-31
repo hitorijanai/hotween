@@ -1,4 +1,4 @@
-//
+﻿//
 // Back.cs
 //
 // Author: Daniele Giardini (C# port of the easing equations created by Robert Penner - http://robertpenner.com/easing)
@@ -33,7 +33,7 @@ namespace Holoville.HOTween.Core.Easing
     /// <summary>
     /// This class contains a C# port of the easing equations created by Robert Penner (http://robertpenner.com/easing).
     /// </summary>
-    static public class Back
+    public static class Back
     {
         /// <summary>
         /// Tween.
@@ -53,7 +53,11 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseIn ( float t, float b, float c, float d ) { return EaseIn( t, b, c, d, 1.70158f ); }
+        public static float EaseIn(float t, float b, float c, float d)
+        {
+            return EaseIn(t, b, c, d, 1.70158f);
+        }
+
         /// <summary>
         /// Tween.
         /// </summary>
@@ -75,9 +79,9 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseIn ( float t, float b, float c, float d, float s )
+        public static float EaseIn(float t, float b, float c, float d, float s)
         {
-            return c*(t/=d)*t*((s+1)*t - s) + b;
+            return c*(t /= d)*t*((s + 1)*t - s) + b;
         }
 
         /// <summary>
@@ -98,7 +102,11 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseOut ( float t, float b, float c, float d ) { return EaseOut( t, b, c, d, 1.70158f ); }
+        public static float EaseOut(float t, float b, float c, float d)
+        {
+            return EaseOut(t, b, c, d, 1.70158f);
+        }
+
         /// <summary>
         /// Tween.
         /// </summary>
@@ -120,9 +128,9 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseOut ( float t, float b, float c, float d, float s )
+        public static float EaseOut(float t, float b, float c, float d, float s)
         {
-            return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+            return c*((t = t/d - 1)*t*((s + 1)*t + s) + 1) + b;
         }
 
         /// <summary>
@@ -143,7 +151,11 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseInOut ( float t, float b, float c, float d ) { return EaseInOut( t, b, c, d, 1.70158f ); }
+        public static float EaseInOut(float t, float b, float c, float d)
+        {
+            return EaseInOut(t, b, c, d, 1.70158f);
+        }
+
         /// <summary>
         /// Tween.
         /// </summary>
@@ -165,11 +177,13 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseInOut ( float t, float b, float c, float d, float s )
+        public static float EaseInOut(float t, float b, float c, float d, float s)
         {
-            if ((t/=d*0.5f) < 1) return c*0.5f*(t*t*(((s*=(1.525f))+1)*t - s)) + b;
-            return c/2*((t-=2)*t*(((s*=(1.525f))+1)*t + s) + 2) + b;
+            if ((t /= d*0.5f) < 1)
+            {
+                return c*0.5f*(t*t*(((s *= (1.525f)) + 1)*t - s)) + b;
+            }
+            return c/2*((t -= 2)*t*(((s *= (1.525f)) + 1)*t + s) + 2) + b;
         }
     }
 }
-

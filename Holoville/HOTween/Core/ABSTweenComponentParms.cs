@@ -28,127 +28,154 @@ namespace Holoville.HOTween.Core
     /// <summary>
     /// Base class for all HOTParms.
     /// </summary>
-    abstract public class ABSTweenComponentParms
+    public abstract class ABSTweenComponentParms
     {
         // VARS ///////////////////////////////////////////////////
 
         /// <summary>
         /// ID.
         /// </summary>
-        protected    string                            id = "";
+        protected string id = "";
+
         /// <summary>
         /// Int ID.
         /// </summary>
-        protected    int                                intId = -1;
+        protected int intId = -1;
+
         /// <summary>
         /// Auto kill on complete.
         /// </summary>
-        protected    bool                            autoKillOnComplete = true;
+        protected bool autoKillOnComplete = true;
+
         /// <summary>
         /// Update type.
         /// </summary>
-        protected    UpdateType                        updateType = HOTween.defUpdateType;
+        protected UpdateType updateType = HOTween.defUpdateType;
+
         /// <summary>
         /// Time scale.
         /// </summary>
-        protected    float                            timeScale = HOTween.defTimeScale;
+        protected float timeScale = HOTween.defTimeScale;
+
         /// <summary>
         /// Loops
         /// </summary>
-        protected    int                                loops = 1;
+        protected int loops = 1;
+
         /// <summary>
         /// Loop type.
         /// </summary>
-        protected    LoopType                        loopType = HOTween.defLoopType;
+        protected LoopType loopType = HOTween.defLoopType;
+
         /// <summary>
         /// Paused.
         /// </summary>
-        protected    bool                            isPaused;
+        protected bool isPaused;
 
         /// <summary>
         /// On start.
         /// </summary>
-        protected    TweenDelegate.TweenCallback                onStart;
+        protected TweenDelegate.TweenCallback onStart;
+
         /// <summary>
         /// On start with parms.
         /// </summary>
-        protected    TweenDelegate.TweenCallbackWParms        onStartWParms;
+        protected TweenDelegate.TweenCallbackWParms onStartWParms;
+
         /// <summary>
         /// On start parameters.
         /// </summary>
-        protected    object[]                                onStartParms;
+        protected object[] onStartParms;
+
         /// <summary>
         /// On update.
         /// </summary>
-        protected    TweenDelegate.TweenCallback                onUpdate;
+        protected TweenDelegate.TweenCallback onUpdate;
+
         /// <summary>
         /// On update with parms.
         /// </summary>
-        protected    TweenDelegate.TweenCallbackWParms        onUpdateWParms;
+        protected TweenDelegate.TweenCallbackWParms onUpdateWParms;
+
         /// <summary>
         /// On update parameters.
         /// </summary>
-        protected    object[]                                onUpdateParms;
+        protected object[] onUpdateParms;
+
         /// <summary>
         /// On pause.
         /// </summary>
-        protected    TweenDelegate.TweenCallback                onPause;
+        protected TweenDelegate.TweenCallback onPause;
+
         /// <summary>
         /// On pause with parms.
         /// </summary>
-        protected    TweenDelegate.TweenCallbackWParms        onPauseWParms;
+        protected TweenDelegate.TweenCallbackWParms onPauseWParms;
+
         /// <summary>
         /// On pause parameters.
         /// </summary>
-        protected    object[]                                onPauseParms;
+        protected object[] onPauseParms;
+
         /// <summary>
         /// On play.
         /// </summary>
-        protected    TweenDelegate.TweenCallback                onPlay;
+        protected TweenDelegate.TweenCallback onPlay;
+
         /// <summary>
         /// On play with parms.
         /// </summary>
-        protected    TweenDelegate.TweenCallbackWParms        onPlayWParms;
+        protected TweenDelegate.TweenCallbackWParms onPlayWParms;
+
         /// <summary>
         /// On play parameters.
         /// </summary>
-        protected    object[]                                onPlayParms;
+        protected object[] onPlayParms;
+
         /// <summary>
         /// On rewinded.
         /// </summary>
-        protected    TweenDelegate.TweenCallback                onRewinded;
+        protected TweenDelegate.TweenCallback onRewinded;
+
         /// <summary>
         /// On rewinded with parms.
         /// </summary>
-        protected    TweenDelegate.TweenCallbackWParms        onRewindedWParms;
+        protected TweenDelegate.TweenCallbackWParms onRewindedWParms;
+
         /// <summary>
         /// On rewinded parameters.
         /// </summary>
-        protected    object[]                                onRewindedParms;
+        protected object[] onRewindedParms;
+
         /// <summary>
         /// On step complete.
         /// </summary>
-        protected    TweenDelegate.TweenCallback                onStepComplete;
+        protected TweenDelegate.TweenCallback onStepComplete;
+
         /// <summary>
         /// On step complete with parms.
         /// </summary>
-        protected    TweenDelegate.TweenCallbackWParms        onStepCompleteWParms;
+        protected TweenDelegate.TweenCallbackWParms onStepCompleteWParms;
+
         /// <summary>
         /// On step complete parameters.
         /// </summary>
-        protected    object[]                                onStepCompleteParms;
+        protected object[] onStepCompleteParms;
+
         /// <summary>
         /// On complete.
         /// </summary>
-        protected    TweenDelegate.TweenCallback                onComplete;
+        protected TweenDelegate.TweenCallback onComplete;
+
         /// <summary>
         /// On complete with parms.
         /// </summary>
-        protected    TweenDelegate.TweenCallbackWParms        onCompleteWParms;
+        protected TweenDelegate.TweenCallbackWParms onCompleteWParms;
+
         /// <summary>
         /// On complete parameters.
         /// </summary>
-        protected    object[]                                onCompleteParms;
+        protected object[] onCompleteParms;
 
 
         // ***********************************************************************************
@@ -161,7 +188,7 @@ namespace Holoville.HOTween.Core
         /// <param name="p_owner">
         /// The <see cref="ABSTweenComponent"/> to initialize.
         /// </param>
-        protected void InitializeOwner( ABSTweenComponent p_owner )
+        protected void InitializeOwner(ABSTweenComponent p_owner)
         {
             p_owner._id = id;
             p_owner._intId = intId;
@@ -196,4 +223,3 @@ namespace Holoville.HOTween.Core
         }
     }
 }
-

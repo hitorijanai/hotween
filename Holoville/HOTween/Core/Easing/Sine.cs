@@ -35,9 +35,9 @@ namespace Holoville.HOTween.Core.Easing
     /// <summary>
     /// This class contains a C# port of the easing equations created by Robert Penner (http://http://robertpenner.com/easing).
     /// </summary>
-    static public class Sine
+    public static class Sine
     {
-        private const    float    _HALF_PI = Mathf.PI * 0.5f;
+        const float _HALF_PI = Mathf.PI*0.5f;
 
         /// <summary>
         /// Tween.
@@ -57,9 +57,9 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseIn ( float t, float b, float c, float d )
+        public static float EaseIn(float t, float b, float c, float d)
         {
-            return -c * Mathf.Cos(t/d * _HALF_PI) + c + b;
+            return -c*Mathf.Cos(t/d*_HALF_PI) + c + b;
         }
 
         /// <summary>
@@ -80,9 +80,9 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseOut ( float t, float b, float c, float d )
+        public static float EaseOut(float t, float b, float c, float d)
         {
-            return c * Mathf.Sin(t/d * _HALF_PI) + b;
+            return c*Mathf.Sin(t/d*_HALF_PI) + b;
         }
 
         /// <summary>
@@ -103,10 +103,9 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseInOut ( float t, float b, float c, float d )
+        public static float EaseInOut(float t, float b, float c, float d)
         {
-            return -c*0.5f * (Mathf.Cos(Mathf.PI*t/d) - 1) + b;
+            return -c*0.5f*(Mathf.Cos(Mathf.PI*t/d) - 1) + b;
         }
     }
 }
-

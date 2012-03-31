@@ -35,20 +35,20 @@ namespace Holoville.HOTween.Core
     /// Base class for all HOTween members
     /// (<see cref="Tweener"/> and <see cref="Sequence"/>).
     /// </summary>
-    abstract public class ABSTweenComponent : IHOTweenComponent
+    public abstract class ABSTweenComponent : IHOTweenComponent
     {
         // VARS ///////////////////////////////////////////////////
 
-        internal    string                        _id = "";
-        internal    int                            _intId = -1;
-        internal    bool                        _autoKillOnComplete = true;
-        internal    bool                        _enabled = true;
-        internal    float                        _timeScale = HOTween.defTimeScale;
-        internal    int                            _loops = 1;
-        internal    LoopType                    _loopType = HOTween.defLoopType;
+        internal string _id = "";
+        internal int _intId = -1;
+        internal bool _autoKillOnComplete = true;
+        internal bool _enabled = true;
+        internal float _timeScale = HOTween.defTimeScale;
+        internal int _loops = 1;
+        internal LoopType _loopType = HOTween.defLoopType;
 
-        internal    UpdateType                    _updateType = HOTween.defUpdateType;
-        internal    bool                        _isPaused;
+        internal UpdateType _updateType = HOTween.defUpdateType;
+        internal bool _isPaused;
 
         /// <summary>
         /// Always set to TRUE by Update(), if isStartupIteration is true,
@@ -56,80 +56,98 @@ namespace Holoville.HOTween.Core
         /// Can also be set to TRUE by Sequence.TweenStartupIteration,
         /// and then immediately reset to FALSE.
         /// </summary>
-        internal    bool                        ignoreCallbacks;
-        internal    Sequence                    contSequence; // Eventual sequence containing this tween.
-        internal    bool                        startupDone = false;
+        internal bool ignoreCallbacks;
 
-        internal    TweenDelegate.TweenCallback            onStart;
-        internal    TweenDelegate.TweenCallbackWParms    onStartWParms;
-        internal    object[]                            onStartParms;
-        internal    TweenDelegate.TweenCallback            onUpdate;
-        internal    TweenDelegate.TweenCallbackWParms    onUpdateWParms;
-        internal    object[]                            onUpdateParms;
-        internal    TweenDelegate.TweenCallback            onPause;
-        internal    TweenDelegate.TweenCallbackWParms    onPauseWParms;
-        internal    object[]                            onPauseParms;
-        internal    TweenDelegate.TweenCallback            onPlay;
-        internal    TweenDelegate.TweenCallbackWParms    onPlayWParms;
-        internal    object[]                            onPlayParms;
-        internal    TweenDelegate.TweenCallback            onRewinded;
-        internal    TweenDelegate.TweenCallbackWParms    onRewindedWParms;
-        internal    object[]                            onRewindedParms;
-        internal    TweenDelegate.TweenCallback            onStepComplete;
-        internal    TweenDelegate.TweenCallbackWParms    onStepCompleteWParms;
-        internal    object[]                            onStepCompleteParms;
-        internal    TweenDelegate.TweenCallback            onComplete;
-        internal    TweenDelegate.TweenCallbackWParms    onCompleteWParms;
-        internal    object[]                            onCompleteParms;
+        internal Sequence contSequence; // Eventual sequence containing this tween.
+        internal bool startupDone;
+
+        internal TweenDelegate.TweenCallback onStart;
+        internal TweenDelegate.TweenCallbackWParms onStartWParms;
+        internal object[] onStartParms;
+
+        internal TweenDelegate.TweenCallback onUpdate;
+        internal TweenDelegate.TweenCallbackWParms onUpdateWParms;
+        internal object[] onUpdateParms;
+
+        internal TweenDelegate.TweenCallback onPause;
+        internal TweenDelegate.TweenCallbackWParms onPauseWParms;
+        internal object[] onPauseParms;
+
+        internal TweenDelegate.TweenCallback onPlay;
+        internal TweenDelegate.TweenCallbackWParms onPlayWParms;
+        internal object[] onPlayParms;
+
+        internal TweenDelegate.TweenCallback onRewinded;
+        internal TweenDelegate.TweenCallbackWParms onRewindedWParms;
+        internal object[] onRewindedParms;
+
+        internal TweenDelegate.TweenCallback onStepComplete;
+        internal TweenDelegate.TweenCallbackWParms onStepCompleteWParms;
+        internal object[] onStepCompleteParms;
+
+        internal TweenDelegate.TweenCallback onComplete;
+        internal TweenDelegate.TweenCallbackWParms onCompleteWParms;
+        internal object[] onCompleteParms;
 
         /// <summary>
         /// Completed loops.
         /// </summary>
-        protected    int                            _completedLoops = 0;
+        protected int _completedLoops;
+
         /// <summary>
         /// Duration.
         /// </summary>
-        protected    float                        _duration = 0;
+        protected float _duration;
+
         /// <summary>
         /// Full duration.
         /// </summary>
-        protected    float                        _fullDuration = 0;
+        protected float _fullDuration;
+
         /// <summary>
         /// Elapsed.
         /// </summary>
-        protected    float                        _elapsed = 0;
+        protected float _elapsed;
+
         /// <summary>
         /// Full elapsed.
         /// </summary>
-        protected    float                        _fullElapsed = 0;
+        protected float _fullElapsed;
+
         /// <summary>
         /// Destroyed.
         /// </summary>
-        protected    bool                        _destroyed;
+        protected bool _destroyed;
+
         /// <summary>
         /// Is empty.
         /// </summary>
-        protected    bool                        _isEmpty = true;
+        protected bool _isEmpty = true;
+
         /// <summary>
         /// Running backwards.
         /// </summary>
-        protected    bool                        _isReversed;
+        protected bool _isReversed;
+
         /// <summary>
         /// Yoyo looping back.
         /// </summary>
-        protected    bool                        _isLoopingBack;
+        protected bool _isLoopingBack;
+
         /// <summary>
         /// Has started.
         /// </summary>
-        protected    bool                        _hasStarted;
+        protected bool _hasStarted;
+
         /// <summary>
         /// Is complete.
         /// </summary>
-        protected    bool                        _isComplete;
+        protected bool _isComplete;
+
         /// <summary>
         /// Used to determine if OnUpdate callbacks should be called.
         /// </summary>
-        protected    float                        prevFullElapsed = 0;
+        protected float prevFullElapsed;
 
         // GETS/SETS //////////////////////////////////////////////
 
@@ -138,73 +156,129 @@ namespace Holoville.HOTween.Core
         /// (more than one Tweener/Sequence can share the same ID, thus allowing for grouped operations).
         /// You can also use <c>intId</c> instead of <c>id</c> for faster operations.
         /// </summary>
-        public        string                    id
+        public string id
         {
-            get { return _id; }
-            set { _id = value; }
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                _id = value;
+            }
         }
+
         /// <summary>
         /// Eventual int ID of this Tweener/Sequence
         /// (more than one Tweener/Sequence can share the same intId, thus allowing for grouped operations).
         /// The main difference from <c>id</c> is that while <c>id</c> is more legible, <c>intId</c> allows for faster operations.
         /// </summary>
-        public        int                        intId
+        public int intId
         {
-            get { return _intId; }
-            set { _intId = value; }
+            get
+            {
+                return _intId;
+            }
+            set
+            {
+                _intId = value;
+            }
         }
+
         /// <summary>
         /// Default is <c>true</c>, which means this Tweener/Sequence will be killed and removed from HOTween as soon as it's completed.
         /// If <c>false</c> doesn't remove this Tweener/Sequence from HOTween when it is completed,
         /// and you will need to call an <c>HOTween.Kill</c> to remove this Tweener/Sequence.
         /// </summary>
-        public        bool                    autoKillOnComplete
+        public bool autoKillOnComplete
         {
-            get { return _autoKillOnComplete; }
-            set { _autoKillOnComplete = value; }
+            get
+            {
+                return _autoKillOnComplete;
+            }
+            set
+            {
+                _autoKillOnComplete = value;
+            }
         }
+
         /// <summary>
         /// Default is <c>true</c>.
         /// If set to <c>false</c>, this Tweener/Sequence will not be updated,
         /// and any use of animation methods (Play/Pause/Rewind/etc) will be ignored
         /// (both if called directly via this instance, than if using HOTween.Play/Pause/Rewind/etc.).
         /// </summary>
-        public        bool                    enabled
+        public bool enabled
         {
-            get { return _enabled; }
-            set { _enabled = value; }
+            get
+            {
+                return _enabled;
+            }
+            set
+            {
+                _enabled = value;
+            }
         }
+
         /// <summary>
         /// Time scale that will be used by this Tweener/Sequence.
         /// </summary>
-        public        float                    timeScale
+        public float timeScale
         {
-            get { return _timeScale; }
-            set { _timeScale = value; }
+            get
+            {
+                return _timeScale;
+            }
+            set
+            {
+                _timeScale = value;
+            }
         }
+
         /// <summary>
         /// Number of times the Tweener/Sequence will run (<c>-1</c> means the tween has infinite loops).
         /// </summary>
-        public        int                        loops
+        public int loops
         {
-            get { return _loops; }
-            set { _loops = value; SetFullDuration(); }
+            get
+            {
+                return _loops;
+            }
+            set
+            {
+                _loops = value;
+                SetFullDuration();
+            }
         }
+
         /// <summary>
         /// Type of loop for this Tweener/Sequence, in case <see cref="loops"/> is greater than 1 (or infinite).
         /// </summary>
-        public        LoopType                loopType
+        public LoopType loopType
         {
-            get { return _loopType; }
-            set { _loopType = value; }
+            get
+            {
+                return _loopType;
+            }
+            set
+            {
+                _loopType = value;
+            }
         }
+
         /// <summary>
         /// Gets and sets the time position of the Tweener/Sequence (loops are included when not infinite, delay is not).
         /// </summary>
-        public        float                    position
+        public float position
         {
-            get { return ( _loops < 1 ? _elapsed : _fullElapsed ); }
-            set { GoTo( value, !_isPaused ); }
+            get
+            {
+                return (_loops < 1 ? _elapsed : _fullElapsed);
+            }
+            set
+            {
+                GoTo(value, !_isPaused);
+            }
         }
 
         // READ-ONLY GETS /////////////////////////////////////////
@@ -212,106 +286,159 @@ namespace Holoville.HOTween.Core
         /// <summary>
         /// Duration of this Tweener/Sequence, loops and tween delay excluded.
         /// </summary>
-        public        float                    duration
+        public float duration
         {
-            get { return _duration; }
+            get
+            {
+                return _duration;
+            }
         }
+
         /// <summary>
         /// Full duration of this Tweener/Sequence, loops included (when not infinite) but tween delay excluded.
         /// </summary>
-        public        float                    fullDuration
+        public float fullDuration
         {
-            get { return _fullDuration; }
+            get
+            {
+                return _fullDuration;
+            }
         }
+
         /// <summary>
         /// Elapsed time within the current loop (tween delay excluded).
         /// </summary>
-        public        float                    elapsed
+        public float elapsed
         {
-            get { return _elapsed; }
+            get
+            {
+                return _elapsed;
+            }
         }
+
         /// <summary>
         /// Full elapsed time including loops (but without considering tween delay).
         /// </summary>
-        public        float                    fullElapsed
+        public float fullElapsed
         {
-            get { return _fullElapsed; }
+            get
+            {
+                return _fullElapsed;
+            }
         }
+
         /// <summary>
         /// The update type for this Tweener/Sequence.
         /// </summary>
-        public        UpdateType                updateType
+        public UpdateType updateType
         {
-            get { return _updateType; }
+            get
+            {
+                return _updateType;
+            }
         }
+
         /// <summary>
         /// Number of loops that have been executed.
         /// </summary>
-        public        int                        completedLoops
+        public int completedLoops
         {
-            get { return _completedLoops; }
+            get
+            {
+                return _completedLoops;
+            }
         }
+
         /// <summary>
         /// Returns a value of <c>true</c> if this Tweener/Sequence was destroyed
         /// (either because it was manually destroyed, because it was completed, or because its target was destroyed).
         /// </summary>
-        public        bool                    destroyed
+        public bool destroyed
         {
-            get { return _destroyed; }
+            get
+            {
+                return _destroyed;
+            }
         }
+
         /// <summary>
         /// Returns a value of <c>true</c> if this Tweener/Sequence contains no tweens
         /// (if this is a tween, it means that no valid property to tween was set;
         /// if this is a sequence, it means no valid <see cref="Tweener"/> was yet added).
         /// </summary>
-        public        bool                    isEmpty
+        public bool isEmpty
         {
-            get { return _isEmpty; }
+            get
+            {
+                return _isEmpty;
+            }
         }
+
         /// <summary>
         /// Returns a value of <c>true</c> if this Tweener/Sequence is set to go backwards (because of a call to <c>Reverse</c>.
         /// </summary>
-        public        bool                    isReversed
+        public bool isReversed
         {
-            get { return _isReversed; }
+            get
+            {
+                return _isReversed;
+            }
         }
+
         /// <summary>
         /// Returns a value of <c>true</c> when this Tweener/Sequence is in the "going backwards" part of a Yoyo loop.
         /// </summary>
-        public        bool                    isLoopingBack
+        public bool isLoopingBack
         {
-            get { return _isLoopingBack; }
+            get
+            {
+                return _isLoopingBack;
+            }
         }
+
         /// <summary>
         /// Returns a value of <c>true</c> if this Tweener/Sequence is paused.
         /// </summary>
-        public        bool                    isPaused
+        public bool isPaused
         {
-            get { return _isPaused; }
+            get
+            {
+                return _isPaused;
+            }
         }
+
         /// <summary>
         /// Returns a value of <c>true</c> after this Tweener/Sequence was started the first time,
         /// or if a call to <c>GoTo</c> or <c>GoToAndPlay</c> was executed.
         /// </summary>
-        public        bool                    hasStarted
+        public bool hasStarted
         {
-            get { return _hasStarted; }
+            get
+            {
+                return _hasStarted;
+            }
         }
 
         /// <summary>
         /// Returns a value of <c>true</c> when this Tweener/Sequence is complete.
         /// </summary>
-        public        bool                    isComplete
+        public bool isComplete
         {
-            get { return _isComplete; }
+            get
+            {
+                return _isComplete;
+            }
         }
 
         /// <summary>
         /// Returns a value of <c>true</c> if this Tweener/Sequence was added to a Sequence.
         /// </summary>
-        public        bool                    isSequenced
+        public bool isSequenced
         {
-            get { return contSequence != null; }
+            get
+            {
+                return contSequence != null;
+            }
         }
 
 
@@ -321,7 +448,11 @@ namespace Holoville.HOTween.Core
         /// <summary>
         /// Kills this Tweener/Sequence, removes it from HOTween, and cleans it.
         /// </summary>
-        public void Kill() { Kill( true ); }
+        public void Kill()
+        {
+            Kill(true);
+        }
+
         /// <summary>
         /// Kills this Tweener/Sequence and cleans it.
         /// </summary>
@@ -329,12 +460,18 @@ namespace Holoville.HOTween.Core
         /// If <c>true</c> also calls <c>HOTween.Kill(this)</c> to remove it from HOTween.
         /// Set internally to <c>false</c> when I already know that HOTween is going to remove it.
         /// </param>
-        virtual internal void Kill( bool p_autoRemoveFromHOTween )
+        internal virtual void Kill(bool p_autoRemoveFromHOTween)
         {
-            if ( _destroyed )                    return;
+            if (_destroyed)
+            {
+                return;
+            }
 
             _destroyed = _isEmpty = true;
-            if ( p_autoRemoveFromHOTween )        HOTween.Kill( this );
+            if (p_autoRemoveFromHOTween)
+            {
+                HOTween.Kill(this);
+            }
         }
 
         /// <summary>
@@ -342,10 +479,16 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void Play()
         {
-            if ( !_enabled )            return;
+            if (!_enabled)
+            {
+                return;
+            }
             bool wasPaused = _isPaused;
             _isPaused = false;
-            if ( wasPaused )            OnPlay();
+            if (wasPaused)
+            {
+                OnPlay();
+            }
         }
 
         /// <summary>
@@ -353,11 +496,20 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void PlayForward()
         {
-            if ( !_enabled )            return;
+            if (!_enabled)
+            {
+                return;
+            }
             bool wasPaused = _isPaused;
             _isPaused = false;
-            if ( _isReversed )            Reverse();
-            if ( wasPaused )            OnPlay();
+            if (_isReversed)
+            {
+                Reverse();
+            }
+            if (wasPaused)
+            {
+                OnPlay();
+            }
         }
 
         /// <summary>
@@ -365,11 +517,20 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void PlayBackwards()
         {
-            if ( !_enabled )            return;
+            if (!_enabled)
+            {
+                return;
+            }
             bool wasPaused = _isPaused;
             _isPaused = false;
-            if ( !_isReversed )            Reverse();
-            if ( wasPaused )            OnPlay();
+            if (!_isReversed)
+            {
+                Reverse();
+            }
+            if (wasPaused)
+            {
+                OnPlay();
+            }
         }
 
         /// <summary>
@@ -377,21 +538,27 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void Pause()
         {
-            if ( !_enabled )            return;
+            if (!_enabled)
+            {
+                return;
+            }
             bool wasPaused = _isPaused;
             _isPaused = true;
-            if ( !wasPaused )            OnPause();
+            if (!wasPaused)
+            {
+                OnPause();
+            }
         }
 
         /// <summary>
         /// Rewinds this Tweener/Sequence (loops and tween delay included), and pauses it.
         /// </summary>
-        abstract public void Rewind();
+        public abstract void Rewind();
 
         /// <summary>
         /// Restarts this Tweener/Sequence from the beginning (loops and tween delay included).
         /// </summary>
-        abstract public void Restart();
+        public abstract void Restart();
 
         /// <summary>
         /// Reverses this Tweener/Sequence,
@@ -399,7 +566,10 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void Reverse()
         {
-            if ( !_enabled )            return;
+            if (!_enabled)
+            {
+                return;
+            }
             _isReversed = !_isReversed;
         }
 
@@ -408,7 +578,10 @@ namespace Holoville.HOTween.Core
         /// Where a loop was involved, the Tweener/Sequence completes at the position where it would actually be after the set number of loops.
         /// If there were infinite loops, this method will have no effect.
         /// </summary>
-        public void Complete() { Complete( true ); }
+        public void Complete()
+        {
+            Complete(true);
+        }
 
         /// <summary>
         /// Sends the Tweener/Sequence to the given time (taking also loops into account).
@@ -420,7 +593,11 @@ namespace Holoville.HOTween.Core
         /// <returns>
         /// Returns <c>true</c> if the Tweener/Sequence reached its end and was completed.
         /// </returns>
-        public bool GoTo( float p_time ) { return GoTo( p_time, false, false ); }
+        public bool GoTo(float p_time)
+        {
+            return GoTo(p_time, false, false);
+        }
+
         /// <summary>
         /// Sends the Tweener/Sequence to the given time (taking also loops into account).
         /// If the time is bigger than the total Tweener/Sequence duration, it goes to the end.
@@ -437,7 +614,11 @@ namespace Holoville.HOTween.Core
         /// <returns>
         /// Returns <c>true</c> if the Tweener/Sequence reached its end and was completed.
         /// </returns>
-        public bool GoTo( float p_time, bool p_forceUpdate ) { return GoTo( p_time, false, p_forceUpdate ); }
+        public bool GoTo(float p_time, bool p_forceUpdate)
+        {
+            return GoTo(p_time, false, p_forceUpdate);
+        }
+
         /// <summary>
         /// Sends the Tweener/Sequence to the given time (taking also loops into account) and plays it.
         /// If the time is bigger than the total Tweener/Sequence duration, it goes to the end.
@@ -448,7 +629,11 @@ namespace Holoville.HOTween.Core
         /// <returns>
         /// Returns <c>true</c> if the Tweener/Sequence reached its end and was completed.
         /// </returns>
-        public bool GoToAndPlay( float p_time ) { return GoTo( p_time, true, false ); }
+        public bool GoToAndPlay(float p_time)
+        {
+            return GoTo(p_time, true, false);
+        }
+
         /// <summary>
         /// Sends the Tweener/Sequence to the given time (taking also loops into account) and plays it.
         /// If the time is bigger than the total Tweener/Sequence duration, it goes to the end.
@@ -465,7 +650,10 @@ namespace Holoville.HOTween.Core
         /// <returns>
         /// Returns <c>true</c> if the Tweener/Sequence reached its end and was completed.
         /// </returns>
-        public bool GoToAndPlay( float p_time, bool p_forceUpdate ) { return GoTo( p_time, true, p_forceUpdate ); }
+        public bool GoToAndPlay(float p_time, bool p_forceUpdate)
+        {
+            return GoTo(p_time, true, p_forceUpdate);
+        }
 
         /// <summary>
         /// A coroutine that waits until the Tweener/Sequence is complete (delays and loops included).
@@ -474,7 +662,10 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public IEnumerator WaitForCompletion()
         {
-            while ( !_isComplete )        yield return 0;
+            while (!_isComplete)
+            {
+                yield return 0;
+            }
             yield break;
         }
 
@@ -489,7 +680,7 @@ namespace Holoville.HOTween.Core
         /// <returns>
         /// A value of <c>true</c> if the given target is currently involved in a running tween or sequence.
         /// </returns>
-        abstract public bool IsTweening( object p_target );
+        public abstract bool IsTweening(object p_target);
 
         /// <summary>
         /// Returns <c>true</c> if the given target is linked to a tween or sequence (running or not).
@@ -500,7 +691,7 @@ namespace Holoville.HOTween.Core
         /// <returns>
         /// A value of <c>true</c> if the given target is linked to a tween or sequence (running or not).
         /// </returns>
-        abstract public bool IsLinkedTo( object p_target );
+        public abstract bool IsLinkedTo(object p_target);
 
         // ===================================================================================
         // INTERNAL METHODS ------------------------------------------------------------------
@@ -508,7 +699,7 @@ namespace Holoville.HOTween.Core
         /// <summary>
         /// Used internally by HOTween, to avoid having the tween calling a kill while HOTween will already be killing it.
         /// </summary>
-        abstract internal void Complete( bool p_doAutoKill );
+        internal abstract void Complete(bool p_doAutoKill);
 
         /// <summary>
         /// Updates the Tweener/Sequence by the given elapsed time,
@@ -520,7 +711,11 @@ namespace Holoville.HOTween.Core
         /// <returns>
         /// A value of <c>true</c> if the tween is not reversed and is complete (or the tween target doesn't exist anymore), otherwise <c>false</c>.
         /// </returns>
-        internal bool Update( float p_elapsed ) { return Update( p_elapsed, false, false ); }
+        internal bool Update(float p_elapsed)
+        {
+            return Update(p_elapsed, false, false);
+        }
+
         /// <summary>
         /// Updates the Tweener/Sequence by the given elapsed time,
         /// and returns a value of <c>true</c> if the Tweener/Sequence is complete.
@@ -535,7 +730,11 @@ namespace Holoville.HOTween.Core
         /// <returns>
         /// A value of <c>true</c> if the tween is not reversed and complete (or the tween target doesn't exist anymore), otherwise <c>false</c>.
         /// </returns>
-        internal bool Update( float p_elapsed, bool p_forceUpdate ) { return Update( p_elapsed, p_forceUpdate, false ); }
+        internal bool Update(float p_elapsed, bool p_forceUpdate)
+        {
+            return Update(p_elapsed, p_forceUpdate, false);
+        }
+
         /// <summary>
         /// Updates the Tweener/Sequence by the given elapsed time,
         /// and returns a value of <c>true</c> if the Tweener/Sequence is complete.
@@ -554,7 +753,7 @@ namespace Holoville.HOTween.Core
         /// <returns>
         /// A value of <c>true</c> if the tween is not reversed and complete (or the tween target doesn't exist anymore), otherwise <c>false</c>.
         /// </returns>
-        abstract internal bool Update( float p_elapsed, bool p_forceUpdate, bool p_isStartupIteration );
+        internal abstract bool Update(float p_elapsed, bool p_forceUpdate, bool p_isStartupIteration);
 
         /// <summary>
         /// Applies the correct Incremental Sequence loop value.
@@ -563,7 +762,7 @@ namespace Holoville.HOTween.Core
         /// <param name="p_diffIncr">
         /// The difference from the previous main Sequence loop increment.
         /// </param>
-        abstract internal void SetIncremental( int p_diffIncr );
+        internal abstract void SetIncremental(int p_diffIncr);
 
         // ===================================================================================
         // PRIVATE METHODS -------------------------------------------------------------------
@@ -572,14 +771,14 @@ namespace Holoville.HOTween.Core
         /// Sends the Tweener/Sequence to the given time (taking also loops into account) and plays it.
         /// If the time is bigger than the total Tweener/Sequence duration, it goes to the end.
         /// </summary>
-        abstract protected bool GoTo( float p_time, bool p_play, bool p_forceUpdate );
+        protected abstract bool GoTo(float p_time, bool p_play, bool p_forceUpdate);
 
         /// <summary>
         /// Startup this tween
         /// (might or might not all OnStart, depending if the tween is in a Sequence or not).
         /// Can be executed only once per tween.
         /// </summary>
-        virtual protected void Startup()
+        protected virtual void Startup()
         {
             startupDone = true;
         }
@@ -587,14 +786,20 @@ namespace Holoville.HOTween.Core
         /// <summary>
         /// Manages on first start behaviour.
         /// </summary>
-        virtual protected void OnStart()
+        protected virtual void OnStart()
         {
-            if ( ignoreCallbacks )                            return;
+            if (ignoreCallbacks)
+            {
+                return;
+            }
             _hasStarted = true;
-            if ( onStart != null ) {
+            if (onStart != null)
+            {
                 onStart();
-            } else if ( onStartWParms != null ) {
-                onStartWParms( new TweenEvent( this, onStartParms ) );
+            }
+            else if (onStartWParms != null)
+            {
+                onStartWParms(new TweenEvent(this, onStartParms));
             }
         }
 
@@ -603,11 +808,17 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnUpdate()
         {
-            if ( ignoreCallbacks )                            return;
-            if ( onUpdate != null ) {
+            if (ignoreCallbacks)
+            {
+                return;
+            }
+            if (onUpdate != null)
+            {
                 onUpdate();
-            } else if ( onUpdateWParms != null ) {
-                onUpdateWParms( new TweenEvent( this, onUpdateParms ) );
+            }
+            else if (onUpdateWParms != null)
+            {
+                onUpdateWParms(new TweenEvent(this, onUpdateParms));
             }
         }
 
@@ -616,11 +827,17 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnPause()
         {
-            if ( ignoreCallbacks )                            return;
-            if ( onPause != null ) {
+            if (ignoreCallbacks)
+            {
+                return;
+            }
+            if (onPause != null)
+            {
                 onPause();
-            } else if ( onPauseWParms != null ) {
-                onPauseWParms( new TweenEvent( this, onPauseParms ) );
+            }
+            else if (onPauseWParms != null)
+            {
+                onPauseWParms(new TweenEvent(this, onPauseParms));
             }
         }
 
@@ -629,11 +846,17 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnPlay()
         {
-            if ( ignoreCallbacks )                            return;
-            if ( onPlay != null ) {
+            if (ignoreCallbacks)
+            {
+                return;
+            }
+            if (onPlay != null)
+            {
                 onPlay();
-            } else if ( onPlayWParms != null ) {
-                onPlayWParms( new TweenEvent( this, onPlayParms ) );
+            }
+            else if (onPlayWParms != null)
+            {
+                onPlayWParms(new TweenEvent(this, onPlayParms));
             }
         }
 
@@ -642,11 +865,17 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnRewinded()
         {
-            if ( ignoreCallbacks )                            return;
-            if ( onRewinded != null ) {
+            if (ignoreCallbacks)
+            {
+                return;
+            }
+            if (onRewinded != null)
+            {
                 onRewinded();
-            } else if ( onRewindedWParms != null ) {
-                onRewindedWParms( new TweenEvent( this, onRewindedParms ) );
+            }
+            else if (onRewindedWParms != null)
+            {
+                onRewindedWParms(new TweenEvent(this, onRewindedParms));
             }
         }
 
@@ -655,11 +884,17 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnStepComplete()
         {
-            if ( ignoreCallbacks )                            return;
-            if ( onStepComplete != null ) {
+            if (ignoreCallbacks)
+            {
+                return;
+            }
+            if (onStepComplete != null)
+            {
                 onStepComplete();
-            } else if ( onStepCompleteWParms != null ) {
-                onStepCompleteWParms( new TweenEvent( this, onStepCompleteParms ) );
+            }
+            else if (onStepCompleteWParms != null)
+            {
+                onStepCompleteWParms(new TweenEvent(this, onStepCompleteParms));
             }
         }
 
@@ -670,8 +905,14 @@ namespace Holoville.HOTween.Core
         {
             _isComplete = true;
             OnStepComplete();
-            if ( ignoreCallbacks )                                    return;
-            if ( onComplete != null || onCompleteWParms != null )    HOTween.onCompletes.Add( this ); // delegate to HOTween which will call OnCompleteDispatch after this tween is eventually destroyed.
+            if (ignoreCallbacks)
+            {
+                return;
+            }
+            if (onComplete != null || onCompleteWParms != null)
+            {
+                HOTween.onCompletes.Add(this); // delegate to HOTween which will call OnCompleteDispatch after this tween is eventually destroyed.
+            }
         }
 
         /// <summary>
@@ -679,10 +920,13 @@ namespace Holoville.HOTween.Core
         /// </summary>
         internal void OnCompleteDispatch()
         {
-            if ( onComplete != null ) {
+            if (onComplete != null)
+            {
                 onComplete();
-            } else if ( onCompleteWParms != null ) {
-                onCompleteWParms( new TweenEvent( this, onCompleteParms ) );
+            }
+            else if (onCompleteWParms != null)
+            {
+                onCompleteWParms(new TweenEvent(this, onCompleteParms));
             }
         }
 
@@ -692,7 +936,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void SetFullDuration()
         {
-            _fullDuration = ( _loops < 0 ? Mathf.Infinity : _duration * _loops );
+            _fullDuration = (_loops < 0 ? Mathf.Infinity : _duration*_loops);
         }
 
         /// <summary>
@@ -701,12 +945,17 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void SetElapsed()
         {
-            if ( _loops >= 0 && _completedLoops >= _loops ) {
+            if (_loops >= 0 && _completedLoops >= _loops)
+            {
                 _elapsed = _duration;
-            } else if ( _fullElapsed < _duration ) {
+            }
+            else if (_fullElapsed < _duration)
+            {
                 _elapsed = _fullElapsed;
-            } else {
-                _elapsed = _fullElapsed % _duration;
+            }
+            else
+            {
+                _elapsed = _fullElapsed%_duration;
             }
         }
 
@@ -715,10 +964,10 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void SetLoops()
         {
-            _completedLoops = (int)Math.Floor( _fullElapsed / _duration ); // OPTIMIZE can't use (int) or tilde to Floor number because they're imprecise, but I should find a quicker solution.
-            _isLoopingBack = ( _loopType != LoopType.Restart && _loopType != LoopType.Incremental &&
-                ( _loops > 0 && ( _completedLoops < _loops && _completedLoops % 2 != 0 || _completedLoops >= _loops && _completedLoops % 2 == 0 )
-                || _loops < 0 && _completedLoops % 2 != 0 ) );
+            _completedLoops = (int)Math.Floor(_fullElapsed/_duration); // OPTIMIZE can't use (int) or tilde to Floor number because they're imprecise, but I should find a quicker solution.
+            _isLoopingBack = (_loopType != LoopType.Restart && _loopType != LoopType.Incremental &&
+                              (_loops > 0 && (_completedLoops < _loops && _completedLoops%2 != 0 || _completedLoops >= _loops && _completedLoops%2 == 0)
+                               || _loops < 0 && _completedLoops%2 != 0));
         }
 
         // ===================================================================================
@@ -729,7 +978,6 @@ namespace Holoville.HOTween.Core
         /// while also looking for them recursively through inner sequences.
         /// Used by <c>HOTween.GetPlugins</c>.
         /// </summary>
-        abstract internal void FillPluginsList( List<ABSTweenPlugin> p_plugs );
+        internal abstract void FillPluginsList(List<ABSTweenPlugin> p_plugs);
     }
 }
-

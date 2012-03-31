@@ -61,16 +61,16 @@ namespace FastDynamicMemberAccessor
         }
 
         //
-        private readonly Type _propertyType;
-        private readonly bool _canRead;
-        private readonly bool _canWrite;
+        readonly Type _propertyType;
+        readonly bool _canRead;
+        readonly bool _canWrite;
 
         protected override void _EmitSetter(TypeBuilder myType)
         {
             //
             // Define a method for the set operation.
             //
-            Type[] setParamTypes = new Type[] {typeof(object), typeof(object)};
+            Type[] setParamTypes = new[] {typeof(object), typeof(object)};
             Type setReturnType = null;
             MethodBuilder setMethod =
                 myType.DefineMethod("Set",
@@ -88,39 +88,39 @@ namespace FastDynamicMemberAccessor
             //
 
             MethodInfo targetSetMethod = _targetType.GetMethod("set_" + _fieldName);
-            if(targetSetMethod != null)
+            if (targetSetMethod != null)
             {
                 Type paramType = targetSetMethod.GetParameters()[0].ParameterType;
 
                 setIL.DeclareLocal(paramType);
-                setIL.Emit(OpCodes.Ldarg_1);                        //Load the first argument
+                setIL.Emit(OpCodes.Ldarg_1); //Load the first argument
                 //(target object)
 
-                setIL.Emit(OpCodes.Castclass, _targetType);    //Cast to the source type
+                setIL.Emit(OpCodes.Castclass, _targetType); //Cast to the source type
 
-                setIL.Emit(OpCodes.Ldarg_2);                        //Load the second argument
+                setIL.Emit(OpCodes.Ldarg_2); //Load the second argument
                 //(value object)
 
-                if(paramType.IsValueType)
+                if (paramType.IsValueType)
                 {
-                    setIL.Emit(OpCodes.Unbox, paramType);            //Unbox it
-                    if(s_TypeHash[paramType]!=null)                    //and load
+                    setIL.Emit(OpCodes.Unbox, paramType); //Unbox it
+                    if (s_TypeHash[paramType] != null) //and load
                     {
                         OpCode load = (OpCode)s_TypeHash[paramType];
                         setIL.Emit(load);
                     }
                     else
                     {
-                        setIL.Emit(OpCodes.Ldobj,paramType);
+                        setIL.Emit(OpCodes.Ldobj, paramType);
                     }
                 }
                 else
                 {
-                    setIL.Emit(OpCodes.Castclass, paramType);        //Cast class
+                    setIL.Emit(OpCodes.Castclass, paramType); //Cast class
                 }
 
                 setIL.EmitCall(OpCodes.Callvirt,
-                               targetSetMethod, null);                            //Set the property value
+                               targetSetMethod, null); //Set the property value
             }
             else
             {
@@ -135,7 +135,7 @@ namespace FastDynamicMemberAccessor
             //
             // Define a method for the get operation.
             //
-            Type[] getParamTypes = new Type[] {typeof(object)};
+            Type[] getParamTypes = new[] {typeof(object)};
             Type getReturnType = typeof(object);
             MethodBuilder getMethod =
                 myType.DefineMethod("Get",
@@ -155,22 +155,21 @@ namespace FastDynamicMemberAccessor
             //
             MethodInfo targetGetMethod = _targetType.GetMethod("get_" + _fieldName);
 
-            if(targetGetMethod != null)
+            if (targetGetMethod != null)
             {
-
                 getIL.DeclareLocal(typeof(object));
-                getIL.Emit(OpCodes.Ldarg_1);                                //Load the first argument
+                getIL.Emit(OpCodes.Ldarg_1); //Load the first argument
                 //(target object)
 
-                getIL.Emit(OpCodes.Castclass, _targetType);                    //Cast to the source type
+                getIL.Emit(OpCodes.Castclass, _targetType); //Cast to the source type
 
-                getIL.EmitCall(OpCodes.Call, targetGetMethod, null);        //Get the property value
+                getIL.EmitCall(OpCodes.Call, targetGetMethod, null); //Get the property value
 
-                if(targetGetMethod.ReturnType.IsValueType)
+                if (targetGetMethod.ReturnType.IsValueType)
                 {
-                    getIL.Emit(OpCodes.Box, targetGetMethod.ReturnType);    //Box if necessary
+                    getIL.Emit(OpCodes.Box, targetGetMethod.ReturnType); //Box if necessary
                 }
-                getIL.Emit(OpCodes.Stloc_0);                                //Store it
+                getIL.Emit(OpCodes.Stloc_0); //Store it
 
                 getIL.Emit(OpCodes.Ldloc_0);
             }

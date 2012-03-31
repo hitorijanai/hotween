@@ -32,11 +32,11 @@ namespace FastDynamicMemberAccessor
     /// <summary>
     /// Cache manager for James Nies' MemberAccessor classes
     /// </summary>
-    static internal class MemberAccessorCacher
+    internal static class MemberAccessorCacher
     {
         // VARS ///////////////////////////////////////////////////
 
-        static    private        Dictionary<Type,Dictionary<string,MemberAccessor>>        dcMemberAccessors;
+        static Dictionary<Type, Dictionary<string, MemberAccessor>> dcMemberAccessors;
 
 
         // ===================================================================================
@@ -46,17 +46,25 @@ namespace FastDynamicMemberAccessor
         /// Returns the cached memberAccessor if it alread exists,
         /// or calls MemberAccessor.Make and caches and returns the newly created MemberAccessor.
         /// </summary>
-        static internal MemberAccessor Make( Type p_targetType, string p_propName, PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo )
+        internal static MemberAccessor Make(Type p_targetType, string p_propName, PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo)
         {
-            if ( dcMemberAccessors != null && dcMemberAccessors.ContainsKey( p_targetType ) && dcMemberAccessors[p_targetType].ContainsKey( p_propName ) )
+            if (dcMemberAccessors != null && dcMemberAccessors.ContainsKey(p_targetType) && dcMemberAccessors[p_targetType].ContainsKey(p_propName))
+            {
                 return dcMemberAccessors[p_targetType][p_propName];
+            }
 
-            if ( dcMemberAccessors == null )                            dcMemberAccessors = new Dictionary<Type, Dictionary<string,MemberAccessor>>();
-            if ( !dcMemberAccessors.ContainsKey( p_targetType ) )        dcMemberAccessors.Add( p_targetType, new Dictionary<string, MemberAccessor>() );
-            Dictionary<string,MemberAccessor> dcFinal = dcMemberAccessors[p_targetType];
+            if (dcMemberAccessors == null)
+            {
+                dcMemberAccessors = new Dictionary<Type, Dictionary<string, MemberAccessor>>();
+            }
+            if (!dcMemberAccessors.ContainsKey(p_targetType))
+            {
+                dcMemberAccessors.Add(p_targetType, new Dictionary<string, MemberAccessor>());
+            }
+            Dictionary<string, MemberAccessor> dcFinal = dcMemberAccessors[p_targetType];
 
-            MemberAccessor ma = MemberAccessor.Make( p_propertyInfo, p_fieldInfo );
-            dcFinal.Add( p_propName, ma );
+            MemberAccessor ma = MemberAccessor.Make(p_propertyInfo, p_fieldInfo);
+            dcFinal.Add(p_propName, ma);
 
             return ma;
         }
@@ -64,10 +72,9 @@ namespace FastDynamicMemberAccessor
         /// <summary>
         /// Clears the cache.
         /// </summary>
-        static internal void Clear()
+        internal static void Clear()
         {
             dcMemberAccessors = null;
         }
     }
 }
-

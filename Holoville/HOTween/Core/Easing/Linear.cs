@@ -33,7 +33,7 @@ namespace Holoville.HOTween.Core.Easing
     /// <summary>
     /// This class contains a C# port of the easing equations created by Robert Penner (http://http://robertpenner.com/easing).
     /// </summary>
-    static public class Linear
+    public static class Linear
     {
         /// <summary>
         /// Tween.
@@ -53,7 +53,7 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseNone ( float t, float b, float c, float d )
+        public static float EaseNone(float t, float b, float c, float d)
         {
             return c*t/d + b;
         }
@@ -76,7 +76,7 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseIn ( float t, float b, float c, float d )
+        public static float EaseIn(float t, float b, float c, float d)
         {
             return c*t/d + b;
         }
@@ -99,7 +99,7 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseOut ( float t, float b, float c, float d )
+        public static float EaseOut(float t, float b, float c, float d)
         {
             return c*t/d + b;
         }
@@ -122,10 +122,9 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseInOut ( float t, float b, float c, float d )
+        public static float EaseInOut(float t, float b, float c, float d)
         {
             return c*t/d + b;
         }
     }
 }
-

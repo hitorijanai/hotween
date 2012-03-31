@@ -32,25 +32,31 @@ namespace Holoville.HOTween
     {
         // VARS ///////////////////////////////////////////////////
 
-        private readonly IHOTweenComponent        _tween;
-        private readonly object[]                _parms;
+        readonly IHOTweenComponent _tween;
+        readonly object[] _parms;
 
         // READ-ONLY GETS /////////////////////////////////////////
 
         /// <summary>
         /// A reference to the IHOTweenComponent that invoked the callback method.
         /// </summary>
-        public        IHOTweenComponent            tween
+        public IHOTweenComponent tween
         {
-            get { return _tween; }
+            get
+            {
+                return _tween;
+            }
         }
 
         /// <summary>
         /// An array of eventual parameters that were passed to the callback.
         /// </summary>
-        public        object[]                    parms
+        public object[] parms
         {
-            get { return _parms; }
+            get
+            {
+                return _parms;
+            }
         }
 
 
@@ -58,11 +64,10 @@ namespace Holoville.HOTween
         // CONSTRUCTOR
         // ***********************************************************************************
 
-        internal TweenEvent ( IHOTweenComponent p_tween, object[] p_parms )
+        internal TweenEvent(IHOTweenComponent p_tween, object[] p_parms)
         {
             _tween = p_tween;
             _parms = p_parms;
         }
     }
 }
-

@@ -33,7 +33,7 @@ namespace Holoville.HOTween.Core.Easing
     /// <summary>
     /// This class contains a C# port of the easing equations created by Robert Penner (http://http://robertpenner.com/easing).
     /// </summary>
-    static public class Cubic
+    public static class Cubic
     {
         /// <summary>
         /// Tween.
@@ -53,9 +53,9 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseIn ( float t, float b, float c, float d )
+        public static float EaseIn(float t, float b, float c, float d)
         {
-            return c*(t/=d)*t*t + b;
+            return c*(t /= d)*t*t + b;
         }
 
         /// <summary>
@@ -76,9 +76,9 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseOut ( float t, float b, float c, float d )
+        public static float EaseOut(float t, float b, float c, float d)
         {
-            return c*((t=t/d-1)*t*t + 1) + b;
+            return c*((t = t/d - 1)*t*t + 1) + b;
         }
 
         /// <summary>
@@ -99,11 +99,13 @@ namespace Holoville.HOTween.Core.Easing
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseInOut ( float t, float b, float c, float d )
+        public static float EaseInOut(float t, float b, float c, float d)
         {
-            if ((t/=d*0.5f) < 1) return c*0.5f*t*t*t + b;
-            return c*0.5f*((t-=2)*t*t + 2) + b;
+            if ((t /= d*0.5f) < 1)
+            {
+                return c*0.5f*t*t*t + b;
+            }
+            return c*0.5f*((t -= 2)*t*t + 2) + b;
         }
     }
 }
-

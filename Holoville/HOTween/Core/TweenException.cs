@@ -39,7 +39,9 @@ namespace Holoville.HOTween.Core
         /// <param name="p_message">
         /// The exception message.
         /// </param>
-        public TweenException( string p_message ) : base( p_message ) {}
+        public TweenException(string p_message)
+            : base(p_message)
+        {
+        }
     }
 }
-

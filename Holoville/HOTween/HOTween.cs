@@ -49,13 +49,14 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public    const        string                            VERSION = "0.9.003";
+        public const string VERSION = "0.9.003";
+
         /// <summary>
         /// HOTween author - me! :P
         /// </summary>
-        public    const        string                            AUTHOR = "Daniele Giardini - Holoville";
+        public const string AUTHOR = "Daniele Giardini - Holoville";
 
-        private    const        string                            GAMEOBJNAME = "HOTween";
+        const string GAMEOBJNAME = "HOTween";
 
         // DEFAULTS ///////////////////////////////////////////////
 
@@ -63,22 +64,25 @@ namespace Holoville.HOTween
         /// Default <see cref="UpdateType"/> that will be used by any new Tweener/Sequence that doesn't implement a specific ease
         /// (default = <c>EaseType.easeOutQuad</c>)
         /// </summary>
-        static    public        UpdateType                        defUpdateType = UpdateType.Update;
+        public static UpdateType defUpdateType = UpdateType.Update;
+
         /// <summary>
         /// Default time scale that will be used by any new Tweener/Sequence that doesn't implement a specific timeScale
         /// (default = <c>1</c>).
         /// </summary>
-        static    public        float                            defTimeScale = 1;
+        public static float defTimeScale = 1;
+
         /// <summary>
         /// Default <see cref="EaseType"/> that will be used by any new Tweener/Sequence that doesn't implement a specific ease
         /// (default = <c>EaseType.easeOutQuad</c>).
         /// </summary>
-        static    public        EaseType                        defEaseType = EaseType.EaseOutQuad;
+        public static EaseType defEaseType = EaseType.EaseOutQuad;
+
         /// <summary>
         /// Default <see cref="LoopType"/> that will be used by any Tweener/Sequence that doesn't implement a specific loopType
         /// (default = <c>LoopType.Restart</c>).
         /// </summary>
-        static    public        LoopType                        defLoopType = LoopType.Restart;
+        public static LoopType defLoopType = LoopType.Restart;
 
         // VARS ///////////////////////////////////////////////////
 
@@ -86,47 +90,50 @@ namespace Holoville.HOTween
         /// If <c>true</c>, shows the eventual paths in use by <see cref="PlugVector3Path"/>
         /// while playing inside Unity's Editor (and if the Editor's Gizmos button is on).
         /// </summary>
-        static    public        bool                            showPathGizmos = false;
+        public static bool showPathGizmos;
+
         /// <summary>
         /// Level of message output in case an error is encountered.
         /// Warnings are logged when HOTween encounters an error, and automatically resolves it without throwing any exception
         /// (like if you try to tween an unexisting property, in which case the tween simply won't be generated,
         /// and an eventual warning will appear in the output window).
         /// </summary>
-        static    public        WarningLevel                    warningLevel = WarningLevel.Verbose;
+        public static WarningLevel warningLevel = WarningLevel.Verbose;
 
         /// <summary>
         /// <c>true</c> if the current player is iOS (iPhone).
         /// Used so simple Reflection instead than unsupported MemberAccessorCacher will be applyed
         /// (iOS doesn't support <c>Reflection.Emit</c>).
         /// </summary>
-        static    internal    bool                            isIOS;
+        internal static bool isIOS;
+
         /// <summary>
         /// <c>true</c> if the current player is running in the Editor.
         /// </summary>
-        static    internal    bool                            isEditor;
+        internal static bool isEditor;
+
         /// <summary>
         /// Filled by tweens that are completed, so that their onCompleteDispatch method can be called AFTER HOTween has eventually removed them
         /// (otherwise a Kill + To on the same target won't work).
         /// This field is emptied as soon as all onCompletes are called.
         /// </summary>
-        static    internal    List<ABSTweenComponent>            onCompletes = new List<ABSTweenComponent>();
+        internal static List<ABSTweenComponent> onCompletes = new List<ABSTweenComponent>();
 
-        static    private        bool                            initialized;
-        static    private        bool                            isPermanent; // If TRUE doesn't destroy HOTween when all tweens are killed.
-        static    private        bool                            renameInstToCountTw; // If TRUE renames HOTween's instance to show running tweens.
-        static    private        float                            time;
+        static bool initialized;
+        static bool isPermanent; // If TRUE doesn't destroy HOTween when all tweens are killed.
+        static bool renameInstToCountTw; // If TRUE renames HOTween's instance to show running tweens.
+        static float time;
 
         // REFERENCES /////////////////////////////////////////////
 
         /// <summary>
         /// Reference to overwrite manager (if in use).
         /// </summary>
-        static    internal    OverwriteManager                overwriteMngr;
+        internal static OverwriteManager overwriteMngr;
 
-        static    private        List<ABSTweenComponent>            tweens; // Contains both Tweeners than Sequences
-        static    private        GameObject                        tweenGOInstance;
-        static    private        HOTween                            it;
+        static List<ABSTweenComponent> tweens; // Contains both Tweeners than Sequences
+        static GameObject tweenGOInstance;
+        static HOTween it;
 
         // READ-ONLY GETS /////////////////////////////////////////
 
@@ -135,9 +142,16 @@ namespace Holoville.HOTween
         /// Tweeners and sequences contained into other sequences don't count:
         /// for example, if there's only one sequence that contains 2 tweeners, <c>totTweens</c> will be 1.
         /// </summary>
-        static    public        int                                totTweens
+        public static int totTweens
         {
-            get { if ( tweens == null ) return 0; return tweens.Count; }
+            get
+            {
+                if (tweens == null)
+                {
+                    return 0;
+                }
+                return tweens.Count;
+            }
         }
 
 
@@ -153,7 +167,11 @@ namespace Holoville.HOTween
         /// to avoid auto-initialization when the first tween is started or created,
         /// and to set options.
         /// </summary>
-        static public void Init() { Init( false, true ); }
+        public static void Init()
+        {
+            Init(false, true);
+        }
+
         /// <summary>
         /// Initializes <see cref="HOTween"/>.
         /// Call this method once when your application starts up,
@@ -165,7 +183,11 @@ namespace Holoville.HOTween
         /// otherwise the manager is destroyed when all tweens have been killed,
         /// and re-created when needed.
         /// </param>
-        static public void Init( bool p_permanentInstance ) { Init( p_permanentInstance, true ); }
+        public static void Init(bool p_permanentInstance)
+        {
+            Init(p_permanentInstance, true);
+        }
+
         /// <summary>
         /// Initializes <see cref="HOTween"/>.
         /// Call this method once when your application starts up,
@@ -181,19 +203,23 @@ namespace Holoville.HOTween
         /// If <c>true</c>, renames HOTween's instance to show
         /// the current number of running tweens (only while in the Editor).
         /// </param>
-        static public void Init( bool p_permanentInstance, bool p_renameInstanceToCountTweens )
+        public static void Init(bool p_permanentInstance, bool p_renameInstanceToCountTweens)
         {
-            if ( initialized )                        return;
+            if (initialized)
+            {
+                return;
+            }
 
             initialized = true;
 
-            isIOS = ( Application.platform == RuntimePlatform.IPhonePlayer );
+            isIOS = (Application.platform == RuntimePlatform.IPhonePlayer);
             isEditor = Application.isEditor;
             isPermanent = p_permanentInstance;
             renameInstToCountTw = p_renameInstanceToCountTweens;
             overwriteMngr = new OverwriteManager();
 
-            if ( isPermanent && tweenGOInstance == null ) {
+            if (isPermanent && tweenGOInstance == null)
+            {
                 NewTweenInstance();
                 SetGOName();
             }
@@ -202,29 +228,37 @@ namespace Holoville.HOTween
         // ===================================================================================
         // UNITY METHODS ---------------------------------------------------------------------
 
-        private void OnDrawGizmos()
+        void OnDrawGizmos()
         {
-            if ( tweens == null || !showPathGizmos )        return;
+            if (tweens == null || !showPathGizmos)
+            {
+                return;
+            }
 
             // Get all existing plugins.
             List<ABSTweenPlugin> plugs = GetPlugins();
 
             // Find path plugins and draw paths.
-            for ( int i = 0; i < plugs.Count; ++i ) {
-                var pathPlug = plugs[i] as PlugVector3Path;
-                if (pathPlug != null && pathPlug.path != null ) {
-                    pathPlug.path.GizmoDraw( pathPlug.pathPerc, false );
+            for (int i = 0; i < plugs.Count; ++i)
+            {
+                PlugVector3Path pathPlug = plugs[i] as PlugVector3Path;
+                if (pathPlug != null && pathPlug.path != null)
+                {
+                    pathPlug.path.GizmoDraw(pathPlug.pathPerc, false);
                 }
             }
         }
 
-        private void OnDestroy()
+        void OnDestroy()
         {
             // Clear everything if this was the currenlty running HOTween.
             // HINT I can use OnDestroy also to check for scene changes, and instantiate another HOTween instance if I need to keep it running.
             // TODO For now HOTween is NOT destroyed when a scene is loaded, - add option to set it as destroyable?
             // (consider also isPermanent option if doing that).
-            if ( this == it )            Clear();
+            if (this == it)
+            {
+                Clear();
+            }
         }
 
         // ===================================================================================
@@ -237,11 +271,14 @@ namespace Holoville.HOTween
         /// <param name="p_sequence">
         /// The <see cref="Sequence"/> to add.
         /// </param>
-        static internal void AddSequence( Sequence p_sequence )
+        internal static void AddSequence(Sequence p_sequence)
         {
-            if ( !initialized )                        Init();
+            if (!initialized)
+            {
+                Init();
+            }
 
-            AddTween( p_sequence );
+            AddTween(p_sequence);
         }
 
         /// <summary>
@@ -264,7 +301,11 @@ namespace Holoville.HOTween
         /// The newly created <see cref="Tweener"/>,
         /// or <c>null</c> if the parameters were invalid.
         /// </returns>
-        static public Tweener To ( object p_target, float p_duration, string p_propName, object p_endVal ) { return To( p_target, p_duration, new TweenParms().Prop( p_propName, p_endVal ) ); }
+        public static Tweener To(object p_target, float p_duration, string p_propName, object p_endVal)
+        {
+            return To(p_target, p_duration, new TweenParms().Prop(p_propName, p_endVal));
+        }
+
         /// <summary>
         /// Creates a new tween with default values, and returns the <see cref="Tweener"/> representing it,
         /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
@@ -288,7 +329,11 @@ namespace Holoville.HOTween
         /// The newly created <see cref="Tweener"/>,
         /// or <c>null</c> if the parameters were invalid.
         /// </returns>
-        static public Tweener To ( object p_target, float p_duration, string p_propName, object p_endVal, bool p_isRelative ) { return To( p_target, p_duration, new TweenParms().Prop( p_propName, p_endVal, p_isRelative ) ); }
+        public static Tweener To(object p_target, float p_duration, string p_propName, object p_endVal, bool p_isRelative)
+        {
+            return To(p_target, p_duration, new TweenParms().Prop(p_propName, p_endVal, p_isRelative));
+        }
+
         /// <summary>
         /// Creates a new tween and returns the <see cref="Tweener"/> representing it,
         /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
@@ -308,16 +353,22 @@ namespace Holoville.HOTween
         /// The newly created <see cref="Tweener"/>,
         /// or <c>null</c> if the parameters were invalid.
         /// </returns>
-        static public Tweener To ( object p_target, float p_duration, TweenParms p_parms )
+        public static Tweener To(object p_target, float p_duration, TweenParms p_parms)
         {
-            if ( !initialized )                        Init();
+            if (!initialized)
+            {
+                Init();
+            }
 
-            Tweener tw = new Tweener( p_target, p_duration, p_parms );
+            Tweener tw = new Tweener(p_target, p_duration, p_parms);
 
             // Check if tween is valid.
-            if ( tw.isEmpty )        return null;
+            if (tw.isEmpty)
+            {
+                return null;
+            }
 
-            AddTween( tw );
+            AddTween(tw);
             return tw;
         }
 
@@ -341,7 +392,11 @@ namespace Holoville.HOTween
         /// The newly created <see cref="Tweener"/>,
         /// or <c>null</c> if the parameters were invalid.
         /// </returns>
-        static public Tweener From ( object p_target, float p_duration, string p_propName, object p_fromVal ) { return From( p_target, p_duration, new TweenParms().Prop( p_propName, p_fromVal ) ); }
+        public static Tweener From(object p_target, float p_duration, string p_propName, object p_fromVal)
+        {
+            return From(p_target, p_duration, new TweenParms().Prop(p_propName, p_fromVal));
+        }
+
         /// <summary>
         /// Creates a new FROM tween with default values, and returns the <see cref="Tweener"/> representing it,
         /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
@@ -365,7 +420,11 @@ namespace Holoville.HOTween
         /// The newly created <see cref="Tweener"/>,
         /// or <c>null</c> if the parameters were invalid.
         /// </returns>
-        static public Tweener From ( object p_target, float p_duration, string p_propName, object p_fromVal, bool p_isRelative ) { return From( p_target, p_duration, new TweenParms().Prop( p_propName, p_fromVal, p_isRelative ) ); }
+        public static Tweener From(object p_target, float p_duration, string p_propName, object p_fromVal, bool p_isRelative)
+        {
+            return From(p_target, p_duration, new TweenParms().Prop(p_propName, p_fromVal, p_isRelative));
+        }
+
         /// <summary>
         /// Creates a new FROM tween and returns the <see cref="Tweener"/> representing it,
         /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
@@ -385,20 +444,29 @@ namespace Holoville.HOTween
         /// The newly created <see cref="Tweener"/>,
         /// or <c>null</c> if the parameters were invalid.
         /// </returns>
-        static public Tweener From ( object p_target, float p_duration, TweenParms p_parms )
+        public static Tweener From(object p_target, float p_duration, TweenParms p_parms)
         {
-            if ( !initialized )                        Init();
+            if (!initialized)
+            {
+                Init();
+            }
 
             p_parms = p_parms.IsFrom();
-            Tweener tw = new Tweener( p_target, p_duration, p_parms );
+            Tweener tw = new Tweener(p_target, p_duration, p_parms);
 
             // Check if tween is valid.
-            if ( tw.isEmpty )        return null;
+            if (tw.isEmpty)
+            {
+                return null;
+            }
 
-            AddTween( tw );
+            AddTween(tw);
             // Immediately jump to position 0 to avoid flickering of objects before they're punched to FROM position.
             // p_isStartupIteration is set to FALSE to ignore callbacks.
-            if ( !tw._isPaused )        tw.Update( 0, true, true );
+            if (!tw._isPaused)
+            {
+                tw.Update(0, true, true);
+            }
             return tw;
         }
 
@@ -408,12 +476,15 @@ namespace Holoville.HOTween
         /// <summary>
         /// Updates normal tweens.
         /// </summary>
-        private void Update()
+        void Update()
         {
-            if ( tweens == null )        return;
+            if (tweens == null)
+            {
+                return;
+            }
 
             // Update tweens.
-            DoUpdate( UpdateType.Update, Time.deltaTime );
+            DoUpdate(UpdateType.Update, Time.deltaTime);
 
             CheckClear();
         }
@@ -421,12 +492,15 @@ namespace Holoville.HOTween
         /// <summary>
         /// Updates lateUpdate tweens.
         /// </summary>
-        private void LateUpdate()
+        void LateUpdate()
         {
-            if ( tweens == null )        return;
+            if (tweens == null)
+            {
+                return;
+            }
 
             // Update tweens.
-            DoUpdate( UpdateType.LateUpdate, Time.deltaTime );
+            DoUpdate(UpdateType.LateUpdate, Time.deltaTime);
 
             CheckClear();
         }
@@ -434,12 +508,15 @@ namespace Holoville.HOTween
         /// <summary>
         /// Updates fixedUpdate tweens.
         /// </summary>
-        private void FixedUpdate()
+        void FixedUpdate()
         {
-            if ( tweens == null )        return;
+            if (tweens == null)
+            {
+                return;
+            }
 
             // Update tweens.
-            DoUpdate( UpdateType.FixedUpdate, Time.fixedDeltaTime );
+            DoUpdate(UpdateType.FixedUpdate, Time.fixedDeltaTime);
 
             CheckClear();
         }
@@ -447,17 +524,20 @@ namespace Holoville.HOTween
         /// <summary>
         /// Updates timeScaleIndependent tweens.
         /// </summary>
-        private static IEnumerator TimeScaleIndependentUpdate()
+        static IEnumerator TimeScaleIndependentUpdate()
         {
-            while ( tweens != null )
+            while (tweens != null)
             {
                 float elapsed = Time.realtimeSinceStartup - time;
                 time = Time.realtimeSinceStartup;
 
                 // Update tweens.
-                DoUpdate( UpdateType.TimeScaleIndependentUpdate, elapsed );
+                DoUpdate(UpdateType.TimeScaleIndependentUpdate, elapsed);
 
-                if ( CheckClear() )        yield break;
+                if (CheckClear())
+                {
+                    yield break;
+                }
 
                 yield return null;
             }
@@ -469,7 +549,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// Enables the overwrite manager (disabled by default).
         /// </summary>
-        static public void EnableOverwriteManager()
+        public static void EnableOverwriteManager()
         {
             overwriteMngr.enabled = true;
         }
@@ -477,7 +557,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// Disables the overwrite manager (disabled by default).
         /// </summary>
-        static public void DisableOverwriteManager()
+        public static void DisableOverwriteManager()
         {
             overwriteMngr.enabled = false;
         }
@@ -491,7 +571,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of paused Tweeners.
         /// </returns>
-        static public int Pause( object p_target ) { return DoFilteredIteration( p_target, DoFilteredPause, false ); }
+        public static int Pause(object p_target)
+        {
+            return DoFilteredIteration(p_target, DoFilteredPause, false);
+        }
+
         /// <summary>
         /// Pauses all the Tweeners/Sequences with the given ID, and returns the total number of paused Tweeners/Sequences.
         /// </summary>
@@ -501,7 +585,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of paused Tweeners/Sequences.
         /// </returns>
-        static public int Pause( string p_id ) { return DoFilteredIteration( p_id, DoFilteredPause, false ); }
+        public static int Pause(string p_id)
+        {
+            return DoFilteredIteration(p_id, DoFilteredPause, false);
+        }
+
         /// <summary>
         /// Pauses all the Tweeners/Sequences with the given intId, and returns the total number of paused Tweeners/Sequences.
         /// </summary>
@@ -511,7 +599,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of paused Tweeners/Sequences.
         /// </returns>
-        static public int Pause( int p_intId ) { return DoFilteredIteration( p_intId, DoFilteredPause, false ); }
+        public static int Pause(int p_intId)
+        {
+            return DoFilteredIteration(p_intId, DoFilteredPause, false);
+        }
+
         /// <summary>
         /// Pauses the given Tweener, and returns the total number of paused ones (1 if the Tweener existed, otherwise 0).
         /// </summary>
@@ -521,7 +613,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of paused Tweener (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int Pause( Tweener p_tweener ) { return DoFilteredIteration( p_tweener, DoFilteredPause, false ); }
+        public static int Pause(Tweener p_tweener)
+        {
+            return DoFilteredIteration(p_tweener, DoFilteredPause, false);
+        }
+
         /// <summary>
         /// Pauses the given Sequence, and returns the total number of paused ones (1 if the Sequence existed, otherwise 0).
         /// </summary>
@@ -531,14 +627,21 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of paused Sequence (1 if the sequence existed, otherwise 0).
         /// </returns>
-        static public int Pause( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredPause, false ); }
+        public static int Pause(Sequence p_sequence)
+        {
+            return DoFilteredIteration(p_sequence, DoFilteredPause, false);
+        }
+
         /// <summary>
         /// Pauses all Tweeners/Sequences, and returns the total number of paused Tweeners/Sequences.
         /// </summary>
         /// <returns>
         /// The total number of paused Tweeners/Sequences.
         /// </returns>
-        static public int Pause() { return DoFilteredIteration( null, DoFilteredPause, false ); }
+        public static int Pause()
+        {
+            return DoFilteredIteration(null, DoFilteredPause, false);
+        }
 
         /// <summary>
         /// Resumes all the tweens (delays included) for the given target, and returns the total number of resumed Tweeners.
@@ -549,7 +652,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners.
         /// </returns>
-        static public int Play( object p_target ) { return Play( p_target, false ); }
+        public static int Play(object p_target)
+        {
+            return Play(p_target, false);
+        }
+
         /// <summary>
         /// Resumes all the tweens for the given target, and returns the total number of resumed Tweeners.
         /// </summary>
@@ -562,7 +669,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners.
         /// </returns>
-        static public int Play( object p_target, bool p_skipDelay ) { return DoFilteredIteration( p_target, DoFilteredPlay, false, p_skipDelay ); }
+        public static int Play(object p_target, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_target, DoFilteredPlay, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Resumes all the Tweeners (delays included) and Sequences with the given ID, and returns the total number of resumed Tweeners/Sequences.
         /// </summary>
@@ -572,7 +683,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int Play( string p_id ) { return Play( p_id, false ); }
+        public static int Play(string p_id)
+        {
+            return Play(p_id, false);
+        }
+
         /// <summary>
         /// Resumes all the Tweeners/Sequences with the given ID, and returns the total number of resumed Tweeners/Sequences.
         /// </summary>
@@ -585,7 +700,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int Play( string p_id, bool p_skipDelay ) { return DoFilteredIteration( p_id, DoFilteredPlay, false, p_skipDelay ); }
+        public static int Play(string p_id, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_id, DoFilteredPlay, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Resumes all the Tweeners (delays included) and Sequences with the given intId, and returns the total number of resumed Tweeners/Sequences.
         /// </summary>
@@ -595,7 +714,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int Play( int p_intId ) { return Play( p_intId, false ); }
+        public static int Play(int p_intId)
+        {
+            return Play(p_intId, false);
+        }
+
         /// <summary>
         /// Resumes all the Tweeners/Sequences with the given intId, and returns the total number of resumed Tweeners/Sequences.
         /// </summary>
@@ -608,7 +731,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int Play( int p_intId, bool p_skipDelay ) { return DoFilteredIteration( p_intId, DoFilteredPlay, false, p_skipDelay ); }
+        public static int Play(int p_intId, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_intId, DoFilteredPlay, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Resumes the given Tweener (delays included), and returns the total number of resumed ones (1 if the Tweener existed, otherwise 0).
         /// </summary>
@@ -618,7 +745,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int Play( Tweener p_tweener ) { return Play( p_tweener, false ); }
+        public static int Play(Tweener p_tweener)
+        {
+            return Play(p_tweener, false);
+        }
+
         /// <summary>
         /// Resumes the given Tweener, and returns the total number of resumed ones (1 if the Tweener existed, otherwise 0).
         /// </summary>
@@ -631,7 +762,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int Play( Tweener p_tweener, bool p_skipDelay ) { return DoFilteredIteration( p_tweener, DoFilteredPlay, false, p_skipDelay ); }
+        public static int Play(Tweener p_tweener, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_tweener, DoFilteredPlay, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Resumes the given Sequence, and returns the total number of resumed ones (1 if the Sequence existed, otherwise 0).
         /// </summary>
@@ -641,14 +776,22 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Sequences (1 if the Sequence existed, otherwise 0).
         /// </returns>
-        static public int Play( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredPlay, false ); }
+        public static int Play(Sequence p_sequence)
+        {
+            return DoFilteredIteration(p_sequence, DoFilteredPlay, false);
+        }
+
         /// <summary>
         /// Resumes all Tweeners (delays included) and Sequences, and returns the total number of resumed Tweeners/Sequences.
         /// </summary>
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int Play() { return Play( false ); }
+        public static int Play()
+        {
+            return Play(false);
+        }
+
         /// <summary>
         /// Resumes all Tweeners/Sequences, and returns the total number of resumed Tweeners/Sequences.
         /// </summary>
@@ -658,7 +801,10 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int Play( bool p_skipDelay ) { return DoFilteredIteration( null, DoFilteredPlay, false, p_skipDelay ); }
+        public static int Play(bool p_skipDelay)
+        {
+            return DoFilteredIteration(null, DoFilteredPlay, false, p_skipDelay);
+        }
 
         /// <summary>
         /// Resumes all the tweens (delays included) for the given target,
@@ -671,7 +817,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners.
         /// </returns>
-        static public int PlayForward( object p_target ) { return PlayForward( p_target, false ); }
+        public static int PlayForward(object p_target)
+        {
+            return PlayForward(p_target, false);
+        }
+
         /// <summary>
         /// Resumes all the tweens for the given target,
         /// sets the tweens so that they move forward and not backwards,
@@ -686,7 +836,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners.
         /// </returns>
-        static public int PlayForward( object p_target, bool p_skipDelay ) { return DoFilteredIteration( p_target, DoFilteredPlayForward, false, p_skipDelay ); }
+        public static int PlayForward(object p_target, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_target, DoFilteredPlayForward, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Resumes all the Tweeners (delays included) and Sequences with the given ID,
         /// sets the tweens so that they move forward and not backwards,
@@ -698,7 +852,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int PlayForward( string p_id ) { return PlayForward( p_id, false ); }
+        public static int PlayForward(string p_id)
+        {
+            return PlayForward(p_id, false);
+        }
+
         /// <summary>
         /// Resumes all the Tweeners/Sequences with the given ID,
         /// sets the tweens so that they move forward and not backwards,
@@ -713,7 +871,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int PlayForward( string p_id, bool p_skipDelay ) { return DoFilteredIteration( p_id, DoFilteredPlayForward, false, p_skipDelay ); }
+        public static int PlayForward(string p_id, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_id, DoFilteredPlayForward, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Resumes all the Tweeners (delays included) and Sequences with the given intId,
         /// sets the tweens so that they move forward and not backwards,
@@ -725,7 +887,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int PlayForward( int p_intId ) { return PlayForward( p_intId, false ); }
+        public static int PlayForward(int p_intId)
+        {
+            return PlayForward(p_intId, false);
+        }
+
         /// <summary>
         /// Resumes all the Tweeners/Sequences with the given intId,
         /// sets the tweens so that they move forward and not backwards,
@@ -740,7 +906,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int PlayForward( int p_intId, bool p_skipDelay ) { return DoFilteredIteration( p_intId, DoFilteredPlayForward, false, p_skipDelay ); }
+        public static int PlayForward(int p_intId, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_intId, DoFilteredPlayForward, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Resumes the given Tweener (delays included),
         /// sets it so that it moves forward and not backwards,
@@ -752,7 +922,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int PlayForward( Tweener p_tweener ) { return PlayForward( p_tweener, false ); }
+        public static int PlayForward(Tweener p_tweener)
+        {
+            return PlayForward(p_tweener, false);
+        }
+
         /// <summary>
         /// Resumes the given Tweener,
         /// sets it so that it moves forward and not backwards,
@@ -767,7 +941,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int PlayForward( Tweener p_tweener, bool p_skipDelay ) { return DoFilteredIteration( p_tweener, DoFilteredPlayForward, false, p_skipDelay ); }
+        public static int PlayForward(Tweener p_tweener, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_tweener, DoFilteredPlayForward, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Resumes the given Sequence,
         /// sets it so that it moves forward and not backwards,
@@ -779,7 +957,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Sequences (1 if the Sequence existed, otherwise 0).
         /// </returns>
-        static public int PlayForward( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredPlayForward, false ); }
+        public static int PlayForward(Sequence p_sequence)
+        {
+            return DoFilteredIteration(p_sequence, DoFilteredPlayForward, false);
+        }
+
         /// <summary>
         /// Resumes all Tweeners (delays included) and Sequences,
         /// sets the tweens so that they move forward and not backwards,
@@ -788,7 +970,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int PlayForward() { return PlayForward( false ); }
+        public static int PlayForward()
+        {
+            return PlayForward(false);
+        }
+
         /// <summary>
         /// Resumes all Tweeners/Sequences,
         /// sets the tweens so that they move forward and not backwards,
@@ -800,7 +986,10 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int PlayForward( bool p_skipDelay ) { return DoFilteredIteration( null, DoFilteredPlayForward, false, p_skipDelay ); }
+        public static int PlayForward(bool p_skipDelay)
+        {
+            return DoFilteredIteration(null, DoFilteredPlayForward, false, p_skipDelay);
+        }
 
         /// <summary>
         /// Resumes all the tweens for the given target,
@@ -813,7 +1002,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners.
         /// </returns>
-        static public int PlayBackwards( object p_target ) { return DoFilteredIteration( p_target, DoFilteredPlayBackwards, false ); }
+        public static int PlayBackwards(object p_target)
+        {
+            return DoFilteredIteration(p_target, DoFilteredPlayBackwards, false);
+        }
+
         /// <summary>
         /// Resumes all the Tweeners/Sequences with the given ID,
         /// sets the tweens so that they move backwards instead than forward,
@@ -825,7 +1018,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int PlayBackwards( string p_id ) { return DoFilteredIteration( p_id, DoFilteredPlayBackwards, false ); }
+        public static int PlayBackwards(string p_id)
+        {
+            return DoFilteredIteration(p_id, DoFilteredPlayBackwards, false);
+        }
+
         /// <summary>
         /// Resumes all the Tweeners/Sequences with the given intId,
         /// sets the tweens so that they move backwards instead than forward,
@@ -837,7 +1034,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int PlayBackwards( int p_intId ) { return DoFilteredIteration( p_intId, DoFilteredPlayBackwards, false ); }
+        public static int PlayBackwards(int p_intId)
+        {
+            return DoFilteredIteration(p_intId, DoFilteredPlayBackwards, false);
+        }
+
         /// <summary>
         /// Resumes the given Tweener,
         /// sets it so that it moves backwards instead than forward,
@@ -849,7 +1050,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int PlayBackwards( Tweener p_tweener ) { return DoFilteredIteration( p_tweener, DoFilteredPlayBackwards, false ); }
+        public static int PlayBackwards(Tweener p_tweener)
+        {
+            return DoFilteredIteration(p_tweener, DoFilteredPlayBackwards, false);
+        }
+
         /// <summary>
         /// Resumes the given Sequence,
         /// sets it so that it moves backwards instead than forward,
@@ -861,7 +1066,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Sequences (1 if the Sequence existed, otherwise 0).
         /// </returns>
-        static public int PlayBackwards( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredPlayBackwards, false ); }
+        public static int PlayBackwards(Sequence p_sequence)
+        {
+            return DoFilteredIteration(p_sequence, DoFilteredPlayBackwards, false);
+        }
+
         /// <summary>
         /// Resumes all Tweeners/Sequences,
         /// sets the tweens so that they move backwards instead than forward,
@@ -870,7 +1079,10 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of resumed Tweeners/Sequences.
         /// </returns>
-        static public int PlayBackwards() { return DoFilteredIteration( null, DoFilteredPlayBackwards, false ); }
+        public static int PlayBackwards()
+        {
+            return DoFilteredIteration(null, DoFilteredPlayBackwards, false);
+        }
 
         /// <summary>
         /// Rewinds all the tweens (delays included) for the given target, and returns the total number of rewinded Tweeners.
@@ -881,7 +1093,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of rewinded Tweeners.
         /// </returns>
-        static public int Rewind( object p_target ) { return Rewind( p_target, false ); }
+        public static int Rewind(object p_target)
+        {
+            return Rewind(p_target, false);
+        }
+
         /// <summary>
         /// Rewinds all the tweens for the given target, and returns the total number of rewinded Tweeners.
         /// </summary>
@@ -894,7 +1110,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of rewinded Tweeners.
         /// </returns>
-        static public int Rewind( object p_target, bool p_skipDelay ) { return DoFilteredIteration( p_target, DoFilteredRewind, false, p_skipDelay ); }
+        public static int Rewind(object p_target, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_target, DoFilteredRewind, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Rewinds all the Tweeners (delays included) and Sequences with the given ID, and returns the total number of rewinded Tweeners/Sequences.
         /// </summary>
@@ -904,7 +1124,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of rewinded Tweeners/Sequences.
         /// </returns>
-        static public int Rewind( string p_id ) { return Rewind( p_id, false ); }
+        public static int Rewind(string p_id)
+        {
+            return Rewind(p_id, false);
+        }
+
         /// <summary>
         /// Rewinds all the Tweeners/Sequences with the given ID, and returns the total number of rewinded Tweeners/Sequences.
         /// </summary>
@@ -917,7 +1141,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of rewinded Tweeners/Sequences.
         /// </returns>
-        static public int Rewind( string p_id, bool p_skipDelay ) { return DoFilteredIteration( p_id, DoFilteredRewind, false, p_skipDelay ); }
+        public static int Rewind(string p_id, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_id, DoFilteredRewind, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Rewinds all the Tweeners (delays included) and Sequences with the given intId, and returns the total number of rewinded Tweeners/Sequences.
         /// </summary>
@@ -927,7 +1155,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of rewinded Tweeners/Sequences.
         /// </returns>
-        static public int Rewind( int p_intId ) { return Rewind( p_intId, false ); }
+        public static int Rewind(int p_intId)
+        {
+            return Rewind(p_intId, false);
+        }
+
         /// <summary>
         /// Rewinds all the Tweeners/Sequences with the given intId, and returns the total number of rewinded Tweeners/Sequences.
         /// </summary>
@@ -940,7 +1172,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of rewinded Tweeners/Sequences.
         /// </returns>
-        static public int Rewind( int p_intId, bool p_skipDelay ) { return DoFilteredIteration( p_intId, DoFilteredRewind, false, p_skipDelay ); }
+        public static int Rewind(int p_intId, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_intId, DoFilteredRewind, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Rewinds the given Tweener (delays included), and returns the total number of rewinded ones (1 if the Tweener existed, otherwise 0).
         /// </summary>
@@ -950,7 +1186,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of rewinded Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int Rewind( Tweener p_tweener ) { return Rewind( p_tweener, false ); }
+        public static int Rewind(Tweener p_tweener)
+        {
+            return Rewind(p_tweener, false);
+        }
+
         /// <summary>
         /// Rewinds the given Tweener, and returns the total number of rewinded ones (1 if the Tweener existed, otherwise 0).
         /// </summary>
@@ -963,7 +1203,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of rewinded Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int Rewind( Tweener p_tweener, bool p_skipDelay ) { return DoFilteredIteration( p_tweener, DoFilteredRewind, false, p_skipDelay ); }
+        public static int Rewind(Tweener p_tweener, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_tweener, DoFilteredRewind, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Rewinds the given Sequence, and returns the total number of rewinded ones (1 if the Sequence existed, otherwise 0).
         /// </summary>
@@ -973,14 +1217,22 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of rewinded Sequences (1 if the Sequence existed, otherwise 0).
         /// </returns>
-        static public int Rewind( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredRewind, false ); }
+        public static int Rewind(Sequence p_sequence)
+        {
+            return DoFilteredIteration(p_sequence, DoFilteredRewind, false);
+        }
+
         /// <summary>
         /// Rewinds all Tweeners (delay included) and Sequences, and returns the total number of rewinded Tweeners/Sequences.
         /// </summary>
         /// <returns>
         /// The total number of rewinded Tweeners/Sequences.
         /// </returns>
-        static public int Rewind() { return Rewind( false ); }
+        public static int Rewind()
+        {
+            return Rewind(false);
+        }
+
         /// <summary>
         /// Rewinds all Tweeners/Sequences, and returns the total number of rewinded Tweeners/Sequences.
         /// </summary>
@@ -990,7 +1242,10 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of rewinded Tweeners/Sequences.
         /// </returns>
-        static public int Rewind( bool p_skipDelay ) { return DoFilteredIteration( null, DoFilteredRewind, false, p_skipDelay ); }
+        public static int Rewind(bool p_skipDelay)
+        {
+            return DoFilteredIteration(null, DoFilteredRewind, false, p_skipDelay);
+        }
 
         /// <summary>
         /// Restarts all the tweens (delays included) for the given target, and returns the total number of restarted Tweeners.
@@ -1001,7 +1256,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of restarted Tweeners.
         /// </returns>
-        static public int Restart( object p_target ) { return Restart( p_target, false ); }
+        public static int Restart(object p_target)
+        {
+            return Restart(p_target, false);
+        }
+
         /// <summary>
         /// Restarts all the tweens for the given target, and returns the total number of restarted Tweeners.
         /// </summary>
@@ -1014,7 +1273,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of restarted Tweeners.
         /// </returns>
-        static public int Restart( object p_target, bool p_skipDelay ) { return DoFilteredIteration( p_target, DoFilteredRestart, false, p_skipDelay ); }
+        public static int Restart(object p_target, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_target, DoFilteredRestart, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Restarts all the Tweeners (delays included) and Sequences with the given ID, and returns the total number of restarted Tweeners/Sequences.
         /// </summary>
@@ -1024,7 +1287,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of restarted Tweeners/Sequences.
         /// </returns>
-        static public int Restart( string p_id ) { return Restart( p_id, false ); }
+        public static int Restart(string p_id)
+        {
+            return Restart(p_id, false);
+        }
+
         /// <summary>
         /// Restarts all the Tweeners/Sequences with the given ID, and returns the total number of restarted Tweeners/Sequences.
         /// </summary>
@@ -1037,7 +1304,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of restarted Tweeners/Sequences.
         /// </returns>
-        static public int Restart( string p_id, bool p_skipDelay ) { return DoFilteredIteration( p_id, DoFilteredRestart, false, p_skipDelay ); }
+        public static int Restart(string p_id, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_id, DoFilteredRestart, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Restarts all the Tweeners (delays included) and Sequences with the given intId, and returns the total number of restarted Tweeners/Sequences.
         /// </summary>
@@ -1047,7 +1318,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of restarted Tweeners/Sequences.
         /// </returns>
-        static public int Restart( int p_intId ) { return Restart( p_intId, false ); }
+        public static int Restart(int p_intId)
+        {
+            return Restart(p_intId, false);
+        }
+
         /// <summary>
         /// Restarts all the Tweeners/Sequences with the given intId, and returns the total number of restarted Tweeners/Sequences.
         /// </summary>
@@ -1060,7 +1335,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of restarted Tweeners/Sequences.
         /// </returns>
-        static public int Restart( int p_intId, bool p_skipDelay ) { return DoFilteredIteration( p_intId, DoFilteredRestart, false, p_skipDelay ); }
+        public static int Restart(int p_intId, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_intId, DoFilteredRestart, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Restarts the given Tweener (delays included), and returns the total number of restarted ones (1 if the Tweener existed, otherwise 0).
         /// </summary>
@@ -1070,7 +1349,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of restarted Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int Restart( Tweener p_tweener ) { return Restart( p_tweener, false ); }
+        public static int Restart(Tweener p_tweener)
+        {
+            return Restart(p_tweener, false);
+        }
+
         /// <summary>
         /// Restarts the given Tweener, and returns the total number of restarted ones (1 if the Tweener existed, otherwise 0).
         /// </summary>
@@ -1083,7 +1366,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of restarted Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int Restart( Tweener p_tweener, bool p_skipDelay ) { return DoFilteredIteration( p_tweener, DoFilteredRestart, false, p_skipDelay ); }
+        public static int Restart(Tweener p_tweener, bool p_skipDelay)
+        {
+            return DoFilteredIteration(p_tweener, DoFilteredRestart, false, p_skipDelay);
+        }
+
         /// <summary>
         /// Restarts the given Sequence, and returns the total number of restarted ones (1 if the Sequence existed, otherwise 0).
         /// </summary>
@@ -1093,14 +1380,22 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of restarted Sequences (1 if the Sequence existed, otherwise 0).
         /// </returns>
-        static public int Restart( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredRestart, false ); }
+        public static int Restart(Sequence p_sequence)
+        {
+            return DoFilteredIteration(p_sequence, DoFilteredRestart, false);
+        }
+
         /// <summary>
         /// Restarts all Tweeners (delay included) and Sequences, and returns the total number of restarted Tweeners/Sequences.
         /// </summary>
         /// <returns>
         /// The total number of restarted Tweeners/Sequences.
         /// </returns>
-        static public int Restart() { return Restart( false ); }
+        public static int Restart()
+        {
+            return Restart(false);
+        }
+
         /// <summary>
         /// Restarts all Tweeners/Sequences and returns the total number of restarted Tweeners/Sequences.
         /// </summary>
@@ -1110,7 +1405,10 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of restarted Tweeners/Sequences.
         /// </returns>
-        static public int Restart( bool p_skipDelay ) { return DoFilteredIteration( null, DoFilteredRestart, false, p_skipDelay ); }
+        public static int Restart(bool p_skipDelay)
+        {
+            return DoFilteredIteration(null, DoFilteredRestart, false, p_skipDelay);
+        }
 
         /// <summary>
         /// Reverses all the tweens for the given target,
@@ -1123,7 +1421,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of reversed Tweeners.
         /// </returns>
-        static public int Reverse( object p_target ) { return DoFilteredIteration( p_target, DoFilteredReverse, false ); }
+        public static int Reverse(object p_target)
+        {
+            return DoFilteredIteration(p_target, DoFilteredReverse, false);
+        }
+
         /// <summary>
         /// Reverses all the Tweeners/Sequences with the given ID,
         /// animating them from their current value back to the starting one,
@@ -1135,7 +1437,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of reversed Tweeners/Sequences.
         /// </returns>
-        static public int Reverse( string p_id ) { return DoFilteredIteration( p_id, DoFilteredReverse, false ); }
+        public static int Reverse(string p_id)
+        {
+            return DoFilteredIteration(p_id, DoFilteredReverse, false);
+        }
+
         /// <summary>
         /// Reverses all the Tweeners/Sequences with the given intId,
         /// animating them from their current value back to the starting one,
@@ -1147,7 +1453,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of reversed Tweeners/Sequences.
         /// </returns>
-        static public int Reverse( int p_intId ) { return DoFilteredIteration( p_intId, DoFilteredReverse, false ); }
+        public static int Reverse(int p_intId)
+        {
+            return DoFilteredIteration(p_intId, DoFilteredReverse, false);
+        }
+
         /// <summary>
         /// Reverses the given Tweener,
         /// animating it from its current value back to the starting one,
@@ -1159,7 +1469,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of reversed Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int Reverse( Tweener p_tweener ) { return DoFilteredIteration( p_tweener, DoFilteredReverse, false ); }
+        public static int Reverse(Tweener p_tweener)
+        {
+            return DoFilteredIteration(p_tweener, DoFilteredReverse, false);
+        }
+
         /// <summary>
         /// Reverses the given Sequence, and returns the total number of reversed ones (1 if the Sequence existed, otherwise 0).
         /// </summary>
@@ -1169,7 +1483,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of reversed Sequences (1 if the Sequence existed, otherwise 0).
         /// </returns>
-        static public int Reverse( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredReverse, false ); }
+        public static int Reverse(Sequence p_sequence)
+        {
+            return DoFilteredIteration(p_sequence, DoFilteredReverse, false);
+        }
+
         /// <summary>
         /// Reverses all Tweeners/Sequences,
         /// animating them from their current value back to the starting one,
@@ -1178,7 +1496,10 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of reversed Tweeners/Sequences.
         /// </returns>
-        static public int Reverse() { return DoFilteredIteration( null, DoFilteredReverse, false ); }
+        public static int Reverse()
+        {
+            return DoFilteredIteration(null, DoFilteredReverse, false);
+        }
 
         /// <summary>
         /// Completes all the tweens for the given target, and returns the total number of completed Tweeners.
@@ -1191,7 +1512,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of completed Tweeners.
         /// </returns>
-        static public int Complete( object p_target ) { return DoFilteredIteration( p_target, DoFilteredComplete, true ); }
+        public static int Complete(object p_target)
+        {
+            return DoFilteredIteration(p_target, DoFilteredComplete, true);
+        }
+
         /// <summary>
         /// Completes all the Tweeners/Sequences with the given ID, and returns the total number of completed Tweeners/Sequences.
         /// Where a loop was involved and not infinite, the relative Tweener/Sequence completes at the position where it would actually be after the set number of loops.
@@ -1203,7 +1528,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of completed Tweeners/Sequences.
         /// </returns>
-        static public int Complete( string p_id ) { return DoFilteredIteration( p_id, DoFilteredComplete, true ); }
+        public static int Complete(string p_id)
+        {
+            return DoFilteredIteration(p_id, DoFilteredComplete, true);
+        }
+
         /// <summary>
         /// Completes all the Tweeners/Sequences with the given intId, and returns the total number of completed Tweeners/Sequences.
         /// Where a loop was involved and not infinite, the relative Tweener/Sequence completes at the position where it would actually be after the set number of loops.
@@ -1215,7 +1544,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of completed Tweeners/Sequences.
         /// </returns>
-        static public int Complete( int p_intId ) { return DoFilteredIteration( p_intId, DoFilteredComplete, true ); }
+        public static int Complete(int p_intId)
+        {
+            return DoFilteredIteration(p_intId, DoFilteredComplete, true);
+        }
+
         /// <summary>
         /// Completes the given Tweener, and returns the total number of completed ones (1 if the Tweener existed, otherwise 0).
         /// Where a loop was involved and not infinite, the relative Tweener completes at the position where it would actually be after the set number of loops.
@@ -1227,7 +1560,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of completed Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int Complete( Tweener p_tweener ) { return DoFilteredIteration( p_tweener, DoFilteredComplete, true ); }
+        public static int Complete(Tweener p_tweener)
+        {
+            return DoFilteredIteration(p_tweener, DoFilteredComplete, true);
+        }
+
         /// <summary>
         /// Completes the given Sequence, and returns the total number of completed ones (1 if the Sequence existed, otherwise 0).
         /// Where a loop was involved and not infinite, the relative Sequence completes at the position where it would actually be after the set number of loops.
@@ -1239,7 +1576,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of completed Sequences (1 if the Sequence existed, otherwise 0).
         /// </returns>
-        static public int Complete( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredComplete, true ); }
+        public static int Complete(Sequence p_sequence)
+        {
+            return DoFilteredIteration(p_sequence, DoFilteredComplete, true);
+        }
+
         /// <summary>
         /// Completes all Tweeners/Sequences, and returns the total number of completed Tweeners/Sequences.
         /// Where a loop was involved and not infinite, the relative Tweener/Sequence completes at the position where it would actually be after the set number of loops.
@@ -1248,7 +1589,10 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of completed Tweeners/Sequences.
         /// </returns>
-        static public int Complete() { return DoFilteredIteration( null, DoFilteredComplete, true ); }
+        public static int Complete()
+        {
+            return DoFilteredIteration(null, DoFilteredComplete, true);
+        }
 
         /// <summary>
         /// Kills all the tweens for the given target (unless they're were created inside a <see cref="Sequence"/>),
@@ -1260,7 +1604,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of killed Tweeners.
         /// </returns>
-        static public int Kill( object p_target ) { return DoFilteredIteration( p_target, DoFilteredKill, true ); }
+        public static int Kill(object p_target)
+        {
+            return DoFilteredIteration(p_target, DoFilteredKill, true);
+        }
+
         /// <summary>
         /// Kills all the Tweeners/Sequences with the given ID, and returns the total number of killed Tweeners/Sequences.
         /// </summary>
@@ -1270,7 +1618,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of killed Tweeners/Sequences.
         /// </returns>
-        static public int Kill( string p_id ) { return DoFilteredIteration( p_id, DoFilteredKill, true ); }
+        public static int Kill(string p_id)
+        {
+            return DoFilteredIteration(p_id, DoFilteredKill, true);
+        }
+
         /// <summary>
         /// Kills all the Tweeners/Sequences with the given intId, and returns the total number of killed Tweeners/Sequences.
         /// </summary>
@@ -1280,7 +1632,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of killed Tweeners/Sequences.
         /// </returns>
-        static public int Kill( int p_intId ) { return DoFilteredIteration( p_intId, DoFilteredKill, true ); }
+        public static int Kill(int p_intId)
+        {
+            return DoFilteredIteration(p_intId, DoFilteredKill, true);
+        }
+
         /// <summary>
         /// Kills the given Tweener, and returns the total number of killed ones (1 if the Tweener existed, otherwise 0).
         /// </summary>
@@ -1290,7 +1646,11 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of killed Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        static public int Kill( Tweener p_tweener ) { return DoFilteredIteration( p_tweener, DoFilteredKill, true ); }
+        public static int Kill(Tweener p_tweener)
+        {
+            return DoFilteredIteration(p_tweener, DoFilteredKill, true);
+        }
+
         /// <summary>
         /// Kills the given Sequence, and returns the total number of killed ones (1 if the Sequence existed, otherwise 0).
         /// </summary>
@@ -1300,14 +1660,21 @@ namespace Holoville.HOTween
         /// <returns>
         /// The total number of killed Sequences (1 if the Sequence existed, otherwise 0).
         /// </returns>
-        static public int Kill( Sequence p_sequence ) { return DoFilteredIteration( p_sequence, DoFilteredKill, true ); }
+        public static int Kill(Sequence p_sequence)
+        {
+            return DoFilteredIteration(p_sequence, DoFilteredKill, true);
+        }
+
         /// <summary>
         /// Kills all Tweeners/Sequences, and returns the total number of killed Tweeners/Sequences.
         /// </summary>
         /// <returns>
         /// The total number of killed Tweeners/Sequences.
         /// </returns>
-        static public int Kill() { return DoFilteredIteration( null, DoFilteredKill, true ); }
+        public static int Kill()
+        {
+            return DoFilteredIteration(null, DoFilteredKill, true);
+        }
 
         /// <summary>
         /// Returns <c>true</c> if the given target is currently involved in any running Tweener or Sequence (taking into account also nested tweens).
@@ -1320,13 +1687,20 @@ namespace Holoville.HOTween
         /// <returns>
         /// A value of <c>true</c> if the given target is currently involved in any running Tweener or Sequence (taking into account also nested tweens).
         /// </returns>
-        static public bool IsTweening( object p_target )
+        public static bool IsTweening(object p_target)
         {
-            if ( tweens == null )                        return false;
+            if (tweens == null)
+            {
+                return false;
+            }
 
-            for ( int i = 0; i < tweens.Count; ++i ) {
+            for (int i = 0; i < tweens.Count; ++i)
+            {
                 ABSTweenComponent tw = tweens[i];
-                if ( tw.IsTweening( p_target ) )        return true;
+                if (tw.IsTweening(p_target))
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -1341,13 +1715,20 @@ namespace Holoville.HOTween
         /// <returns>
         /// A value of <c>true</c> if the given target is linked to any Tweener or Sequence (running or not, taking into account also nested tweens).
         /// </returns>
-        static public bool IsLinkedTo( object p_target )
+        public static bool IsLinkedTo(object p_target)
         {
-            if ( tweens == null )                        return false;
+            if (tweens == null)
+            {
+                return false;
+            }
 
-            for ( int i = 0; i < tweens.Count; ++i ) {
+            for (int i = 0; i < tweens.Count; ++i)
+            {
                 ABSTweenComponent tw = tweens[i];
-                if ( tw.IsLinkedTo( p_target ) )        return true;
+                if (tw.IsLinkedTo(p_target))
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -1356,139 +1737,178 @@ namespace Holoville.HOTween
         // ===================================================================================
         // PRIVATE METHODS -------------------------------------------------------------------
 
-        static private void DoUpdate( UpdateType p_updateType, float p_elapsed )
+        static void DoUpdate(UpdateType p_updateType, float p_elapsed)
         {
-            for ( int i = tweens.Count - 1; i > -1; --i ) {
+            for (int i = tweens.Count - 1; i > -1; --i)
+            {
                 ABSTweenComponent tw = tweens[i];
-                if ( tw.updateType == p_updateType && tw.Update( p_elapsed * tw.timeScale ) ) {
+                if (tw.updateType == p_updateType && tw.Update(p_elapsed*tw.timeScale))
+                {
                     // Tween complete...
-                    if ( tw.destroyed || tw.autoKillOnComplete ) {
+                    if (tw.destroyed || tw.autoKillOnComplete)
+                    {
                         // ...autoKill: remove it.
-                        tweens[i].Kill( false );
-                        tweens.RemoveAt( i );
+                        tweens[i].Kill(false);
+                        tweens.RemoveAt(i);
                     }
                 }
             }
             // Dispatch eventual onCompletes.
-            if ( onCompletes.Count > 0 ) {
-                for ( int i = 0; i < onCompletes.Count; ++i )        onCompletes[i].OnCompleteDispatch();
+            if (onCompletes.Count > 0)
+            {
+                for (int i = 0; i < onCompletes.Count; ++i)
+                {
+                    onCompletes[i].OnCompleteDispatch();
+                }
                 onCompletes = new List<ABSTweenComponent>();
             }
         }
 
-        static private void DoFilteredKill( int p_index, bool p_optionalBool )
+        static void DoFilteredKill(int p_index, bool p_optionalBool)
         {
-            tweens.RemoveAt( p_index );
+            tweens.RemoveAt(p_index);
         }
 
-        static private void DoFilteredPause( int p_index, bool p_optionalBool )
+        static void DoFilteredPause(int p_index, bool p_optionalBool)
         {
             tweens[p_index].Pause();
         }
 
-        static private void DoFilteredPlay( int p_index, bool p_skipDelay )
+        static void DoFilteredPlay(int p_index, bool p_skipDelay)
         {
             ABSTweenComponent tw = tweens[p_index];
-            var tweener = tw as Tweener;
-            if ( tweener != null )
-                tweener.Play( p_skipDelay );
+            Tweener tweener = tw as Tweener;
+            if (tweener != null)
+            {
+                tweener.Play(p_skipDelay);
+            }
             else
+            {
                 tw.Play();
+            }
         }
 
-        static private void DoFilteredPlayForward( int p_index, bool p_skipDelay )
+        static void DoFilteredPlayForward(int p_index, bool p_skipDelay)
         {
             ABSTweenComponent tw = tweens[p_index];
-            var tweener = tw as Tweener;
-            if ( tweener != null )
-                tweener.PlayForward( p_skipDelay );
+            Tweener tweener = tw as Tweener;
+            if (tweener != null)
+            {
+                tweener.PlayForward(p_skipDelay);
+            }
             else
+            {
                 tw.PlayForward();
+            }
         }
 
-        static private void DoFilteredPlayBackwards( int p_index, bool p_optionalBool )
+        static void DoFilteredPlayBackwards(int p_index, bool p_optionalBool)
         {
             ABSTweenComponent tw = tweens[p_index];
-            var tweener = tw as Tweener;
-            if ( tweener != null )
+            Tweener tweener = tw as Tweener;
+            if (tweener != null)
+            {
                 tweener.PlayBackwards();
+            }
             else
+            {
                 tw.PlayBackwards();
+            }
         }
 
-        static private void DoFilteredRewind( int p_index, bool p_skipDelay )
+        static void DoFilteredRewind(int p_index, bool p_skipDelay)
         {
             ABSTweenComponent tw = tweens[p_index];
-            var tweener = tw as Tweener;
-            if ( tweener != null ) {
-                tweener.Rewind( p_skipDelay );
-            } else
-                tw.Rewind();
-        }
-
-        static private void DoFilteredRestart( int p_index, bool p_skipDelay )
-        {
-            ABSTweenComponent tw = tweens[p_index];
-            var tweener = tw as Tweener;
-            if ( tweener != null )
-                tweener.Restart( p_skipDelay );
+            Tweener tweener = tw as Tweener;
+            if (tweener != null)
+            {
+                tweener.Rewind(p_skipDelay);
+            }
             else
-                tw.Restart();
+            {
+                tw.Rewind();
+            }
         }
 
-        static private void DoFilteredReverse( int p_index, bool p_optionalBool )
+        static void DoFilteredRestart(int p_index, bool p_skipDelay)
+        {
+            ABSTweenComponent tw = tweens[p_index];
+            Tweener tweener = tw as Tweener;
+            if (tweener != null)
+            {
+                tweener.Restart(p_skipDelay);
+            }
+            else
+            {
+                tw.Restart();
+            }
+        }
+
+        static void DoFilteredReverse(int p_index, bool p_optionalBool)
         {
             tweens[p_index].Reverse();
         }
 
-        static private void DoFilteredComplete( int p_index, bool p_optionalBool )
+        static void DoFilteredComplete(int p_index, bool p_optionalBool)
         {
-            tweens[p_index].Complete( false );
+            tweens[p_index].Complete(false);
         }
 
-        static private void AddTween( ABSTweenComponent p_tween )
+        static void AddTween(ABSTweenComponent p_tween)
         {
-            if ( tweenGOInstance == null )            NewTweenInstance();
-            if ( tweens == null ) {
+            if (tweenGOInstance == null)
+            {
+                NewTweenInstance();
+            }
+            if (tweens == null)
+            {
                 tweens = new List<ABSTweenComponent>();
                 it.StartCoroutines();
             }
-            tweens.Add( p_tween );
+            tweens.Add(p_tween);
             SetGOName();
         }
 
-        static private void NewTweenInstance()
+        static void NewTweenInstance()
         {
-            tweenGOInstance = new GameObject( GAMEOBJNAME );
+            tweenGOInstance = new GameObject(GAMEOBJNAME);
             it = tweenGOInstance.AddComponent<HOTween>();
-            DontDestroyOnLoad( tweenGOInstance );
+            DontDestroyOnLoad(tweenGOInstance);
         }
 
-        private void StartCoroutines()
+        void StartCoroutines()
         {
             time = Time.realtimeSinceStartup;
-            StartCoroutine( StartCoroutines_StartTimeScaleIndependentUpdate() );
+            StartCoroutine(StartCoroutines_StartTimeScaleIndependentUpdate());
         }
-        private IEnumerator StartCoroutines_StartTimeScaleIndependentUpdate()
+
+        IEnumerator StartCoroutines_StartTimeScaleIndependentUpdate()
         {
             yield return null;
 
-            StartCoroutine( TimeScaleIndependentUpdate() );
+            StartCoroutine(TimeScaleIndependentUpdate());
 
             yield break;
         }
 
-        static private void SetGOName()
+        static void SetGOName()
         {
-            if ( !isEditor || !renameInstToCountTw )        return;
+            if (!isEditor || !renameInstToCountTw)
+            {
+                return;
+            }
             tweenGOInstance.name = GAMEOBJNAME + " : " + totTweens;
         }
 
-        static private bool CheckClear()
+        static bool CheckClear()
         {
-            if ( tweens == null || tweens.Count == 0 ) {
+            if (tweens == null || tweens.Count == 0)
+            {
                 Clear();
-                if ( isPermanent )    SetGOName();
+                if (isPermanent)
+                {
+                    SetGOName();
+                }
                 return true;
             }
 
@@ -1496,14 +1916,21 @@ namespace Holoville.HOTween
             return false;
         }
 
-        static private void Clear()
+        static void Clear()
         {
-            if ( it != null )                        it.StopAllCoroutines();
+            if (it != null)
+            {
+                it.StopAllCoroutines();
+            }
 
             tweens = null;
 
-            if ( !isPermanent ) {
-                if ( tweenGOInstance != null )        Destroy( tweenGOInstance );
+            if (!isPermanent)
+            {
+                if (tweenGOInstance != null)
+                {
+                    Destroy(tweenGOInstance);
+                }
                 tweenGOInstance = null;
                 it = null;
             }
@@ -1520,67 +1947,99 @@ namespace Holoville.HOTween
         /// - Tweener target if <see cref="object"/> (doesn't look inside sequence tweens)
         /// - Everything if null
         /// </summary>
-        static private int DoFilteredIteration( object p_filter, TweenDelegate.FilterFunc p_operation, bool p_collectionChanger ) { return DoFilteredIteration( p_filter, p_operation, p_collectionChanger, false ); }
-        static private int DoFilteredIteration( object p_filter, TweenDelegate.FilterFunc p_operation, bool p_collectionChanger, bool p_optionalBool )
+        static int DoFilteredIteration(object p_filter, TweenDelegate.FilterFunc p_operation, bool p_collectionChanger)
         {
-            if ( tweens == null )                return 0;
+            return DoFilteredIteration(p_filter, p_operation, p_collectionChanger, false);
+        }
+
+        static int DoFilteredIteration(object p_filter, TweenDelegate.FilterFunc p_operation, bool p_collectionChanger, bool p_optionalBool)
+        {
+            if (tweens == null)
+            {
+                return 0;
+            }
 
             int opCount = 0;
 
-            if ( p_filter == null ) {
+            if (p_filter == null)
+            {
                 // All
-                for ( int i = tweens.Count - 1; i > -1; --i ) {
-                    p_operation( i, p_optionalBool );
+                for (int i = tweens.Count - 1; i > -1; --i)
+                {
+                    p_operation(i, p_optionalBool);
                     ++opCount;
                 }
-            } else if ( p_filter is int ) {
+            }
+            else if (p_filter is int)
+            {
                 // Int ID
-                int f = (int) p_filter;
-                for ( int i = tweens.Count - 1; i > -1; --i ) {
-                    if ( tweens[i].intId == f ) {
-                        p_operation( i, p_optionalBool );
+                int f = (int)p_filter;
+                for (int i = tweens.Count - 1; i > -1; --i)
+                {
+                    if (tweens[i].intId == f)
+                    {
+                        p_operation(i, p_optionalBool);
                         ++opCount;
                     }
                 }
-            } else if ( p_filter is string ) {
+            }
+            else if (p_filter is string)
+            {
                 // ID
-                string f = (string) p_filter;
-                for ( int i = tweens.Count - 1; i > -1; --i ) {
-                    if ( tweens[i].id == f ) {
-                        p_operation( i, p_optionalBool );
+                string f = (string)p_filter;
+                for (int i = tweens.Count - 1; i > -1; --i)
+                {
+                    if (tweens[i].id == f)
+                    {
+                        p_operation(i, p_optionalBool);
                         ++opCount;
                     }
                 }
-            } else if ( p_filter is Tweener ) {
+            }
+            else if (p_filter is Tweener)
+            {
                 // Tweener
                 Tweener f = p_filter as Tweener;
-                for ( int i = tweens.Count - 1; i > -1; --i ) {
-                    if ( tweens[i] == f ) {
-                        p_operation( i, p_optionalBool );
+                for (int i = tweens.Count - 1; i > -1; --i)
+                {
+                    if (tweens[i] == f)
+                    {
+                        p_operation(i, p_optionalBool);
                         ++opCount;
                     }
                 }
-            } else if ( p_filter is Sequence ) {
+            }
+            else if (p_filter is Sequence)
+            {
                 // Sequence
                 Sequence f = p_filter as Sequence;
-                for ( int i = tweens.Count - 1; i > -1; --i ) {
-                    if ( tweens[i] == f ) {
-                        p_operation( i, p_optionalBool );
+                for (int i = tweens.Count - 1; i > -1; --i)
+                {
+                    if (tweens[i] == f)
+                    {
+                        p_operation(i, p_optionalBool);
                         ++opCount;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 // Target
-                for ( int i = tweens.Count - 1; i > -1; --i ) {
+                for (int i = tweens.Count - 1; i > -1; --i)
+                {
                     Tweener tw = tweens[i] as Tweener;
-                    if ( tw != null && tw.target == p_filter ) {
-                        p_operation( i, p_optionalBool );
+                    if (tw != null && tw.target == p_filter)
+                    {
+                        p_operation(i, p_optionalBool);
                         ++opCount;
                     }
                 }
             }
 
-            if ( p_collectionChanger )            CheckClear();
+            if (p_collectionChanger)
+            {
+                CheckClear();
+            }
 
             return opCount;
         }
@@ -1589,16 +2048,20 @@ namespace Holoville.HOTween
         /// Returns all the currently existing plugins involved in any tween, even if nested or paused,
         /// or <c>null</c> if there are none.
         /// </summary>
-        static private List<ABSTweenPlugin> GetPlugins()
+        static List<ABSTweenPlugin> GetPlugins()
         {
-            if ( tweens == null )            return null;
+            if (tweens == null)
+            {
+                return null;
+            }
 
             List<ABSTweenPlugin> plugs = new List<ABSTweenPlugin>();
-            for ( int i = 0; i < tweens.Count; ++i )
-                tweens[i].FillPluginsList( plugs );
+            for (int i = 0; i < tweens.Count; ++i)
+            {
+                tweens[i].FillPluginsList(plugs);
+            }
 
             return plugs;
         }
     }
 }
-

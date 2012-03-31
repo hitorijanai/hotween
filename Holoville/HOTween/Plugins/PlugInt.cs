@@ -36,12 +36,12 @@ namespace Holoville.HOTween.Plugins
     {
         // VARS ///////////////////////////////////////////////////
 
-        static internal    Type[]            validPropTypes = { typeof(Single),typeof(Int32) };
-        static internal    Type[]            validValueTypes = { typeof(Int32) };
+        internal static Type[] validPropTypes = {typeof(Single), typeof(Int32)};
+        internal static Type[] validValueTypes = {typeof(Int32)};
 
-        private        float                typedStartVal;
-        private        float                typedEndVal;
-        private        float                changeVal;
+        float typedStartVal;
+        float typedEndVal;
+        float changeVal;
 
         // GETS/SETS //////////////////////////////////////////////
 
@@ -49,13 +49,21 @@ namespace Holoville.HOTween.Plugins
         /// Gets the untyped start value,
         /// sets both the untyped and the typed start value.
         /// </summary>
-        override protected    object        startVal {
-            get { return _startVal; }
-            set {
-                if ( tweenObj.isFrom && isRelative ) {
-                    _startVal = typedStartVal = typedEndVal + Convert.ToSingle( value );
-                } else {
-                    _startVal = typedStartVal = Convert.ToSingle( value );
+        protected override object startVal
+        {
+            get
+            {
+                return _startVal;
+            }
+            set
+            {
+                if (tweenObj.isFrom && isRelative)
+                {
+                    _startVal = typedStartVal = typedEndVal + Convert.ToSingle(value);
+                }
+                else
+                {
+                    _startVal = typedStartVal = Convert.ToSingle(value);
                 }
             }
         }
@@ -64,9 +72,16 @@ namespace Holoville.HOTween.Plugins
         /// Gets the untyped end value,
         /// sets both the untyped and the typed end value.
         /// </summary>
-        override protected    object        endVal {
-            get { return _endVal; }
-            set { _endVal = typedEndVal = Convert.ToSingle( value ); }
+        protected override object endVal
+        {
+            get
+            {
+                return _endVal;
+            }
+            set
+            {
+                _endVal = typedEndVal = Convert.ToSingle(value);
+            }
         }
 
 
@@ -80,7 +95,11 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_endVal">
         /// The <see cref="float"/> value to tween to.
         /// </param>
-        public PlugInt( float p_endVal ) : base( p_endVal, false ) {}
+        public PlugInt(float p_endVal)
+            : base(p_endVal, false)
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of this plugin.
         /// </summary>
@@ -90,7 +109,11 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_easeType">
         /// The <see cref="EaseType"/> to use.
         /// </param>
-        public PlugInt( float p_endVal, EaseType p_easeType ) : base( p_endVal, p_easeType, false ) {}
+        public PlugInt(float p_endVal, EaseType p_easeType)
+            : base(p_endVal, p_easeType, false)
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of this plugin using the main ease type.
         /// </summary>
@@ -100,7 +123,11 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_isRelative">
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
-        public PlugInt( float p_endVal, bool p_isRelative ) : base( p_endVal, p_isRelative ) {}
+        public PlugInt(float p_endVal, bool p_isRelative)
+            : base(p_endVal, p_isRelative)
+        {
+        }
+
         /// <summary>
         /// Creates a new instance of this plugin.
         /// </summary>
@@ -113,7 +140,10 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_isRelative">
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
-        public PlugInt( float p_endVal, EaseType p_easeType, bool p_isRelative ) : base( p_endVal, p_easeType, p_isRelative ) {}
+        public PlugInt(float p_endVal, EaseType p_easeType, bool p_isRelative)
+            : base(p_endVal, p_easeType, p_isRelative)
+        {
+        }
 
         // ===================================================================================
         // METHODS ---------------------------------------------------------------------------
@@ -121,22 +151,29 @@ namespace Holoville.HOTween.Plugins
         /// <summary>
         /// Returns the speed-based duration based on the given speed x second.
         /// </summary>
-        override protected float GetSpeedBasedDuration( float p_speed )
+        protected override float GetSpeedBasedDuration(float p_speed)
         {
-            float speedDur = changeVal / p_speed;
-            if ( speedDur < 0 )        speedDur = -speedDur;
+            float speedDur = changeVal/p_speed;
+            if (speedDur < 0)
+            {
+                speedDur = -speedDur;
+            }
             return speedDur;
         }
 
         /// <summary>
         /// Sets the typed changeVal based on the current startVal and endVal.
         /// </summary>
-        override protected void SetChangeVal()
+        protected override void SetChangeVal()
         {
-            if ( isRelative && !tweenObj.isFrom )
+            if (isRelative && !tweenObj.isFrom)
+            {
                 changeVal = typedEndVal;
+            }
             else
+            {
                 changeVal = typedEndVal - typedStartVal;
+            }
         }
 
         /// <summary>
@@ -145,9 +182,9 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_diffIncr">
         /// The difference from the previous loop increment.
         /// </param>
-        override internal void SetIncremental( int p_diffIncr )
+        internal override void SetIncremental(int p_diffIncr)
         {
-            typedStartVal += changeVal * p_diffIncr;
+            typedStartVal += changeVal*p_diffIncr;
         }
 
         /// <summary>
@@ -156,11 +193,10 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_totElapsed">
         /// The total elapsed time since startup.
         /// </param>
-        override protected void DoUpdate ( float p_totElapsed )
+        protected override void DoUpdate(float p_totElapsed)
         {
-            float v = ease( p_totElapsed, typedStartVal, changeVal, _duration );
-            SetValue( Mathf.Round( v ) );
+            float v = ease(p_totElapsed, typedStartVal, changeVal, _duration);
+            SetValue(Mathf.Round(v));
         }
     }
 }
-

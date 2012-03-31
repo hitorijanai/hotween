@@ -34,14 +34,17 @@ namespace Holoville.HOTween
         /// When a tween completes, rewinds the animation and restarts (X to Y, repeat).
         /// </summary>
         Restart,
+
         /// <summary>
         /// Tweens to the end values then back to the original ones and so on (X to Y, Y to X, repeat).
         /// </summary>
         Yoyo,
+
         /// <summary>
         /// Like <see cref="LoopType.Yoyo"/>, but also inverts the easing (meaning if it was <c>easeInSomething</c>, it will become <c>easeOutSomething</c>, and viceversa).
         /// </summary>
         YoyoInverse,
+
         /// <summary>
         /// Continuously increments the tween (X to Y, Y to Y+(Y-X), and so on),
         /// thus always moving "onward".
@@ -49,4 +52,3 @@ namespace Holoville.HOTween
         Incremental
     }
 }
-
