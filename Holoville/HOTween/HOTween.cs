@@ -129,7 +129,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// Reference to overwrite manager (if in use).
         /// </summary>
-        internal static OverwriteManager overwriteMngr;
+        internal static OverwriteManager overwriteManager;
 
         static List<ABSTweenComponent> tweens; // Contains both Tweeners than Sequences
         static GameObject tweenGOInstance;
@@ -169,7 +169,7 @@ namespace Holoville.HOTween
         /// </summary>
         public static void Init()
         {
-            Init(false, true);
+            Init(false, true, false);
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace Holoville.HOTween
         /// </param>
         public static void Init(bool p_permanentInstance)
         {
-            Init(p_permanentInstance, true);
+            Init(p_permanentInstance, true, false);
         }
 
         /// <summary>
@@ -203,7 +203,11 @@ namespace Holoville.HOTween
         /// If <c>true</c>, renames HOTween's instance to show
         /// the current number of running tweens (only while in the Editor).
         /// </param>
-        public static void Init(bool p_permanentInstance, bool p_renameInstanceToCountTweens)
+        /// <param name="p_allowOverwriteManager">
+        /// If <c>true</c>, allows HOTween's instance to enable or disable
+        /// the OverwriteManager to improve performance if it is never needed.
+        /// </param>
+        public static void Init(bool p_permanentInstance, bool p_renameInstanceToCountTweens, bool p_allowOverwriteManager)
         {
             if (initialized)
             {
@@ -216,7 +220,11 @@ namespace Holoville.HOTween
             isEditor = Application.isEditor;
             isPermanent = p_permanentInstance;
             renameInstToCountTw = p_renameInstanceToCountTweens;
-            overwriteMngr = new OverwriteManager();
+
+            if (p_allowOverwriteManager)
+            {
+                overwriteManager = new OverwriteManager();
+            }
 
             if (isPermanent && tweenGOInstance == null)
             {
@@ -551,7 +559,10 @@ namespace Holoville.HOTween
         /// </summary>
         public static void EnableOverwriteManager()
         {
-            overwriteMngr.enabled = true;
+            if (overwriteManager != null)
+            {
+                overwriteManager.enabled = true;
+            }
         }
 
         /// <summary>
@@ -559,7 +570,10 @@ namespace Holoville.HOTween
         /// </summary>
         public static void DisableOverwriteManager()
         {
-            overwriteMngr.enabled = false;
+            if (overwriteManager != null)
+            {
+                overwriteManager.enabled = false;
+            }
         }
 
         /// <summary>

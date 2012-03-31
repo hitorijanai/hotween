@@ -166,7 +166,12 @@ namespace Holoville.HOTween
                 return;
             }
 
-            HOTween.overwriteMngr.RemoveTween(this);
+            // Remove tween from OverwriteManager if it was allowed on HOTween's initialization.
+            if (HOTween.overwriteManager != null)
+            {
+                HOTween.overwriteManager.RemoveTween(this);
+            }
+
             plugins = null;
             _target = null;
 
@@ -707,8 +712,11 @@ namespace Holoville.HOTween
                 return;
             }
 
-            // Add tween to OverwriteManager.
-            HOTween.overwriteMngr.AddTween(this);
+            // Add tween to OverwriteManager if it was allowed on HOTween's initialization.
+            if (HOTween.overwriteManager != null)
+            {
+                HOTween.overwriteManager.AddTween(this);
+            }
 
             base.OnStart();
         }

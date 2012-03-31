@@ -104,8 +104,7 @@ namespace Holoville.HOTween.Core
                                 }
                             }
                         }
-                    NEXT_TWEEN:
-                        continue;
+                    NEXT_TWEEN: ;
                     }
                 }
             }
