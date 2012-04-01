@@ -479,14 +479,17 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void Play()
         {
-            if (!_enabled)
+            if (_enabled)
             {
-                return;
+                PlayIfPaused();
             }
-            bool wasPaused = _isPaused;
-            _isPaused = false;
-            if (wasPaused)
+        }
+
+        void PlayIfPaused()
+        {
+            if (_isPaused)
             {
+                _isPaused = false;
                 OnPlay();
             }
         }
@@ -496,19 +499,10 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void PlayForward()
         {
-            if (!_enabled)
+            if (_enabled)
             {
-                return;
-            }
-            bool wasPaused = _isPaused;
-            _isPaused = false;
-            if (_isReversed)
-            {
-                Reverse();
-            }
-            if (wasPaused)
-            {
-                OnPlay();
+                _isReversed = false;
+                PlayIfPaused();
             }
         }
 
@@ -517,19 +511,10 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void PlayBackwards()
         {
-            if (!_enabled)
+            if (_enabled)
             {
-                return;
-            }
-            bool wasPaused = _isPaused;
-            _isPaused = false;
-            if (!_isReversed)
-            {
-                Reverse();
-            }
-            if (wasPaused)
-            {
-                OnPlay();
+                _isReversed = true;
+                PlayIfPaused();
             }
         }
 
@@ -538,14 +523,9 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void Pause()
         {
-            if (!_enabled)
+            if (_enabled && !_isPaused)
             {
-                return;
-            }
-            bool wasPaused = _isPaused;
-            _isPaused = true;
-            if (!wasPaused)
-            {
+                _isPaused = true;
                 OnPause();
             }
         }
@@ -566,11 +546,10 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void Reverse()
         {
-            if (!_enabled)
+            if (_enabled)
             {
-                return;
+                _isReversed = !_isReversed;
             }
-            _isReversed = !_isReversed;
         }
 
         /// <summary>
