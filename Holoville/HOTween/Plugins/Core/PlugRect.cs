@@ -163,7 +163,7 @@ namespace Holoville.HOTween.Plugins.Core
             // Uses length of diagonal to calculate units.
             float diffW = typedEndVal.width - typedStartVal.width;
             float diffH = typedEndVal.height - typedStartVal.height;
-            float diag = Mathf.Sqrt(diffW*diffW + diffH*diffH);
+            float diag = (float)Math.Sqrt(diffW * diffW + diffH * diffH);
             float speedDur = diag/p_speed;
             if (speedDur < 0)
             {

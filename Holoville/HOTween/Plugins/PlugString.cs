@@ -203,7 +203,7 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            int v = Mathf.RoundToInt(ease(p_totElapsed, 0, changeVal, _duration));
+            int v = (int)Math.Round(ease(p_totElapsed, 0, changeVal, _duration));
             string s;
 
             if (isRelative)

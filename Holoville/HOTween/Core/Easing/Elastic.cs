@@ -28,6 +28,7 @@
 // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System;
 using UnityEngine;
 
 namespace Holoville.HOTween.Core.Easing
@@ -108,9 +109,9 @@ namespace Holoville.HOTween.Core.Easing
             }
             else
             {
-                s = p/_2PI*Mathf.Asin(c/a);
+                s = p/_2PI*(float)Math.Asin(c/a);
             }
-            return -(a*Mathf.Pow(2, 10*(t -= 1))*Mathf.Sin((t*d - s)*_2PI/p)) + b;
+            return -(a*(float)Math.Pow(2, 10*(t -= 1))*(float)Math.Sin((t*d - s)*_2PI/p)) + b;
         }
 
         /// <summary>
@@ -182,9 +183,9 @@ namespace Holoville.HOTween.Core.Easing
             }
             else
             {
-                s = p/_2PI*Mathf.Asin(c/a);
+                s = p/_2PI*(float)Math.Asin(c/a);
             }
-            return (a*Mathf.Pow(2, -10*t)*Mathf.Sin((t*d - s)*_2PI/p) + c + b);
+            return (a*(float)Math.Pow(2, -10*t)*(float)Math.Sin((t*d - s)*_2PI/p) + c + b);
         }
 
         /// <summary>
@@ -256,13 +257,13 @@ namespace Holoville.HOTween.Core.Easing
             }
             else
             {
-                s = p/_2PI*Mathf.Asin(c/a);
+                s = p/_2PI*(float)Math.Asin(c/a);
             }
             if (t < 1)
             {
-                return -0.5f*(a*Mathf.Pow(2, 10*(t -= 1))*Mathf.Sin((t*d - s)*_2PI/p)) + b;
+                return -0.5f*(a*(float)Math.Pow(2, 10*(t -= 1))*(float)Math.Sin((t*d - s)*_2PI/p)) + b;
             }
-            return a*Mathf.Pow(2, -10*(t -= 1))*Mathf.Sin((t*d - s)*_2PI/p)*0.5f + c + b;
+            return a*(float)Math.Pow(2, -10*(t -= 1))*(float)Math.Sin((t*d - s)*_2PI/p)*0.5f + c + b;
         }
     }
 }

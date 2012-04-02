@@ -28,6 +28,7 @@
 // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+using System;
 using UnityEngine;
 
 namespace Holoville.HOTween.Core.Easing
@@ -59,7 +60,7 @@ namespace Holoville.HOTween.Core.Easing
         /// </returns>
         public static float EaseIn(float t, float b, float c, float d)
         {
-            return -c*Mathf.Cos(t/d*_HALF_PI) + c + b;
+            return -c*(float)Math.Cos(t/d*_HALF_PI) + c + b;
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Holoville.HOTween.Core.Easing
         /// </returns>
         public static float EaseOut(float t, float b, float c, float d)
         {
-            return c*Mathf.Sin(t/d*_HALF_PI) + b;
+            return c*(float)Math.Sin(t/d*_HALF_PI) + b;
         }
 
         /// <summary>
@@ -105,7 +106,7 @@ namespace Holoville.HOTween.Core.Easing
         /// </returns>
         public static float EaseInOut(float t, float b, float c, float d)
         {
-            return -c*0.5f*(Mathf.Cos(Mathf.PI*t/d) - 1) + b;
+            return -c*0.5f*((float)Math.Cos(Mathf.PI*t/d) - 1) + b;
         }
     }
 }

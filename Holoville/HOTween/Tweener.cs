@@ -277,7 +277,7 @@ namespace Holoville.HOTween
                 return;
             }
 
-            _fullElapsed = (_fullDuration == Mathf.Infinity ? _duration : _fullDuration);
+            _fullElapsed = float.IsPositiveInfinity(_fullDuration) ? _duration : _fullDuration;
             Update(0, true);
             if (_autoKillOnComplete)
             {

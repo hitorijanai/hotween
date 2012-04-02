@@ -28,7 +28,7 @@
 // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 // EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-using UnityEngine;
+using System;
 
 namespace Holoville.HOTween.Core.Easing
 {
@@ -57,7 +57,7 @@ namespace Holoville.HOTween.Core.Easing
         /// </returns>
         public static float EaseIn(float t, float b, float c, float d)
         {
-            return (t == 0) ? b : c*Mathf.Pow(2, 10*(t/d - 1)) + b - c*0.001f;
+            return (t == 0) ? b : c*(float)Math.Pow(2, 10*(t/d - 1)) + b - c*0.001f;
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Holoville.HOTween.Core.Easing
         /// </returns>
         public static float EaseOut(float t, float b, float c, float d)
         {
-            return (t == d) ? b + c : c*(-Mathf.Pow(2, -10*t/d) + 1) + b;
+            return (t == d) ? b + c : c*(-(float)Math.Pow(2, -10*t/d) + 1) + b;
         }
 
         /// <summary>
@@ -113,9 +113,9 @@ namespace Holoville.HOTween.Core.Easing
             }
             if ((t /= d*0.5f) < 1)
             {
-                return c*0.5f*Mathf.Pow(2, 10*(t - 1)) + b;
+                return c*0.5f*(float)Math.Pow(2, 10*(t - 1)) + b;
             }
-            return c*0.5f*(-Mathf.Pow(2, -10*--t) + 2) + b;
+            return c*0.5f*(-(float)Math.Pow(2, -10*--t) + 2) + b;
         }
     }
 }

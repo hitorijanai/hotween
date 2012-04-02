@@ -51,28 +51,28 @@ namespace Holoville.HOTween.Core
             {
                 n = 0;
             }
-            q.w = Mathf.Sqrt(n)*0.5f;
+            q.w = (float)Math.Sqrt(n) * 0.5f;
 
             n = 1 + m[0, 0] - m[1, 1] - m[2, 2];
             if (n < 0)
             {
                 n = 0;
             }
-            q.x = Mathf.Sqrt(n)*0.5f;
+            q.x = (float)Math.Sqrt(n) * 0.5f;
 
             n = 1 - m[0, 0] + m[1, 1] - m[2, 2];
             if (n < 0)
             {
                 n = 0;
             }
-            q.y = Mathf.Sqrt(n)*0.5f;
+            q.y = (float)Math.Sqrt(n) * 0.5f;
 
             n = 1 - m[0, 0] - m[1, 1] + m[2, 2];
             if (n < 0)
             {
                 n = 0;
             }
-            q.z = Mathf.Sqrt(n)*0.5f;
+            q.z = (float)Math.Sqrt(n) * 0.5f;
 
             q.x *= Mathf.Sign(q.x*(m[2, 1] - m[1, 2]));
             q.y *= Mathf.Sign(q.y*(m[0, 2] - m[2, 0]));

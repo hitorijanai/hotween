@@ -489,7 +489,7 @@ namespace Holoville.HOTween
         /// Sets the number of times the Tweener will run (default = <c>1</c>, meaning only one go and no other loops).
         /// </summary>
         /// <param name="p_loops">
-        /// Number of loops (set it to <c>-1</c> or <see cref="Mathf.Infinity"/> to apply infinite loops).
+        /// Number of loops (set it to <c>-1</c> or <see cref="float.PositiveInfinity"/> to apply infinite loops).
         /// </param>
         public TweenParms Loops(int p_loops)
         {
@@ -502,7 +502,7 @@ namespace Holoville.HOTween
         /// (default = <c>1</c>, <c>LoopType.Restart</c>).
         /// </summary>
         /// <param name="p_loops">
-        /// Number of loops (set it to <c>-1</c> or <see cref="Mathf.Infinity"/> to apply infinite loops).
+        /// Number of loops (set it to <c>-1</c> or <see cref="float.PositiveInfinity"/> to apply infinite loops).
         /// </param>
         /// <param name="p_loopType">
         /// The <see cref="LoopType"/> behaviour to use.

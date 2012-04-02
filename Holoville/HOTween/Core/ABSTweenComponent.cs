@@ -915,7 +915,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void SetFullDuration()
         {
-            _fullDuration = (_loops < 0 ? Mathf.Infinity : _duration*_loops);
+            _fullDuration = (_loops < 0 ? float.PositiveInfinity : _duration*_loops);
         }
 
         /// <summary>
