@@ -194,12 +194,13 @@ namespace Holoville.HOTween.Plugins.Core
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            float x = ease(p_totElapsed, typedStartVal.x, changeVal.x, _duration);
-            float y = ease(p_totElapsed, typedStartVal.y, changeVal.y, _duration);
-            float z = ease(p_totElapsed, typedStartVal.z, changeVal.z, _duration);
-            float w = ease(p_totElapsed, typedStartVal.w, changeVal.w, _duration);
+            float time = ease(p_totElapsed, 0f, 1f, _duration);
 
-            SetValue(new Vector4(x, y, z, w));
+            SetValue(new Vector4(
+                typedStartVal.x + changeVal.x * time,
+                typedStartVal.y + changeVal.y * time,
+                typedStartVal.z + changeVal.z * time,
+                typedStartVal.w + changeVal.w * time));
         }
     }
 }

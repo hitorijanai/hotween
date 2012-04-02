@@ -319,11 +319,12 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            float x = ease(p_totElapsed, typedStartVal.x, changeVal.x, _duration);
-            float y = ease(p_totElapsed, typedStartVal.y, changeVal.y, _duration);
-            float z = ease(p_totElapsed, typedStartVal.z, changeVal.z, _duration);
+            float time = ease(p_totElapsed, 0f, 1f, _duration);
 
-            SetValue(Quaternion.Euler(new Vector3(x, y, z)));
+            SetValue(Quaternion.Euler(new Vector3(
+                typedStartVal.x + changeVal.x * time,
+                typedStartVal.y + changeVal.y * time,
+                typedStartVal.z + changeVal.z * time)));
         }
     }
 }

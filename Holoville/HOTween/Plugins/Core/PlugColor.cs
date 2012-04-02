@@ -40,7 +40,6 @@ namespace Holoville.HOTween.Plugins.Core
 
         Color typedStartVal;
         Color typedEndVal;
-        float changeVal;
         Color diffChangeVal; // Used for incremental loops.
 
         // GETS/SETS //////////////////////////////////////////////
@@ -153,7 +152,7 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         protected override float GetSpeedBasedDuration(float p_speed)
         {
-            float speedDur = changeVal/p_speed;
+            float speedDur = 1f/p_speed;
             if (speedDur < 0)
             {
                 speedDur = -speedDur;
@@ -166,8 +165,6 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         protected override void SetChangeVal()
         {
-            changeVal = 1;
-
             if (isRelative && !tweenObj.isFrom)
             {
                 typedEndVal = typedStartVal + typedEndVal;
@@ -196,9 +193,13 @@ namespace Holoville.HOTween.Plugins.Core
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            float val = ease(p_totElapsed, 0, changeVal, _duration);
+            float time = ease(p_totElapsed, 0f, 1f, _duration);
 
-            SetValue(Color.Lerp(typedStartVal, typedEndVal, val));
+            SetValue(new Color(
+                typedStartVal.r + diffChangeVal.r * time,
+                typedStartVal.g + diffChangeVal.g * time,
+                typedStartVal.b + diffChangeVal.b * time,
+                typedStartVal.a + diffChangeVal.a * time));
         }
     }
 }
