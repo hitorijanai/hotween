@@ -34,7 +34,7 @@ using UnityEngine;
 namespace Holoville.HOTween.Core.Easing
 {
     /// <summary>
-    /// This class contains a C# port of the easing equations created by Robert Penner (http://http://robertpenner.com/easing).
+    /// This class contains a C# port of the easing equations created by Robert Penner (http://robertpenner.com/easing).
     /// </summary>
     public static class Elastic
     {

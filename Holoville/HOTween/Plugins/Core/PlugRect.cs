@@ -42,7 +42,6 @@ namespace Holoville.HOTween.Plugins.Core
 
         Rect typedStartVal;
         Rect typedEndVal;
-        float changeVal;
         Rect diffChangeVal; // Used for incremental loops.
 
         // GETS/SETS //////////////////////////////////////////////
@@ -177,8 +176,6 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         protected override void SetChangeVal()
         {
-            changeVal = 1;
-
             if (isRelative && !tweenObj.isFrom)
             {
                 typedEndVal.x += typedStartVal.x;
@@ -227,15 +224,15 @@ namespace Holoville.HOTween.Plugins.Core
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            float val = ease(p_totElapsed, 0, changeVal, _duration);
+            float time = ease(p_totElapsed, 0f, 1f, _duration);
 
-            Rect r = new Rect();
-            r.x = Mathf.Lerp(typedStartVal.x, typedEndVal.x, val);
-            r.y = Mathf.Lerp(typedStartVal.y, typedEndVal.y, val);
-            r.width = Mathf.Lerp(typedStartVal.width, typedEndVal.width, val);
-            r.height = Mathf.Lerp(typedStartVal.height, typedEndVal.height, val);
+            Rect rect = new Rect();
+            rect.x = typedStartVal.x + diffChangeVal.x * time;
+            rect.y = typedStartVal.y + diffChangeVal.x * time; ;
+            rect.width = typedStartVal.width + diffChangeVal.width * time; ;
+            rect.height = typedStartVal.height + diffChangeVal.height * time;;
 
-            SetValue(r);
+            SetValue(rect);
         }
     }
 }
