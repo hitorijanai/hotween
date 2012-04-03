@@ -361,30 +361,5 @@ namespace Holoville.HOTween
             onCompleteParms = p_funcParms;
             return this;
         }
-
-
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // ||| INTERNAL CLASSES ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-        class HOTPropData
-        {
-            // VARS ///////////////////////////////////////////////////
-
-            public string propName;
-            public object endValOrPlugin;
-            public bool isRelative;
-
-            // ***********************************************************************************
-            // CONSTRUCTOR
-            // ***********************************************************************************
-
-            public HOTPropData(string p_propName, object p_endValOrPlugin, bool p_isRelative)
-            {
-                propName = p_propName;
-                endValOrPlugin = p_endValOrPlugin;
-                isRelative = p_isRelative;
-            }
-        }
     }
 }

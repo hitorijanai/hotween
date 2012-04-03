@@ -745,14 +745,6 @@ namespace Holoville.HOTween
             base.Startup();
         }
 
-        /// <summary>
-        /// Manages on first start behaviour.
-        /// </summary>
-        protected override void OnStart()
-        {
-            base.OnStart();
-        }
-
         // ===================================================================================
         // HELPERS ---------------------------------------------------------------------------
 
