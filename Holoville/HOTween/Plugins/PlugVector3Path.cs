@@ -480,23 +480,23 @@ namespace Holoville.HOTween.Plugins
             {
                 switch (orientType)
                 {
-                    case OrientType.LookAtPosition:
-                        orientTrans.LookAt(lookPos, Vector3.up);
-                        break;
-                    case OrientType.LookAtTransform:
-                        if (orientTrans != null && !orientTrans.Equals(null))
-                        {
-                            orientTrans.LookAt(lookTrans.position, Vector3.up);
-                        }
-                        break;
-                    case OrientType.ToPath:
-                        float nextT = pathPerc + lookAheadVal;
-                        if (nextT > 1)
-                        {
-                            nextT = nextT - 1;
-                        }
-                        Vector3 nextP = path.GetPoint(nextT);
-                        orientTrans.LookAt(nextP, orientTrans.up);
+                case OrientType.LookAtPosition:
+                    orientTrans.LookAt(lookPos, Vector3.up);
+                    break;
+                case OrientType.LookAtTransform:
+                    if (orientTrans != null && !orientTrans.Equals(null))
+                    {
+                        orientTrans.LookAt(lookTrans.position, Vector3.up);
+                    }
+                    break;
+                case OrientType.ToPath:
+                    float nextT = pathPerc + lookAheadVal;
+                    if (nextT > 1)
+                    {
+                        nextT = (isClosedPath ? nextT - 1 : 1.000001f);
+                    }
+                    Vector3 nextP = path.GetPoint(nextT);
+                    orientTrans.LookAt(nextP, orientTrans.up);
 //                    if ( lockAxis != Axis.None ) {
 //                        // FIXME LockAxis
 //                        Vector3 rot = orientTrans.eulerAngles;
@@ -505,7 +505,7 @@ namespace Holoville.HOTween.Plugins
 //                        if ( ( lockAxis & Axis.Z ) == Axis.Z )    rot.z = lockRot.z;
 //                        orientTrans.rotation = Quaternion.Euler( rot );
 //                    }
-                        break;
+                    break;
                 }
             }
         }
