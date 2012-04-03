@@ -25,7 +25,9 @@
 
 using System;
 using System.Reflection;
+#if !MICRO
 using FastDynamicMemberAccessor;
+#endif
 using Holoville.HOTween.Core;
 
 namespace Holoville.HOTween.Plugins.Core
@@ -75,7 +77,9 @@ namespace Holoville.HOTween.Plugins.Core
 
         EaseType easeType; // Store so instance can be cloned and ease can be changed while playing.
         EaseInfo easeInfo;
+#if !MICRO
         IMemberAccessor valAccessor;
+#endif
         bool wasStarted;
         bool speedBasedDurationWasSet;
         int prevCompletedLoops; // Stored only during Incremental loop type.
@@ -246,6 +250,10 @@ namespace Holoville.HOTween.Plugins.Core
             }
             _duration = tweenObj.duration;
 
+#if MICRO
+            propInfo = p_propertyInfo;
+            fieldInfo = p_fieldInfo;
+#else
             if (HOTween.isIOS)
             {
                 propInfo = p_propertyInfo;
@@ -258,6 +266,7 @@ namespace Holoville.HOTween.Plugins.Core
                     valAccessor = MemberAccessorCacher.Make(p_targetType, p_propertyName, p_propertyInfo, p_fieldInfo);
                 }
             }
+#endif
         }
 
         /// <summary>
@@ -494,6 +503,42 @@ namespace Holoville.HOTween.Plugins.Core
         /// </param>
         protected virtual void SetValue(object p_value)
         {
+#if MICRO
+            if (propInfo != null)
+            {
+                try
+                {
+                    propInfo.SetValue(tweenObj.target, p_value, null);
+                }
+                catch (InvalidCastException)
+                {
+                    // This happens only if a float is being assigned to an int.
+                    propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)p_value), null);
+                }
+                catch (ArgumentException)
+                {
+                    // This happens only on iOS if a float is being assigned to an int.
+                    propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)p_value), null);
+                }
+            }
+            else
+            {
+                try
+                {
+                    fieldInfo.SetValue(tweenObj.target, p_value);
+                }
+                catch (InvalidCastException)
+                {
+                    // This happens only if a float is being assigned to an int.
+                    fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)p_value));
+                }
+                catch (ArgumentException)
+                {
+                    // This happens only on iOS if a float is being assigned to an int.
+                    fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)p_value));
+                }
+            }
+#else
             if (HOTween.isIOS)
             {
                 if (propInfo != null)
@@ -548,6 +593,7 @@ namespace Holoville.HOTween.Plugins.Core
                     valAccessor.Set(tweenObj.target, (int)Math.Floor((double)p_value));
                 }
             }
+#endif
         }
 
         /// <summary>
@@ -556,6 +602,13 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         protected virtual object GetValue()
         {
+#if MICRO
+            if (propInfo != null)
+            {
+                return propInfo.GetValue(tweenObj.target, null);
+            }
+            return fieldInfo.GetValue(tweenObj.target);
+#else
             if (HOTween.isIOS)
             {
                 if (propInfo != null)
@@ -565,6 +618,7 @@ namespace Holoville.HOTween.Plugins.Core
                 return fieldInfo.GetValue(tweenObj.target);
             }
             return valAccessor.Get(tweenObj.target);
+#endif
         }
     }
 }
