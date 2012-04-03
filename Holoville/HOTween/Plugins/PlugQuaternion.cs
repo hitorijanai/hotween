@@ -256,47 +256,43 @@ namespace Holoville.HOTween.Plugins
             if (isRelative && !tweenObj.isFrom)
             {
                 changeVal = typedEndVal;
+                return;
             }
-            else
-            {
-                changeVal = new Vector3(typedEndVal.x - typedStartVal.x, typedEndVal.y - typedStartVal.y, typedEndVal.z - typedStartVal.z);
 
-                if (beyond360)
-                {
-                    changeVal = typedEndVal - typedStartVal;
-                }
-                else
-                {
-                    Vector3 ev = typedEndVal;
-                    if (ev.x > 360)
-                    {
-                        ev.x = ev.x%360;
-                    }
-                    if (ev.y > 360)
-                    {
-                        ev.y = ev.y%360;
-                    }
-                    if (ev.z > 360)
-                    {
-                        ev.z = ev.z%360;
-                    }
-                    changeVal = ev - typedStartVal;
-                    float altX = 360 - typedStartVal.x + ev.x;
-                    if (altX < (changeVal.x > 0 ? changeVal.x : -changeVal.x))
-                    {
-                        changeVal.x = altX;
-                    }
-                    float altY = 360 - typedStartVal.y + ev.y;
-                    if (altY < (changeVal.y > 0 ? changeVal.y : -changeVal.y))
-                    {
-                        changeVal.y = altY;
-                    }
-                    float altZ = 360 - typedStartVal.z + ev.z;
-                    if (altZ < (changeVal.z > 0 ? changeVal.z : -changeVal.z))
-                    {
-                        changeVal.z = altZ;
-                    }
-                }
+            if (beyond360)
+            {
+                changeVal = typedEndVal - typedStartVal;
+                return;
+            }
+
+            Vector3 ev = typedEndVal;
+            if (ev.x > 360)
+            {
+                ev.x = ev.x%360;
+            }
+            if (ev.y > 360)
+            {
+                ev.y = ev.y%360;
+            }
+            if (ev.z > 360)
+            {
+                ev.z = ev.z%360;
+            }
+            changeVal = ev - typedStartVal;
+            float altX = 360 - typedStartVal.x + ev.x;
+            if (altX < (changeVal.x > 0 ? changeVal.x : -changeVal.x))
+            {
+                changeVal.x = altX;
+            }
+            float altY = 360 - typedStartVal.y + ev.y;
+            if (altY < (changeVal.y > 0 ? changeVal.y : -changeVal.y))
+            {
+                changeVal.y = altY;
+            }
+            float altZ = 360 - typedStartVal.z + ev.z;
+            if (altZ < (changeVal.z > 0 ? changeVal.z : -changeVal.z))
+            {
+                changeVal.z = altZ;
             }
         }
 
