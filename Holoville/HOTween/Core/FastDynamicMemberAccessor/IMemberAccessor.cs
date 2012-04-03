@@ -4,6 +4,7 @@
 // Author: James Nies
 // Licensed under The Code Project Open License (CPOL): http://www.codeproject.com/info/cpol10.aspx
 
+#if !MICRO
 namespace FastDynamicMemberAccessor
 {
     /// <summary>
@@ -31,3 +32,4 @@ namespace FastDynamicMemberAccessor
         void Set(object target, object value);
     }
 }
+#endif

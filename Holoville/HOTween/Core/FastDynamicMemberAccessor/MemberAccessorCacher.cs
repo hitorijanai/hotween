@@ -23,6 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+#if !MICRO
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -78,3 +79,4 @@ namespace FastDynamicMemberAccessor
         }
     }
 }
+#endif

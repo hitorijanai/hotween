@@ -4,6 +4,7 @@
 // Author: James Nies
 // Licensed under The Code Project Open License (CPOL): http://www.codeproject.com/info/cpol10.aspx
 
+#if !MICRO
 using System;
 using System.Collections;
 using System.Reflection;
@@ -281,3 +282,4 @@ namespace FastDynamicMemberAccessor
         protected abstract void _EmitSetter(TypeBuilder type);
     }
 }
+#endif
