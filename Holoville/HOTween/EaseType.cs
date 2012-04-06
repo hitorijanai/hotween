@@ -184,20 +184,5 @@ namespace Holoville.HOTween
         /// Ease in out bounce.
         /// </summary>
         EaseInOutBounce,
-
-        /// <summary>
-        /// Ease in strong.
-        /// </summary>
-        EaseInStrong,
-
-        /// <summary>
-        /// Ease out strong.
-        /// </summary>
-        EaseOutStrong,
-
-        /// <summary>
-        /// Ease in out strong.
-        /// </summary>
-        EaseInOutStrong
     }
 }
