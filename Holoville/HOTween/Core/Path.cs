@@ -223,7 +223,7 @@ namespace Holoville.HOTween.Core
 
             out_fullLen = 0;
             float incr = 1f/p_subdivisions;
-            Dictionary<float, float> timeLenTable = new Dictionary<float, float>();
+            Dictionary<float, float> timeLenTable = new Dictionary<float, float>(p_subdivisions);
 
             Vector3 prevP = GetPoint(0);
 
