@@ -38,75 +38,75 @@ namespace Holoville.HOTween.Core.Easing
     /// </summary>
     public static class Sine
     {
-        const float _HALF_PI = Mathf.PI*0.5f;
+        const float PiOver2 = Mathf.PI*0.5f;
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a sinusoidal (sin(t)) easing in: accelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseIn(float t, float b, float c, float d)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration)
         {
-            return -c*(float)Math.Cos(t/d*_HALF_PI) + c + b;
+            return -changeValue*(float)Math.Cos(time/duration*PiOver2) + changeValue + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a sinusoidal (sin(t)) easing out: decelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseOut(float t, float b, float c, float d)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration)
         {
-            return c*(float)Math.Sin(t/d*_HALF_PI) + b;
+            return changeValue*(float)Math.Sin(time/duration*PiOver2) + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a sinusoidal (sin(t)) easing in/out: acceleration until halfway, then deceleration.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration)
         {
-            return -c*0.5f*((float)Math.Cos(Mathf.PI*t/d) - 1) + b;
+            return -changeValue*0.5f*((float)Math.Cos(Mathf.PI*time/duration) - 1) + startValue;
         }
     }
 }

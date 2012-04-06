@@ -36,95 +36,26 @@ namespace Holoville.HOTween.Core.Easing
     public static class Linear
     {
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a simple linear tweening, with no easing.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseNone(float t, float b, float c, float d)
+        public static float EaseNone(float time, float startValue, float changeValue, float duration)
         {
-            return c*t/d + b;
-        }
-
-        /// <summary>
-        /// Tween.
-        /// </summary>
-        /// <param name="t">
-        /// Time.
-        /// </param>
-        /// <param name="b">
-        /// Begin value.
-        /// </param>
-        /// <param name="c">
-        /// Change value.
-        /// </param>
-        /// <param name="d">
-        /// Duration.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Single"/>
-        /// </returns>
-        public static float EaseIn(float t, float b, float c, float d)
-        {
-            return c*t/d + b;
-        }
-
-        /// <summary>
-        /// Tween.
-        /// </summary>
-        /// <param name="t">
-        /// Time.
-        /// </param>
-        /// <param name="b">
-        /// Begin value.
-        /// </param>
-        /// <param name="c">
-        /// Change value.
-        /// </param>
-        /// <param name="d">
-        /// Duration.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Single"/>
-        /// </returns>
-        public static float EaseOut(float t, float b, float c, float d)
-        {
-            return c*t/d + b;
-        }
-
-        /// <summary>
-        /// Tween.
-        /// </summary>
-        /// <param name="t">
-        /// Time.
-        /// </param>
-        /// <param name="b">
-        /// Begin value.
-        /// </param>
-        /// <param name="c">
-        /// Change value.
-        /// </param>
-        /// <param name="d">
-        /// Duration.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Single"/>
-        /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d)
-        {
-            return c*t/d + b;
+            return changeValue*time/duration + startValue;
         }
     }
 }

@@ -38,232 +38,232 @@ namespace Holoville.HOTween.Core.Easing
     /// </summary>
     public static class Elastic
     {
-        const float _2PI = Mathf.PI*2;
+        const float TwoPi = Mathf.PI * 2;
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for an elastic (exponentially decaying sine wave) easing in: accelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseIn(float t, float b, float c, float d)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration)
         {
-            return EaseIn(t, b, c, d, 0, 0);
+            return EaseIn(time, startValue, changeValue, duration, 0, 0);
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for an elastic (exponentially decaying sine wave) easing in: accelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
-        /// <param name="a">
-        /// Variable.
+        /// <param name="amplitude">
+        /// Amplitude.
         /// </param>
-        /// <param name="p">
-        /// Variable.
+        /// <param name="period">
+        /// Period.
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseIn(float t, float b, float c, float d, float a, float p)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration, float amplitude, float period)
         {
             float s;
-            if (t == 0)
+            if (time == 0)
             {
-                return b;
+                return startValue;
             }
-            if ((t /= d) == 1)
+            if ((time /= duration) == 1)
             {
-                return b + c;
+                return startValue + changeValue;
             }
-            if (p == 0)
+            if (period == 0)
             {
-                p = d*0.3f;
+                period = duration*0.3f;
             }
-            if (a == 0 || (c > 0 && a < c) || (c < 0 && a < -c))
+            if (amplitude == 0 || (changeValue > 0 && amplitude < changeValue) || (changeValue < 0 && amplitude < -changeValue))
             {
-                a = c;
-                s = p/4;
+                amplitude = changeValue;
+                s = period/4;
             }
             else
             {
-                s = p/_2PI*(float)Math.Asin(c/a);
+                s = period/TwoPi*(float)Math.Asin(changeValue/amplitude);
             }
-            return -(a*(float)Math.Pow(2, 10*(t -= 1))*(float)Math.Sin((t*d - s)*_2PI/p)) + b;
+            return -(amplitude*(float)Math.Pow(2, 10*(time -= 1))*(float)Math.Sin((time*duration - s)*TwoPi/period)) + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for an elastic (exponentially decaying sine wave) easing out: decelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseOut(float t, float b, float c, float d)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration)
         {
-            return EaseOut(t, b, c, d, 0, 0);
+            return EaseOut(time, startValue, changeValue, duration, 0, 0);
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for an elastic (exponentially decaying sine wave) easing out: decelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
-        /// <param name="a">
-        /// Variable.
+        /// <param name="amplitude">
+        /// Amplitude.
         /// </param>
-        /// <param name="p">
-        /// Variable.
+        /// <param name="period">
+        /// Period.
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseOut(float t, float b, float c, float d, float a, float p)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration, float amplitude, float period)
         {
             float s;
-            if (t == 0)
+            if (time == 0)
             {
-                return b;
+                return startValue;
             }
-            if ((t /= d) == 1)
+            if ((time /= duration) == 1)
             {
-                return b + c;
+                return startValue + changeValue;
             }
-            if (p == 0)
+            if (period == 0)
             {
-                p = d*0.3f;
+                period = duration*0.3f;
             }
-            if (a == 0 || (c > 0 && a < c) || (c < 0 && a < -c))
+            if (amplitude == 0 || (changeValue > 0 && amplitude < changeValue) || (changeValue < 0 && amplitude < -changeValue))
             {
-                a = c;
-                s = p/4;
+                amplitude = changeValue;
+                s = period/4;
             }
             else
             {
-                s = p/_2PI*(float)Math.Asin(c/a);
+                s = period/TwoPi*(float)Math.Asin(changeValue/amplitude);
             }
-            return (a*(float)Math.Pow(2, -10*t)*(float)Math.Sin((t*d - s)*_2PI/p) + c + b);
+            return (amplitude*(float)Math.Pow(2, -10*time)*(float)Math.Sin((time*duration - s)*TwoPi/period) + changeValue + startValue);
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for an elastic (exponentially decaying sine wave) easing in/out: acceleration until halfway, then deceleration.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration)
         {
-            return EaseInOut(t, b, c, d, 0, 0);
+            return EaseInOut(time, startValue, changeValue, duration, 0, 0);
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for an elastic (exponentially decaying sine wave) easing in/out: acceleration until halfway, then deceleration.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
-        /// <param name="a">
-        /// Variable.
+        /// <param name="amplitude">
+        /// Amplitude.
         /// </param>
-        /// <param name="p">
-        /// Variable.
+        /// <param name="period">
+        /// Period.
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d, float a, float p)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration, float amplitude, float period)
         {
             float s;
-            if (t == 0)
+            if (time == 0)
             {
-                return b;
+                return startValue;
             }
-            if ((t /= d*0.5f) == 2)
+            if ((time /= duration*0.5f) == 2)
             {
-                return b + c;
+                return startValue + changeValue;
             }
-            if (p == 0)
+            if (period == 0)
             {
-                p = d*(0.3f*1.5f);
+                period = duration*(0.3f*1.5f);
             }
-            if (a == 0 || (c > 0 && a < c) || (c < 0 && a < -c))
+            if (amplitude == 0 || (changeValue > 0 && amplitude < changeValue) || (changeValue < 0 && amplitude < -changeValue))
             {
-                a = c;
-                s = p/4;
+                amplitude = changeValue;
+                s = period/4;
             }
             else
             {
-                s = p/_2PI*(float)Math.Asin(c/a);
+                s = period/TwoPi*(float)Math.Asin(changeValue/amplitude);
             }
-            if (t < 1)
+            if (time < 1)
             {
-                return -0.5f*(a*(float)Math.Pow(2, 10*(t -= 1))*(float)Math.Sin((t*d - s)*_2PI/p)) + b;
+                return -0.5f*(amplitude*(float)Math.Pow(2, 10*(time -= 1))*(float)Math.Sin((time*duration - s)*TwoPi/period)) + startValue;
             }
-            return a*(float)Math.Pow(2, -10*(t -= 1))*(float)Math.Sin((t*d - s)*_2PI/p)*0.5f + c + b;
+            return amplitude*(float)Math.Pow(2, -10*(time -= 1))*(float)Math.Sin((time*duration - s)*TwoPi/period)*0.5f + changeValue + startValue;
         }
     }
 }

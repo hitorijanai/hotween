@@ -36,154 +36,154 @@ namespace Holoville.HOTween.Core.Easing
     public static class Back
     {
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in: accelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseIn(float t, float b, float c, float d)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration)
         {
-            return EaseIn(t, b, c, d, 1.70158f);
+            return EaseIn(time, startValue, changeValue, duration, 1.70158f);
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in: accelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
-        /// <param name="s">
-        /// Back factor.
+        /// <param name="overshoot">
+        /// Overshoot ammount: higher means greater overshoot (0 produces cubic easing with no overshoot, and the default value of 1.70158 produces an overshoot of 10 percent).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseIn(float t, float b, float c, float d, float s)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration, float overshoot)
         {
-            return c*(t /= d)*t*((s + 1)*t - s) + b;
+            return changeValue*(time /= duration)*time*((overshoot + 1)*time - overshoot) + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing out: decelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseOut(float t, float b, float c, float d)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration)
         {
-            return EaseOut(t, b, c, d, 1.70158f);
+            return EaseOut(time, startValue, changeValue, duration, 1.70158f);
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing out: decelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
-        /// <param name="s">
-        /// Back factor.
+        /// <param name="overshoot">
+        /// Overshoot ammount: higher means greater overshoot (0 produces cubic easing with no overshoot, and the default value of 1.70158 produces an overshoot of 10 percent).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseOut(float t, float b, float c, float d, float s)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration, float overshoot)
         {
-            return c*((t = t/d - 1)*t*((s + 1)*t + s) + 1) + b;
+            return changeValue*((time = time/duration - 1)*time*((overshoot + 1)*time + overshoot) + 1) + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in/out: acceleration until halfway, then deceleration.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration)
         {
-            return EaseInOut(t, b, c, d, 1.70158f);
+            return EaseInOut(time, startValue, changeValue, duration, 1.70158f);
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in/out: acceleration until halfway, then deceleration.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
-        /// <param name="s">
-        /// Back factor.
+        /// <param name="overshoot">
+        /// Overshoot ammount: higher means greater overshoot (0 produces cubic easing with no overshoot, and the default value of 1.70158 produces an overshoot of 10 percent).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d, float s)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration, float overshoot)
         {
-            if ((t /= d*0.5f) < 1)
+            if ((time /= duration*0.5f) < 1)
             {
-                return c*0.5f*(t*t*(((s *= (1.525f)) + 1)*t - s)) + b;
+                return changeValue*0.5f*(time*time*(((overshoot *= (1.525f)) + 1)*time - overshoot)) + startValue;
             }
-            return c/2*((t -= 2)*t*(((s *= (1.525f)) + 1)*t + s) + 2) + b;
+            return changeValue/2*((time -= 2)*time*(((overshoot *= (1.525f)) + 1)*time + overshoot) + 2) + startValue;
         }
     }
 }

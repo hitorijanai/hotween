@@ -36,76 +36,76 @@ namespace Holoville.HOTween.Core.Easing
     public static class Quint
     {
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a quintic (t^5) easing in: accelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseIn(float t, float b, float c, float d)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration)
         {
-            return c*(t /= d)*t*t*t*t + b;
+            return changeValue*(time /= duration)*time*time*time*time + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a quintic (t^5) easing out: decelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseOut(float t, float b, float c, float d)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration)
         {
-            return c*((t = t/d - 1)*t*t*t*t + 1) + b;
+            return changeValue*((time = time/duration - 1)*time*time*time*time + 1) + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a quintic (t^5) easing in/out: acceleration until halfway, then deceleration.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration)
         {
-            if ((t /= d*0.5f) < 1)
+            if ((time /= duration*0.5f) < 1)
             {
-                return c*0.5f*t*t*t*t*t + b;
+                return changeValue*0.5f*time*time*time*time*time + startValue;
             }
-            return c*0.5f*((t -= 2)*t*t*t*t + 2) + b;
+            return changeValue*0.5f*((time -= 2)*time*time*time*time + 2) + startValue;
         }
     }
 }

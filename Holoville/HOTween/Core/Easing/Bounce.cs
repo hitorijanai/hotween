@@ -36,88 +36,88 @@ namespace Holoville.HOTween.Core.Easing
     public static class Bounce
     {
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing in: accelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseIn(float t, float b, float c, float d)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration)
         {
-            return c - EaseOut(d - t, 0, c, d) + b;
+            return changeValue - EaseOut(duration - time, 0, changeValue, duration) + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing out: decelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseOut(float t, float b, float c, float d)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration)
         {
-            if ((t /= d) < (1/2.75f))
+            if ((time /= duration) < (1/2.75f))
             {
-                return c*(7.5625f*t*t) + b;
+                return changeValue*(7.5625f*time*time) + startValue;
             }
-            if (t < (2/2.75f))
+            if (time < (2/2.75f))
             {
-                return c*(7.5625f*(t -= (1.5f/2.75f))*t + 0.75f) + b;
+                return changeValue*(7.5625f*(time -= (1.5f/2.75f))*time + 0.75f) + startValue;
             }
-            if (t < (2.5f/2.75f))
+            if (time < (2.5f/2.75f))
             {
-                return c*(7.5625f*(t -= (2.25f/2.75f))*t + 0.9375f) + b;
+                return changeValue*(7.5625f*(time -= (2.25f/2.75f))*time + 0.9375f) + startValue;
             }
-            return c*(7.5625f*(t -= (2.625f/2.75f))*t + 0.984375f) + b;
+            return changeValue*(7.5625f*(time -= (2.625f/2.75f))*time + 0.984375f) + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a bounce (exponentially decaying parabolic bounce) easing in/out: acceleration until halfway, then deceleration.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration)
         {
-            if (t < d*0.5f)
+            if (time < duration*0.5f)
             {
-                return EaseIn(t*2, 0, c, d)*0.5f + b;
+                return EaseIn(time*2, 0, changeValue, duration)*0.5f + startValue;
             }
-            return EaseOut(t*2 - d, 0, c, d)*0.5f + c*0.5f + b;
+            return EaseOut(time*2 - duration, 0, changeValue, duration)*0.5f + changeValue*0.5f + startValue;
         }
     }
 }

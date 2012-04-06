@@ -38,84 +38,92 @@ namespace Holoville.HOTween.Core.Easing
     public static class Expo
     {
         /// <summary>
-        /// Tween.
+        /// Easing equation function for an exponential (2^t) easing in: accelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseIn(float t, float b, float c, float d)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration)
         {
-            return (t == 0) ? b : c*(float)Math.Pow(2, 10*(t/d - 1)) + b - c*0.001f;
+            if (time == 0)
+            {
+                return startValue;
+            }
+            return changeValue*(float)Math.Pow(2, 10*(time/duration - 1)) + startValue - changeValue*0.001f;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for an exponential (2^t) easing out: decelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseOut(float t, float b, float c, float d)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration)
         {
-            return (t == d) ? b + c : c*(-(float)Math.Pow(2, -10*t/d) + 1) + b;
+            if (time == duration)
+            {
+                return startValue + changeValue;
+            }
+            return changeValue*(-(float)Math.Pow(2, -10*time/duration) + 1) + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for an exponential (2^t) easing in/out: acceleration until halfway, then deceleration.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration)
         {
-            if (t == 0)
+            if (time == 0)
             {
-                return b;
+                return startValue;
             }
-            if (t == d)
+            if (time == duration)
             {
-                return b + c;
+                return startValue + changeValue;
             }
-            if ((t /= d*0.5f) < 1)
+            if ((time /= duration*0.5f) < 1)
             {
-                return c*0.5f*(float)Math.Pow(2, 10*(t - 1)) + b;
+                return changeValue*0.5f*(float)Math.Pow(2, 10*(time - 1)) + startValue;
             }
-            return c*0.5f*(-(float)Math.Pow(2, -10*--t) + 2) + b;
+            return changeValue*0.5f*(-(float)Math.Pow(2, -10*--time) + 2) + startValue;
         }
     }
 }

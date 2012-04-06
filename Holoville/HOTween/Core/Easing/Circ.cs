@@ -38,76 +38,76 @@ namespace Holoville.HOTween.Core.Easing
     public static class Circ
     {
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a circular (sqrt(1-t^2)) easing in: accelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseIn(float t, float b, float c, float d)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration)
         {
-            return -c*((float)Math.Sqrt(1 - (t /= d)*t) - 1) + b;
+            return -changeValue*((float)Math.Sqrt(1 - (time /= duration)*time) - 1) + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a circular (sqrt(1-t^2)) easing out: decelerating from zero velocity.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseOut(float t, float b, float c, float d)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration)
         {
-            return c*(float)Math.Sqrt(1 - (t = t/d - 1)*t) + b;
+            return changeValue*(float)Math.Sqrt(1 - (time = time/duration - 1)*time) + startValue;
         }
 
         /// <summary>
-        /// Tween.
+        /// Easing equation function for a circular (sqrt(1-t^2)) easing in/out: acceleration until halfway, then deceleration.
         /// </summary>
-        /// <param name="t">
-        /// Time.
+        /// <param name="time">
+        /// Current time (in frames or seconds).
         /// </param>
-        /// <param name="b">
-        /// Begin value.
+        /// <param name="startValue">
+        /// Starting value.
         /// </param>
-        /// <param name="c">
-        /// Change value.
+        /// <param name="changeValue">
+        /// Change needed in value.
         /// </param>
-        /// <param name="d">
-        /// Duration.
+        /// <param name="duration">
+        /// Expected easing duration (in frames or seconds).
         /// </param>
         /// <returns>
-        /// A <see cref="System.Single"/>
+        /// The eased value.
         /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration)
         {
-            if ((t /= d*0.5f) < 1)
+            if ((time /= duration*0.5f) < 1)
             {
-                return -c*0.5f*((float)Math.Sqrt(1 - t*t) - 1) + b;
+                return -changeValue*0.5f*((float)Math.Sqrt(1 - time*time) - 1) + startValue;
             }
-            return c*0.5f*((float)Math.Sqrt(1 - (t -= 2)*t) + 1) + b;
+            return changeValue*0.5f*((float)Math.Sqrt(1 - (time -= 2)*time) + 1) + startValue;
         }
     }
 }
