@@ -184,5 +184,26 @@ namespace Holoville.HOTween
         /// Ease in out bounce.
         /// </summary>
         EaseInOutBounce,
+
+        /// <summary>
+        /// Ease in strong.
+        /// OBSOLETE: use EaseInQuint instead.
+        /// </summary>
+        [System.ObsoleteAttribute("Use EaseInQuint instead.")]
+        EaseInStrong,
+        
+        /// <summary>
+        /// OBSOLETE: use EaseOutQuint instead.
+        /// Ease out strong.
+        /// </summary>
+        [System.ObsoleteAttribute("Use EaseOutQuint instead.")]
+        EaseOutStrong,
+        
+        /// <summary>
+        /// OBSOLETE: use EaseInOutQuint instead.
+        /// Ease in out strong.
+        /// </summary>
+        [System.ObsoleteAttribute("Use EaseInOutQuint instead.")]
+        EaseInOutStrong
     }
 }

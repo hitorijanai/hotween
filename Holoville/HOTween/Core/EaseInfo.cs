@@ -147,6 +147,13 @@ namespace Holoville.HOTween.Core
                 case EaseType.EaseInOutBounce:
                     return new EaseInfo(Bounce.EaseInOut, null);
 
+                case EaseType.EaseInStrong:
+                    return new EaseInfo(Strong.EaseIn, Strong.EaseOut);
+                case EaseType.EaseOutStrong:
+                    return new EaseInfo(Strong.EaseOut, Strong.EaseIn);
+                case EaseType.EaseInOutStrong:
+                    return new EaseInfo(Strong.EaseInOut, null);
+
                 default:
                     return new EaseInfo(Linear.EaseNone, null);
             }
