@@ -607,7 +607,7 @@ namespace Holoville.HOTween.Plugins.Core
             if (propInfo != null)
             {
                 //return propInfo.GetValue(tweenObj.target, null);
-                return propInfo.GetGetMethod().Invoke(tweenObj.target, null); // FIX for reflection bug with some generics on iOS
+                return propInfo.GetGetMethod().Invoke(tweenObj.target, null); // HACK for reflection bug with some generics on iOS
             }
             return fieldInfo.GetValue(tweenObj.target);
 #else
@@ -616,7 +616,7 @@ namespace Holoville.HOTween.Plugins.Core
                 if (propInfo != null)
                 {
                     //return propInfo.GetValue(tweenObj.target, null);
-                    return propInfo.GetGetMethod().Invoke(tweenObj.target, null); // FIX for reflection bug with some generics on iOS
+                    return propInfo.GetGetMethod().Invoke(tweenObj.target, null); // HACK for reflection bug with some generics on iOS
                 }
                 return fieldInfo.GetValue(tweenObj.target);
             }
