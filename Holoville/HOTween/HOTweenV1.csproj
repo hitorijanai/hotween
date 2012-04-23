@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F0009EA8-4894-4A39-9165-ED7A326F9F8D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Holoville.HOTween</RootNamespace>
+    <AssemblyName>HOTween</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\HOTween.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\HOTween.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Micro_Debug|AnyCPU'">
+    <AssemblyName>HOTweenMicro</AssemblyName>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>binMicro\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>binMicro\HOTweenMicro.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Micro_Release|AnyCPU'">
+    <AssemblyName>HOTweenMicro</AssemblyName>
+    <OutputPath>binMicro\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>binMicro\HOTweenMicro.XML</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\..\Program Files\_Design\Unity\Editor\Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Axis.cs" />
+    <Compile Include="Core\ABSTweenComponent.cs" />
+    <Compile Include="Core\ABSTweenComponentParms.cs" />
+    <Compile Include="Core\EaseInfo.cs" />
+    <Compile Include="Core\Easing\Back.cs" />
+    <Compile Include="Core\Easing\Bounce.cs" />
+    <Compile Include="Core\Easing\Circ.cs" />
+    <Compile Include="Core\Easing\Cubic.cs" />
+    <Compile Include="Core\Easing\Elastic.cs" />
+    <Compile Include="Core\Easing\Expo.cs" />
+    <Compile Include="Core\Easing\Linear.cs" />
+    <Compile Include="Core\Easing\Quad.cs" />
+    <Compile Include="Core\Easing\Quart.cs" />
+    <Compile Include="Core\Easing\Quint.cs" />
+    <Compile Include="Core\Easing\Sine.cs" />
+    <Compile Include="Core\Easing\Strong.cs" />
+    <Compile Include="Core\FastDynamicMemberAccessor\FieldAccessor.cs" />
+    <Compile Include="Core\FastDynamicMemberAccessor\IMemberAccessor.cs" />
+    <Compile Include="Core\FastDynamicMemberAccessor\MemberAccessor.cs" />
+    <Compile Include="Core\FastDynamicMemberAccessor\MemberAccessorCacher.cs" />
+    <Compile Include="Core\FastDynamicMemberAccessor\MemberAccessorException.cs" />
+    <Compile Include="Core\FastDynamicMemberAccessor\PropertyAccessor.cs" />
+    <Compile Include="Core\OverwriteManager.cs" />
+    <Compile Include="Core\Path.cs" />
+    <Compile Include="Core\TweenDelegate.cs" />
+    <Compile Include="Core\TweenException.cs" />
+    <Compile Include="Core\TweenWarning.cs" />
+    <Compile Include="Core\Utils.cs" />
+    <Compile Include="EaseType.cs" />
+    <Compile Include="HOTween.cs" />
+    <Compile Include="IHOTweenComponent.cs" />
+    <Compile Include="LoopType.cs" />
+    <Compile Include="Plugins\Core\ABSTweenPlugin.cs" />
+    <Compile Include="Plugins\Core\PlugColor.cs" />
+    <Compile Include="Plugins\Core\PlugFloat.cs" />
+    <Compile Include="Plugins\Core\PlugRect.cs" />
+    <Compile Include="Plugins\Core\PlugVector2.cs" />
+    <Compile Include="Plugins\Core\PlugVector3.cs" />
+    <Compile Include="Plugins\Core\PlugVector4.cs" />
+    <Compile Include="Plugins\PlugInt.cs" />
+    <Compile Include="Plugins\PlugQuaternion.cs" />
+    <Compile Include="Plugins\PlugSetColor.cs" />
+    <Compile Include="Plugins\PlugString.cs" />
+    <Compile Include="Plugins\PlugVector3Path.cs" />
+    <Compile Include="Plugins\PlugVector3X.cs" />
+    <Compile Include="Plugins\PlugVector3Y.cs" />
+    <Compile Include="Plugins\PlugVector3Z.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sequence.cs" />
+    <Compile Include="SequenceParms.cs" />
+    <Compile Include="Tweener.cs" />
+    <Compile Include="TweenEvent.cs" />
+    <Compile Include="TweenParms.cs" />
+    <Compile Include="TweenVar.cs" />
+    <Compile Include="UpdateType.cs" />
+    <Compile Include="WarningLevel.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
