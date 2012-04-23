@@ -50,6 +50,10 @@ namespace Holoville.HOTween
         // ***********************************************************************************
 
         /// <summary>
+        /// Creates a new Sequence without any parameter.
+        /// </summary>
+        public Sequence() : this(null) {}
+        /// <summary>
         /// Creates a new Sequence.
         /// </summary>
         /// <param name="p_parms">
@@ -59,7 +63,7 @@ namespace Holoville.HOTween
         /// </param>
         public Sequence(SequenceParms p_parms)
         {
-            p_parms.InitializeSequence(this);
+            if (p_parms != null) p_parms.InitializeSequence(this);
 
             // Automatically pause the sequence.
             _isPaused = true;
