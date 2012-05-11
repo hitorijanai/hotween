@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
-// Last update: 2012/04/23
+// Last update: 2012/05/11
 
 using System.Collections;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace Holoville.HOTween
     /// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
     /// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
     /// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-    /// <para>Version: 0.9.007</para>
+    /// <para>Version: 0.9.008</para>
     /// </summary>
     public class HOTween : MonoBehaviour
     {
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "0.9.007";
+        public const string VERSION = "0.9.008";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -473,7 +473,7 @@ namespace Holoville.HOTween
             // p_isStartupIteration is set to FALSE to ignore callbacks.
             if (!tw._isPaused)
             {
-                tw.Update(0, true, true);
+                tw.Update(0, true, true, true);
             }
             return tw;
         }
