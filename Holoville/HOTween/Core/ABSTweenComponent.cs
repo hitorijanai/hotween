@@ -924,7 +924,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void SetElapsed()
         {
-            if (_loops >= 0 && _completedLoops >= _loops)
+            if (_duration == 0 || _loops >= 0 && _completedLoops >= _loops)
             {
                 _elapsed = _duration;
             }

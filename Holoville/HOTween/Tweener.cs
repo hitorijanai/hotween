@@ -497,7 +497,14 @@ namespace Holoville.HOTween
                 {
                     plug.ReverseEase();
                 }
-                plug.Update(plugElapsed);
+                if (_duration > 0) {
+                    // Used in case of 0 duration tweens
+                    plug.Update(plugElapsed);
+                }
+                else
+                {
+                    plug.Complete();
+                }
             }
 
             // Manage eventual pause, complete, update, rewinded, and stepComplete.
