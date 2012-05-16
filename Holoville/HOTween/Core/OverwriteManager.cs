@@ -77,6 +77,10 @@ namespace Holoville.HOTween.Core
                                 ABSTweenPlugin plug = tw.plugins[c];
                                 if (plug.propName == addPlug.propName && (addPlug.pluginId == -1 || plug.pluginId == -1 || plug.pluginId == addPlug.pluginId))
                                 {
+                                    if (tw.isSequenced && p_tween.isSequenced && tw.contSequence == p_tween.contSequence)
+                                    {
+                                        goto NEXT_TWEEN;
+                                    }
                                     if (!tw.isSequenced || !tw.isComplete)
                                     {
                                         // Overwrite old plugin.
