@@ -228,7 +228,7 @@ namespace Holoville.HOTween.Plugins.Core
 
             Rect rect = new Rect();
             rect.x = typedStartVal.x + diffChangeVal.x * time;
-            rect.y = typedStartVal.y + diffChangeVal.x * time;
+            rect.y = typedStartVal.y + diffChangeVal.y * time;
             rect.width = typedStartVal.width + diffChangeVal.width * time;
             rect.height = typedStartVal.height + diffChangeVal.height * time;
 
