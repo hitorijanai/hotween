@@ -498,12 +498,12 @@ namespace Holoville.HOTween
                     plug.ReverseEase();
                 }
                 if (_duration > 0) {
-                    // Used in case of 0 duration tweens
                     plug.Update(plugElapsed);
                 }
-                else
-                {
+                else {
+                    // 0 duration tweens
                     plug.Complete();
+                    complete = true;
                 }
             }
 
