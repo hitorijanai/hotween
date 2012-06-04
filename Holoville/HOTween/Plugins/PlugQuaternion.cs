@@ -268,32 +268,42 @@ namespace Holoville.HOTween.Plugins
             Vector3 ev = typedEndVal;
             if (ev.x > 360)
             {
-                ev.x = ev.x%360;
+                ev.x = ev.x % 360;
             }
             if (ev.y > 360)
             {
-                ev.y = ev.y%360;
+                ev.y = ev.y % 360;
             }
             if (ev.z > 360)
             {
-                ev.z = ev.z%360;
+                ev.z = ev.z % 360;
             }
             changeVal = ev - typedStartVal;
-            float altX = 360 - typedStartVal.x + ev.x;
-            if (altX < (changeVal.x > 0 ? changeVal.x : -changeVal.x))
-            {
-                changeVal.x = altX;
-            }
-            float altY = 360 - typedStartVal.y + ev.y;
-            if (altY < (changeVal.y > 0 ? changeVal.y : -changeVal.y))
-            {
-                changeVal.y = altY;
-            }
-            float altZ = 360 - typedStartVal.z + ev.z;
-            if (altZ < (changeVal.z > 0 ? changeVal.z : -changeVal.z))
-            {
-                changeVal.z = altZ;
-            }
+
+            // Find shortest rotation
+            float abs = (changeVal.x > 0 ? changeVal.x : -changeVal.x);
+            if (abs > 180) changeVal.x = changeVal.x > 0 ? -(360 - abs) : 360 - abs;
+            abs = (changeVal.y > 0 ? changeVal.y : -changeVal.y);
+            if (abs > 180) changeVal.y = changeVal.y > 0 ? -(360 - abs) : 360 - abs;
+            abs = (changeVal.z > 0 ? changeVal.z : -changeVal.z);
+            if (abs > 180) changeVal.z = changeVal.z > 0 ? -(360 - abs) : 360 - abs;
+            
+
+//            float altX = 360 - typedStartVal.x + ev.x;
+//            if (altX < (changeVal.x > 0 ? changeVal.x : -changeVal.x))
+//            {
+//                changeVal.x = altX;
+//            }
+//            float altY = 360 - typedStartVal.y + ev.y;
+//            if (altY < (changeVal.y > 0 ? changeVal.y : -changeVal.y))
+//            {
+//                changeVal.y = altY;
+//            }
+//            float altZ = 360 - typedStartVal.z + ev.z;
+//            if (altZ < (changeVal.z > 0 ? changeVal.z : -changeVal.z))
+//            {
+//                changeVal.z = altZ;
+//            }
         }
 
         /// <summary>
