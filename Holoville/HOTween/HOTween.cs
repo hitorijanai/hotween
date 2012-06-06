@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
-// Last update: 2012/06/04
+// Last update: 2012/06/06
 
 using System.Collections;
 using System.Collections.Generic;

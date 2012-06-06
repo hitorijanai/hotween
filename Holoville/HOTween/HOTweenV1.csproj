@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\HOTween.XML</DocumentationFile>
@@ -36,7 +36,7 @@
     <AssemblyName>HOTweenMicro</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>binMicro\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;MICRO</DefineConstants>
     <DocumentationFile>binMicro\HOTweenMicro.XML</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,7 +47,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Micro_Release|AnyCPU'">
     <AssemblyName>HOTweenMicro</AssemblyName>
     <OutputPath>binMicro\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;MICRO</DefineConstants>
     <DocumentationFile>binMicro\HOTweenMicro.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
