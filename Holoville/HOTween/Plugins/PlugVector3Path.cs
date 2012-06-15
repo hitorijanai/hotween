@@ -55,6 +55,7 @@ namespace Holoville.HOTween.Plugins
         internal Path path; // Internal so that HOTween OnDrawGizmo can find it and draw the paths.
         internal float pathPerc; // Stores the current percentage of the path, so that HOTween's OnDrawGizmo can show its velocity.
 
+        const float EPSILON = 0.001f; // Used for floating points comparison
         Vector3 typedStartVal;
         Vector3[] points;
         Vector3 diffChangeVal; // Used for incremental loops.
@@ -388,7 +389,13 @@ namespace Holoville.HOTween.Plugins
             else
             {
                 Vector3 currVal = (Vector3)GetValue();
-                if (points[0].Equals(currVal))
+                // Calculate if currVal and start point are equal,
+                // managing floating point imprecision.
+                Vector3 diff = currVal - points[0];
+                if (diff.x < 0) diff.x = -diff.x;
+                if (diff.y < 0) diff.y = -diff.y;
+                if (diff.z < 0) diff.z = -diff.z;
+                if (diff.x < EPSILON && diff.y < EPSILON && diff.z < EPSILON)
                 {
                     pts = new Vector3[points.Length + 2 + pAdd]; // Path length is the same (plus control points).
                 }
