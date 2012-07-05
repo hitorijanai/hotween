@@ -123,6 +123,17 @@
     <Compile Include="WarningLevel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set BinDir=bin.Global\HOTween
+set DestinationDir=$(SolutionDir)..\%25BinDir%25
+
+echo Deleting TMPs...
+DEL $(TargetDir)\*.tmp
+
+echo Exporting Assembly to %25DestinationDir%25
+echo Copying files to Destination...
+echo f | xcopy "$(ProjectDir)bin" %25DestinationDir%25 /Y /I /E</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
