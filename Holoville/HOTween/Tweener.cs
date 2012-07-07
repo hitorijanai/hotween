@@ -325,6 +325,15 @@ namespace Holoville.HOTween
         }
 
         /// <summary>
+        /// Returns a list containing the target of this tween.
+        /// </summary>
+        /// <returns>A list containing the target of this tween.</returns>
+        public override List<object> GetTweenTargets()
+        {
+            return new List<object>() {target};
+        }
+
+        /// <summary>
         /// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
         /// returns a point on the path at the given percentage (0 to 1).
         /// Returns a <c>zero Vector</c> if there's no path tween associated with this tween.

@@ -348,9 +348,8 @@ namespace Holoville.HOTween
                 return false;
             }
 
-            for (int i = 0; i < items.Count; ++i)
+            foreach (HOTSeqItem item in items)
             {
-                HOTSeqItem item = items[i];
                 if (item.twMember != null && item.twMember.IsLinkedTo(p_target))
                 {
                     return true;
@@ -358,6 +357,22 @@ namespace Holoville.HOTween
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Returns a list of all the targets of this Sequence, or NULL if there are none.
+        /// </summary>
+        /// <returns>A list of all the targets of this Sequence, or NULL if there are none.</returns>
+        public override List<object> GetTweenTargets()
+        {
+            if (items == null) return null;
+
+            List<object> targets = new List<object>();
+            foreach (HOTSeqItem item in items)
+            {
+                if (item.twMember != null) targets.AddRange(item.twMember.GetTweenTargets());
+            }
+            return targets;
         }
 
         // ===================================================================================

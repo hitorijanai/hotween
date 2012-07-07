@@ -672,6 +672,12 @@ namespace Holoville.HOTween.Core
         /// </returns>
         public abstract bool IsLinkedTo(object p_target);
 
+        /// <summary>
+        /// Returns a list of all the targets of this tween, or NULL if there are none.
+        /// </summary>
+        /// <returns>A list of all the targets of this tween, or NULL if there are none.</returns>
+        public abstract List<object> GetTweenTargets();
+
         // ===================================================================================
         // INTERNAL METHODS ------------------------------------------------------------------
 

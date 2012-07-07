@@ -91,6 +91,7 @@
     <Compile Include="Core\Path.cs" />
     <Compile Include="Core\TweenDelegate.cs" />
     <Compile Include="Core\TweenException.cs" />
+    <Compile Include="Core\TweenInfo.cs" />
     <Compile Include="Core\TweenWarning.cs" />
     <Compile Include="Core\Utils.cs" />
     <Compile Include="EaseType.cs" />
