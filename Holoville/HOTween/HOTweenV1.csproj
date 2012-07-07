@@ -17,27 +17,27 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\bin.HOTweenV1\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\HOTween.XML</DocumentationFile>
+    <DocumentationFile>..\bin.HOTweenV1\HOTween.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\bin.HOTweenV1\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\HOTween.XML</DocumentationFile>
+    <DocumentationFile>..\bin.HOTweenV1\HOTween.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Micro_Debug|AnyCPU'">
     <AssemblyName>HOTweenMicro</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>binMicro\</OutputPath>
+    <OutputPath>..\bin.HOTweenV1\</OutputPath>
     <DefineConstants>TRACE;DEBUG;MICRO</DefineConstants>
-    <DocumentationFile>binMicro\HOTweenMicro.XML</DocumentationFile>
+    <DocumentationFile>..\bin.HOTweenV1\HOTweenMicro.XML</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -46,9 +46,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Micro_Release|AnyCPU'">
     <AssemblyName>HOTweenMicro</AssemblyName>
-    <OutputPath>binMicro\</OutputPath>
+    <OutputPath>..\bin.HOTweenV1\</OutputPath>
     <DefineConstants>TRACE;MICRO</DefineConstants>
-    <DocumentationFile>binMicro\HOTweenMicro.XML</DocumentationFile>
+    <DocumentationFile>..\bin.HOTweenV1\HOTweenMicro.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -133,7 +133,7 @@ DEL $(TargetDir)\*.tmp
 
 echo Exporting Assembly to %25DestinationDir%25
 echo Copying files to Destination...
-echo f | xcopy "$(ProjectDir)bin" %25DestinationDir%25 /Y /I /E</PostBuildEvent>
+echo f | xcopy "$(ProjectDir)..\bin.HOTweenV1" %25DestinationDir%25 /Y /I /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
