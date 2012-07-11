@@ -302,29 +302,5 @@ namespace Holoville.HOTween.Core
                 lengthsTable[i - 1] = pathLen;
             }
         }
-
-        internal Dictionary<float, float> GetTimeToArcLenTable(int p_subdivisions, out float out_fullLen)
-        {
-            // Code optimized by stfx.
-
-            out_fullLen = 0;
-            float incr = 1f/p_subdivisions;
-            Dictionary<float, float> timeLenTable = new Dictionary<float, float>(p_subdivisions);
-
-            Vector3 prevP = GetPoint(0);
-
-            for (int i = 1; i < p_subdivisions + 1; ++i)
-            {
-                float time = incr*i;
-
-                Vector3 currP = GetPoint(time);
-                out_fullLen += Vector3.Distance(currP, prevP);
-                prevP = currP;
-
-                timeLenTable.Add(time, out_fullLen);
-            }
-
-            return timeLenTable;
-        }
     }
 }

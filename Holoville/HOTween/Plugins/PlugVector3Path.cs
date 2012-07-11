@@ -440,7 +440,6 @@ namespace Holoville.HOTween.Plugins
             path = new Path(pts);
 
             // Store arc lengths tables for constant speed.
-//            dcTimeToLen = path.GetTimeToArcLenTable(path.path.Length*4, out pathLen);
             path.StoreTimeToArcLenTables(path.path.Length * 4);
 
             if (!isClosedPath)
