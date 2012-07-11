@@ -38,6 +38,11 @@ namespace Holoville.HOTween.Core
     {
         // VARS ///////////////////////////////////////////////////
 
+        public float pathLen; // Stored when storing time and length tables;
+
+        float[] timesTable; // Connected to lengthsTable, used for constant speed calculations
+        float[] lengthsTable; // Connected to timesTable, used for constant speed calculations
+
         internal Vector3[] path;
         internal bool changed; // Used by incremental loops to tell that drawPs should be recalculated.
 
@@ -216,6 +221,87 @@ namespace Holoville.HOTween.Core
 
         // ===================================================================================
         // INTERNAL METHODS ------------------------------------------------------------------
+
+        /// <summary>
+        /// Returns the point at the given time percentage (0 to 1),
+        /// considering the path at constant speed.
+        /// </summary>
+        /// <param name="t">The time percentage (0 to 1) at which to get the point </param>
+        internal Vector3 GetConstPoint(float t)
+        {
+            // Convert time percentage to constant path percentage
+            float pathPerc = GetConstPathPercFromTimePerc(t);
+
+            return GetPoint(pathPerc);
+        }
+        /// <summary>
+        /// Returns the point at the given time percentage (0 to 1),
+        /// considering the path at constant speed.
+        /// </summary>
+        /// <param name="t">The time percentage (0 to 1) at which to get the point </param>
+        /// <param name="out_pathPerc">Outputs the calculated path percentage value</param>
+        /// <returns></returns>
+        internal Vector3 GetConstPoint(float t, out float out_pathPerc)
+        {
+            // Convert time percentage to constant path percentage
+            float pathPerc = GetConstPathPercFromTimePerc(t);
+            // Update pathPerc.
+            out_pathPerc = pathPerc;
+
+            return GetPoint(pathPerc);
+        }
+        /// <summary>
+        /// Gets the constant path percentage for the given time percentage
+        /// that can be used with GetConstPoint.
+        /// </summary>
+        /// <param name="t">The time percentage (0 to 1) to use</param>
+        /// <returns></returns>
+        float GetConstPathPercFromTimePerc(float t)
+        {
+            // Apply constant speed
+            if (t > 0 && t < 1) {
+                float tLen = pathLen * t;
+                // Find point in time/lenght table.
+                float t0 = 0, l0 = 0, t1 = 0, l1 = 0;
+                for (int i = 0; i < lengthsTable.Length; ++i) {
+                    if (lengthsTable[i] > tLen) {
+                        t1 = timesTable[i];
+                        l1 = lengthsTable[i];
+                        if (i > 0) l0 = lengthsTable[i - 1];
+                        break;
+                    }
+                    t0 = timesTable[i];
+                }
+                // Find correct time.
+                t = t0 + ((tLen - l0) / (l1 - l0)) * (t1 - t0);
+            }
+
+            // Clamp value because path has limited range of 0-1.
+            if (t > 1) t = 1; else if (t < 0) t = 0;
+
+            return t;
+        }
+
+        internal void StoreTimeToArcLenTables(int p_subdivisions)
+        {
+            pathLen = 0;
+            float incr = 1f / p_subdivisions;
+            timesTable = new float[p_subdivisions];
+            lengthsTable = new float[p_subdivisions];
+
+            Vector3 prevP = GetPoint(0);
+
+            for (int i = 1; i < p_subdivisions + 1; ++i) {
+                float time = incr * i;
+
+                Vector3 currP = GetPoint(time);
+                pathLen += Vector3.Distance(currP, prevP);
+                prevP = currP;
+
+                timesTable[i - 1] = time;
+                lengthsTable[i - 1] = pathLen;
+            }
+        }
 
         internal Dictionary<float, float> GetTimeToArcLenTable(int p_subdivisions, out float out_fullLen)
         {

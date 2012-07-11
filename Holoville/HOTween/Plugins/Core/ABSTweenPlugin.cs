@@ -57,7 +57,11 @@ namespace Holoville.HOTween.Plugins.Core
 
         bool _initialized;
         bool _easeReversed;
-        string _propName; // Stored during Init, used by overwrite manager.
+
+        /// <summary>
+        /// Name of the property being tweened. Stored during Init, used by overwrite manager and log messages.
+        /// </summary>
+        protected string _propName;
 
         /// <summary>
         /// Ease type.

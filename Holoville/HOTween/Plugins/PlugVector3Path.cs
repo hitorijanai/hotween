@@ -64,8 +64,6 @@ namespace Holoville.HOTween.Plugins
         float lookAheadVal = 0.0001f;
         Axis lockAxis = Axis.None;
         Vector3 lockRot; // Stores initial rotation axis, so they can be locked.
-        Dictionary<float, float> dcTimeToLen; // Stores arc lenghts table, used for constant speed calculations.
-        float pathLen; // Stored when storing dcTimeToLen;
 
         // REFERENCES /////////////////////////////////////////////
 
@@ -352,7 +350,7 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override float GetSpeedBasedDuration(float p_speed)
         {
-            return pathLen/p_speed;
+            return path.pathLen/p_speed;
         }
 
         /// <summary>
@@ -441,8 +439,9 @@ namespace Holoville.HOTween.Plugins
             // Create the path.
             path = new Path(pts);
 
-            // Store arc lengths table for constant speed.
-            dcTimeToLen = path.GetTimeToArcLenTable(path.path.Length*4, out pathLen);
+            // Store arc lengths tables for constant speed.
+//            dcTimeToLen = path.GetTimeToArcLenTable(path.path.Length*4, out pathLen);
+            path.StoreTimeToArcLenTables(path.path.Length * 4);
 
             if (!isClosedPath)
             {
@@ -525,11 +524,7 @@ namespace Holoville.HOTween.Plugins
         /// <param name="t">
         /// The percentage (0 to 1) at which to get the point.
         /// </param>
-        internal Vector3 GetConstPointOnPath(float t)
-        {
-            return GetConstPointOnPath(t, false);
-        }
-
+        internal Vector3 GetConstPointOnPath(float t) { return GetConstPointOnPath(t, false); }
         /// <summary>
         /// Returns the point at the given percentage (0 to 1),
         /// considering the path at constant speed.
@@ -544,49 +539,30 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         internal Vector3 GetConstPointOnPath(float t, bool p_updatePathPerc)
         {
-            // Apply constant speed
-            if (t > 0 && t < 1)
-            {
-                float tLen = pathLen*t;
-                // Find point in time/lenght table.
-                float t0 = 0;
-                float l0 = 0;
-                float t1 = 0;
-                float l1 = 0;
-                foreach (KeyValuePair<float, float> item in dcTimeToLen)
-                {
-                    if (item.Value > tLen)
-                    {
-                        t1 = item.Key;
-                        l1 = item.Value;
-                        if (t0 > 0)
-                        {
-                            l0 = dcTimeToLen[t0];
-                        }
-                        break;
-                    }
-                    t0 = item.Key;
-                }
-                // Find correct time.
-                t = t0 + ((tLen - l0)/(l1 - l0))*(t1 - t0);
+            if (p_updatePathPerc) {
+                return path.GetConstPoint(t, out pathPerc);
+            } else {
+                return path.GetConstPoint(t);
             }
+        }
 
-            // Clamp value because path has limited range of 0-1.
-            if (t > 1)
-            {
-                t = 1;
-            }
-            else if (t < 0)
-            {
-                t = 0;
-            }
-            // Update pathPerc.
-            if (p_updatePathPerc)
-            {
-                pathPerc = t;
-            }
+        /// <summary>
+        /// Returns the length of the path unto the given waypoint.
+        /// Requires Startup to be called on its <see cref="Tweener"/>
+        /// (so that dcTimeToLenTable is stored and can be used).
+        /// </summary>
+        /// <param name="p_waypointId">Id of the waypoint inside the path</param>
+        /// <returns></returns>
+        internal float GetWaypointLength(int p_waypointId)
+        {
+//            if (dcTimeToLen == null) {
+//                TweenWarning.Log("GetWaypointLenght for " + tweenObj.target + "." + _propName + " can't be called without calling Tweener.Startup first");
+//                return 0;
+//            }
+//            if (p_waypointId == 0) return 0;
 
-            return path.GetPoint(t);
+            // Get waypoint position in 
+            throw new NotImplementedException();
         }
     }
 }

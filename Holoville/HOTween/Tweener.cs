@@ -23,6 +23,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using System.Collections.Generic;
 using Holoville.HOTween.Core;
 using Holoville.HOTween.Plugins;
@@ -333,6 +334,9 @@ namespace Holoville.HOTween
             return new List<object>() {target};
         }
 
+        // ===================================================================================
+        // PLUGINS SPECIFIC METHODS ----------------------------------------------------------
+
         /// <summary>
         /// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
         /// returns a point on the path at the given percentage (0 to 1).
@@ -340,30 +344,59 @@ namespace Holoville.HOTween
         /// Note that, if the tween wasn't started, the OnStart callback will be called
         /// the first time you call this method, because the tween needs to be initialized.
         /// </summary>
-        /// <param name="t">
-        /// The percentage (0 to 1) at which to get the point.
-        /// </param>
+        /// <param name="t">The percentage (0 to 1) at which to get the point</param>
         public Vector3 GetPointOnPath(float t)
         {
-            if (plugins == null)
-            {
-                return Vector3.zero;
+            PlugVector3Path plugVector3Path = GetPlugVector3PathPlugin();
+            if (plugVector3Path == null) return Vector3.zero;
+
+            if (!startupDone) Startup(); // Startup the tween to store the path data.
+            return plugVector3Path.GetConstPointOnPath(t);
+        }
+
+        /// <summary>
+        /// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
+        /// defines a portion of that path to use and re-adapt to (easing included),
+        /// and rewinds/restarts the tween (depending if it was paused or not).
+        /// </summary>
+        /// <param name="p_waypointId0">Id of the new starting waypoint on the current path</param>
+        /// <param name="p_waypointId1">Id of the new ending waypoint on the current path</param>
+        public void UsePartialPath(int p_waypointId0, int p_waypointId1)
+        {
+            PlugVector3Path plugVector3Path = GetPlugVector3PathPlugin();
+            if (plugVector3Path == null) {
+                TweenWarning.Log("Tweener for " + _target + " contains no PlugVector3Path plugin");
+                return;
             }
 
-            foreach (ABSTweenPlugin plug in plugins)
-            {
+            if (!startupDone) Startup(); // Startup the tween to store the path data.
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// If this Tweener contains a <see cref="PlugVector3Path"/> tween
+        /// that had been partialized, returns it to its original size, easing, and duration,
+        /// and rewinds/restarts the tween (depending if it was paused or not).
+        /// </summary>
+        public void ResetPath()
+        {
+            
+        }
+
+        /// <summary>
+        /// If this Tweener contains a <see cref="PlugVector3Path"/>, returns it.
+        /// Otherwise returns null.
+        /// </summary>
+        /// <returns></returns>
+        private PlugVector3Path GetPlugVector3PathPlugin()
+        {
+            if (plugins == null) return null;
+            foreach (ABSTweenPlugin plug in plugins) {
                 PlugVector3Path plugVector3Path = plug as PlugVector3Path;
-                if (plugVector3Path != null)
-                {
-                    if (!startupDone)
-                    {
-                        Startup(); // Startup the tween to get the path data.
-                    }
-                    return plugVector3Path.GetConstPointOnPath(t);
-                }
+                if (plugVector3Path != null) return plugVector3Path;
             }
-
-            return Vector3.zero;
+            return null;
         }
 
         // ===================================================================================
