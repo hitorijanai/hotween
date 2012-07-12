@@ -54,11 +54,13 @@ namespace Holoville.HOTween.Plugins
 
         internal Path path; // Internal so that HOTween OnDrawGizmo can find it and draw the paths.
         internal float pathPerc; // Stores the current percentage of the path, so that HOTween's OnDrawGizmo can show its velocity.
+        internal bool hasAdditionalStartingP; // True if the path was created with an additional starting point
 
         const float EPSILON = 0.001f; // Used for floating points comparison
         Vector3 typedStartVal;
         Vector3[] points;
         Vector3 diffChangeVal; // Used for incremental loops.
+        bool isPartialPath;
         bool isClosedPath;
         OrientType orientType = OrientType.None;
         float lookAheadVal = 0.0001f;
@@ -137,11 +139,7 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_path">
         /// The <see cref="Vector3"/> path to tween through.
         /// </param>
-        public PlugVector3Path(Vector3[] p_path)
-            : base(p_path, false)
-        {
-        }
-
+        public PlugVector3Path(Vector3[] p_path) : base(p_path, false) {}
         /// <summary>
         /// Creates a new instance of this plugin using an absolute path.
         /// </summary>
@@ -151,11 +149,7 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_easeType">
         /// The <see cref="EaseType"/> to use.
         /// </param>
-        public PlugVector3Path(Vector3[] p_path, EaseType p_easeType)
-            : base(p_path, p_easeType, false)
-        {
-        }
-
+        public PlugVector3Path(Vector3[] p_path, EaseType p_easeType) : base(p_path, p_easeType, false) {}
         /// <summary>
         /// Creates a new instance of this plugin using the main ease type.
         /// </summary>
@@ -166,11 +160,7 @@ namespace Holoville.HOTween.Plugins
         /// If <c>true</c>, the path is considered relative to the starting value of the property, instead than absolute.
         /// Not compatible with <c>HOTween.From</c>.
         /// </param>
-        public PlugVector3Path(Vector3[] p_path, bool p_isRelative)
-            : base(p_path, p_isRelative)
-        {
-        }
-
+        public PlugVector3Path(Vector3[] p_path, bool p_isRelative) : base(p_path, p_isRelative) {}
         /// <summary>
         /// Creates a new instance of this plugin.
         /// </summary>
@@ -184,9 +174,28 @@ namespace Holoville.HOTween.Plugins
         /// If <c>true</c>, the path is considered relative to the starting value of the property, instead than absolute.
         /// Not compatible with <c>HOTween.From</c>.
         /// </param>
-        public PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative)
-            : base(p_path, p_easeType, p_isRelative)
+        public PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative) : base(p_path, p_easeType, p_isRelative) {}
+        /// <summary>
+        /// Creates a new instance of this plugin.
+        /// </summary>
+        /// <param name="p_path">
+        /// The <see cref="Vector3"/> path to tween through.
+        /// </param>
+        /// <param name="p_easeType">
+        /// The <see cref="EaseType"/> to use.
+        /// </param>
+        /// <param name="p_isRelative">
+        /// If <c>true</c>, the path is considered relative to the starting value of the property, instead than absolute.
+        /// Not compatible with <c>HOTween.From</c>.
+        /// </param>
+        /// <param name="p_isPartialPath">
+        /// If TRUE indicates that the path is partial, and will be created accordingly,
+        /// and the p_path array will be used as is.
+        /// Used by <see cref="Tweener"/> when creating a new partial PlugVector3Path.
+        /// </param>
+        public PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative, bool p_isPartialPath) : base(p_path, p_easeType, p_isRelative)
         {
+            isPartialPath = p_isPartialPath;
         }
 
         /// <summary>
@@ -350,7 +359,7 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override float GetSpeedBasedDuration(float p_speed)
         {
-            return path.pathLen/p_speed;
+            return path.pathLength/p_speed;
         }
 
         /// <summary>
@@ -373,67 +382,63 @@ namespace Holoville.HOTween.Plugins
 
             // Create path.
             Vector3[] pts;
-            int indMod = 1;
-            int pAdd = (isClosedPath ? 1 : 0);
-            if (isRelative)
-            {
-                pts = new Vector3[points.Length + 2 + pAdd]; // Path length is the same (plus control points).
-                Vector3 diff = points[0] - typedStartVal;
-                for (int i = 0; i < points.Length; ++i)
-                {
-                    pts[i + indMod] = points[i] - diff;
-                }
-            }
-            else
-            {
-                Vector3 currVal = (Vector3)GetValue();
-                // Calculate if currVal and start point are equal,
-                // managing floating point imprecision.
-                Vector3 diff = currVal - points[0];
-                if (diff.x < 0) diff.x = -diff.x;
-                if (diff.y < 0) diff.y = -diff.y;
-                if (diff.z < 0) diff.z = -diff.z;
-                if (diff.x < EPSILON && diff.y < EPSILON && diff.z < EPSILON)
-                {
-                    pts = new Vector3[points.Length + 2 + pAdd]; // Path length is the same (plus control points).
-                }
-                else
-                {
-                    pts = new Vector3[points.Length + 3 + pAdd]; // Path needs additional point for current value as starting point (plus control points).
-                    if (tweenObj.isFrom)
-                    {
-                        pts[pts.Length - 2] = currVal;
+            if (isPartialPath) {
+                // Use path as it is, since it was already being created correctly by Tweener.
+                pts = points;
+            } else {
+                int indMod = 1;
+                int pAdd = (isClosedPath ? 1 : 0);
+                if (isRelative) {
+                    // Path length is the same (plus control points).
+                    hasAdditionalStartingP = false;
+                    pts = new Vector3[points.Length + 2 + pAdd];
+                    Vector3 diff = points[0] - typedStartVal;
+                    for (int i = 0; i < points.Length; ++i) {
+                        pts[i + indMod] = points[i] - diff;
                     }
-                    else
-                    {
-                        pts[1] = currVal;
-                        indMod = 2;
+                } else {
+                    Vector3 currVal = (Vector3)GetValue();
+                    // Calculate if currVal and start point are equal,
+                    // managing floating point imprecision.
+                    Vector3 diff = currVal - points[0];
+                    if (diff.x < 0) diff.x = -diff.x;
+                    if (diff.y < 0) diff.y = -diff.y;
+                    if (diff.z < 0) diff.z = -diff.z;
+                    if (diff.x < EPSILON && diff.y < EPSILON && diff.z < EPSILON) {
+                        // Path length is the same (plus control points).
+                        hasAdditionalStartingP = false;
+                        pts = new Vector3[points.Length + 2 + pAdd];
+                    } else {
+                        // Path needs additional point for current value as starting point (plus control points).
+                        hasAdditionalStartingP = true;
+                        pts = new Vector3[points.Length + 3 + pAdd];
+                        if (tweenObj.isFrom) {
+                            pts[pts.Length - 2] = currVal;
+                        } else {
+                            pts[1] = currVal;
+                            indMod = 2;
+                        }
+                    }
+                    for (int i = 0; i < points.Length; ++i) {
+                        pts[i + indMod] = points[i];
                     }
                 }
-                for (int i = 0; i < points.Length; ++i)
-                {
-                    pts[i + indMod] = points[i];
+
+                if (isClosedPath) {
+                    // Close path.
+                    pts[pts.Length - 2] = pts[1];
                 }
-            }
 
-            if (isClosedPath)
-            {
-                // Close path.
-                pts[pts.Length - 2] = pts[1];
-            }
-
-            // Add control points.
-            if (isClosedPath)
-            {
-                pts[0] = pts[pts.Length - 3];
-                pts[pts.Length - 1] = pts[2];
-            }
-            else
-            {
-                pts[0] = pts[1];
-                Vector3 lastP = pts[pts.Length - 2];
-                Vector3 diffV = lastP - pts[pts.Length - 3];
-                pts[pts.Length - 1] = lastP + diffV;
+                // Add control points.
+                if (isClosedPath) {
+                    pts[0] = pts[pts.Length - 3];
+                    pts[pts.Length - 1] = pts[2];
+                } else {
+                    pts[0] = pts[1];
+                    Vector3 lastP = pts[pts.Length - 2];
+                    Vector3 diffV = lastP - pts[pts.Length - 3];
+                    pts[pts.Length - 1] = lastP + diffV;
+                }
             }
 
             // Create the path.
@@ -546,22 +551,23 @@ namespace Holoville.HOTween.Plugins
         }
 
         /// <summary>
-        /// Returns the length of the path unto the given waypoint.
-        /// Requires Startup to be called on its <see cref="Tweener"/>
-        /// (so that dcTimeToLenTable is stored and can be used).
+        /// Returns the percentage of the path length occupied by the given path waypoints interval.
         /// </summary>
-        /// <param name="p_waypointId">Id of the waypoint inside the path</param>
-        /// <returns></returns>
-        internal float GetWaypointLength(int p_waypointId)
+        internal float GetWaypointsLengthPercentage(int p_pathWaypointId0, int p_pathWaypointId1)
         {
-//            if (dcTimeToLen == null) {
-//                TweenWarning.Log("GetWaypointLenght for " + tweenObj.target + "." + _propName + " can't be called without calling Tweener.Startup first");
-//                return 0;
-//            }
-//            if (p_waypointId == 0) return 0;
-
-            // Get waypoint position in 
-            throw new NotImplementedException();
+//            Debug.Log("WAYPOINTS INTERVAL: " + path.path[p_pathWaypointId0] + " > " + path.path[p_pathWaypointId1]);
+            if (path.waypointsLength == null) path.StoreWaypointsLengths(4);
+//            Debug.Log("PATH LEN: " + path.path.Length + " - WAYPOINTLENGTHS LEN: " + path.waypointsLength.Length);
+//            Debug.Log("PATH WP IDS: " + p_pathWaypointId0 + ", " + p_pathWaypointId1);
+            float partialLen = 0;
+            for (int i = p_pathWaypointId0; i < p_pathWaypointId1; ++i) {
+//                Debug.Log(":: " + i + " : " + path.waypointsLength[i]);
+                partialLen += path.waypointsLength[i];
+            }
+//            Debug.Log("TOT LEN: " + path.pathLength + " - PARTIAL LEN: " + partialLen);
+            float perc = partialLen / path.pathLength;
+            if (perc > 1) perc = 1; // Limit in case of near errors (because full path length is calculated differently then sum of waypoints)
+            return perc;
         }
     }
 }

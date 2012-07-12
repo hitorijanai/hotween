@@ -38,7 +38,8 @@ namespace Holoville.HOTween.Core
     {
         // VARS ///////////////////////////////////////////////////
 
-        public float pathLen; // Stored when storing time and length tables;
+        public float pathLength; // Stored when storing time and length tables.
+        public float[] waypointsLength; // Length of each waypoint, excluding control points
 
         float[] timesTable; // Connected to lengthsTable, used for constant speed calculations
         float[] lengthsTable; // Connected to timesTable, used for constant speed calculations
@@ -250,6 +251,65 @@ namespace Holoville.HOTween.Core
 
             return GetPoint(pathPerc);
         }
+
+        internal void StoreTimeToArcLenTables(int p_subdivisions)
+        {
+            pathLength = 0;
+            float incr = 1f / p_subdivisions;
+            timesTable = new float[p_subdivisions];
+            lengthsTable = new float[p_subdivisions];
+
+            Vector3 prevP = GetPoint(0);
+
+            for (int i = 1; i < p_subdivisions + 1; ++i) {
+                float perc = incr * i;
+
+                Vector3 currP = GetPoint(perc);
+                pathLength += Vector3.Distance(currP, prevP);
+                prevP = currP;
+
+                timesTable[i - 1] = perc;
+                lengthsTable[i - 1] = pathLength;
+            }
+        }
+
+        internal void StoreWaypointsLengths(int p_subdivisions)
+        {
+            // Create a relative path between each waypoint,
+            // with its start and end control lines coinciding with the next/prev waypoints.
+            int len = path.Length - 2;
+            waypointsLength = new float[len];
+            waypointsLength[0] = 0;
+            Path partialPath = null;
+            for (int i = 2; i < len + 1; ++i) {
+                // Create partial path
+                Vector3[] pts = new Vector3[4];
+                pts[0] = path[i - 2];
+                pts[1] = path[i - 1];
+                pts[2] = path[i];
+                pts[3] = path[i + 1];
+                if (i == 2) {
+                    partialPath = new Path(pts);
+                } else {
+                    partialPath.path = pts;
+                }
+                // Calculate length of partial path
+                float partialLen = 0;
+                float incr = 1f / p_subdivisions;
+                Vector3 prevP = partialPath.GetPoint(0);
+                for (int c = 1; c < p_subdivisions + 1; ++c) {
+                    float perc = incr * c;
+                    Vector3 currP = partialPath.GetPoint(perc);
+                    partialLen += Vector3.Distance(currP, prevP);
+                    prevP = currP;
+                }
+                waypointsLength[i - 1] = partialLen;
+            }
+        }
+
+        // ===================================================================================
+        // PRIVATE METHODS -------------------------------------------------------------------
+
         /// <summary>
         /// Gets the constant path percentage for the given time percentage
         /// that can be used with GetConstPoint.
@@ -260,8 +320,8 @@ namespace Holoville.HOTween.Core
         {
             // Apply constant speed
             if (t > 0 && t < 1) {
-                float tLen = pathLen * t;
-                // Find point in time/lenght table.
+                float tLen = pathLength * t;
+                // Find point in time/length table.
                 float t0 = 0, l0 = 0, t1 = 0, l1 = 0;
                 for (int i = 0; i < lengthsTable.Length; ++i) {
                     if (lengthsTable[i] > tLen) {
@@ -280,27 +340,6 @@ namespace Holoville.HOTween.Core
             if (t > 1) t = 1; else if (t < 0) t = 0;
 
             return t;
-        }
-
-        internal void StoreTimeToArcLenTables(int p_subdivisions)
-        {
-            pathLen = 0;
-            float incr = 1f / p_subdivisions;
-            timesTable = new float[p_subdivisions];
-            lengthsTable = new float[p_subdivisions];
-
-            Vector3 prevP = GetPoint(0);
-
-            for (int i = 1; i < p_subdivisions + 1; ++i) {
-                float time = incr * i;
-
-                Vector3 currP = GetPoint(time);
-                pathLen += Vector3.Distance(currP, prevP);
-                prevP = currP;
-
-                timesTable[i - 1] = time;
-                lengthsTable[i - 1] = pathLen;
-            }
         }
     }
 }

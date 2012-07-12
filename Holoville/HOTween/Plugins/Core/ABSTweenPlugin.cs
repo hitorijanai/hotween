@@ -64,6 +64,11 @@ namespace Holoville.HOTween.Plugins.Core
         protected string _propName;
 
         /// <summary>
+        /// Stored to be used during recreation of plugin for partial tweens.
+        /// </summary>
+        internal Type targetType;
+
+        /// <summary>
         /// Ease type.
         /// </summary>
         protected TweenDelegate.EaseFunc ease;
@@ -91,8 +96,8 @@ namespace Holoville.HOTween.Plugins.Core
 
         // IOS-ONLY VARS //////////////////////////////////////////
 
-        PropertyInfo propInfo;
-        FieldInfo fieldInfo;
+        internal PropertyInfo propInfo;
+        internal FieldInfo fieldInfo;
 
         // REFERENCES /////////////////////////////////////////////
 
@@ -148,13 +153,9 @@ namespace Holoville.HOTween.Plugins.Core
         /// <summary>
         /// Used by <see cref="OverwriteManager"/> to get the property name.
         /// </summary>
-        internal string propName
-        {
-            get
-            {
-                return _propName;
-            }
-        }
+        internal string propName { get { return _propName; } }
+
+        internal bool isRelativePlugin { get { return isRelative; } }
 
         /// <summary>
         /// Some plugins might override this to specify a different ID (like PlugVector3X).
@@ -249,6 +250,7 @@ namespace Holoville.HOTween.Plugins.Core
 
             tweenObj = p_tweenObj;
             _propName = p_propertyName;
+            targetType = p_targetType;
             if (easeInfo == null || tweenObj.speedBased)
             {
                 SetEase(p_easeType);
@@ -278,11 +280,7 @@ namespace Holoville.HOTween.Plugins.Core
         /// Starts up the plugin, getting the actual start and change values.
         /// Called by Tweener right before starting the effective animations.
         /// </summary>
-        internal void Startup()
-        {
-            Startup(false);
-        }
-
+        internal void Startup() { Startup(false); }
         /// <summary>
         /// Starts up the plugin, getting the actual start and change values.
         /// Called by Tweener right before starting the effective animations.

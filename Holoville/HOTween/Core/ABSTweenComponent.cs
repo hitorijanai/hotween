@@ -100,6 +100,11 @@ namespace Holoville.HOTween.Core
         protected float _duration;
 
         /// <summary>
+        /// Memorized when a partial tween is applied.
+        /// </summary>
+        protected float _originalDuration;
+
+        /// <summary>
         /// Full duration.
         /// </summary>
         protected float _fullDuration;
@@ -760,7 +765,7 @@ namespace Holoville.HOTween.Core
 
         /// <summary>
         /// Startup this tween
-        /// (might or might not all OnStart, depending if the tween is in a Sequence or not).
+        /// (might or might not call OnStart, depending if the tween is in a Sequence or not).
         /// Can be executed only once per tween.
         /// </summary>
         protected virtual void Startup()

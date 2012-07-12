@@ -500,10 +500,7 @@ namespace Holoville.HOTween
             }
 
             // Manage eventual OnStart.
-            if (!startupDone)
-            {
-                Startup();
-            }
+            Startup();
             if (!_hasStarted)
             {
                 OnStart();
@@ -660,10 +657,7 @@ namespace Holoville.HOTween
                 return;
             }
 
-            if (!startupDone)
-            {
-                Startup();
-            }
+            Startup();
             if (!_hasStarted)
             {
                 OnStart();
@@ -748,15 +742,12 @@ namespace Holoville.HOTween
 
         /// <summary>
         /// Startup this tween
-        /// (might or might not all OnStart, depending if the tween is in a Sequence or not).
+        /// (might or might not call OnStart, depending if the tween is in a Sequence or not).
         /// Can be executed only once per tween.
         /// </summary>
         protected override void Startup()
         {
-            if (startupDone)
-            {
-                return;
-            }
+            if (startupDone) return;
 
             // Move through all the elements in order, so the initial values are initialized.
             TweenStartupIteration();

@@ -54,6 +54,8 @@ namespace Holoville.HOTween
 
         internal List<ABSTweenPlugin> plugins;
 
+        List<ABSTweenPlugin> _originalPlugins; // Memorized when partial plugins are created/used.
+
         object _target;
 
         // GETS/SETS //////////////////////////////////////////////
@@ -350,38 +352,73 @@ namespace Holoville.HOTween
             PlugVector3Path plugVector3Path = GetPlugVector3PathPlugin();
             if (plugVector3Path == null) return Vector3.zero;
 
-            if (!startupDone) Startup(); // Startup the tween to store the path data.
+            Startup(); // Ensure startup - if not already executed - to store the path data.
             return plugVector3Path.GetConstPointOnPath(t);
         }
 
         /// <summary>
         /// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
         /// defines a portion of that path to use and re-adapt to (easing included),
-        /// and rewinds/restarts the tween (depending if it was paused or not).
+        /// and restarts the tween in its partial form.
         /// </summary>
-        /// <param name="p_waypointId0">Id of the new starting waypoint on the current path</param>
+        /// <param name="p_waypointId0">
+        /// Id of the new starting waypoint on the current path.
+        /// If you want to be sure you're targeting the first point in the path, pass -1
+        /// (this is because the first waypoint of the path might be different from the first waypoint you passed,
+        /// in case the target Transform was not already on the starting position, and thus needed to reach it).
+        /// </param>
         /// <param name="p_waypointId1">Id of the new ending waypoint on the current path</param>
         public void UsePartialPath(int p_waypointId0, int p_waypointId1)
         {
+            // TODO here
             PlugVector3Path plugVector3Path = GetPlugVector3PathPlugin();
             if (plugVector3Path == null) {
                 TweenWarning.Log("Tweener for " + _target + " contains no PlugVector3Path plugin");
                 return;
+            } else if (plugins.Count > 1) {
+                TweenWarning.Log("Applying a partial path on a Tweener (" + _target + ") with more than one plugin/property being tweened is not allowed");
+                return;
             }
 
-            if (!startupDone) Startup(); // Startup the tween to store the path data.
+            // Startup the tween (if not already started) to store the path data.
+            Startup();
+            // Convert waypoints ids to path ids
+            int p_pathWaypointId0 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId0);
+            int p_pathWaypointId1 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId1);
+            // Get duration of the new partial path, relative to previous duration
+            float waypointPerc = plugVector3Path.GetWaypointsLengthPercentage(p_pathWaypointId0, p_pathWaypointId1);
+            float partialDuration = _duration * waypointPerc;
 
-            throw new NotImplementedException();
+            // Store original duration and plugins
+            _originalDuration = _duration;
+            _originalPlugins = plugins;
+            // Assign new duration
+            _duration = partialDuration;
+            // Create new partial path
+            Vector3[] pts = new Vector3[p_pathWaypointId1 - p_pathWaypointId0 + 3];
+            int diff = p_pathWaypointId0;
+            for (int i = 0; i < pts.Length; ++i) {
+                pts[i] = plugVector3Path.path.path[i + diff - 1];
+            }
+            // Create new partial PlugVector3Path, init it, and assign it to plugins
+            PlugVector3Path newPV3P = new PlugVector3Path(pts, _easeType, plugVector3Path.isRelativePlugin, true).OrientToPath();
+            // TODO HERE
+            newPV3P.Init(this, plugVector3Path.propName, easeType, plugVector3Path.targetType, plugVector3Path.propInfo, plugVector3Path.fieldInfo);
+            plugins = new List<ABSTweenPlugin> { newPV3P };
+
+            // Re-Startup and restart.
+            Startup(true);
+            Restart(true);
         }
 
         /// <summary>
         /// If this Tweener contains a <see cref="PlugVector3Path"/> tween
         /// that had been partialized, returns it to its original size, easing, and duration,
-        /// and rewinds/restarts the tween (depending if it was paused or not).
+        /// and restarts the tween in its partial form.
         /// </summary>
         public void ResetPath()
         {
-            
+            // TODO ResetPath
         }
 
         /// <summary>
@@ -460,10 +497,7 @@ namespace Holoville.HOTween
 
             if (p_ignoreDelay || delayCount == 0)
             {
-                if (!startupDone)
-                {
-                    Startup();
-                }
+                Startup();
                 if (!_hasStarted)
                 {
                     OnStart();
@@ -512,10 +546,7 @@ namespace Holoville.HOTween
                 }
                 _elapsedDelay = delayCount;
                 delayCount = 0;
-                if (!startupDone)
-                {
-                    Startup();
-                }
+                Startup();
                 if (!_hasStarted)
                 {
                     OnStart();
@@ -668,10 +699,7 @@ namespace Holoville.HOTween
                 return;
             }
 
-            if (!startupDone)
-            {
-                Startup();
-            }
+            Startup();
             if (!_hasStarted)
             {
                 OnStart();
@@ -727,20 +755,21 @@ namespace Holoville.HOTween
 
         /// <summary>
         /// Startup this tween
-        /// (might or might not all OnStart, depending if the tween is in a Sequence or not).
+        /// (might or might not call OnStart, depending if the tween is in a Sequence or not).
         /// Can be executed only once per tween.
         /// </summary>
-        protected override void Startup()
+        protected override void Startup() { Startup(false); }
+        /// <summary>
+        /// Startup this tween
+        /// (might or might not call OnStart, depending if the tween is in a Sequence or not).
+        /// Can be executed only once per tween.
+        /// </summary>
+        /// <param name="p_force">If TRUE forces startup even if it had already been executed</param>
+        void Startup(bool p_force)
         {
-            if (startupDone)
-            {
-                return;
-            }
+            if (!p_force && startupDone) return;
 
-            for (int i = 0; i < plugins.Count; ++i)
-            {
-                plugins[i].Startup();
-            }
+            foreach (ABSTweenPlugin t in plugins) t.Startup();
             if (_speedBased)
             {
                 // Reset duration based on value changes and speed.
@@ -796,6 +825,18 @@ namespace Holoville.HOTween
             {
                 p_plugs.Add(plugins[i]);
             }
+        }
+
+        /// <summary>
+        /// Returns the correct id of the given waypoint, converted to path id.
+        /// </summary>
+        static int ConvertWaypointIdToPathId(PlugVector3Path p_plugVector3Path, int p_waypointId)
+        {
+            if (p_waypointId == -1) return 1;
+            if (p_plugVector3Path.hasAdditionalStartingP)
+                return p_waypointId + 2;
+            else
+                return p_waypointId + 1;
         }
     }
 }
