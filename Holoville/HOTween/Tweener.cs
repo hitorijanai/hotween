@@ -359,7 +359,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
         /// defines a portion of that path to use and re-adapt to (easing included),
-        /// and restarts the tween in its partial form.
+        /// and rewinds/restarts the tween in its partial form (depending if it was paused or not).
         /// </summary>
         /// <param name="p_waypointId0">
         /// Id of the new starting waypoint on the current path.
@@ -401,14 +401,17 @@ namespace Holoville.HOTween
                 pts[i] = plugVector3Path.path.path[i + diff - 1];
             }
             // Create new partial PlugVector3Path, init it, and assign it to plugins
-            PlugVector3Path newPV3P = new PlugVector3Path(pts, _easeType, plugVector3Path.isRelativePlugin, true).OrientToPath();
-            // TODO HERE
+            PlugVector3Path newPV3P = plugVector3Path.CloneForPartialPath(pts, _easeType);
             newPV3P.Init(this, plugVector3Path.propName, easeType, plugVector3Path.targetType, plugVector3Path.propInfo, plugVector3Path.fieldInfo);
             plugins = new List<ABSTweenPlugin> { newPV3P };
 
             // Re-Startup and restart.
             Startup(true);
-            Restart(true);
+            if (!_isPaused)
+                Restart(true);
+            else {
+                Rewind(true);
+            }
         }
 
         /// <summary>

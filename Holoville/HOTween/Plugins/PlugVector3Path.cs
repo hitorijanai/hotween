@@ -278,13 +278,14 @@ namespace Holoville.HOTween.Plugins
         /// Parameter > If the tween target is a <see cref="Transform"/>, orients the tween target to the path,
         /// locking it's rotation on the given axis.
         /// </summary>
-        /// <param name="p_lockAxis">
+        /// <param name="p_lockAxis_alphaDontUseIt">
+        /// WARNING: do NOT use, still in alpha.
         /// Sets one or more axis to lock while rotating.
         /// To lock more than one axis, use the bitwise OR operator (ex: <c>Axis.X | Axis.Y</c>).
         /// </param>
-        public PlugVector3Path OrientToPath(Axis p_lockAxis)
+        public PlugVector3Path OrientToPath(Axis p_lockAxis_alphaDontUseIt)
         {
-            return OrientToPath(true, 0.0001f, p_lockAxis);
+            return OrientToPath(true, 0.0001f, p_lockAxis_alphaDontUseIt);
         }
 
         /// <summary>
@@ -297,12 +298,12 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_lookAhead">
         /// The look ahead percentage (0 to 1).
         /// </param>
-        /// <param name="p_lockAxis">
+        /// <param name="p_lockAxis_alphaDontUseIt">
         /// WARNING: do NOT use, still in alpha.
         /// Sets one or more axis to lock while rotating.
         /// To lock more than one axis, use the bitwise OR operator (ex: <c>Axis.X | Axis.Y</c>).
         /// </param>
-        public PlugVector3Path OrientToPath(bool p_orient, float p_lookAhead, Axis p_lockAxis)
+        public PlugVector3Path OrientToPath(bool p_orient, float p_lookAhead, Axis p_lockAxis_alphaDontUseIt)
         {
             if (p_orient)
             {
@@ -317,7 +318,7 @@ namespace Holoville.HOTween.Plugins
             {
                 lookAheadVal = 0.9999f;
             }
-            lockAxis = p_lockAxis;
+            lockAxis = p_lockAxis_alphaDontUseIt;
             return this;
         }
 
@@ -555,19 +556,35 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         internal float GetWaypointsLengthPercentage(int p_pathWaypointId0, int p_pathWaypointId1)
         {
-//            Debug.Log("WAYPOINTS INTERVAL: " + path.path[p_pathWaypointId0] + " > " + path.path[p_pathWaypointId1]);
             if (path.waypointsLength == null) path.StoreWaypointsLengths(4);
-//            Debug.Log("PATH LEN: " + path.path.Length + " - WAYPOINTLENGTHS LEN: " + path.waypointsLength.Length);
-//            Debug.Log("PATH WP IDS: " + p_pathWaypointId0 + ", " + p_pathWaypointId1);
             float partialLen = 0;
             for (int i = p_pathWaypointId0; i < p_pathWaypointId1; ++i) {
-//                Debug.Log(":: " + i + " : " + path.waypointsLength[i]);
                 partialLen += path.waypointsLength[i];
             }
-//            Debug.Log("TOT LEN: " + path.pathLength + " - PARTIAL LEN: " + partialLen);
             float perc = partialLen / path.pathLength;
             if (perc > 1) perc = 1; // Limit in case of near errors (because full path length is calculated differently then sum of waypoints)
             return perc;
+        }
+
+        // ===================================================================================
+        // HELPERS ---------------------------------------------------------------------------
+
+        internal PlugVector3Path CloneForPartialPath(Vector3[] p_precisePath, EaseType p_easeType)
+        {
+            PlugVector3Path plugClone = new PlugVector3Path(p_precisePath, p_easeType, isRelative, true);
+            switch (orientType) {
+            case OrientType.ToPath:
+                plugClone.OrientToPath(true, lookAheadVal, lockAxis);
+                break;
+            case OrientType.LookAtTransform:
+                plugClone.LookAt(lookTrans);
+                break;
+            case OrientType.LookAtPosition:
+                plugClone.LookAt(lookPos);
+                break;
+            }
+
+            return plugClone;
         }
     }
 }

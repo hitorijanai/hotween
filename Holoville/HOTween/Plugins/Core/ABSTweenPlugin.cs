@@ -155,8 +155,6 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         internal string propName { get { return _propName; } }
 
-        internal bool isRelativePlugin { get { return isRelative; } }
-
         /// <summary>
         /// Some plugins might override this to specify a different ID (like PlugVector3X).
         /// Used by <see cref="OverwriteManager"/> to check if two plugins are the same (for overwrite purposes).
