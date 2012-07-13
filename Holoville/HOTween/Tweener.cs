@@ -449,8 +449,9 @@ namespace Holoville.HOTween
             // Convert waypoints ids to path ids
             int p_pathWaypointId0 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId0);
             int p_pathWaypointId1 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId1);
-            // Assign new duration
+            // Assign new duration and ease
             _duration = p_newDuration >= 0 ? p_newDuration : _originalDuration * plugVector3Path.GetWaypointsLengthPercentage(p_pathWaypointId0, p_pathWaypointId1);
+            _easeType = p_newEaseType;
 
             // Create new partial path
             Vector3[] pts = new Vector3[p_pathWaypointId1 - p_pathWaypointId0 + 3];
