@@ -450,7 +450,8 @@ namespace Holoville.HOTween
             int p_pathWaypointId0 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId0);
             int p_pathWaypointId1 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId1);
             // Assign new duration and ease
-            _duration = p_newDuration >= 0 ? p_newDuration : _originalDuration * plugVector3Path.GetWaypointsLengthPercentage(p_pathWaypointId0, p_pathWaypointId1);
+            float waypointsPerc = plugVector3Path.GetWaypointsLengthPercentage(p_pathWaypointId0, p_pathWaypointId1);
+            _duration = p_newDuration >= 0 ? p_newDuration : _speedBased ? _originalNonSpeedBasedDuration : _originalDuration * waypointsPerc;
             _easeType = p_newEaseType;
 
             // Create new partial path
@@ -483,7 +484,7 @@ namespace Holoville.HOTween
         public void ResetPath()
         {
             // Reset original values
-            _duration = _originalDuration;
+            _duration = speedBased ? _originalNonSpeedBasedDuration : _originalDuration;
             _easeType = _originalEaseType;
             plugins = _originalPlugins;
             _originalPlugins = null;
@@ -845,11 +846,14 @@ namespace Holoville.HOTween
         {
             if (!p_force && startupDone) return;
 
-            foreach (ABSTweenPlugin t in plugins) t.Startup();
+            foreach (ABSTweenPlugin t in plugins) {
+                if (!t.wasStarted) t.Startup();
+            }
             if (_speedBased)
             {
                 // Reset duration based on value changes and speed.
                 // Can't be done sooner because it needs to startup the plugins first.
+                _originalNonSpeedBasedDuration = _duration;
                 _duration = 0;
                 foreach (ABSTweenPlugin plug in plugins)
                 {
@@ -859,6 +863,8 @@ namespace Holoville.HOTween
                     }
                 }
                 SetFullDuration();
+            } else if (p_force) {
+                SetFullDuration(); // Reset full duration
             }
 
             base.Startup();

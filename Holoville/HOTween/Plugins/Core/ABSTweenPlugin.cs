@@ -90,7 +90,7 @@ namespace Holoville.HOTween.Plugins.Core
 #if !MICRO
         IMemberAccessor valAccessor;
 #endif
-        bool wasStarted;
+        internal bool wasStarted;
         bool speedBasedDurationWasSet;
         int prevCompletedLoops; // Stored only during Incremental loop type.
 

@@ -105,6 +105,11 @@ namespace Holoville.HOTween.Core
         protected float _originalDuration;
 
         /// <summary>
+        /// Memorized when applying speedBased duration.
+        /// </summary>
+        protected float _originalNonSpeedBasedDuration;
+
+        /// <summary>
         /// Full duration.
         /// </summary>
         protected float _fullDuration;
