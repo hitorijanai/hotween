@@ -43,6 +43,7 @@ namespace Holoville.HOTween
         float _elapsedDelay;
 
         internal EaseType _easeType = HOTween.defEaseType;
+        EaseType _originalEaseType; // Memorized when partial plugins are created/used.
 
         internal bool _speedBased;
         internal float _delay;
@@ -53,9 +54,7 @@ namespace Holoville.HOTween
         // REFERENCES /////////////////////////////////////////////
 
         internal List<ABSTweenPlugin> plugins;
-
         List<ABSTweenPlugin> _originalPlugins; // Memorized when partial plugins are created/used.
-
         object _target;
 
         // GETS/SETS //////////////////////////////////////////////
@@ -359,6 +358,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
         /// defines a portion of that path to use and re-adapt to (easing included),
+        /// also re-adapting the duration to the correct partial,
         /// and rewinds/restarts the tween in its partial form (depending if it was paused or not).
         /// </summary>
         /// <param name="p_waypointId0">
@@ -369,6 +369,64 @@ namespace Holoville.HOTween
         /// </param>
         /// <param name="p_waypointId1">Id of the new ending waypoint on the current path</param>
         public Tweener UsePartialPath(int p_waypointId0, int p_waypointId1)
+        {
+            EaseType orEaseType = _originalPlugins == null ? _easeType : _originalEaseType;
+            return UsePartialPath(p_waypointId0, p_waypointId1, -1, orEaseType);
+        }
+        /// <summary>
+        /// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
+        /// defines a portion of that path to use and re-adapt to (easing included),
+        /// and rewinds/restarts the tween in its partial form (depending if it was paused or not).
+        /// </summary>
+        /// <param name="p_waypointId0">
+        /// Id of the new starting waypoint on the current path.
+        /// If you want to be sure you're targeting the first point in the path, pass -1
+        /// (this is because the first waypoint of the path might be different from the first waypoint you passed,
+        /// in case the target Transform was not already on the starting position, and thus needed to reach it).
+        /// </param>
+        /// <param name="p_waypointId1">Id of the new ending waypoint on the current path</param>
+        /// <param name="p_newDuration">
+        /// Tween duration of the partial path (if -1 auto-calculates the correct partial based on the original duration)
+        /// </param>
+        public Tweener UsePartialPath(int p_waypointId0, int p_waypointId1, float p_newDuration)
+        {
+            EaseType orEaseType = _originalPlugins == null ? _easeType : _originalEaseType;
+            return UsePartialPath(p_waypointId0, p_waypointId1, p_newDuration, orEaseType);
+        }
+        /// <summary>
+        /// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
+        /// defines a portion of that path to use and re-adapt to (easing included),
+        /// and rewinds/restarts the tween in its partial form (depending if it was paused or not).
+        /// </summary>
+        /// <param name="p_waypointId0">
+        /// Id of the new starting waypoint on the current path.
+        /// If you want to be sure you're targeting the first point in the path, pass -1
+        /// (this is because the first waypoint of the path might be different from the first waypoint you passed,
+        /// in case the target Transform was not already on the starting position, and thus needed to reach it).
+        /// </param>
+        /// <param name="p_waypointId1">Id of the new ending waypoint on the current path</param>
+        /// <param name="p_newEaseType">New EaseType to apply</param>
+        public Tweener UsePartialPath(int p_waypointId0, int p_waypointId1, EaseType p_newEaseType)
+        {
+            return UsePartialPath(p_waypointId0, p_waypointId1, -1, p_newEaseType);
+        }
+        /// <summary>
+        /// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
+        /// defines a portion of that path to use and re-adapt to,
+        /// and rewinds/restarts the tween in its partial form (depending if it was paused or not).
+        /// </summary>
+        /// <param name="p_waypointId0">
+        /// Id of the new starting waypoint on the current path.
+        /// If you want to be sure you're targeting the first point in the path, pass -1
+        /// (this is because the first waypoint of the path might be different from the first waypoint you passed,
+        /// in case the target Transform was not already on the starting position, and thus needed to reach it).
+        /// </param>
+        /// <param name="p_waypointId1">Id of the new ending waypoint on the current path</param>
+        /// <param name="p_newDuration">
+        /// Tween duration of the partial path (if -1 auto-calculates the correct partial based on the original duration)
+        /// </param>
+        /// <param name="p_newEaseType">New EaseType to apply</param>
+        public Tweener UsePartialPath(int p_waypointId0, int p_waypointId1, float p_newDuration, EaseType p_newEaseType)
         {
             // Get original plugin
             PlugVector3Path plugVector3Path = GetOriginalPlugVector3PathPlugin();
@@ -382,17 +440,17 @@ namespace Holoville.HOTween
 
             // Startup the tween (if not already started) to store the path data.
             Startup();
-            // Store original duration and plugins (if not already stored).
+            // Store original duration and easeType (if not already stored).
             if (_originalPlugins == null) {
                 _originalDuration = _duration;
+                _originalEaseType = _easeType;
                 _originalPlugins = plugins;
             }
             // Convert waypoints ids to path ids
             int p_pathWaypointId0 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId0);
             int p_pathWaypointId1 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId1);
-            // Assign duration of the new partial path, relative to previous duration
-            float waypointPerc = plugVector3Path.GetWaypointsLengthPercentage(p_pathWaypointId0, p_pathWaypointId1);
-            _duration = _originalDuration * waypointPerc;
+            // Assign new duration
+            _duration = p_newDuration >= 0 ? p_newDuration : _originalDuration * plugVector3Path.GetWaypointsLengthPercentage(p_pathWaypointId0, p_pathWaypointId1);
 
             // Create new partial path
             Vector3[] pts = new Vector3[p_pathWaypointId1 - p_pathWaypointId0 + 3];
@@ -401,7 +459,7 @@ namespace Holoville.HOTween
                 pts[i] = plugVector3Path.path.path[i + diff - 1];
             }
             // Create new partial PlugVector3Path, init it, and assign it to plugins
-            PlugVector3Path newPV3P = plugVector3Path.CloneForPartialPath(pts, _easeType);
+            PlugVector3Path newPV3P = plugVector3Path.CloneForPartialPath(pts, p_newEaseType);
             newPV3P.Init(this, plugVector3Path.propName, easeType, plugVector3Path.targetType, plugVector3Path.propInfo, plugVector3Path.fieldInfo);
             plugins = new List<ABSTweenPlugin> { newPV3P };
 
@@ -425,6 +483,7 @@ namespace Holoville.HOTween
         {
             // Reset original values
             _duration = _originalDuration;
+            _easeType = _originalEaseType;
             plugins = _originalPlugins;
             _originalPlugins = null;
             // Re-startup and restart
