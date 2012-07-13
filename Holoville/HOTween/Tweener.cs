@@ -421,7 +421,10 @@ namespace Holoville.HOTween
         /// (this is because the first waypoint of the path might be different from the first waypoint you passed,
         /// in case the target Transform was not already on the starting position, and thus needed to reach it).
         /// </param>
-        /// <param name="p_waypointId1">Id of the new ending waypoint on the current path</param>
+        /// <param name="p_waypointId1">
+        /// Id of the new ending waypoint on the current path 
+        /// (-1 in case you want to target the ending waypoint of a closed path)
+        /// </param>
         /// <param name="p_newDuration">
         /// Tween duration of the partial path (if -1 auto-calculates the correct partial based on the original duration)
         /// </param>
@@ -447,8 +450,8 @@ namespace Holoville.HOTween
                 _originalPlugins = plugins;
             }
             // Convert waypoints ids to path ids
-            int p_pathWaypointId0 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId0);
-            int p_pathWaypointId1 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId1);
+            int p_pathWaypointId0 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId0, true);
+            int p_pathWaypointId1 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId1, false);
             // Assign new duration and ease
             _duration = p_newDuration >= 0 ? p_newDuration : _speedBased ? _originalNonSpeedBasedDuration : _originalDuration * plugVector3Path.GetWaypointsLengthPercentage(p_pathWaypointId0, p_pathWaypointId1);
             _easeType = p_newEaseType;
@@ -464,7 +467,7 @@ namespace Holoville.HOTween
             newPV3P.Init(this, plugVector3Path.propName, easeType, plugVector3Path.targetType, plugVector3Path.propInfo, plugVector3Path.fieldInfo);
             plugins = new List<ABSTweenPlugin> { newPV3P };
 
-            // Re-Startup and restart.
+            // Re-Startup and restart
             Startup(true);
             if (!_isPaused)
                 Restart(true);
@@ -911,9 +914,12 @@ namespace Holoville.HOTween
         /// <summary>
         /// Returns the correct id of the given waypoint, converted to path id.
         /// </summary>
-        static int ConvertWaypointIdToPathId(PlugVector3Path p_plugVector3Path, int p_waypointId)
+        /// <param name="p_isWp0">If TRUE indicates that the given waypoint is the starting one,
+        /// otherwise it's the ending one</param>
+        /// <returns></returns>
+        static int ConvertWaypointIdToPathId(PlugVector3Path p_plugVector3Path, int p_waypointId, bool p_isStartingWp)
         {
-            if (p_waypointId == -1) return 1;
+            if (p_waypointId == -1) return p_isStartingWp ? 1 : p_plugVector3Path.path.path.Length - 2;
             if (p_plugVector3Path.hasAdditionalStartingP)
                 return p_waypointId + 2;
             else

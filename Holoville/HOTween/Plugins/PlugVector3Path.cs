@@ -61,7 +61,7 @@ namespace Holoville.HOTween.Plugins
         Vector3[] points;
         Vector3 diffChangeVal; // Used for incremental loops.
         bool isPartialPath;
-        bool isClosedPath;
+        internal bool isClosedPath;
         OrientType orientType = OrientType.None;
         float lookAheadVal = 0.0001f;
         Axis lockAxis = Axis.None;
