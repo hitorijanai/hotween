@@ -94,6 +94,15 @@ namespace Holoville.HOTween.Plugins.Core
         bool speedBasedDurationWasSet;
         int prevCompletedLoops; // Stored only during Incremental loop type.
 
+        // SPECIFIC GETTERS/SETTERS ///////////////////////////////
+        // Used in case a specific type of accessor can be used to speed things up
+
+        Transform _transformTarget;
+        TweenDelegate.HOAction<Vector3> _setTransformVector3;
+        TweenDelegate.HOFunc<Vector3> _getTransformVector3;
+        TweenDelegate.HOAction<Quaternion> _setTransformQuaternion;
+        TweenDelegate.HOFunc<Quaternion> _getTransformQuaternion; 
+
         // IOS-ONLY VARS //////////////////////////////////////////
 
         internal PropertyInfo propInfo;
@@ -255,23 +264,38 @@ namespace Holoville.HOTween.Plugins.Core
             }
             _duration = tweenObj.duration;
 
+            if (targetType == typeof(Transform)) {
+                // Use specific transform accessors for faster performance
+                _transformTarget = p_tweenObj.target as Transform;
+                switch (_propName) {
+                case "position":
+                    _setTransformVector3 = value => _transformTarget.position = value;
+                    _getTransformVector3 = () => _transformTarget.position;
+                    break;
+                case "localScale":
+                    _setTransformVector3 = value => _transformTarget.localScale = value;
+                    _getTransformVector3 = () => _transformTarget.localScale;
+                    break;
+                case "rotation":
+                    _setTransformQuaternion = value => _transformTarget.rotation = value;
+                    _getTransformQuaternion = () => _transformTarget.rotation;
+                    break;
+                }
+            } else {
 #if MICRO
-            propInfo = p_propertyInfo;
-            fieldInfo = p_fieldInfo;
-#else
-            if (HOTween.isIOS)
-            {
                 propInfo = p_propertyInfo;
                 fieldInfo = p_fieldInfo;
-            }
-            else
-            {
-                if (!ignoreAccessor)
-                {
-                    valAccessor = MemberAccessorCacher.Make(p_targetType, p_propertyName, p_propertyInfo, p_fieldInfo);
+#else
+                if (HOTween.isIOS) {
+                    propInfo = p_propertyInfo;
+                    fieldInfo = p_fieldInfo;
+                } else {
+                    if (!ignoreAccessor) {
+                        valAccessor = MemberAccessorCacher.Make(p_targetType, p_propertyName, p_propertyInfo, p_fieldInfo);
+                    }
                 }
-            }
 #endif
+            }
         }
 
         /// <summary>
@@ -504,44 +528,14 @@ namespace Holoville.HOTween.Plugins.Core
         /// </param>
         protected virtual void SetValue(object p_value)
         {
+            if (_transformTarget != null) {
+                // Use specific accessors
+                if (_setTransformVector3 != null)
+                    _setTransformVector3((Vector3)p_value);
+                else
+                    _setTransformQuaternion((Quaternion)p_value);
+            } else {
 #if MICRO
-            if (propInfo != null)
-            {
-                try
-                {
-                    propInfo.SetValue(tweenObj.target, p_value, null);
-                }
-                catch (InvalidCastException)
-                {
-                    // This happens only if a float is being assigned to an int.
-                    propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
-                }
-                catch (ArgumentException)
-                {
-                    // This happens only on iOS if a float is being assigned to an int.
-                    propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
-                }
-            }
-            else
-            {
-                try
-                {
-                    fieldInfo.SetValue(tweenObj.target, p_value);
-                }
-                catch (InvalidCastException)
-                {
-                    // This happens only if a float is being assigned to an int.
-                    fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
-                }
-                catch (ArgumentException)
-                {
-                    // This happens only on iOS if a float is being assigned to an int.
-                    fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
-                }
-            }
-#else
-            if (HOTween.isIOS)
-            {
                 if (propInfo != null)
                 {
                     try
@@ -576,25 +570,42 @@ namespace Holoville.HOTween.Plugins.Core
                         fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
                     }
                 }
-            }
-            else
-            {
-                try
-                {
-                    valAccessor.Set(tweenObj.target, p_value);
+#else
+                if (HOTween.isIOS) {
+                    if (propInfo != null) {
+                        try {
+                            propInfo.SetValue(tweenObj.target, p_value, null);
+                        } catch (InvalidCastException) {
+                            // This happens only if a float is being assigned to an int.
+                            propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
+                        } catch (ArgumentException) {
+                            // This happens only on iOS if a float is being assigned to an int.
+                            propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
+                        }
+                    } else {
+                        try {
+                            fieldInfo.SetValue(tweenObj.target, p_value);
+                        } catch (InvalidCastException) {
+                            // This happens only if a float is being assigned to an int.
+                            fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
+                        } catch (ArgumentException) {
+                            // This happens only on iOS if a float is being assigned to an int.
+                            fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
+                        }
+                    }
+                } else {
+                    try {
+                        valAccessor.Set(tweenObj.target, p_value);
+                    } catch (InvalidCastException) {
+                        // This happens only if a float is being assigned to an int.
+                        valAccessor.Set(tweenObj.target, (int)Math.Floor((double)(float)p_value)); // OPTIMIZE store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
+                    } catch (ArgumentException) {
+                        // This happens only on iOS if a float is being assigned to an int, but is also here just to be sure.
+                        valAccessor.Set(tweenObj.target, (int)Math.Floor((double)(float)p_value));
+                    }
                 }
-                catch (InvalidCastException)
-                {
-                    // This happens only if a float is being assigned to an int.
-                    valAccessor.Set(tweenObj.target, (int)Math.Floor((double)(float)p_value)); // OPTIMIZE store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
-                }
-                catch (ArgumentException)
-                {
-                    // This happens only on iOS if a float is being assigned to an int, but is also here just to be sure.
-                    valAccessor.Set(tweenObj.target, (int)Math.Floor((double)(float)p_value));
-                }
-            }
 #endif
+            }
         }
 
         /// <summary>
@@ -603,25 +614,31 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         protected virtual object GetValue()
         {
+            if (_transformTarget != null) {
+                // Use specific accessors
+                if (_getTransformVector3 != null)
+                    return _getTransformVector3();
+                else
+                    return _getTransformQuaternion();
+            } else {
 #if MICRO
-            if (propInfo != null)
-            {
-                //return propInfo.GetValue(tweenObj.target, null);
-                return propInfo.GetGetMethod().Invoke(tweenObj.target, null); // HACK for reflection bug with some generics on iOS
-            }
-            return fieldInfo.GetValue(tweenObj.target);
-#else
-            if (HOTween.isIOS)
-            {
                 if (propInfo != null)
                 {
                     //return propInfo.GetValue(tweenObj.target, null);
                     return propInfo.GetGetMethod().Invoke(tweenObj.target, null); // HACK for reflection bug with some generics on iOS
                 }
                 return fieldInfo.GetValue(tweenObj.target);
-            }
-            return valAccessor.Get(tweenObj.target);
+#else
+                if (HOTween.isIOS) {
+                    if (propInfo != null) {
+                        //return propInfo.GetValue(tweenObj.target, null);
+                        return propInfo.GetGetMethod().Invoke(tweenObj.target, null); // HACK for reflection bug with some generics on iOS
+                    }
+                    return fieldInfo.GetValue(tweenObj.target);
+                }
+                return valAccessor.Get(tweenObj.target);
 #endif
+            }
         }
     }
 }

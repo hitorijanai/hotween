@@ -914,7 +914,9 @@ namespace Holoville.HOTween
         /// <summary>
         /// Returns the correct id of the given waypoint, converted to path id.
         /// </summary>
-        /// <param name="p_isWp0">If TRUE indicates that the given waypoint is the starting one,
+        /// <param name="p_plugVector3Path">Vector3 path plugin to use</param>
+        /// <param name="p_waypointId">Waypoint to convert</param>
+        /// <param name="p_isStartingWp">If TRUE indicates that the given waypoint is the starting one,
         /// otherwise it's the ending one</param>
         /// <returns></returns>
         static int ConvertWaypointIdToPathId(PlugVector3Path p_plugVector3Path, int p_waypointId, bool p_isStartingWp)

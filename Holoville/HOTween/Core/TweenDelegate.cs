@@ -46,5 +46,15 @@ namespace Holoville.HOTween.Core
         public delegate float EaseFunc(float t, float b, float c, float d);
 
         internal delegate void FilterFunc(int p_index, bool p_optionalBool);
+
+        /// <summary>
+        /// Used in place of <c>System.Func</c>, which is not available in mscorlib.
+        /// </summary>
+        public delegate T HOFunc<out T>();
+
+        /// <summary>
+        /// Used in place of <c>System.Action</c>.
+        /// </summary>
+        public delegate void HOAction<in T>(T p_newValue);
     }
 }
