@@ -272,6 +272,10 @@ namespace Holoville.HOTween.Plugins.Core
                     _setTransformVector3 = value => _transformTarget.position = value;
                     _getTransformVector3 = () => _transformTarget.position;
                     break;
+                case "localPosition":
+                    _setTransformVector3 = value => _transformTarget.localPosition = value;
+                    _getTransformVector3 = () => _transformTarget.localPosition;
+                    break;
                 case "localScale":
                     _setTransformVector3 = value => _transformTarget.localScale = value;
                     _getTransformVector3 = () => _transformTarget.localScale;
@@ -279,6 +283,10 @@ namespace Holoville.HOTween.Plugins.Core
                 case "rotation":
                     _setTransformQuaternion = value => _transformTarget.rotation = value;
                     _getTransformQuaternion = () => _transformTarget.rotation;
+                    break;
+                case "localRotation":
+                    _setTransformQuaternion = value => _transformTarget.localRotation = value;
+                    _getTransformQuaternion = () => _transformTarget.localRotation;
                     break;
                 }
             } else {
