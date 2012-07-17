@@ -97,6 +97,7 @@ namespace Holoville.HOTween.Plugins.Core
         // SPECIFIC GETTERS/SETTERS ///////////////////////////////
         // Used in case a specific type of accessor can be used to speed things up
 
+        bool _useSpeedTransformAccessors;
         Transform _transformTarget;
         TweenDelegate.HOAction<Vector3> _setTransformVector3;
         TweenDelegate.HOFunc<Vector3> _getTransformVector3;
@@ -267,6 +268,7 @@ namespace Holoville.HOTween.Plugins.Core
             if (targetType == typeof(Transform)) {
                 // Use specific transform accessors for faster performance
                 _transformTarget = p_tweenObj.target as Transform;
+                _useSpeedTransformAccessors = true;
                 switch (_propName) {
                 case "position":
                     _setTransformVector3 = value => _transformTarget.position = value;
@@ -288,8 +290,13 @@ namespace Holoville.HOTween.Plugins.Core
                     _setTransformQuaternion = value => _transformTarget.localRotation = value;
                     _getTransformQuaternion = () => _transformTarget.localRotation;
                     break;
+                default:
+                    _transformTarget = null; // No valid speed property found
+                    _useSpeedTransformAccessors = false;
+                    break;
                 }
-            } else {
+            }
+            if (!_useSpeedTransformAccessors) {
 #if MICRO
                 propInfo = p_propertyInfo;
                 fieldInfo = p_fieldInfo;
@@ -536,7 +543,7 @@ namespace Holoville.HOTween.Plugins.Core
         /// </param>
         protected virtual void SetValue(object p_value)
         {
-            if (_transformTarget != null) {
+            if (_useSpeedTransformAccessors) {
                 // Use specific accessors
                 if (_setTransformVector3 != null)
                     _setTransformVector3((Vector3)p_value);
@@ -622,7 +629,7 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         protected virtual object GetValue()
         {
-            if (_transformTarget != null) {
+            if (_useSpeedTransformAccessors) {
                 // Use specific accessors
                 if (_getTransformVector3 != null)
                     return _getTransformVector3();
