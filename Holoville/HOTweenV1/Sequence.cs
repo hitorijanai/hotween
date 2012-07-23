@@ -44,6 +44,21 @@ namespace Holoville.HOTween
 
         List<HOTSeqItem> items;
 
+        // PROPERTIES ///////////////////////////////////////////////////
+
+        override internal bool steadyIgnoreCallbacks
+        {
+            get { return _steadyIgnoreCallbacks; }
+            set
+            {
+                _steadyIgnoreCallbacks = value;
+                if (items == null) return;
+                foreach (HOTSeqItem item in items) {
+                    if (item.twMember != null) item.twMember.steadyIgnoreCallbacks = value;
+                }
+            }
+        }
+
 
         // ***********************************************************************************
         // CONSTRUCTOR
@@ -671,8 +686,7 @@ namespace Holoville.HOTween
             for (int i = items.Count - 1; i > - 1; --i)
             {
                 HOTSeqItem item = items[i];
-                if (item.twMember != null)
-                {
+                if (item.twMember != null) {
                     item.twMember.Rewind();
                 }
             }
@@ -704,6 +718,8 @@ namespace Holoville.HOTween
         /// </summary>
         void TweenStartupIteration()
         {
+            bool setSteadyIgnoreCallbacks = !steadyIgnoreCallbacks;
+            if (setSteadyIgnoreCallbacks) steadyIgnoreCallbacks = true;
             // OPTIMIZE Find way to speed this up (by applying values directly instead than animating to them?)
             HOTSeqItem item;
             for (int i = 0; i < items.Count; ++i)
@@ -720,11 +736,10 @@ namespace Holoville.HOTween
                 item = items[i];
                 if (item.twMember != null)
                 {
-                    item.twMember.ignoreCallbacks = true;
                     item.twMember.Rewind();
-                    item.twMember.ignoreCallbacks = false;
                 }
             }
+            if (setSteadyIgnoreCallbacks) steadyIgnoreCallbacks = false;
         }
 
         /// <summary>

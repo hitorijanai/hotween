@@ -58,6 +58,19 @@ namespace Holoville.HOTween.Core
         /// </summary>
         internal bool ignoreCallbacks;
 
+        /// <summary>
+        /// Used by main Sequences to set an ignoreCallbacks value to all its items/subitems,
+        /// which the items/subitmes themselves won't be able to reset.
+        /// Necessary during TweenStartupIteration.
+        /// </summary>
+        internal bool _steadyIgnoreCallbacks;
+        // Overridden by sequences to set steadyIgnoreCallbacks value to all times and subitems.
+        internal virtual bool steadyIgnoreCallbacks
+        {
+            get { return _steadyIgnoreCallbacks; }
+            set { _steadyIgnoreCallbacks = value; }
+        }
+
         internal Sequence contSequence; // Eventual sequence containing this tween.
         internal bool startupDone;
 
@@ -783,10 +796,8 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected virtual void OnStart()
         {
-            if (ignoreCallbacks)
-            {
-                return;
-            }
+            if (steadyIgnoreCallbacks || ignoreCallbacks) return;
+
             _hasStarted = true;
             if (onStart != null)
             {
@@ -803,7 +814,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnUpdate()
         {
-            if (ignoreCallbacks)
+            if (steadyIgnoreCallbacks || ignoreCallbacks)
             {
                 return;
             }
@@ -822,7 +833,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnPause()
         {
-            if (ignoreCallbacks)
+            if (steadyIgnoreCallbacks || ignoreCallbacks)
             {
                 return;
             }
@@ -841,7 +852,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnPlay()
         {
-            if (ignoreCallbacks)
+            if (steadyIgnoreCallbacks || ignoreCallbacks)
             {
                 return;
             }
@@ -860,7 +871,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnRewinded()
         {
-            if (ignoreCallbacks)
+            if (steadyIgnoreCallbacks || ignoreCallbacks)
             {
                 return;
             }
@@ -879,7 +890,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnStepComplete()
         {
-            if (ignoreCallbacks)
+            if (steadyIgnoreCallbacks || ignoreCallbacks)
             {
                 return;
             }
@@ -900,7 +911,7 @@ namespace Holoville.HOTween.Core
         {
             _isComplete = true;
             OnStepComplete();
-            if (ignoreCallbacks)
+            if (steadyIgnoreCallbacks || ignoreCallbacks)
             {
                 return;
             }

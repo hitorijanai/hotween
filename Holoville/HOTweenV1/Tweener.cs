@@ -877,7 +877,7 @@ namespace Holoville.HOTween
         /// </summary>
         protected override void OnStart()
         {
-            if (ignoreCallbacks)
+            if (steadyIgnoreCallbacks || ignoreCallbacks)
             {
                 return;
             }
