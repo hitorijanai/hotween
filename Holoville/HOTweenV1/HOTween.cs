@@ -1691,6 +1691,27 @@ namespace Holoville.HOTween
         }
 
         /// <summary>
+        /// Returns a list of the eventual existing tweens with the given Id,
+        /// (empty if no Tweener/Sequence was found).
+        /// </summary>
+        /// <param name="p_id">Id to look for</param>
+        /// <param name="p_includeNestedTweens">If TRUE also searches inside nested tweens</param>
+        /// <returns></returns>
+        public static List<IHOTweenComponent> GetTweensById(string p_id, bool p_includeNestedTweens)
+        {
+            List<IHOTweenComponent> res = new List<IHOTweenComponent>();
+            if (tweens == null) return res;
+            foreach (ABSTweenComponent tw in tweens) {
+                if (p_includeNestedTweens) {
+                    res.AddRange(tw.GetTweensById(p_id));
+                } else {
+                    if (tw.id == p_id) res.Add(tw);
+                }
+            }
+            return res;
+        }
+
+        /// <summary>
         /// Returns <c>true</c> if the given target is currently involved in any running Tweener or Sequence (taking into account also nested tweens).
         /// Returns <c>false</c> both if the given target is not inside a Tweener, than if the relative Tweener is paused.
         /// To simply check if the target is attached to a Tweener or Sequence use <see cref="IsLinkedTo"/> instead.
@@ -1708,9 +1729,7 @@ namespace Holoville.HOTween
                 return false;
             }
 
-            for (int i = 0; i < tweens.Count; ++i)
-            {
-                ABSTweenComponent tw = tweens[i];
+            foreach (ABSTweenComponent tw in tweens) {
                 if (tw.IsTweening(p_target))
                 {
                     return true;

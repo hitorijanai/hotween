@@ -383,11 +383,24 @@ namespace Holoville.HOTween
             if (items == null) return null;
 
             List<object> targets = new List<object>();
-            foreach (HOTSeqItem item in items)
-            {
+            foreach (HOTSeqItem item in items) {
                 if (item.twMember != null) targets.AddRange(item.twMember.GetTweenTargets());
             }
             return targets;
+        }
+
+        /// <summary>
+        /// Returns a list of the eventual existing tweens with the given Id within this Sequence,
+        /// nested tweens included (or an empty list if no tweens were found).
+        /// </summary>
+        internal override List<IHOTweenComponent> GetTweensById(string p_id)
+        {
+            List<IHOTweenComponent> res = new List<IHOTweenComponent>();
+            if (id == p_id) res.Add(this);
+            foreach (HOTSeqItem item in items) {
+                if (item.twMember != null) res.AddRange(item.twMember.GetTweensById(p_id));
+            }
+            return res;
         }
 
         // ===================================================================================
