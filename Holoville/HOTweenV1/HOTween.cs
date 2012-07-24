@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
-// Last update: 2012/07/23
+// Last update: 2012/07/24
 
 using System.Collections;
 using System.Collections.Generic;
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.300";
+        public const string VERSION = "1.1.301";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -473,7 +473,7 @@ namespace Holoville.HOTween
             // p_isStartupIteration is set to FALSE to ignore callbacks.
             if (!tw._isPaused)
             {
-                tw.Update(0, true, true, true);
+                tw.Update(0, true, true, false, true);
             }
             return tw;
         }

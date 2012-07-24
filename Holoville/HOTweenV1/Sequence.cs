@@ -463,10 +463,13 @@ namespace Holoville.HOTween
         /// If <c>true</c> means the update is due to a startup iteration (managed by Sequence Startup),
         /// and all callbacks will be ignored.
         /// </param>
+        /// <param name="p_ignoreCallbacks">
+        /// If <c>true</c> doesn't call any callback method.
+        /// </param>
         /// <returns>
         /// A value of <c>true</c> if the Sequence is not reversed and is complete (or all the Sequence tween targets don't exist anymore), otherwise <c>false</c>.
         /// </returns>
-        internal override bool Update(float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration)
+        internal override bool Update(float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration, bool p_ignoreCallbacks)
         {
             if (_destroyed)
             {
@@ -493,7 +496,7 @@ namespace Holoville.HOTween
                 return false;
             }
 
-            ignoreCallbacks = p_isStartupIteration;
+            ignoreCallbacks = p_isStartupIteration || p_ignoreCallbacks;
 
             if (!_isReversed)
             {
@@ -565,7 +568,7 @@ namespace Holoville.HOTween
                 item = items[i];
                 if (item.twMember != null && item.startTime > twElapsed)
                 {
-                    item.twMember.GoTo(twElapsed - item.startTime, p_forceUpdate);
+                    item.twMember.GoTo(twElapsed - item.startTime, p_forceUpdate, true);
                 }
             }
             for (int i = 0; i < items.Count; ++i)
@@ -631,7 +634,7 @@ namespace Holoville.HOTween
         /// <returns>
         /// Returns <c>true</c> if the sequence reached its end and was completed.
         /// </returns>
-        protected override bool GoTo(float p_time, bool p_play, bool p_forceUpdate)
+        protected override bool GoTo(float p_time, bool p_play, bool p_forceUpdate, bool p_ignoreCallbacks)
         {
             if (!_enabled)
             {
@@ -652,7 +655,7 @@ namespace Holoville.HOTween
             }
 
             _fullElapsed = p_time;
-            Update(0, true);
+            Update(0, true, false, p_ignoreCallbacks);
             if (!_isComplete && p_play)
             {
                 Play();
@@ -718,6 +721,7 @@ namespace Holoville.HOTween
         /// </summary>
         void TweenStartupIteration()
         {
+            // TODO implement ignoreCallbacks in Rewind method, to avoid using steadyIgnoreCallbacks
             bool setSteadyIgnoreCallbacks = !steadyIgnoreCallbacks;
             if (setSteadyIgnoreCallbacks) steadyIgnoreCallbacks = true;
             // OPTIMIZE Find way to speed this up (by applying values directly instead than animating to them?)

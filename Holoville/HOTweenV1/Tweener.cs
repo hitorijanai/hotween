@@ -518,9 +518,9 @@ namespace Holoville.HOTween
         // ===================================================================================
         // INTERNAL METHODS ------------------------------------------------------------------
 
-        internal override bool Update(float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration)
+        internal override bool Update(float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration, bool p_ignoreCallbacks)
         {
-            return Update(p_shortElapsed, p_forceUpdate, p_isStartupIteration, false);
+            return Update(p_shortElapsed, p_forceUpdate, p_isStartupIteration, p_ignoreCallbacks, false);
         }
         /// <summary>
         /// Updates the Tweener by the given elapsed time,
@@ -537,6 +537,9 @@ namespace Holoville.HOTween
         /// If <c>true</c> means the update is due to a startup iteration (managed by Sequence Startup or HOTween.From),
         /// and all callbacks will be ignored.
         /// </param>
+        /// <param name="p_ignoreCallbacks">
+        /// If <c>true</c> doesn't call any callback method.
+        /// </param>
         /// <param name="p_ignoreDelay">
         /// If <c>true</c> uses p_shortElapsed fully ignoring the delay
         /// (useful when setting the initial FROM state).
@@ -544,7 +547,7 @@ namespace Holoville.HOTween
         /// <returns>
         /// A value of <c>true</c> if the Tweener is not reversed and is complete (or the tween target doesn't exist anymore), otherwise <c>false</c>.
         /// </returns>
-        internal bool Update(float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration, bool p_ignoreDelay=false)
+        internal bool Update(float p_shortElapsed, bool p_forceUpdate, bool p_isStartupIteration, bool p_ignoreCallbacks, bool p_ignoreDelay = false)
         {
             if (_destroyed)
             {
@@ -572,7 +575,7 @@ namespace Holoville.HOTween
                 return false;
             }
 
-            ignoreCallbacks = p_isStartupIteration;
+            ignoreCallbacks = p_isStartupIteration || p_ignoreCallbacks;
 
             if (p_ignoreDelay || delayCount == 0)
             {
@@ -739,7 +742,7 @@ namespace Holoville.HOTween
         /// <returns>
         /// Returns <c>true</c> if the tween reached its end and was completed.
         /// </returns>
-        protected override bool GoTo(float p_time, bool p_play, bool p_forceUpdate)
+        protected override bool GoTo(float p_time, bool p_play, bool p_forceUpdate, bool p_ignoreCallbacks)
         {
             if (!_enabled)
             {
@@ -762,7 +765,7 @@ namespace Holoville.HOTween
             _fullElapsed = p_time;
             delayCount = 0;
             _elapsedDelay = _delay;
-            Update(0, true);
+            Update(0, true, false, p_ignoreCallbacks);
             if (!_isComplete && p_play)
             {
                 Play();

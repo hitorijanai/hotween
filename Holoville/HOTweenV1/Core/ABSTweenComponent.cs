@@ -597,9 +597,8 @@ namespace Holoville.HOTween.Core
         /// </returns>
         public bool GoTo(float p_time)
         {
-            return GoTo(p_time, false, false);
+            return GoTo(p_time, false, false, false);
         }
-
         /// <summary>
         /// Sends the Tweener/Sequence to the given time (taking also loops into account).
         /// If the time is bigger than the total Tweener/Sequence duration, it goes to the end.
@@ -618,7 +617,11 @@ namespace Holoville.HOTween.Core
         /// </returns>
         public bool GoTo(float p_time, bool p_forceUpdate)
         {
-            return GoTo(p_time, false, p_forceUpdate);
+            return GoTo(p_time, false, p_forceUpdate, false);
+        }
+        internal bool GoTo(float p_time, bool p_forceUpdate, bool p_ignoreCallbacks)
+        {
+            return GoTo(p_time, false, p_forceUpdate, p_ignoreCallbacks);
         }
 
         /// <summary>
@@ -633,9 +636,8 @@ namespace Holoville.HOTween.Core
         /// </returns>
         public bool GoToAndPlay(float p_time)
         {
-            return GoTo(p_time, true, false);
+            return GoTo(p_time, true, false, false);
         }
-
         /// <summary>
         /// Sends the Tweener/Sequence to the given time (taking also loops into account) and plays it.
         /// If the time is bigger than the total Tweener/Sequence duration, it goes to the end.
@@ -654,7 +656,11 @@ namespace Holoville.HOTween.Core
         /// </returns>
         public bool GoToAndPlay(float p_time, bool p_forceUpdate)
         {
-            return GoTo(p_time, true, p_forceUpdate);
+            return GoTo(p_time, true, p_forceUpdate, false);
+        }
+        internal bool GoToAndPlay(float p_time, bool p_forceUpdate, bool p_ignoreCallbacks)
+        {
+            return GoTo(p_time, true, p_forceUpdate, p_ignoreCallbacks);
         }
 
         /// <summary>
@@ -721,9 +727,8 @@ namespace Holoville.HOTween.Core
         /// </returns>
         internal bool Update(float p_elapsed)
         {
-            return Update(p_elapsed, false, false);
+            return Update(p_elapsed, false, false, false);
         }
-
         /// <summary>
         /// Updates the Tweener/Sequence by the given elapsed time,
         /// and returns a value of <c>true</c> if the Tweener/Sequence is complete.
@@ -740,9 +745,8 @@ namespace Holoville.HOTween.Core
         /// </returns>
         internal bool Update(float p_elapsed, bool p_forceUpdate)
         {
-            return Update(p_elapsed, p_forceUpdate, false);
+            return Update(p_elapsed, p_forceUpdate, false, false);
         }
-
         /// <summary>
         /// Updates the Tweener/Sequence by the given elapsed time,
         /// and returns a value of <c>true</c> if the Tweener/Sequence is complete.
@@ -761,7 +765,32 @@ namespace Holoville.HOTween.Core
         /// <returns>
         /// A value of <c>true</c> if the tween is not reversed and complete (or the tween target doesn't exist anymore), otherwise <c>false</c>.
         /// </returns>
-        internal abstract bool Update(float p_elapsed, bool p_forceUpdate, bool p_isStartupIteration);
+        internal bool Update(float p_elapsed, bool p_forceUpdate, bool p_isStartupIteration)
+        {
+            return Update(p_elapsed, p_forceUpdate, p_isStartupIteration, false);
+        }
+        /// <summary>
+        /// Updates the Tweener/Sequence by the given elapsed time,
+        /// and returns a value of <c>true</c> if the Tweener/Sequence is complete.
+        /// </summary>
+        /// <param name="p_elapsed">
+        /// The elapsed time since the last update.
+        /// </param>
+        /// <param name="p_forceUpdate">
+        /// If <c>true</c> forces the update even if the Tweener/Sequence is complete or paused,
+        /// but ignores onUpdate, and sends onComplete and onStepComplete calls only if the Tweener/Sequence wasn't complete before this call.
+        /// </param>
+        /// <param name="p_isStartupIteration">
+        /// If <c>true</c> means the update is due to a startup iteration (managed by Sequence Startup),
+        /// and all callbacks will be ignored.
+        /// </param>
+        /// <param name="p_ignoreCallbacks">
+        /// If <c>true</c> doesn't call any callback method.
+        /// </param>
+        /// <returns>
+        /// A value of <c>true</c> if the tween is not reversed and complete (or the tween target doesn't exist anymore), otherwise <c>false</c>.
+        /// </returns>
+        internal abstract bool Update(float p_elapsed, bool p_forceUpdate, bool p_isStartupIteration, bool p_ignoreCallbacks);
 
         /// <summary>
         /// Applies the correct Incremental Sequence loop value.
@@ -779,7 +808,7 @@ namespace Holoville.HOTween.Core
         /// Sends the Tweener/Sequence to the given time (taking also loops into account) and plays it.
         /// If the time is bigger than the total Tweener/Sequence duration, it goes to the end.
         /// </summary>
-        protected abstract bool GoTo(float p_time, bool p_play, bool p_forceUpdate);
+        protected abstract bool GoTo(float p_time, bool p_play, bool p_forceUpdate, bool p_ignoreCallbacks);
 
         /// <summary>
         /// Startup this tween
