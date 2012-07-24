@@ -152,7 +152,9 @@ namespace Holoville.HOTween.Editor
 
         void DrawInfo(TweenInfo twInfo)
         {
-            GUILayout.Label("Loops: " + twInfo.tween.completedLoops + "/" + twInfo.tween.loops, HOGUIStyle.LabelSmallStyle);
+            bool hasId = twInfo.tween.id != "";
+            string s = "Id: " + (hasId ? twInfo.tween.id : "-") + ", Loops: " + twInfo.tween.completedLoops + "/" + twInfo.tween.loops;
+            GUILayout.Label(s, HOGUIStyle.LabelSmallStyle);
         }
 
         void DrawTargetButtons(TweenInfo twInfo, TweenGroup twGroup)
