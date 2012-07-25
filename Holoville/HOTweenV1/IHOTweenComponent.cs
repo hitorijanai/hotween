@@ -24,6 +24,7 @@
 // THE SOFTWARE.
 
 using System.Collections;
+using Holoville.HOTween.Core;
 
 namespace Holoville.HOTween
 {
@@ -239,6 +240,23 @@ namespace Holoville.HOTween
         /// yield return StartCoroutine( myTweenComponent.WaitForCompletion() );
         /// </summary>
         IEnumerator WaitForCompletion();
+
+        /// <summary>
+        /// Assigns the given callback to this Tweener/Sequence,
+        /// overwriting any existing callbacks of the same type.
+        /// </summary>
+        /// <param name="p_callbackType">The type of callback to apply</param>
+        /// <param name="p_callback">The function to call, who must return <c>void</c> and accept no parameters</param>
+        void ApplyCallback(CallbackType p_callbackType, TweenDelegate.TweenCallback p_callback);
+        /// <summary>
+        /// Assigns the given callback to this Tweener/Sequence,
+        /// overwriting any existing callbacks of the same type.
+        /// </summary>
+        /// <param name="p_callbackType">The type of callback to apply</param>
+        /// <param name="p_callback">The function to call, who must return <c>void</c> and accept no parameters.
+        /// It must return <c>void</c> and has to accept a single parameter of type <see cref="TweenEvent"/></param>
+        /// <param name="p_callbackParms">Additional comma separated parameters to pass to the function</param>
+        void ApplyCallback(CallbackType p_callbackType, TweenDelegate.TweenCallbackWParms p_callback, params object[] p_callbackParms);
 
         /// <summary>
         /// Returns <c>true</c> if the given target is currently involved in this Tweener/Sequence (taking into account also nested tweens).

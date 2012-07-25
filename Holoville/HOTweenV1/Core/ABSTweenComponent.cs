@@ -678,6 +678,69 @@ namespace Holoville.HOTween.Core
         }
 
         /// <summary>
+        /// Assigns the given callback to this Tweener/Sequence,
+        /// overwriting any existing callbacks of the same type.
+        /// </summary>
+        /// <param name="p_callbackType">The type of callback to apply</param>
+        /// <param name="p_callback">The function to call, who must return <c>void</c> and accept no parameters</param>
+        public void ApplyCallback(CallbackType p_callbackType, TweenDelegate.TweenCallback p_callback)
+        {
+            ApplyCallback(false, p_callbackType, p_callback, null, null);
+        }
+        /// <summary>
+        /// Assigns the given callback to this Tweener/Sequence,
+        /// overwriting any existing callbacks of the same type.
+        /// </summary>
+        /// <param name="p_callbackType">The type of callback to apply</param>
+        /// <param name="p_callback">The function to call, who must return <c>void</c> and accept no parameters.
+        /// It must return <c>void</c> and has to accept a single parameter of type <see cref="TweenEvent"/></param>
+        /// <param name="p_callbackParms">Additional comma separated parameters to pass to the function</param>
+        public void ApplyCallback(CallbackType p_callbackType, TweenDelegate.TweenCallbackWParms p_callback, params object[] p_callbackParms)
+        {
+            ApplyCallback(true, p_callbackType, null, p_callback, p_callbackParms);
+        }
+        void ApplyCallback(bool p_wParms, CallbackType p_callbackType, TweenDelegate.TweenCallback p_callback, TweenDelegate.TweenCallbackWParms p_callbackWParms, params object[] p_callbackParms)
+        {
+            switch (p_callbackType) {
+                case CallbackType.OnStart:
+                    onStart = p_callback;
+                    onStartWParms = p_callbackWParms;
+                    onStartParms = p_callbackParms;
+                    break;
+                case CallbackType.OnUpdate:
+                    onUpdate = p_callback;
+                    onUpdateWParms = p_callbackWParms;
+                    onUpdateParms = p_callbackParms;
+                    break;
+                case CallbackType.OnStepComplete:
+                    onStepComplete = p_callback;
+                    onStepCompleteWParms = p_callbackWParms;
+                    onStepCompleteParms = p_callbackParms;
+                    break;
+                case CallbackType.OnComplete:
+                    onComplete = p_callback;
+                    onCompleteWParms = p_callbackWParms;
+                    onCompleteParms = p_callbackParms;
+                    break;
+                case CallbackType.OnPlay:
+                    onPlay = p_callback;
+                    onPlayWParms = p_callbackWParms;
+                    onPlayParms = p_callbackParms;
+                    break;
+                case CallbackType.OnPause:
+                    onPause = p_callback;
+                    onPauseWParms = p_callbackWParms;
+                    onPauseParms = p_callbackParms;
+                    break;
+                case CallbackType.OnRewinded:
+                    onRewinded = p_callback;
+                    onRewindedWParms = p_callbackWParms;
+                    onRewindedParms = p_callbackParms;
+                    break;
+            }
+        }
+
+        /// <summary>
         /// Returns <c>true</c> if the given target is currently involved in a running tween or sequence.
         /// Returns <c>false</c> both if the given target is not inside a tween, than if the relative tween is paused.
         /// To simply check if the target is attached to a tween or sequence, use <c>IsLinkedTo( target )</c> instead.
