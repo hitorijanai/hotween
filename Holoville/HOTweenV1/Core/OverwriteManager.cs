@@ -101,7 +101,7 @@ namespace Holoville.HOTween.Core
                                                 tw.contSequence.Remove(tw);
                                             }
                                             runningTweens.RemoveAt(i);
-                                            tw.Kill();
+                                            tw.Kill(false);
                                             goto NEXT_TWEEN;
                                         }
                                     }
