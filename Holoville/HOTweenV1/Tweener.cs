@@ -142,8 +142,7 @@ namespace Holoville.HOTween
 
             p_parms.InitializeObject(this, _target);
 
-            if (plugins != null && plugins.Count > 0)
-            {
+            if (plugins != null && plugins.Count > 0) {
                 // Valid plugins were added: mark this as not empty anymore.
                 _isEmpty = false;
             }
@@ -285,6 +284,49 @@ namespace Holoville.HOTween
             {
                 Kill(p_autoRemoveFromHOTween);
             }
+        }
+
+        /// <summary>
+        /// Completely resets the Tweener except its target,
+        /// and applies a new <see cref="TweenType"/>, duration, and <see cref="TweenParms"/>.
+        /// </summary>
+        /// <param name="p_tweenType">New tween type (to/from)</param>
+        /// <param name="p_newDuration">New duration</param>
+        /// <param name="p_newParms">New parameters</param>
+        public void ResetAndChangeParms(TweenType p_tweenType, float p_newDuration, TweenParms p_newParms)
+        {
+            if (_destroyed) {
+                TweenWarning.Log("ResetAndChangeParms can't run because the tween was destroyed - set AutoKill or autoKillOnComplete to FALSE if you want to avoid destroying a tween after completion");
+                return;
+            }
+            Reset();
+            _duration = p_newDuration;
+            if (p_tweenType == TweenType.From) p_newParms = p_newParms.IsFrom();
+
+            p_newParms.InitializeObject(this, _target);
+
+            if (plugins != null && plugins.Count > 0) {
+                // Valid plugins were added: mark this as not empty anymore.
+                _isEmpty = false;
+            }
+
+            SetFullDuration();
+        }
+
+        /// <summary>
+        /// Completely resets this Tweener, except its target
+        /// </summary>
+        override protected void Reset()
+        {
+            base.Reset();
+
+            isFrom = false;
+            plugins = null;
+            _originalPlugins = null;
+            _delay = _elapsedDelay = delayCount = 0;
+            _speedBased = false;
+            _easeType = HOTween.defEaseType;
+            _originalEaseType = HOTween.defEaseType;
         }
 
         /// <summary>

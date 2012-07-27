@@ -678,6 +678,49 @@ namespace Holoville.HOTween.Core
         }
 
         /// <summary>
+        /// Completely resets this tween, except its target (in case of Tweeners).
+        /// </summary>
+        protected virtual void Reset()
+        {
+            _id = "";
+            _intId = -1;
+            _autoKillOnComplete = true;
+            _enabled = true;
+            _timeScale = HOTween.defTimeScale;
+            _loops = 1;
+            _loopType = HOTween.defLoopType;
+            _updateType = HOTween.defUpdateType;
+            _isPaused = false;
+            _completedLoops = 0;
+            _duration = _originalDuration = _originalNonSpeedBasedDuration = _fullDuration = 0;
+            _elapsed = _fullElapsed = 0;
+            _isEmpty = true;
+            _isReversed = _isLoopingBack = _hasStarted = _isComplete = false;
+            startupDone = false;
+            onStart = null;
+            onStartWParms = null;
+            onStartParms = null;
+            onUpdate = null;
+            onUpdateWParms = null;
+            onUpdateParms = null;
+            onStepComplete = null;
+            onStepCompleteWParms = null;
+            onStepCompleteParms = null;
+            onComplete = null;
+            onCompleteWParms = null;
+            onCompleteParms = null;
+            onPause = null;
+            onPauseWParms = null;
+            onPauseParms = null;
+            onPlay = null;
+            onPlayWParms = null;
+            onPlayParms = null;
+            onRewinded = null;
+            onRewindedWParms = null;
+            onRewindedParms = null;
+        }
+
+        /// <summary>
         /// Assigns the given callback to this Tweener/Sequence,
         /// overwriting any existing callbacks of the same type.
         /// </summary>

@@ -120,6 +120,7 @@
     <Compile Include="Tweener.cs" />
     <Compile Include="TweenEvent.cs" />
     <Compile Include="TweenParms.cs" />
+    <Compile Include="TweenType.cs" />
     <Compile Include="TweenVar.cs" />
     <Compile Include="UpdateType.cs" />
     <Compile Include="WarningLevel.cs" />
