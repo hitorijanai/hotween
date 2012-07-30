@@ -390,6 +390,27 @@ namespace Holoville.HOTween
         }
 
         /// <summary>
+        /// Returns a list of the eventual nested <see cref="Tweener"/> objects whose target is the given one,
+        /// or an empty list if none was found.
+        /// </summary>
+        public List<Tweener> GetTweenersByTarget(object p_target)
+        {
+            List<Tweener> res = new List<Tweener>();
+            foreach (HOTSeqItem item in items) {
+                if (item.twMember == null) continue;
+                Tweener tweener = item.twMember as Tweener;
+                if (tweener != null) {
+                    // Tweener
+                    if (tweener.target == p_target) res.Add(tweener);
+                } else {
+                    // Sequence
+                    res.AddRange(((Sequence)item.twMember).GetTweenersByTarget(p_target));
+                }
+            }
+            return res;
+        }
+
+        /// <summary>
         /// Returns a list of the eventual existing tweens with the given Id within this Sequence,
         /// nested tweens included (or an empty list if no tweens were found).
         /// </summary>
