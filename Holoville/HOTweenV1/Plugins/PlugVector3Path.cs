@@ -56,6 +56,7 @@ namespace Holoville.HOTween.Plugins
         internal float pathPerc; // Stores the current percentage of the path, so that HOTween's OnDrawGizmo can show its velocity.
         internal bool hasAdditionalStartingP; // True if the path was created with an additional starting point
 
+        const int SUBDIVISIONS_MULTIPLIER = 16;
         const float EPSILON = 0.001f; // Used for floating points comparison
         Vector3 typedStartVal;
         Vector3[] points;
@@ -67,8 +68,8 @@ namespace Holoville.HOTween.Plugins
         Axis lockRotationAxis = Axis.None;
         Path orPath; // Original path (in case of partial path tween)
         bool isPartialPath;
-        float partialPathPerc;
-        float partialPathStartPerc;
+        float partialPathPerc = 1;
+        float partialPathStartPerc = 0;
 
         // REFERENCES /////////////////////////////////////////////
 
@@ -488,7 +489,7 @@ namespace Holoville.HOTween.Plugins
             path = new Path(pts);
 
             // Store arc lengths tables for constant speed.
-            path.StoreTimeToArcLenTables(path.path.Length * 4);
+            path.StoreTimeToArcLenTables(path.path.Length * SUBDIVISIONS_MULTIPLIER);
 
             if (!isClosedPath)
             {
@@ -526,8 +527,8 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            pathPerc = ease(p_totElapsed, 0, 1, _duration);
-            SetValue(GetConstPointOnPath(pathPerc, true));
+            pathPerc = ease(p_totElapsed, partialPathStartPerc, partialPathPerc, _duration);
+            SetValue(GetConstPointOnPath(pathPerc, true, isPartialPath ? orPath : path));
 
             if (orientType != OrientType.None && orientTrans != null && !orientTrans.Equals(null))
             {
@@ -543,17 +544,9 @@ namespace Holoville.HOTween.Plugins
                     }
                     break;
                 case OrientType.ToPath:
-                    float nextT;
-                    Vector3 lookAtP;
-                    if (isPartialPath) {
-                        nextT = partialPathStartPerc + (pathPerc * partialPathPerc) + lookAheadVal;
-                        if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
-                        lookAtP = orPath.GetPoint(nextT);
-                    } else {
-                        nextT = pathPerc + lookAheadVal;
-                        if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
-                        lookAtP = path.GetPoint(nextT);
-                    }
+                    float nextT = pathPerc + lookAheadVal;
+                    if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
+                    Vector3 lookAtP = isPartialPath ? orPath.GetPoint(nextT) : path.GetPoint(nextT);
                     if ( lockRotationAxis != Axis.None && orientTrans != null ) {
                         if ((lockRotationAxis & Axis.X) == Axis.X) lookAtP.y = orientTrans.position.y;
                         if ((lockRotationAxis & Axis.Y) == Axis.Y) lookAtP.z = orientTrans.position.z;
@@ -577,7 +570,7 @@ namespace Holoville.HOTween.Plugins
         /// <param name="t">
         /// The percentage (0 to 1) at which to get the point.
         /// </param>
-        internal Vector3 GetConstPointOnPath(float t) { return GetConstPointOnPath(t, false); }
+        internal Vector3 GetConstPointOnPath(float t) { return GetConstPointOnPath(t, false, null); }
         /// <summary>
         /// Returns the point at the given percentage (0 to 1),
         /// considering the path at constant speed.
@@ -590,13 +583,13 @@ namespace Holoville.HOTween.Plugins
         /// IF <c>true</c> updates also <see cref="pathPerc"/> value
         /// (necessary if this method is called for an update).
         /// </param>
-        internal Vector3 GetConstPointOnPath(float t, bool p_updatePathPerc)
+        /// <param name="p_path">
+        /// IF not NULL uses the given path instead than the default one.
+        /// </param>
+        internal Vector3 GetConstPointOnPath(float t, bool p_updatePathPerc, Path p_path)
         {
-            if (p_updatePathPerc) {
-                return path.GetConstPoint(t, out pathPerc);
-            } else {
-                return path.GetConstPoint(t);
-            }
+            if (p_updatePathPerc) return p_path.GetConstPoint(t, out pathPerc);
+            return p_path.GetConstPoint(t);
         }
 
         /// <summary>
@@ -604,7 +597,7 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         internal float GetWaypointsLengthPercentage(int p_pathWaypointId0, int p_pathWaypointId1)
         {
-            if (path.waypointsLength == null) path.StoreWaypointsLengths(4);
+            if (path.waypointsLength == null) path.StoreWaypointsLengths(SUBDIVISIONS_MULTIPLIER);
             float partialLen = 0;
             for (int i = p_pathWaypointId0; i < p_pathWaypointId1; ++i) {
                 partialLen += path.waypointsLength[i];
@@ -632,6 +625,7 @@ namespace Holoville.HOTween.Plugins
                 plugClone.LookAt(lookPos);
                 break;
             }
+            if (isClosedPath) plugClone.ClosePath();
 
             return plugClone;
         }
