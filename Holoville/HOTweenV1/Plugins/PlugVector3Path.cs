@@ -60,12 +60,15 @@ namespace Holoville.HOTween.Plugins
         Vector3 typedStartVal;
         Vector3[] points;
         Vector3 diffChangeVal; // Used for incremental loops.
-        bool isPartialPath;
         internal bool isClosedPath;
         OrientType orientType = OrientType.None;
         float lookAheadVal = 0.0001f;
         Axis lockPositionAxis = Axis.None;
         Axis lockRotationAxis = Axis.None;
+        Path orPath; // Original path (in case of partial path tween)
+        bool isPartialPath;
+        float partialPathPerc;
+        float partialPathStartPerc;
 
         // REFERENCES /////////////////////////////////////////////
 
@@ -176,7 +179,9 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         public PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative) : base(p_path, p_easeType, p_isRelative) {}
         /// <summary>
-        /// Creates a new instance of this plugin.
+        /// Creates a new instance of this plugin, setting it for partial path tweem.
+        /// The p_path array will be used as is.
+        /// Used by <see cref="Tweener"/> when creating a new partial PlugVector3Path.
         /// </summary>
         /// <param name="p_path">
         /// The <see cref="Vector3"/> path to tween through.
@@ -188,14 +193,17 @@ namespace Holoville.HOTween.Plugins
         /// If <c>true</c>, the path is considered relative to the starting value of the property, instead than absolute.
         /// Not compatible with <c>HOTween.From</c>.
         /// </param>
-        /// <param name="p_isPartialPath">
-        /// If TRUE indicates that the path is partial, and will be created accordingly,
-        /// and the p_path array will be used as is.
-        /// Used by <see cref="Tweener"/> when creating a new partial PlugVector3Path.
+        /// <param name="p_orPath">
+        /// The original path from which this partial one is taken.
         /// </param>
-        public PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative, bool p_isPartialPath) : base(p_path, p_easeType, p_isRelative)
+        /// <param name="p_partialPathPerc"> Percentage of this partial path compared to the full path</param>
+        /// <param name="p_partialPathStartPerc"> Percentage of the full path where this partial path starts</param>
+        private PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative, Path p_orPath, float p_partialPathPerc, float p_partialPathStartPerc) : base(p_path, p_easeType, p_isRelative)
         {
-            isPartialPath = p_isPartialPath;
+            isPartialPath = true;
+            orPath = p_orPath;
+            partialPathPerc = p_partialPathPerc;
+            partialPathStartPerc = p_partialPathStartPerc;
         }
 
         /// <summary>
@@ -322,12 +330,9 @@ namespace Holoville.HOTween.Plugins
                 orientType = OrientType.ToPath;
             }
             lookAheadVal = p_lookAhead;
-            if (lookAheadVal < 0.0001f)
-            {
+            if (lookAheadVal < 0.0001f) {
                 lookAheadVal = 0.0001f;
-            }
-            if (lookAheadVal > 0.9999f)
-            {
+            } else if (lookAheadVal > 0.9999f) {
                 lookAheadVal = 0.9999f;
             }
             lockRotationAxis = p_lockRotationAxis;
@@ -538,16 +543,25 @@ namespace Holoville.HOTween.Plugins
                     }
                     break;
                 case OrientType.ToPath:
-                    float nextT = pathPerc + lookAheadVal;
-                    if (nextT > 1)
-                    {
-                        nextT = (isClosedPath ? nextT - 1 : 1.000001f);
+                    float nextT;
+                    Vector3 lookAtP;
+                    if (isPartialPath) {
+                        nextT = partialPathStartPerc + (pathPerc * partialPathPerc) + lookAheadVal;
+                        if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
+                        lookAtP = orPath.GetPoint(nextT);
+                    } else {
+                        nextT = pathPerc + lookAheadVal;
+                        if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
+                        lookAtP = path.GetPoint(nextT);
                     }
-                    Vector3 lookAtP = path.GetPoint(nextT);
                     if ( lockRotationAxis != Axis.None && orientTrans != null ) {
                         if ((lockRotationAxis & Axis.X) == Axis.X) lookAtP.y = orientTrans.position.y;
                         if ((lockRotationAxis & Axis.Y) == Axis.Y) lookAtP.z = orientTrans.position.z;
-                        if ((lockRotationAxis & Axis.Z) == Axis.Z) lookAtP.y = orientTrans.position.y;
+                        if ((lockRotationAxis & Axis.Z) == Axis.Z) lookAtP.x = orientTrans.position.x;
+//                        Vector3 transConv = orientTrans.TransformPoint(orientTrans.localPosition);
+//                        if ((lockRotationAxis & Axis.X) == Axis.X) lookAtP.y = transConv.y;
+//                        if ((lockRotationAxis & Axis.Y) == Axis.Y) lookAtP.z = transConv.z;
+//                        if ((lockRotationAxis & Axis.Z) == Axis.Z) lookAtP.x = transConv.x;
                     }
                     orientTrans.LookAt(lookAtP, orientTrans.up);
                     break;
@@ -603,9 +617,9 @@ namespace Holoville.HOTween.Plugins
         // ===================================================================================
         // HELPERS ---------------------------------------------------------------------------
 
-        internal PlugVector3Path CloneForPartialPath(Vector3[] p_precisePath, EaseType p_easeType)
+        internal PlugVector3Path CloneForPartialPath(Vector3[] p_precisePath, EaseType p_easeType, float p_partialPerc, float p_partialStartPerc)
         {
-            PlugVector3Path plugClone = new PlugVector3Path(p_precisePath, p_easeType, isRelative, true);
+            PlugVector3Path plugClone = new PlugVector3Path(p_precisePath, p_easeType, isRelative, path, p_partialPerc, p_partialStartPerc);
 //            plugClone.LockPosition(lockPositionAxis); // No need to do this, since the original path will already be set
             switch (orientType) {
             case OrientType.ToPath:

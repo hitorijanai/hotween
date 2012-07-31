@@ -489,7 +489,8 @@ namespace Holoville.HOTween
             if (plugVector3Path == null) {
                 TweenWarning.Log("Tweener for " + _target + " contains no PlugVector3Path plugin");
                 return this;
-            } else if (plugins.Count > 1) {
+            }
+            if (plugins.Count > 1) {
                 TweenWarning.Log("Applying a partial path on a Tweener (" + _target + ") with more than one plugin/property being tweened is not allowed");
                 return this;
             }
@@ -503,20 +504,23 @@ namespace Holoville.HOTween
                 _originalPlugins = plugins;
             }
             // Convert waypoints ids to path ids
-            int p_pathWaypointId0 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId0, true);
-            int p_pathWaypointId1 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId1, false);
+            int pathWaypointId0 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId0, true);
+            int pathWaypointId1 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId1, false);
+            // Get waypoints length percentage (needed for auto-duration and calculation of lookAhed)
+            float partialPerc = plugVector3Path.GetWaypointsLengthPercentage(pathWaypointId0, pathWaypointId1);
+            float partialStartPerc = pathWaypointId0 == 0 ? 0 : plugVector3Path.GetWaypointsLengthPercentage(0, pathWaypointId0);
             // Assign new duration and ease
-            _duration = p_newDuration >= 0 ? p_newDuration : _speedBased ? _originalNonSpeedBasedDuration : _originalDuration * plugVector3Path.GetWaypointsLengthPercentage(p_pathWaypointId0, p_pathWaypointId1);
+            _duration = p_newDuration >= 0 ? p_newDuration : _speedBased ? _originalNonSpeedBasedDuration : _originalDuration * partialPerc;
             _easeType = p_newEaseType;
 
             // Create new partial path
-            Vector3[] pts = new Vector3[p_pathWaypointId1 - p_pathWaypointId0 + 3];
-            int diff = p_pathWaypointId0;
+            Vector3[] pts = new Vector3[pathWaypointId1 - pathWaypointId0 + 3];
+            int diff = pathWaypointId0;
             for (int i = 0; i < pts.Length; ++i) {
                 pts[i] = plugVector3Path.path.path[i + diff - 1];
             }
             // Create new partial PlugVector3Path, init it, and assign it to plugins
-            PlugVector3Path newPV3P = plugVector3Path.CloneForPartialPath(pts, p_newEaseType);
+            PlugVector3Path newPV3P = plugVector3Path.CloneForPartialPath(pts, p_newEaseType, partialPerc, partialStartPerc);
             newPV3P.Init(this, plugVector3Path.propName, easeType, plugVector3Path.targetType, plugVector3Path.propInfo, plugVector3Path.fieldInfo);
             plugins = new List<ABSTweenPlugin> { newPV3P };
 
