@@ -530,10 +530,8 @@ namespace Holoville.HOTween.Plugins
             pathPerc = ease(p_totElapsed, partialPathStartPerc, partialPathPerc, _duration);
             SetValue(GetConstPointOnPath(pathPerc, true, isPartialPath ? orPath : path));
 
-            if (orientType != OrientType.None && orientTrans != null && !orientTrans.Equals(null))
-            {
-                switch (orientType)
-                {
+            if (orientType != OrientType.None && orientTrans != null && !orientTrans.Equals(null)) {
+                switch (orientType) {
                 case OrientType.LookAtPosition:
                     orientTrans.LookAt(lookPos, Vector3.up);
                     break;
@@ -547,16 +545,23 @@ namespace Holoville.HOTween.Plugins
                     float nextT = pathPerc + lookAheadVal;
                     if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
                     Vector3 lookAtP = isPartialPath ? orPath.GetPoint(nextT) : path.GetPoint(nextT);
-                    if ( lockRotationAxis != Axis.None && orientTrans != null ) {
-                        if ((lockRotationAxis & Axis.X) == Axis.X) lookAtP.y = orientTrans.position.y;
-                        if ((lockRotationAxis & Axis.Y) == Axis.Y) lookAtP.z = orientTrans.position.z;
-                        if ((lockRotationAxis & Axis.Z) == Axis.Z) lookAtP.x = orientTrans.position.x;
-//                        Vector3 transConv = orientTrans.TransformPoint(orientTrans.localPosition);
-//                        if ((lockRotationAxis & Axis.X) == Axis.X) lookAtP.y = transConv.y;
-//                        if ((lockRotationAxis & Axis.Y) == Axis.Y) lookAtP.z = transConv.z;
-//                        if ((lockRotationAxis & Axis.Z) == Axis.Z) lookAtP.x = transConv.x;
+                    Vector3 transUp = orientTrans.up;
+                    if (lockRotationAxis != Axis.None && orientTrans != null) {
+                        if ((lockRotationAxis & Axis.X) == Axis.X) {
+                            Vector3 v0 = orientTrans.InverseTransformPoint(lookAtP);
+                            v0.y = 0;
+                            lookAtP = orientTrans.TransformPoint(v0);
+                            transUp = Vector3.up;
+                        }
+                        if ((lockRotationAxis & Axis.Y) == Axis.Y) {
+                            Vector3 v0 = orientTrans.InverseTransformPoint(lookAtP);
+                            if (v0.z < 0) v0.z = -v0.z;
+                            v0.x = 0;
+                            lookAtP = orientTrans.TransformPoint(v0);
+                        }
+                        if ((lockRotationAxis & Axis.Z) == Axis.Z) transUp = Vector3.up;
                     }
-                    orientTrans.LookAt(lookAtP, orientTrans.up);
+                    orientTrans.LookAt(lookAtP, transUp);
                     break;
                 }
             }
