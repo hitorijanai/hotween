@@ -43,7 +43,6 @@ namespace Holoville.HOTween
         float _elapsedDelay;
 
         internal EaseType _easeType = HOTween.defEaseType;
-        EaseType _originalEaseType; // Memorized when partial plugins are created/used.
 
         internal bool _speedBased;
         internal float _delay;
@@ -54,8 +53,13 @@ namespace Holoville.HOTween
         // REFERENCES /////////////////////////////////////////////
 
         internal List<ABSTweenPlugin> plugins;
-        List<ABSTweenPlugin> _originalPlugins; // Memorized when partial plugins are created/used.
         object _target;
+
+        // SPECIAL VARS ///////////////////////////////////////////
+
+        bool isPartialled;
+        EaseType _originalEaseType; // Memorized when partial plugins are created/used
+        PlugVector3Path pv3Path; // Reference to eventual plugVector3Path plugin (used for partial paths)
 
         // GETS/SETS //////////////////////////////////////////////
 
@@ -322,7 +326,8 @@ namespace Holoville.HOTween
 
             isFrom = false;
             plugins = null;
-            _originalPlugins = null;
+            isPartialled = false;
+            pv3Path = null;
             _delay = _elapsedDelay = delayCount = 0;
             _speedBased = false;
             _easeType = HOTween.defEaseType;
@@ -401,7 +406,7 @@ namespace Holoville.HOTween
         /// <param name="t">The percentage (0 to 1) at which to get the point</param>
         public Vector3 GetPointOnPath(float t)
         {
-            PlugVector3Path plugVector3Path = GetOriginalPlugVector3PathPlugin();
+            PlugVector3Path plugVector3Path = GetPlugVector3PathPlugin();
             if (plugVector3Path == null) return Vector3.zero;
 
             Startup(); // Ensure startup - if not already executed - to store the path data.
@@ -423,7 +428,7 @@ namespace Holoville.HOTween
         /// <param name="p_waypointId1">Id of the new ending waypoint on the current path</param>
         public Tweener UsePartialPath(int p_waypointId0, int p_waypointId1)
         {
-            EaseType orEaseType = _originalPlugins == null ? _easeType : _originalEaseType;
+            EaseType orEaseType = !isPartialled ? _easeType : _originalEaseType;
             return UsePartialPath(p_waypointId0, p_waypointId1, -1, orEaseType);
         }
         /// <summary>
@@ -443,7 +448,7 @@ namespace Holoville.HOTween
         /// </param>
         public Tweener UsePartialPath(int p_waypointId0, int p_waypointId1, float p_newDuration)
         {
-            EaseType orEaseType = _originalPlugins == null ? _easeType : _originalEaseType;
+            EaseType orEaseType = isPartialled ? _originalEaseType : _easeType;
             return UsePartialPath(p_waypointId0, p_waypointId1, p_newDuration, orEaseType);
         }
         /// <summary>
@@ -484,45 +489,40 @@ namespace Holoville.HOTween
         /// <param name="p_newEaseType">New EaseType to apply</param>
         public Tweener UsePartialPath(int p_waypointId0, int p_waypointId1, float p_newDuration, EaseType p_newEaseType)
         {
-            // Get original plugin
-            PlugVector3Path plugVector3Path = GetOriginalPlugVector3PathPlugin();
-            if (plugVector3Path == null) {
-                TweenWarning.Log("Tweener for " + _target + " contains no PlugVector3Path plugin");
-                return this;
-            }
             if (plugins.Count > 1) {
                 TweenWarning.Log("Applying a partial path on a Tweener (" + _target + ") with more than one plugin/property being tweened is not allowed");
                 return this;
             }
 
+            if (pv3Path == null) {
+                // Get eventual plugVector3Path plugin
+                pv3Path = GetPlugVector3PathPlugin();
+                if (pv3Path == null) {
+                    TweenWarning.Log("Tweener for " + _target + " contains no PlugVector3Path plugin");
+                    return this;
+                }
+            }
+
             // Startup the tween (if not already started) to store the path data.
             Startup();
             // Store original duration and easeType (if not already stored).
-            if (_originalPlugins == null) {
+            if (!isPartialled) {
+                isPartialled = true;
                 _originalDuration = _duration;
                 _originalEaseType = _easeType;
-                _originalPlugins = plugins;
             }
             // Convert waypoints ids to path ids
-            int pathWaypointId0 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId0, true);
-            int pathWaypointId1 = ConvertWaypointIdToPathId(plugVector3Path, p_waypointId1, false);
+            int pathWaypointId0 = ConvertWaypointIdToPathId(pv3Path, p_waypointId0, true);
+            int pathWaypointId1 = ConvertWaypointIdToPathId(pv3Path, p_waypointId1, false);
             // Get waypoints length percentage (needed for auto-duration and calculation of lookAhed)
-            float partialPerc = plugVector3Path.GetWaypointsLengthPercentage(pathWaypointId0, pathWaypointId1);
-            float partialStartPerc = pathWaypointId0 == 0 ? 0 : plugVector3Path.GetWaypointsLengthPercentage(0, pathWaypointId0);
+            float partialPerc = pv3Path.GetWaypointsLengthPercentage(pathWaypointId0, pathWaypointId1);
+            float partialStartPerc = pathWaypointId0 == 0 ? 0 : pv3Path.GetWaypointsLengthPercentage(0, pathWaypointId0);
             // Assign new duration and ease
-            _duration = p_newDuration >= 0 ? p_newDuration : _speedBased ? _originalNonSpeedBasedDuration : _originalDuration * partialPerc;
+            _duration = p_newDuration >= 0 ? p_newDuration : _originalDuration * partialPerc;
             _easeType = p_newEaseType;
 
-            // Create new partial path
-            Vector3[] pts = new Vector3[pathWaypointId1 - pathWaypointId0 + 3];
-            int diff = pathWaypointId0;
-            for (int i = 0; i < pts.Length; ++i) {
-                pts[i] = plugVector3Path.path.path[i + diff - 1];
-            }
-            // Create new partial PlugVector3Path, init it, and assign it to plugins
-            PlugVector3Path newPV3P = plugVector3Path.CloneForPartialPath(pts, p_newEaseType, partialPerc, partialStartPerc);
-            newPV3P.Init(this, plugVector3Path.propName, easeType, plugVector3Path.targetType, plugVector3Path.propInfo, plugVector3Path.fieldInfo);
-            plugins = new List<ABSTweenPlugin> { newPV3P };
+            // Convert path to partial
+            pv3Path.SwitchToPartialPath(_duration, p_newEaseType, partialStartPerc, partialPerc);
 
             // Re-Startup and restart
             Startup(true);
@@ -543,10 +543,10 @@ namespace Holoville.HOTween
         public void ResetPath()
         {
             // Reset original values
+            isPartialled = false;
             _duration = speedBased ? _originalNonSpeedBasedDuration : _originalDuration;
             _easeType = _originalEaseType;
-            plugins = _originalPlugins;
-            _originalPlugins = null;
+            pv3Path.ResetToFullPath(_duration, _easeType);
             // Re-startup and restart
             Startup(true);
             if (!_isPaused)
@@ -561,11 +561,10 @@ namespace Holoville.HOTween
         /// Otherwise returns null.
         /// </summary>
         /// <returns></returns>
-        private PlugVector3Path GetOriginalPlugVector3PathPlugin()
+        private PlugVector3Path GetPlugVector3PathPlugin()
         {
             if (plugins == null) return null;
-            List<ABSTweenPlugin> targetPlugins = _originalPlugins ?? plugins;
-            foreach (ABSTweenPlugin plug in targetPlugins) {
+            foreach (ABSTweenPlugin plug in plugins) {
                 PlugVector3Path plugVector3Path = plug as PlugVector3Path;
                 if (plugVector3Path != null) return plugVector3Path;
             }

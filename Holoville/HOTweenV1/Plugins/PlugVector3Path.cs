@@ -66,10 +66,9 @@ namespace Holoville.HOTween.Plugins
         float lookAheadVal = 0.0001f;
         Axis lockPositionAxis = Axis.None;
         Axis lockRotationAxis = Axis.None;
-        Path orPath; // Original path (in case of partial path tween)
         bool isPartialPath;
-        float partialPathPerc = 1;
-        float partialPathStartPerc = 0;
+        float startPerc = 0; // Implemented to allow partial paths
+        float changePerc = 1; // Implemented to allow partial paths
 
         // REFERENCES /////////////////////////////////////////////
 
@@ -179,33 +178,6 @@ namespace Holoville.HOTween.Plugins
         /// Not compatible with <c>HOTween.From</c>.
         /// </param>
         public PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative) : base(p_path, p_easeType, p_isRelative) {}
-        /// <summary>
-        /// Creates a new instance of this plugin, setting it for partial path tweem.
-        /// The p_path array will be used as is.
-        /// Used by <see cref="Tweener"/> when creating a new partial PlugVector3Path.
-        /// </summary>
-        /// <param name="p_path">
-        /// The <see cref="Vector3"/> path to tween through.
-        /// </param>
-        /// <param name="p_easeType">
-        /// The <see cref="EaseType"/> to use.
-        /// </param>
-        /// <param name="p_isRelative">
-        /// If <c>true</c>, the path is considered relative to the starting value of the property, instead than absolute.
-        /// Not compatible with <c>HOTween.From</c>.
-        /// </param>
-        /// <param name="p_orPath">
-        /// The original path from which this partial one is taken.
-        /// </param>
-        /// <param name="p_partialPathPerc"> Percentage of this partial path compared to the full path</param>
-        /// <param name="p_partialPathStartPerc"> Percentage of the full path where this partial path starts</param>
-        private PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative, Path p_orPath, float p_partialPathPerc, float p_partialPathStartPerc) : base(p_path, p_easeType, p_isRelative)
-        {
-            isPartialPath = true;
-            orPath = p_orPath;
-            partialPathPerc = p_partialPathPerc;
-            partialPathStartPerc = p_partialPathStartPerc;
-        }
 
         /// <summary>
         /// Init override.
@@ -394,8 +366,7 @@ namespace Holoville.HOTween.Plugins
         }
 
         /// <summary>
-        /// Recreate the path if it was relative,
-        /// otherwise simply add the correct starting and ending point so the path can be reached from the property's actual position.
+        /// Adds the correct starting and ending point so the path can be reached from the property's actual position.
         /// </summary>
         protected override void SetChangeVal()
         {
@@ -410,63 +381,58 @@ namespace Holoville.HOTween.Plugins
 
             // Create path.
             Vector3[] pts;
-            if (isPartialPath) {
-                // Use path as it is, since it was already being created correctly by Tweener.
-                pts = points;
+            int indMod = 1;
+            int pAdd = (isClosedPath ? 1 : 0);
+            if (isRelative) {
+                // Path length is the same (plus control points).
+                hasAdditionalStartingP = false;
+                pts = new Vector3[points.Length + 2 + pAdd];
+                Vector3 diff = points[0] - typedStartVal;
+                for (int i = 0; i < points.Length; ++i) {
+                    pts[i + indMod] = points[i] - diff;
+                }
             } else {
-                int indMod = 1;
-                int pAdd = (isClosedPath ? 1 : 0);
-                if (isRelative) {
+                Vector3 currVal = (Vector3)GetValue();
+                // Calculate if currVal and start point are equal,
+                // managing floating point imprecision.
+                Vector3 diff = currVal - points[0];
+                if (diff.x < 0) diff.x = -diff.x;
+                if (diff.y < 0) diff.y = -diff.y;
+                if (diff.z < 0) diff.z = -diff.z;
+                if (diff.x < EPSILON && diff.y < EPSILON && diff.z < EPSILON) {
                     // Path length is the same (plus control points).
                     hasAdditionalStartingP = false;
                     pts = new Vector3[points.Length + 2 + pAdd];
-                    Vector3 diff = points[0] - typedStartVal;
-                    for (int i = 0; i < points.Length; ++i) {
-                        pts[i + indMod] = points[i] - diff;
-                    }
                 } else {
-                    Vector3 currVal = (Vector3)GetValue();
-                    // Calculate if currVal and start point are equal,
-                    // managing floating point imprecision.
-                    Vector3 diff = currVal - points[0];
-                    if (diff.x < 0) diff.x = -diff.x;
-                    if (diff.y < 0) diff.y = -diff.y;
-                    if (diff.z < 0) diff.z = -diff.z;
-                    if (diff.x < EPSILON && diff.y < EPSILON && diff.z < EPSILON) {
-                        // Path length is the same (plus control points).
-                        hasAdditionalStartingP = false;
-                        pts = new Vector3[points.Length + 2 + pAdd];
+                    // Path needs additional point for current value as starting point (plus control points).
+                    hasAdditionalStartingP = true;
+                    pts = new Vector3[points.Length + 3 + pAdd];
+                    if (tweenObj.isFrom) {
+                        pts[pts.Length - 2] = currVal;
                     } else {
-                        // Path needs additional point for current value as starting point (plus control points).
-                        hasAdditionalStartingP = true;
-                        pts = new Vector3[points.Length + 3 + pAdd];
-                        if (tweenObj.isFrom) {
-                            pts[pts.Length - 2] = currVal;
-                        } else {
-                            pts[1] = currVal;
-                            indMod = 2;
-                        }
-                    }
-                    for (int i = 0; i < points.Length; ++i) {
-                        pts[i + indMod] = points[i];
+                        pts[1] = currVal;
+                        indMod = 2;
                     }
                 }
-
-                if (isClosedPath) {
-                    // Close path.
-                    pts[pts.Length - 2] = pts[1];
+                for (int i = 0; i < points.Length; ++i) {
+                    pts[i + indMod] = points[i];
                 }
+            }
 
-                // Add control points.
-                if (isClosedPath) {
-                    pts[0] = pts[pts.Length - 3];
-                    pts[pts.Length - 1] = pts[2];
-                } else {
-                    pts[0] = pts[1];
-                    Vector3 lastP = pts[pts.Length - 2];
-                    Vector3 diffV = lastP - pts[pts.Length - 3];
-                    pts[pts.Length - 1] = lastP + diffV;
-                }
+            if (isClosedPath) {
+                // Close path.
+                pts[pts.Length - 2] = pts[1];
+            }
+
+            // Add control points.
+            if (isClosedPath) {
+                pts[0] = pts[pts.Length - 3];
+                pts[pts.Length - 1] = pts[2];
+            } else {
+                pts[0] = pts[1];
+                Vector3 lastP = pts[pts.Length - 2];
+                Vector3 diffV = lastP - pts[pts.Length - 3];
+                pts[pts.Length - 1] = lastP + diffV;
             }
 
             // Manage eventual lockPositionAxis.
@@ -527,8 +493,8 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            pathPerc = ease(p_totElapsed, partialPathStartPerc, partialPathPerc, _duration);
-            SetValue(GetConstPointOnPath(pathPerc, true, isPartialPath ? orPath : path));
+            pathPerc = ease(p_totElapsed, startPerc, changePerc, _duration);
+            SetValue(GetConstPointOnPath(pathPerc, true, path));
 
             if (orientType != OrientType.None && orientTrans != null && !orientTrans.Equals(null)) {
                 switch (orientType) {
@@ -544,7 +510,7 @@ namespace Holoville.HOTween.Plugins
                 case OrientType.ToPath:
                     float nextT = pathPerc + lookAheadVal;
                     if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
-                    Vector3 lookAtP = isPartialPath ? orPath.GetPoint(nextT) : path.GetPoint(nextT);
+                    Vector3 lookAtP = path.GetPoint(nextT);
                     Vector3 transUp = orientTrans.up;
                     if (lockRotationAxis != Axis.None && orientTrans != null) {
                         if ((lockRotationAxis & Axis.X) == Axis.X) {
@@ -564,6 +530,24 @@ namespace Holoville.HOTween.Plugins
                     orientTrans.LookAt(lookAtP, transUp);
                     break;
                 }
+            }
+        }
+
+        internal override void Rewind()
+        {
+            if (isPartialPath) {
+                DoUpdate(0);
+            } else {
+                base.Rewind();
+            }
+        }
+
+        internal override void Complete()
+        {
+            if (isPartialPath) {
+                DoUpdate(_duration);
+            } else {
+                base.Complete();
             }
         }
 
@@ -615,24 +599,22 @@ namespace Holoville.HOTween.Plugins
         // ===================================================================================
         // HELPERS ---------------------------------------------------------------------------
 
-        internal PlugVector3Path CloneForPartialPath(Vector3[] p_precisePath, EaseType p_easeType, float p_partialPerc, float p_partialStartPerc)
+        internal void SwitchToPartialPath(float p_duration, EaseType p_easeType, float p_partialStartPerc, float p_partialChangePerc)
         {
-            PlugVector3Path plugClone = new PlugVector3Path(p_precisePath, p_easeType, isRelative, path, p_partialPerc, p_partialStartPerc);
-//            plugClone.LockPosition(lockPositionAxis); // No need to do this, since the original path will already be set
-            switch (orientType) {
-            case OrientType.ToPath:
-                plugClone.OrientToPath(true, lookAheadVal, lockRotationAxis);
-                break;
-            case OrientType.LookAtTransform:
-                plugClone.LookAt(lookTrans);
-                break;
-            case OrientType.LookAtPosition:
-                plugClone.LookAt(lookPos);
-                break;
-            }
-            if (isClosedPath) plugClone.ClosePath();
+            isPartialPath = true;
+            _duration = p_duration;
+            SetEase(p_easeType);
+            startPerc = p_partialStartPerc;
+            changePerc = p_partialChangePerc;
+        }
 
-            return plugClone;
+        internal void ResetToFullPath(float p_duration, EaseType p_easeType)
+        {
+            isPartialPath = false;
+            _duration = p_duration;
+            SetEase(p_easeType);
+            startPerc = 0;
+            changePerc = 1;
         }
     }
 }
