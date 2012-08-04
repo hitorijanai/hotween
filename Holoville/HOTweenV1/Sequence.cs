@@ -575,7 +575,7 @@ namespace Holoville.HOTween
                 if (prevCompletedLoops != _completedLoops)
                 {
                     int currLoops = _completedLoops;
-                    if (currLoops >= _loops)
+                    if (_loops != -1 && currLoops >= _loops)
                     {
                         --currLoops; // Avoid to calculate completion loop increment
                     }

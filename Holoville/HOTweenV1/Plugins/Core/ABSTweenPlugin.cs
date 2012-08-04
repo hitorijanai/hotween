@@ -420,7 +420,7 @@ namespace Holoville.HOTween.Plugins.Core
                 if (prevCompletedLoops != tweenObj.completedLoops)
                 {
                     int currLoops = tweenObj.completedLoops;
-                    if (currLoops >= tweenObj._loops)
+                    if (tweenObj._loops != -1 && currLoops >= tweenObj._loops)
                     {
                         --currLoops; // Avoid to calculate completion loop increment
                     }

@@ -751,13 +751,9 @@ namespace Holoville.HOTween
         /// </param>
         internal override void SetIncremental(int p_diffIncr)
         {
-            if (plugins == null)
-            {
-                return;
-            }
-            for (int i = 0; i < plugins.Count; ++i)
-            {
-                plugins[i].SetIncremental(p_diffIncr);
+            if (plugins == null) return;
+            foreach (ABSTweenPlugin t in plugins) {
+                t.SetIncremental(p_diffIncr);
             }
         }
 
