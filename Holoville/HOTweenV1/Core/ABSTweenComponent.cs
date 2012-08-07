@@ -1111,7 +1111,17 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void SetLoops()
         {
-            _completedLoops = (int)Math.Floor(_fullElapsed/_duration); // OPTIMIZE can't use (int) or tilde to Floor number because they're imprecise, but I should find a quicker solution.
+            // Take care of floating points imprecision,
+            // to avoid things like "2/2 = 0.99999" from happening
+            float div = _fullElapsed/_duration;
+            int ceil = (int)Math.Ceiling(div);
+            if (ceil - div < 0.000001f) {
+                _completedLoops = ceil;
+            } else {
+                _completedLoops = ceil - 1;
+            }
+
+//            _completedLoops = (int)Math.Floor(_fullElapsed/_duration); // OPTIMIZE can't use (int) or tilde to Floor number because they're imprecise, but I should find a quicker solution.
             _isLoopingBack = (_loopType != LoopType.Restart && _loopType != LoopType.Incremental &&
                               (_loops > 0 && (_completedLoops < _loops && _completedLoops%2 != 0 || _completedLoops >= _loops && _completedLoops%2 == 0)
                                || _loops < 0 && _completedLoops%2 != 0));
