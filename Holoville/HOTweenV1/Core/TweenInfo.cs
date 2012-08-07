@@ -48,6 +48,10 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public bool isPaused { get { return tween.isPaused; } }
         /// <summary>
+        /// Is complete.
+        /// </summary>
+        public bool isComplete { get { return tween.isComplete; } }
+        /// <summary>
         /// Is enabled.
         /// </summary>
         public bool isEnabled { get { return tween.enabled; } }
