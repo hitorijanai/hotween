@@ -115,7 +115,7 @@ namespace Holoville.HOTween.Editor.Core
             BtNegStyle = new GUIStyle(GUI.skin.button);
             SetStyleNormalTextColors(BtNegStyle, _NegativeColor);
 
-            BtTinyStyle = new GUIStyle(GUI.skin.button) {padding = {left = -2, right = 0, top = 1}};
+            BtTinyStyle = new GUIStyle(GUI.skin.button) {padding = {left = -2, right = 0, top = 2}};
             BtTinyNegStyle = new GUIStyle(BtTinyStyle);
             SetStyleNormalTextColors(BtTinyNegStyle, _NegativeColor);
 
