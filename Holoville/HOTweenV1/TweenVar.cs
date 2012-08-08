@@ -210,7 +210,7 @@ namespace Holoville.HOTween
             {
                 _elapsed = 0;
             }
-            _value = ease(_elapsed, _startVal, changeVal, duration);
+            _value = ease(_elapsed, _startVal, changeVal, duration, HOTween.defEaseOvershootOrAmplitude, HOTween.defEasePeriod);
             return _value;
         }
 

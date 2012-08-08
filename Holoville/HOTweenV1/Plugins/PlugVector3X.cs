@@ -255,7 +255,7 @@ namespace Holoville.HOTween.Plugins
         protected override void DoUpdate(float p_totElapsed)
         {
             Vector3 curV = (Vector3)(GetValue());
-            curV.x = ease(p_totElapsed, typedStartVal, changeVal, _duration);
+            curV.x = ease(p_totElapsed, typedStartVal, changeVal, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
 
             SetValue(curV);
         }

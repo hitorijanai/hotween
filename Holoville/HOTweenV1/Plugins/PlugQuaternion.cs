@@ -325,7 +325,7 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            float time = ease(p_totElapsed, 0f, 1f, _duration);
+            float time = ease(p_totElapsed, 0f, 1f, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
 
             SetValue(Quaternion.Euler(new Vector3(
                 typedStartVal.x + changeVal.x * time,

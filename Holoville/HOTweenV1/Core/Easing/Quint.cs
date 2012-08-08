@@ -50,10 +50,12 @@ namespace Holoville.HOTween.Core.Easing
         /// <param name="duration">
         /// Expected easing duration (in frames or seconds).
         /// </param>
+        /// <param name="unusedOvershootOrAmplitude">Unused: here to keep same delegate for all ease types.</param>
+        /// <param name="unusedPeriod">Unused: here to keep same delegate for all ease types.</param>
         /// <returns>
         /// The eased value.
         /// </returns>
-        public static float EaseIn(float time, float startValue, float changeValue, float duration)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration, float unusedOvershootOrAmplitude, float unusedPeriod)
         {
             return changeValue*(time /= duration)*time*time*time*time + startValue;
         }
@@ -73,10 +75,12 @@ namespace Holoville.HOTween.Core.Easing
         /// <param name="duration">
         /// Expected easing duration (in frames or seconds).
         /// </param>
+        /// <param name="unusedOvershootOrAmplitude">Unused: here to keep same delegate for all ease types.</param>
+        /// <param name="unusedPeriod">Unused: here to keep same delegate for all ease types.</param>
         /// <returns>
         /// The eased value.
         /// </returns>
-        public static float EaseOut(float time, float startValue, float changeValue, float duration)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration, float unusedOvershootOrAmplitude, float unusedPeriod)
         {
             return changeValue*((time = time/duration - 1)*time*time*time*time + 1) + startValue;
         }
@@ -96,10 +100,12 @@ namespace Holoville.HOTween.Core.Easing
         /// <param name="duration">
         /// Expected easing duration (in frames or seconds).
         /// </param>
+        /// <param name="unusedOvershootOrAmplitude">Unused: here to keep same delegate for all ease types.</param>
+        /// <param name="unusedPeriod">Unused: here to keep same delegate for all ease types.</param>
         /// <returns>
         /// The eased value.
         /// </returns>
-        public static float EaseInOut(float time, float startValue, float changeValue, float duration)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration, float unusedOvershootOrAmplitude, float unusedPeriod)
         {
             if ((time /= duration*0.5f) < 1)
             {

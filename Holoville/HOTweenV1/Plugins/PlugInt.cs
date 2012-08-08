@@ -195,7 +195,7 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            float v = ease(p_totElapsed, typedStartVal, changeVal, _duration);
+            float v = ease(p_totElapsed, typedStartVal, changeVal, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
             SetValue((float)Math.Round(v));
         }
     }

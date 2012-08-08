@@ -43,7 +43,7 @@ namespace Holoville.HOTween.Core
         /// <summary>
         /// Delegate used internally for ease functions.
         /// </summary>
-        public delegate float EaseFunc(float t, float b, float c, float d);
+        public delegate float EaseFunc(float elapsed, float startValue, float changeValue, float duration, float overshootOrAmplitude, float period);
 
         internal delegate void FilterFunc(int p_index, bool p_optionalBool);
 

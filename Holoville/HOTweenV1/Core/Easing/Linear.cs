@@ -50,10 +50,12 @@ namespace Holoville.HOTween.Core.Easing
         /// <param name="duration">
         /// Expected easing duration (in frames or seconds).
         /// </param>
+        /// <param name="unusedOvershootOrAmplitude">Unused: here to keep same delegate for all ease types.</param>
+        /// <param name="unusedPeriod">Unused: here to keep same delegate for all ease types.</param>
         /// <returns>
         /// The eased value.
         /// </returns>
-        public static float EaseNone(float time, float startValue, float changeValue, float duration)
+        public static float EaseNone(float time, float startValue, float changeValue, float duration, float unusedOvershootOrAmplitude, float unusedPeriod)
         {
             return changeValue*time/duration + startValue;
         }

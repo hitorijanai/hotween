@@ -227,7 +227,7 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            float val = ease(p_totElapsed, 0, changeVal, _duration);
+            float val = ease(p_totElapsed, 0, changeVal, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
 
             SetValue(Color.Lerp(typedStartVal, typedEndVal, val));
         }

@@ -42,6 +42,8 @@ namespace Holoville.HOTween
 
         bool speedBased;
         EaseType easeType = HOTween.defEaseType;
+        float easeOvershootOrAmplitude = HOTween.defEaseOvershootOrAmplitude;
+        float easePeriod = HOTween.defEasePeriod;
         float delay;
         List<HOTPropData> propDatas;
         bool isFrom;
@@ -78,12 +80,11 @@ namespace Holoville.HOTween
         {
             InitializeOwner(p_tweenObj);
 
-            if (speedBased)
-            {
-                easeType = EaseType.Linear;
-            }
+            if (speedBased) easeType = EaseType.Linear;
             p_tweenObj._speedBased = speedBased;
             p_tweenObj._easeType = easeType;
+            p_tweenObj._easeOvershootOrAmplitude = easeOvershootOrAmplitude;
+            p_tweenObj._easePeriod = easePeriod;
             p_tweenObj._delay = p_tweenObj.delayCount = delay;
             p_tweenObj.isFrom = isFrom;
 
@@ -91,12 +92,10 @@ namespace Holoville.HOTween
             p_tweenObj.plugins = new List<ABSTweenPlugin>();
             Type targetType = p_target.GetType();
             FieldInfo fieldInfo = null;
-            foreach (HOTPropData data in propDatas)
-            {
+            foreach (HOTPropData data in propDatas) {
                 // Store propInfo and fieldInfo to see if they exist, and then pass them to plugin init.
                 PropertyInfo propInfo = targetType.GetProperty(data.propName);
-                if (propInfo == null)
-                {
+                if (propInfo == null) {
                     fieldInfo = targetType.GetField(data.propName);
                     if (fieldInfo == null)
                     {
@@ -107,110 +106,71 @@ namespace Holoville.HOTween
                 // Store correct plugin.
                 ABSTweenPlugin plug;
                 ABSTweenPlugin absTweenPlugin = data.endValOrPlugin as ABSTweenPlugin;
-                if (absTweenPlugin != null)
-                {
+                if (absTweenPlugin != null) {
                     // Use existing plugin.
                     plug = absTweenPlugin;
-                    if (plug.ValidateTarget(p_target))
-                    {
-                        if (plug.initialized)
-                        {
+                    if (plug.ValidateTarget(p_target)) {
+                        if (plug.initialized) {
                             // This plugin was already initialized with another Tweener. Clone it.
                             plug = plug.CloneBasic(); // OPTIMIZE Uses Activator, which is slow.
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // Invalid target.
                         TweenWarning.Log(Utils.SimpleClassName(plug.GetType()) + " : Invalid target (" + p_target + "). The tween for this property will not be created.");
                         continue;
                     }
-                }
-                else
-                {
+                } else {
                     // Parse value to find correct plugin to use.
                     plug = null;
                     string propType = (propInfo != null ? propInfo.PropertyType.ToString() : fieldInfo.FieldType.ToString());
                     string shortPropType = propType.Substring(propType.IndexOf(".") + 1);
-                    switch (shortPropType)
-                    {
+                    switch (shortPropType) {
                         case "Vector2":
-                            if (!ValidateValue(data.endValOrPlugin, PlugVector2.validValueTypes))
-                            {
-                                break;
-                            }
+                            if (!ValidateValue(data.endValOrPlugin, PlugVector2.validValueTypes)) break;
                             plug = new PlugVector2((Vector2)data.endValOrPlugin, data.isRelative);
                             break;
                         case "Vector3":
-                            if (!ValidateValue(data.endValOrPlugin, PlugVector3.validValueTypes))
-                            {
-                                break;
-                            }
+                            if (!ValidateValue(data.endValOrPlugin, PlugVector3.validValueTypes)) break;
                             plug = new PlugVector3((Vector3)data.endValOrPlugin, data.isRelative);
                             break;
                         case "Vector4":
-                            if (!ValidateValue(data.endValOrPlugin, PlugVector4.validValueTypes))
-                            {
-                                break;
-                            }
+                            if (!ValidateValue(data.endValOrPlugin, PlugVector4.validValueTypes)) break;
                             plug = new PlugVector4((Vector4)data.endValOrPlugin, data.isRelative);
                             break;
                         case "Quaternion":
-                            if (!ValidateValue(data.endValOrPlugin, PlugQuaternion.validValueTypes))
-                            {
-                                break;
-                            }
-                            if (data.endValOrPlugin is Vector3)
-                            {
+                            if (!ValidateValue(data.endValOrPlugin, PlugQuaternion.validValueTypes)) break;
+                            if (data.endValOrPlugin is Vector3) {
                                 plug = new PlugQuaternion((Vector3)data.endValOrPlugin, data.isRelative);
-                            }
-                            else
-                            {
+                            } else {
                                 plug = new PlugQuaternion((Quaternion)data.endValOrPlugin, data.isRelative);
                             }
                             break;
                         case "Color":
-                            if (!ValidateValue(data.endValOrPlugin, PlugColor.validValueTypes))
-                            {
-                                break;
-                            }
+                            if (!ValidateValue(data.endValOrPlugin, PlugColor.validValueTypes)) break;
                             plug = new PlugColor((Color)data.endValOrPlugin, data.isRelative);
                             break;
                         case "Rect":
-                            if (!ValidateValue(data.endValOrPlugin, PlugRect.validValueTypes))
-                            {
-                                break;
-                            }
+                            if (!ValidateValue(data.endValOrPlugin, PlugRect.validValueTypes)) break;
                             plug = new PlugRect((Rect)data.endValOrPlugin, data.isRelative);
                             break;
                         case "String":
-                            if (!ValidateValue(data.endValOrPlugin, PlugString.validValueTypes))
-                            {
-                                break;
-                            }
+                            if (!ValidateValue(data.endValOrPlugin, PlugString.validValueTypes)) break;
                             plug = new PlugString(data.endValOrPlugin.ToString(), data.isRelative);
                             break;
                         case "Int32":
-                            if (!ValidateValue(data.endValOrPlugin, PlugInt.validValueTypes))
-                            {
-                                break;
-                            }
+                            if (!ValidateValue(data.endValOrPlugin, PlugInt.validValueTypes)) break;
                             plug = new PlugInt((int)data.endValOrPlugin, data.isRelative);
                             break;
                         default:
-                            try
-                            {
+                            try {
                                 plug = new PlugFloat(Convert.ToSingle(data.endValOrPlugin), data.isRelative);
-                            }
-                            catch (Exception)
-                            {
+                            } catch (Exception) {
                                 TweenWarning.Log("No valid plugin for animating \"" + p_target + "." + data.propName + "\" (of type " + propType + "). The tween for this property will not be created.");
                                 continue;
                             }
                             break;
                     }
-                    if (plug == null)
-                    {
+                    if (plug == null) {
                         TweenWarning.Log("The end value set for \"" + p_target + "." + data.propName + "\" tween is invalid. The tween for this property will not be created.");
                         continue;
                     }
@@ -263,9 +223,38 @@ namespace Holoville.HOTween
         /// <param name="p_easeType">
         /// The <see cref="EaseType"/> to use.
         /// </param>
-        public TweenParms Ease(EaseType p_easeType)
+        public TweenParms Ease(EaseType p_easeType) { return Ease(p_easeType, HOTween.defEaseOvershootOrAmplitude, HOTween.defEasePeriod); }
+        /// <summary>
+        /// Sets the ease type to use (default = <c>EaseType.easeOutQuad</c>).
+        /// If you set this tween to use speed instead than time,
+        /// this parameter becomes useless, because it will be managed internally.
+        /// </summary>
+        /// <param name="p_easeType">
+        /// The <see cref="EaseType"/> to use.
+        /// </param>
+        /// <param name="p_overshoot">
+        /// Eventual overshoot to use with Back easeType (default is 1.70158).
+        /// </param>
+        public TweenParms Ease(EaseType p_easeType, float p_overshoot) { return Ease(p_easeType, p_overshoot, HOTween.defEasePeriod); }
+        /// <summary>
+        /// Sets the ease type to use (default = <c>EaseType.easeOutQuad</c>).
+        /// If you set this tween to use speed instead than time,
+        /// this parameter becomes useless, because it will be managed internally.
+        /// </summary>
+        /// <param name="p_easeType">
+        /// The <see cref="EaseType"/> to use.
+        /// </param>
+        /// <param name="p_amplitude">
+        /// Eventual amplitude to use with Elastic easeType (default is 0).
+        /// </param>
+        /// <param name="p_period">
+        /// Eventual period to use with Elastic easeType (default is 0).
+        /// </param>
+        public TweenParms Ease(EaseType p_easeType, float p_amplitude, float p_period)
         {
             easeType = p_easeType;
+            easeOvershootOrAmplitude = p_amplitude;
+            easePeriod = p_period;
 
             return this;
         }

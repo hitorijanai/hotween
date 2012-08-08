@@ -38,74 +38,80 @@ namespace Holoville.HOTween.Core.Easing
         /// <summary>
         /// Tween.
         /// </summary>
-        /// <param name="t">
+        /// <param name="time">
         /// Time.
         /// </param>
-        /// <param name="b">
+        /// <param name="startValue">
         /// Begin value.
         /// </param>
-        /// <param name="c">
+        /// <param name="changeValue">
         /// Change value.
         /// </param>
-        /// <param name="d">
+        /// <param name="duration">
         /// Duration.
         /// </param>
+        /// <param name="unusedOvershootOrAmplitude">Unused: here to keep same delegate for all ease types.</param>
+        /// <param name="unusedPeriod">Unused: here to keep same delegate for all ease types.</param>
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseIn(float t, float b, float c, float d)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration, float unusedOvershootOrAmplitude, float unusedPeriod)
         {
-            return c*(t /= d)*t*t*t*t + b;
+            return changeValue*(time /= duration)*time*time*time*time + startValue;
         }
 
         /// <summary>
         /// Tween.
         /// </summary>
-        /// <param name="t">
+        /// <param name="time">
         /// Time.
         /// </param>
-        /// <param name="b">
+        /// <param name="startValue">
         /// Begin value.
         /// </param>
-        /// <param name="c">
+        /// <param name="changeValue">
         /// Change value.
         /// </param>
-        /// <param name="d">
+        /// <param name="duration">
         /// Duration.
         /// </param>
+        /// <param name="unusedOvershootOrAmplitude">Unused: here to keep same delegate for all ease types.</param>
+        /// <param name="unusedPeriod">Unused: here to keep same delegate for all ease types.</param>
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseOut(float t, float b, float c, float d)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration, float unusedOvershootOrAmplitude, float unusedPeriod)
         {
-            return c*((t = t/d - 1)*t*t*t*t + 1) + b;
+            return changeValue*((time = time/duration - 1)*time*time*time*time + 1) + startValue;
         }
 
         /// <summary>
         /// Tween.
         /// </summary>
-        /// <param name="t">
+        /// <param name="time">
         /// Time.
         /// </param>
-        /// <param name="b">
+        /// <param name="startValue">
         /// Begin value.
         /// </param>
-        /// <param name="c">
+        /// <param name="changeValue">
         /// Change value.
         /// </param>
-        /// <param name="d">
+        /// <param name="duration">
         /// Duration.
         /// </param>
+        /// <param name="unusedOvershootOrAmplitude">Unused: here to keep same delegate for all ease types.</param>
+        /// <param name="unusedPeriod">Unused: here to keep same delegate for all ease types.</param>
         /// <returns>
         /// A <see cref="System.Single"/>
         /// </returns>
-        public static float EaseInOut(float t, float b, float c, float d)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration, float unusedOvershootOrAmplitude, float unusedPeriod)
         {
-            if ((t /= d*0.5f) < 1)
+            if ((time /= duration*0.5f) < 1)
             {
-                return c*0.5f*t*t*t*t*t + b;
+                return changeValue*0.5f*time*time*time*time*time + startValue;
             }
-            return c*0.5f*((t -= 2)*t*t*t*t + 2) + b;
+            return changeValue*0.5f*((time -= 2)*time*time*time*time + 2) + startValue;
         }
     }
 }

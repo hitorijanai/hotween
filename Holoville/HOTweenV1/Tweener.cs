@@ -43,6 +43,8 @@ namespace Holoville.HOTween
         float _elapsedDelay;
 
         internal EaseType _easeType = HOTween.defEaseType;
+        internal float _easeOvershootOrAmplitude = HOTween.defEaseOvershootOrAmplitude;
+        internal float _easePeriod = HOTween.defEasePeriod;
 
         internal bool _speedBased;
         internal float _delay;
@@ -68,14 +70,9 @@ namespace Holoville.HOTween
         /// (consider that the plugins you have set might have different ease types).
         /// Setting it will change the ease of all the plugins used by this tweener.
         /// </summary>
-        public EaseType easeType
-        {
-            get
-            {
-                return _easeType;
-            }
-            set
-            {
+        public EaseType easeType {
+            get { return _easeType; }
+            set {
                 _easeType = value;
                 // Change ease type of all existing plugins.
                 for (int i = 0; i < plugins.Count; ++i)
@@ -83,6 +80,23 @@ namespace Holoville.HOTween
                     plugins[i].SetEase(_easeType);
                 }
             }
+        }
+
+        /// <summary>
+        /// Eventual overshoot to use with Back easeTypes.
+        /// </summary>
+        public float easeOvershootOrAmplitude {
+            get { return _easeOvershootOrAmplitude; }
+            set { _easeOvershootOrAmplitude = value; }
+        }
+
+        /// <summary>
+        /// Eventual period to use with Elastic easeTypes.
+        /// </summary>
+        public float easePeriod
+        {
+            get { return _easePeriod; }
+            set { _easePeriod = value; }
         }
 
         // READ-ONLY GETS /////////////////////////////////////////
@@ -331,6 +345,8 @@ namespace Holoville.HOTween
             _delay = _elapsedDelay = delayCount = 0;
             _speedBased = false;
             _easeType = HOTween.defEaseType;
+            _easeOvershootOrAmplitude = HOTween.defEaseOvershootOrAmplitude;
+            _easePeriod = HOTween.defEasePeriod;
             _originalEaseType = HOTween.defEaseType;
         }
 

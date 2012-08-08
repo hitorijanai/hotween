@@ -50,36 +50,14 @@ namespace Holoville.HOTween.Core.Easing
         /// <param name="duration">
         /// Expected easing duration (in frames or seconds).
         /// </param>
-        /// <returns>
-        /// The eased value.
-        /// </returns>
-        public static float EaseIn(float time, float startValue, float changeValue, float duration)
-        {
-            return EaseIn(time, startValue, changeValue, duration, 1.70158f);
-        }
-
-        /// <summary>
-        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in: accelerating from zero velocity.
-        /// </summary>
-        /// <param name="time">
-        /// Current time (in frames or seconds).
-        /// </param>
-        /// <param name="startValue">
-        /// Starting value.
-        /// </param>
-        /// <param name="changeValue">
-        /// Change needed in value.
-        /// </param>
-        /// <param name="duration">
-        /// Expected easing duration (in frames or seconds).
-        /// </param>
         /// <param name="overshoot">
         /// Overshoot ammount: higher means greater overshoot (0 produces cubic easing with no overshoot, and the default value of 1.70158 produces an overshoot of 10 percent).
         /// </param>
+        /// <param name="unusedPeriod">Unused: here to keep same delegate for all ease types.</param>
         /// <returns>
         /// The eased value.
         /// </returns>
-        public static float EaseIn(float time, float startValue, float changeValue, float duration, float overshoot)
+        public static float EaseIn(float time, float startValue, float changeValue, float duration, float overshoot, float unusedPeriod)
         {
             return changeValue*(time /= duration)*time*((overshoot + 1)*time - overshoot) + startValue;
         }
@@ -99,36 +77,14 @@ namespace Holoville.HOTween.Core.Easing
         /// <param name="duration">
         /// Expected easing duration (in frames or seconds).
         /// </param>
-        /// <returns>
-        /// The eased value.
-        /// </returns>
-        public static float EaseOut(float time, float startValue, float changeValue, float duration)
-        {
-            return EaseOut(time, startValue, changeValue, duration, 1.70158f);
-        }
-
-        /// <summary>
-        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing out: decelerating from zero velocity.
-        /// </summary>
-        /// <param name="time">
-        /// Current time (in frames or seconds).
-        /// </param>
-        /// <param name="startValue">
-        /// Starting value.
-        /// </param>
-        /// <param name="changeValue">
-        /// Change needed in value.
-        /// </param>
-        /// <param name="duration">
-        /// Expected easing duration (in frames or seconds).
-        /// </param>
         /// <param name="overshoot">
         /// Overshoot ammount: higher means greater overshoot (0 produces cubic easing with no overshoot, and the default value of 1.70158 produces an overshoot of 10 percent).
         /// </param>
+        /// <param name="unusedPeriod">Unused: here to keep same delegate for all ease types.</param>
         /// <returns>
         /// The eased value.
         /// </returns>
-        public static float EaseOut(float time, float startValue, float changeValue, float duration, float overshoot)
+        public static float EaseOut(float time, float startValue, float changeValue, float duration, float overshoot, float unusedPeriod)
         {
             return changeValue*((time = time/duration - 1)*time*((overshoot + 1)*time + overshoot) + 1) + startValue;
         }
@@ -148,36 +104,14 @@ namespace Holoville.HOTween.Core.Easing
         /// <param name="duration">
         /// Expected easing duration (in frames or seconds).
         /// </param>
-        /// <returns>
-        /// The eased value.
-        /// </returns>
-        public static float EaseInOut(float time, float startValue, float changeValue, float duration)
-        {
-            return EaseInOut(time, startValue, changeValue, duration, 1.70158f);
-        }
-
-        /// <summary>
-        /// Easing equation function for a back (overshooting cubic easing: (s+1)*t^3 - s*t^2) easing in/out: acceleration until halfway, then deceleration.
-        /// </summary>
-        /// <param name="time">
-        /// Current time (in frames or seconds).
-        /// </param>
-        /// <param name="startValue">
-        /// Starting value.
-        /// </param>
-        /// <param name="changeValue">
-        /// Change needed in value.
-        /// </param>
-        /// <param name="duration">
-        /// Expected easing duration (in frames or seconds).
-        /// </param>
         /// <param name="overshoot">
         /// Overshoot ammount: higher means greater overshoot (0 produces cubic easing with no overshoot, and the default value of 1.70158 produces an overshoot of 10 percent).
         /// </param>
+        /// <param name="unusedPeriod">Unused: here to keep same delegate for all ease types.</param>
         /// <returns>
         /// The eased value.
         /// </returns>
-        public static float EaseInOut(float time, float startValue, float changeValue, float duration, float overshoot)
+        public static float EaseInOut(float time, float startValue, float changeValue, float duration, float overshoot, float unusedPeriod)
         {
             if ((time /= duration*0.5f) < 1)
             {

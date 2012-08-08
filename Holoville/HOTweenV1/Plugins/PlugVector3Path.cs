@@ -493,7 +493,7 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            pathPerc = ease(p_totElapsed, startPerc, changePerc, _duration);
+            pathPerc = ease(p_totElapsed, startPerc, changePerc, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
             SetValue(GetConstPointOnPath(pathPerc, true, path));
 
             if (orientType != OrientType.None && orientTrans != null && !orientTrans.Equals(null)) {
