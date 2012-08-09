@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.340";
+        public const string VERSION = "1.1.350";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1819,7 +1819,8 @@ namespace Holoville.HOTween
 
         static void DoUpdate(UpdateType p_updateType, float p_elapsed)
         {
-            for (int i = tweens.Count - 1; i > -1; --i)
+            int tweensCount = tweens.Count - 1;
+            for (int i = tweensCount - 1; i > -1; --i)
             {
                 ABSTweenComponent tw = tweens[i];
                 if (tw.updateType == p_updateType && tw.Update(p_elapsed*tw.timeScale))
@@ -1828,15 +1829,18 @@ namespace Holoville.HOTween
                     if (tw.destroyed || tw.autoKillOnComplete)
                     {
                         // ...autoKill: remove it.
-                        tweens[i].Kill(false);
+                        tw.Kill(false);
                         tweens.RemoveAt(i);
                     }
                 }
             }
+            
+            int onCompletesCount = onCompletes.Count;
+            
             // Dispatch eventual onCompletes.
-            if (onCompletes.Count > 0)
+            if (onCompletesCount > 0)
             {
-                for (int i = 0; i < onCompletes.Count; ++i)
+                for (int i = 0; i < onCompletesCount; ++i)
                 {
                     onCompletes[i].OnCompleteDispatch();
                 }
