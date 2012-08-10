@@ -742,6 +742,28 @@ namespace Holoville.HOTween.Core
         {
             ApplyCallback(true, p_callbackType, null, p_callback, p_callbackParms);
         }
+        /// <summary>
+        /// Assigns the given callback to this Tweener/Sequence,
+        /// overwriting any existing callbacks of the same type.
+        /// This overload will use sendMessage to call the method named p_methodName 
+        /// on every MonoBehaviour in the p_sendMessageTarget GameObject.
+        /// </summary>
+        /// <param name="p_callbackType">The type of callback to apply</param>
+        /// <param name="p_sendMessageTarget">GameObject to target for sendMessage</param>
+        /// <param name="p_methodName">Name of the method to call</param>
+        /// <param name="p_value">Eventual additional parameter</param>
+        /// <param name="p_options">SendMessageOptions</param>
+        public void ApplyCallback(CallbackType p_callbackType, GameObject p_sendMessageTarget, string p_methodName, object p_value, SendMessageOptions p_options = SendMessageOptions.RequireReceiver)
+        {
+            TweenDelegate.TweenCallbackWParms cb = HOTween.DoSendMessage;
+            object[] cbParms = new object[4] {
+                p_sendMessageTarget,
+                p_methodName,
+                p_value,
+                p_options
+            };
+            ApplyCallback(true, p_callbackType, null, cb, cbParms);
+        }
         void ApplyCallback(bool p_wParms, CallbackType p_callbackType, TweenDelegate.TweenCallback p_callback, TweenDelegate.TweenCallbackWParms p_callbackWParms, params object[] p_callbackParms)
         {
             switch (p_callbackType) {
@@ -1052,12 +1074,9 @@ namespace Holoville.HOTween.Core
         {
             _isComplete = true;
             OnStepComplete();
-            if (steadyIgnoreCallbacks || ignoreCallbacks)
-            {
-                return;
-            }
-            if (onComplete != null || onCompleteWParms != null)
-            {
+            if (steadyIgnoreCallbacks || ignoreCallbacks) return;
+
+            if (onComplete != null || onCompleteWParms != null) {
                 HOTween.onCompletes.Add(this); // delegate to HOTween which will call OnCompleteDispatch after this tween is eventually destroyed.
             }
         }
@@ -1067,12 +1086,9 @@ namespace Holoville.HOTween.Core
         /// </summary>
         internal void OnCompleteDispatch()
         {
-            if (onComplete != null)
-            {
+            if (onComplete != null) {
                 onComplete();
-            }
-            else if (onCompleteWParms != null)
-            {
+            } else if (onCompleteWParms != null) {
                 onCompleteWParms(new TweenEvent(this, onCompleteParms));
             }
         }

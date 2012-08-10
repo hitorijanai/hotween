@@ -1938,6 +1938,24 @@ namespace Holoville.HOTween
             tweens[p_index].Complete(false);
         }
 
+        /// <summary>
+        /// Used by callbacks that are wired to sendMessage.
+        /// </summary>
+        static internal void DoSendMessage(TweenEvent e)
+        {
+            GameObject target = e.parms[0] as GameObject;
+            if (target == null) return;
+
+            string methodName = e.parms[1] as string;
+            object value = e.parms[2];
+            SendMessageOptions options = (SendMessageOptions)e.parms[3];
+            if (value != null) {
+                target.SendMessage(methodName, e.parms[2], options);
+            } else {
+                target.SendMessage(methodName, options);
+            }
+        }
+
         static void AddTween(ABSTweenComponent p_tween)
         {
             if (tweenGOInstance == null)

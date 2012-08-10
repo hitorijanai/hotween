@@ -361,5 +361,25 @@ namespace Holoville.HOTween
             onCompleteParms = p_funcParms;
             return this;
         }
+
+        /// <summary>
+        /// Uses sendMessage to call the method named p_methodName 
+        /// on every MonoBehaviour in the p_sendMessageTarget GameObject.
+        /// </summary>
+        /// <param name="p_sendMessageTarget">GameObject to target for sendMessage</param>
+        /// <param name="p_methodName">Name of the method to call</param>
+        /// <param name="p_value">Eventual additional parameter</param>
+        /// <param name="p_options">SendMessageOptions</param>
+        public SequenceParms OnComplete(GameObject p_sendMessageTarget, string p_methodName, object p_value = null, SendMessageOptions p_options = SendMessageOptions.RequireReceiver)
+        {
+            onCompleteWParms = HOTween.DoSendMessage;
+            onCompleteParms = new object[4] {
+                p_sendMessageTarget,
+                p_methodName,
+                p_value,
+                p_options
+            };
+            return this;
+        }
     }
 }
