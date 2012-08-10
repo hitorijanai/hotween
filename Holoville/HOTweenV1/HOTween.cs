@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
-// Last update: 2012/08/08
+// Last update: 2012/08/10
 
 using System.Collections;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace Holoville.HOTween
     /// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
     /// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
     /// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-    /// <para>Version: 1.1.340</para>
+    /// <para>Version: 1.1.360</para>
     /// </summary>
     public class HOTween : MonoBehaviour
     {
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.350";
+        public const string VERSION = "1.1.360";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1820,7 +1820,7 @@ namespace Holoville.HOTween
         static void DoUpdate(UpdateType p_updateType, float p_elapsed)
         {
             int tweensCount = tweens.Count - 1;
-            for (int i = tweensCount - 1; i > -1; --i)
+            for (int i = tweensCount; i > -1; --i)
             {
                 ABSTweenComponent tw = tweens[i];
                 if (tw.updateType == p_updateType && tw.Update(p_elapsed*tw.timeScale))
