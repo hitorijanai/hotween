@@ -383,12 +383,14 @@ namespace Holoville.HOTween.Plugins
             Vector3[] pts;
             int indMod = 1;
             int pAdd = (isClosedPath ? 1 : 0);
+            int pointsLength = points.Length;
+
             if (isRelative) {
                 // Path length is the same (plus control points).
                 hasAdditionalStartingP = false;
-                pts = new Vector3[points.Length + 2 + pAdd];
+                pts = new Vector3[pointsLength + 2 + pAdd];
                 Vector3 diff = points[0] - typedStartVal;
-                for (int i = 0; i < points.Length; ++i) {
+                for (int i = 0; i < pointsLength; ++i) {
                     pts[i + indMod] = points[i] - diff;
                 }
             } else {
@@ -402,11 +404,11 @@ namespace Holoville.HOTween.Plugins
                 if (diff.x < EPSILON && diff.y < EPSILON && diff.z < EPSILON) {
                     // Path length is the same (plus control points).
                     hasAdditionalStartingP = false;
-                    pts = new Vector3[points.Length + 2 + pAdd];
+                    pts = new Vector3[pointsLength + 2 + pAdd];
                 } else {
                     // Path needs additional point for current value as starting point (plus control points).
                     hasAdditionalStartingP = true;
-                    pts = new Vector3[points.Length + 3 + pAdd];
+                    pts = new Vector3[pointsLength + 3 + pAdd];
                     if (tweenObj.isFrom) {
                         pts[pts.Length - 2] = currVal;
                     } else {
@@ -414,25 +416,27 @@ namespace Holoville.HOTween.Plugins
                         indMod = 2;
                     }
                 }
-                for (int i = 0; i < points.Length; ++i) {
+                for (int i = 0; i < pointsLength; ++i) {
                     pts[i + indMod] = points[i];
                 }
             }
 
+            pointsLength = pts.Length;
+
             if (isClosedPath) {
                 // Close path.
-                pts[pts.Length - 2] = pts[1];
+                pts[pointsLength - 2] = pts[1];
             }
 
             // Add control points.
             if (isClosedPath) {
-                pts[0] = pts[pts.Length - 3];
-                pts[pts.Length - 1] = pts[2];
+                pts[0] = pts[pointsLength - 3];
+                pts[pointsLength - 1] = pts[2];
             } else {
                 pts[0] = pts[1];
-                Vector3 lastP = pts[pts.Length - 2];
-                Vector3 diffV = lastP - pts[pts.Length - 3];
-                pts[pts.Length - 1] = lastP + diffV;
+                Vector3 lastP = pts[pointsLength - 2];
+                Vector3 diffV = lastP - pts[pointsLength - 3];
+                pts[pointsLength - 1] = lastP + diffV;
             }
 
             // Manage eventual lockPositionAxis.
@@ -441,7 +445,7 @@ namespace Holoville.HOTween.Plugins
                 bool lockY = ((lockPositionAxis & Axis.Y) == Axis.Y);
                 bool lockZ = ((lockPositionAxis & Axis.Z) == Axis.Z);
                 Vector3 orPos = typedStartVal;
-                for (int i = 0; i < pts.Length; ++i) {
+                for (int i = 0; i < pointsLength; ++i) {
                     Vector3 pt = pts[i];
                     pts[i] = new Vector3(
                         lockX ? orPos.x : pt.x,
@@ -460,7 +464,7 @@ namespace Holoville.HOTween.Plugins
             if (!isClosedPath)
             {
                 // Store the changeVal used for Incremental loops.
-                diffChangeVal = pts[pts.Length - 2] - pts[1];
+                diffChangeVal = pts[pointsLength - 2] - pts[1];
             }
         }
 
@@ -478,7 +482,8 @@ namespace Holoville.HOTween.Plugins
             }
 
             Vector3[] pathPs = path.path;
-            for (int i = 0; i < pathPs.Length; ++i)
+            int pathPsLength = pathPs.Length;
+            for (int i = 0; i < pathPsLength; ++i)
             {
                 pathPs[i] += (diffChangeVal*p_diffIncr);
             }

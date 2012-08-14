@@ -88,7 +88,7 @@ namespace Holoville.HOTween.Core
         internal static string SimpleClassName(Type p_class)
         {
             string s = p_class.ToString();
-            return s.Substring(s.LastIndexOf(".") + 1);
+            return s.Substring(s.LastIndexOf('.') + 1);
         }
     }
 }

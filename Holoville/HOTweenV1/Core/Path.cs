@@ -161,7 +161,8 @@ namespace Holoville.HOTween.Core
             }
             // Draw path.
             Vector3 prevPt = drawPs[0];
-            for (int i = 1; i < drawPs.Length; ++i)
+            int drawPsLength = drawPs.Length;
+            for (int i = 1; i < drawPsLength; ++i)
             {
                 currPt = drawPs[i];
                 Gizmos.DrawLine(currPt, prevPt);
@@ -169,7 +170,8 @@ namespace Holoville.HOTween.Core
             }
             // Draw path control points.
             Gizmos.color = Color.white;
-            for (int i = 1; i < path.Length - 1; ++i)
+            int pathLength = path.Length - 1;
+            for (int i = 1; i < pathLength; ++i)
             {
                 Gizmos.DrawSphere(path[i], 0.1f);
             }
@@ -323,7 +325,8 @@ namespace Holoville.HOTween.Core
                 float tLen = pathLength * t;
                 // Find point in time/length table.
                 float t0 = 0, l0 = 0, t1 = 0, l1 = 0;
-                for (int i = 0; i < lengthsTable.Length; ++i) {
+                int lengthsTableLength = lengthsTable.Length;
+                for (int i = 0; i < lengthsTableLength; ++i) {
                     if (lengthsTable[i] > tLen) {
                         t1 = timesTable[i];
                         l1 = lengthsTable[i];

@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
-// Last update: 2012/08/10
+// Last update: 2012/08/14
 
 using System.Collections;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace Holoville.HOTween
     /// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
     /// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
     /// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-    /// <para>Version: 1.1.360</para>
+    /// <para>Version: 1.1.370</para>
     /// </summary>
     public class HOTween : MonoBehaviour
     {
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.360";
+        public const string VERSION = "1.1.370";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -255,9 +255,10 @@ namespace Holoville.HOTween
 
             // Get all existing plugins.
             List<ABSTweenPlugin> plugs = GetPlugins();
+            int pluginsCount = plugs.Count;
 
             // Find path plugins and draw paths.
-            for (int i = 0; i < plugs.Count; ++i)
+            for (int i = 0; i < pluginsCount; ++i)
             {
                 PlugVector3Path pathPlug = plugs[i] as PlugVector3Path;
                 if (pathPlug != null && pathPlug.path != null)
@@ -1789,7 +1790,9 @@ namespace Holoville.HOTween
                 return false;
             }
 
-            for (int i = 0; i < tweens.Count; ++i)
+            int tweensCount = tweens.Count;
+
+            for (int i = 0; i < tweensCount; ++i)
             {
                 ABSTweenComponent tw = tweens[i];
                 if (tw.IsLinkedTo(p_target))
@@ -1809,8 +1812,9 @@ namespace Holoville.HOTween
         public static TweenInfo[] GetTweenInfos()
         {
             if (totTweens <= 0) return null;
-            TweenInfo[] twInfos = new TweenInfo[tweens.Count];
-            for (int i = 0; i < tweens.Count; ++i) twInfos[i] = new TweenInfo(tweens[i]);
+            int tweensCount = tweens.Count;
+            TweenInfo[] twInfos = new TweenInfo[tweensCount];
+            for (int i = 0; i < tweensCount; ++i) twInfos[i] = new TweenInfo(tweens[i]);
             return twInfos;
         }
 
@@ -2062,11 +2066,12 @@ namespace Holoville.HOTween
             }
 
             int opCount = 0;
+            int tweensCount = tweens.Count - 1;
 
             if (p_filter == null)
             {
                 // All
-                for (int i = tweens.Count - 1; i > -1; --i)
+                for (int i = tweensCount; i > -1; --i)
                 {
                     p_operation(i, p_optionalBool);
                     ++opCount;
@@ -2076,7 +2081,7 @@ namespace Holoville.HOTween
             {
                 // Int ID
                 int f = (int)p_filter;
-                for (int i = tweens.Count - 1; i > -1; --i)
+                for (int i = tweensCount; i > -1; --i)
                 {
                     if (tweens[i].intId == f)
                     {
@@ -2089,7 +2094,7 @@ namespace Holoville.HOTween
             {
                 // ID
                 string f = (string)p_filter;
-                for (int i = tweens.Count - 1; i > -1; --i)
+                for (int i = tweensCount; i > -1; --i)
                 {
                     if (tweens[i].id == f)
                     {
@@ -2102,7 +2107,7 @@ namespace Holoville.HOTween
             {
                 // Tweener
                 Tweener f = p_filter as Tweener;
-                for (int i = tweens.Count - 1; i > -1; --i)
+                for (int i = tweensCount; i > -1; --i)
                 {
                     if (tweens[i] == f)
                     {
@@ -2115,7 +2120,7 @@ namespace Holoville.HOTween
             {
                 // Sequence
                 Sequence f = p_filter as Sequence;
-                for (int i = tweens.Count - 1; i > -1; --i)
+                for (int i = tweensCount; i > -1; --i)
                 {
                     if (tweens[i] == f)
                     {
@@ -2127,7 +2132,7 @@ namespace Holoville.HOTween
             else
             {
                 // Target
-                for (int i = tweens.Count - 1; i > -1; --i)
+                for (int i = tweensCount; i > -1; --i)
                 {
                     Tweener tw = tweens[i] as Tweener;
                     if (tw != null && tw.target == p_filter)
@@ -2158,7 +2163,8 @@ namespace Holoville.HOTween
             }
 
             List<ABSTweenPlugin> plugs = new List<ABSTweenPlugin>();
-            for (int i = 0; i < tweens.Count; ++i)
+            int tweensCount = tweens.Count;
+            for (int i = 0; i < tweensCount; ++i)
             {
                 tweens[i].FillPluginsList(plugs);
             }

@@ -63,18 +63,25 @@ namespace Holoville.HOTween.Core
             {
                 // Check running tweens for eventual overwrite.
                 List<ABSTweenPlugin> addPlugs = p_tween.plugins;
-                for (int i = runningTweens.Count - 1; i > -1; --i)
+
+                int runningTweensCount = runningTweens.Count - 1;
+                int addPlugsCount = addPlugs.Count;
+
+                for (int i = runningTweensCount; i > -1; --i)
                 {
                     Tweener tw = runningTweens[i];
+                    List<ABSTweenPlugin> twPlugins = tw.plugins;
+                    int twPluginsCount = twPlugins.Count;
+
                     if (tw.target == p_tween.target)
                     {
                         // Check internal plugins.
-                        for (int n = 0; n < addPlugs.Count; ++n)
+                        for (int n = 0; n < addPlugsCount; ++n)
                         {
                             ABSTweenPlugin addPlug = addPlugs[n];
-                            for (int c = tw.plugins.Count - 1; c > -1; --c)
+                            for (int c = twPluginsCount - 1; c > -1; --c)
                             {
-                                ABSTweenPlugin plug = tw.plugins[c];
+                                ABSTweenPlugin plug = twPlugins[c];
                                 if (plug.propName == addPlug.propName && (addPlug.pluginId == -1 || plug.pluginId == -1 || plug.pluginId == addPlug.pluginId))
                                 {
                                     if (tw.isSequenced && p_tween.isSequenced && tw.contSequence == p_tween.contSequence)
@@ -84,7 +91,8 @@ namespace Holoville.HOTween.Core
                                     if (!tw.isSequenced || !tw.isComplete)
                                     {
                                         // Overwrite old plugin.
-                                        tw.plugins.RemoveAt(c);
+                                        twPlugins.RemoveAt(c);
+                                        twPluginsCount--;
                                         if (HOTween.isEditor && HOTween.warningLevel == WarningLevel.Verbose)
                                         {
                                             string t0 = addPlug.GetType().ToString();
@@ -94,7 +102,7 @@ namespace Holoville.HOTween.Core
                                             TweenWarning.Log(t0 + " is overwriting " + t1 + " for " + tw.target + "." + plug.propName);
                                         }
                                         // Check if whole tween needs to be removed.
-                                        if (tw.plugins.Count == 0)
+                                        if (twPluginsCount == 0)
                                         {
                                             if (tw.isSequenced)
                                             {
@@ -118,7 +126,8 @@ namespace Holoville.HOTween.Core
 
         public void RemoveTween(Tweener p_tween)
         {
-            for (int i = 0; i < runningTweens.Count; ++i)
+            int runningTweensCount = runningTweens.Count;
+            for (int i = 0; i < runningTweensCount; ++i)
             {
                 if (runningTweens[i] == p_tween)
                 {

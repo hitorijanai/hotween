@@ -191,7 +191,8 @@ namespace Holoville.HOTween
             HOTSeqItem newItem = (p_twMember != null ? new HOTSeqItem(0, p_twMember as ABSTweenComponent) : new HOTSeqItem(0, p_duration));
 
             float itemDur = newItem.duration;
-            for (int i = 0; i < items.Count; ++i)
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i)
             {
                 items[i].startTime += itemDur;
             }
@@ -243,7 +244,8 @@ namespace Holoville.HOTween
             }
 
             bool placed = false;
-            for (int i = 0; i < items.Count; ++i)
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i)
             {
                 if (items[i].startTime >= p_time)
                 {
@@ -335,7 +337,8 @@ namespace Holoville.HOTween
                 return false;
             }
 
-            for (int i = 0; i < items.Count; ++i)
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i)
             {
                 HOTSeqItem item = items[i];
                 if (item.twMember != null && item.twMember.IsTweening(p_target))
@@ -439,7 +442,8 @@ namespace Holoville.HOTween
                 return;
             }
 
-            for (int i = 0; i < items.Count; ++i)
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i)
             {
                 HOTSeqItem item = items[i];
                 if (item.twMember != null && item.twMember == p_tween)
@@ -597,7 +601,8 @@ namespace Holoville.HOTween
             // Update the elements...
             HOTSeqItem item;
             float twElapsed = (!_isLoopingBack ? _elapsed : _duration - _elapsed);
-            for (int i = items.Count - 1; i > -1; --i)
+            int itemsCount = items.Count;
+            for (int i = itemsCount - 1; i > -1; --i)
             {
                 item = items[i];
                 if (item.twMember != null && item.startTime > twElapsed)
@@ -605,7 +610,7 @@ namespace Holoville.HOTween
                     item.twMember.GoTo(twElapsed - item.startTime, p_forceUpdate, true);
                 }
             }
-            for (int i = 0; i < items.Count; ++i)
+            for (int i = 0; i < itemsCount; ++i)
             {
                 item = items[i];
                 if (item.twMember != null && item.startTime <= twElapsed)
@@ -647,7 +652,8 @@ namespace Holoville.HOTween
         /// </param>
         internal override void SetIncremental(int p_diffIncr)
         {
-            for (int i = 0; i < items.Count; ++i)
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i)
             {
                 HOTSeqItem item = items[i];
                 if (item.twMember == null)
@@ -720,7 +726,8 @@ namespace Holoville.HOTween
             _completedLoops = 0;
             _fullElapsed = _elapsed = 0;
 
-            for (int i = items.Count - 1; i > - 1; --i)
+            int itemsCount = items.Count - 1;
+            for (int i = itemsCount; i > -1; --i)
             {
                 HOTSeqItem item = items[i];
                 if (item.twMember != null) {
@@ -760,7 +767,8 @@ namespace Holoville.HOTween
             if (setSteadyIgnoreCallbacks) steadyIgnoreCallbacks = true;
             // OPTIMIZE Find way to speed this up (by applying values directly instead than animating to them?)
             HOTSeqItem item;
-            for (int i = 0; i < items.Count; ++i)
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i)
             {
                 item = items[i];
                 if (item.twMember == null)
@@ -769,7 +777,7 @@ namespace Holoville.HOTween
                 }
                 item.twMember.Update(item.twMember.duration, true, true);
             }
-            for (int i = items.Count - 1; i > - 1; --i)
+            for (int i = itemsCount - 1; i > -1; --i)
             {
                 item = items[i];
                 if (item.twMember != null)
@@ -823,7 +831,8 @@ namespace Holoville.HOTween
                 return;
             }
 
-            for (int i = 0; i < items.Count; ++i)
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i)
             {
                 HOTSeqItem itm = items[i];
                 if (itm.twMember == null)

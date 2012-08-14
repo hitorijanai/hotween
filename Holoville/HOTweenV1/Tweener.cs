@@ -75,7 +75,8 @@ namespace Holoville.HOTween
             set {
                 _easeType = value;
                 // Change ease type of all existing plugins.
-                for (int i = 0; i < plugins.Count; ++i)
+                int pluginsCount = plugins.Count;
+                for (int i = 0; i < pluginsCount; ++i)
                 {
                     plugins[i].SetEase(_easeType);
                 }
@@ -717,7 +718,8 @@ namespace Holoville.HOTween
 
             // Update the plugins.
             float plugElapsed = (!_isLoopingBack ? _elapsed : _duration - _elapsed);
-            for (int i = 0; i < plugins.Count; ++i)
+            int pluginsCount = plugins.Count;
+            for (int i = 0; i < pluginsCount; ++i)
             {
                 ABSTweenPlugin plug = plugins[i];
                 if (!_isLoopingBack && plug.easeReversed || _isLoopingBack && _loopType == LoopType.YoyoInverse && !plug.easeReversed)
@@ -785,10 +787,12 @@ namespace Holoville.HOTween
                 return;
             }
 
-            for (int i = 0; i < plugins.Count; ++i)
+            int pluginsCount = plugins.Count;
+            for (int i = 0; i < pluginsCount; ++i)
             {
                 plugins[i].ForceSetSpeedBasedDuration();
             }
+
             _duration = 0;
             foreach (ABSTweenPlugin plug in plugins)
             {
@@ -862,7 +866,8 @@ namespace Holoville.HOTween
             _completedLoops = 0;
             _fullElapsed = _elapsed = 0;
 
-            for (int i = 0; i < plugins.Count; ++i)
+            int pluginsCount = plugins.Count;
+            for (int i = 0; i < pluginsCount; ++i)
             {
                 ABSTweenPlugin plug = plugins[i];
                 if (plug.easeReversed)
@@ -976,7 +981,8 @@ namespace Holoville.HOTween
                 return;
             }
 
-            for (int i = 0; i < plugins.Count; ++i)
+            int pluginsCount = plugins.Count;
+            for (int i = 0; i < pluginsCount; ++i)
             {
                 p_plugs.Add(plugins[i]);
             }
