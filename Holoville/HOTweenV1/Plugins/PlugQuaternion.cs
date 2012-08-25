@@ -50,23 +50,24 @@ namespace Holoville.HOTween.Plugins
         /// Gets the untyped start value,
         /// sets both the untyped and the typed start value.
         /// </summary>
-        protected override object startVal
-        {
-            get
-            {
+        protected override object startVal {
+            get {
                 return _startVal;
             }
-            set
-            {
-                if (tweenObj.isFrom && isRelative)
-                {
+            set {
+                if (tweenObj.isFrom && isRelative) {
                     typedStartVal = typedEndVal + (value is Quaternion ? ((Quaternion)value).eulerAngles : (Vector3)value);
                     _startVal = Quaternion.Euler(typedStartVal);
-                }
-                else
-                {
-                    _startVal = value;
-                    typedStartVal = (value is Quaternion ? ((Quaternion)value).eulerAngles : (Vector3)value);
+                } else {
+                    if (value is Quaternion) {
+                        _startVal = value;
+                        typedStartVal = ((Quaternion)value).eulerAngles;
+                    } else {
+                        _startVal = Quaternion.Euler((Vector3)value);
+                        typedStartVal = (Vector3)value;
+                    }
+//                    _startVal = value;
+//                    typedStartVal = (value is Quaternion ? ((Quaternion)value).eulerAngles : (Vector3)value);
                 }
             }
         }
@@ -75,16 +76,20 @@ namespace Holoville.HOTween.Plugins
         /// Gets the untyped end value,
         /// sets both the untyped and the typed end value.
         /// </summary>
-        protected override object endVal
-        {
-            get
-            {
+        protected override object endVal {
+            get {
                 return _endVal;
             }
-            set
-            {
-                _endVal = value;
-                typedEndVal = (value is Quaternion ? ((Quaternion)value).eulerAngles : (Vector3)value);
+            set {
+                if (value is Quaternion) {
+                    _endVal = value;
+                    typedEndVal = ((Quaternion)value).eulerAngles;
+                } else {
+                    _endVal = Quaternion.Euler((Vector3)value);
+                    typedEndVal = (Vector3)value;
+                }
+//                _endVal = value;
+//                typedEndVal = (value is Quaternion ? ((Quaternion)value).eulerAngles : (Vector3)value);
             }
         }
 

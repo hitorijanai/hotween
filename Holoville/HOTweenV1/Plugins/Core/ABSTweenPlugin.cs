@@ -536,7 +536,7 @@ namespace Holoville.HOTween.Plugins.Core
 
         /// <summary>
         /// Sets the value of the controlled property.
-        /// Some plugins (like PlugSetColor) might override this to get values from different properties.
+        /// Some plugins (like PlugSetColor or PlugQuaterion) might override this to get values from different properties.
         /// </summary>
         /// <param name="p_value">
         /// The new value.
