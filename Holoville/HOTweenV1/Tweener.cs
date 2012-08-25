@@ -732,7 +732,7 @@ namespace Holoville.HOTween
                 else {
                     // 0 duration tweens
                     plug.Complete();
-                    complete = true;
+                    if (!wasComplete) complete = true;
                 }
             }
 
@@ -816,30 +816,20 @@ namespace Holoville.HOTween
         /// </returns>
         protected override bool GoTo(float p_time, bool p_play, bool p_forceUpdate, bool p_ignoreCallbacks)
         {
-            if (!_enabled)
-            {
-                return false;
-            }
+            if (!_enabled) return false;
 
-            if (p_time > _fullDuration)
-            {
+            if (p_time > _fullDuration) {
                 p_time = _fullDuration;
-            }
-            else if (p_time < 0)
-            {
+            } else if (p_time < 0) {
                 p_time = 0;
             }
-            if (!p_forceUpdate && _fullElapsed == p_time)
-            {
-                return _isComplete;
-            }
+            if (!p_forceUpdate && _fullElapsed == p_time) return _isComplete;
 
             _fullElapsed = p_time;
             delayCount = 0;
             _elapsedDelay = _delay;
             Update(0, true, false, p_ignoreCallbacks);
-            if (!_isComplete && p_play)
-            {
+            if (!_isComplete && p_play) {
                 Play();
             }
 

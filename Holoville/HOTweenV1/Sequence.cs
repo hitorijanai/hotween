@@ -600,23 +600,35 @@ namespace Holoville.HOTween
 
             // Update the elements...
             HOTSeqItem item;
-            float twElapsed = (!_isLoopingBack ? _elapsed : _duration - _elapsed);
             int itemsCount = items.Count;
-            for (int i = itemsCount - 1; i > -1; --i)
-            {
-                item = items[i];
-                if (item.twMember != null && item.startTime > twElapsed)
-                {
-                    item.twMember.GoTo(twElapsed - item.startTime, p_forceUpdate, true);
+            if (_duration > 0) {
+                float twElapsed = (!_isLoopingBack ? _elapsed : _duration - _elapsed);
+                for (int i = itemsCount - 1; i > -1; --i) {
+                    item = items[i];
+                    if (item.twMember != null && item.startTime > twElapsed) {
+                        if (item.twMember.duration > 0) {
+                            item.twMember.GoTo(twElapsed - item.startTime, p_forceUpdate, true);
+                        } else {
+                            item.twMember.Rewind();
+                        }
+                    }
                 }
-            }
-            for (int i = 0; i < itemsCount; ++i)
-            {
-                item = items[i];
-                if (item.twMember != null && item.startTime <= twElapsed)
-                {
-                    item.twMember.GoTo(twElapsed - item.startTime, p_forceUpdate);
+                for (int i = 0; i < itemsCount; ++i) {
+                    item = items[i];
+                    if (item.twMember != null && item.startTime <= twElapsed) {
+                        if (item.twMember.duration > 0) {
+                            item.twMember.GoTo(twElapsed - item.startTime, p_forceUpdate);
+                        } else {
+                            item.twMember.Complete();
+                        }
+                    }
                 }
+            } else {
+                for (int i = itemsCount - 1; i > -1; --i) {
+                    item = items[i];
+                    if (item.twMember != null) item.twMember.Complete();
+                }
+                if (!wasComplete) complete = true;
             }
 
             // Manage eventual pause, complete, update, and stepComplete.
@@ -894,6 +906,7 @@ namespace Holoville.HOTween
             {
                 startTime = p_startTime;
                 twMember = p_twMember;
+                twMember.autoKillOnComplete = false;
             }
 
             public HOTSeqItem(float p_startTime, float p_duration)
