@@ -53,7 +53,9 @@ namespace Holoville.HOTween
             {
                 _steadyIgnoreCallbacks = value;
                 if (items == null) return;
-                foreach (HOTSeqItem item in items) {
+                int itemsCount = items.Count;
+                for (int i = 0; i < itemsCount; ++i ) {
+                    HOTSeqItem item = items[i];
                     if (item.twMember != null) item.twMember.steadyIgnoreCallbacks = value;
                 }
             }
@@ -276,19 +278,13 @@ namespace Holoville.HOTween
         /// </param>
         internal override void Kill(bool p_autoRemoveFromHOTween)
         {
-            if (_destroyed)
-            {
-                return;
-            }
+            if (_destroyed) return;
 
-            if (items != null)
-            {
-                foreach (HOTSeqItem item in items)
-                {
-                    if (item.twMember != null)
-                    {
-                        item.twMember.Kill(false);
-                    }
+            if (items != null) {
+                int itemsCount = items.Count;
+                for (int i = 0; i < itemsCount; ++i) {
+                    HOTSeqItem item = items[i];
+                    if (item.twMember != null) item.twMember.Kill(false);
                 }
                 items = null;
             }
@@ -309,12 +305,9 @@ namespace Holoville.HOTween
         /// </summary>
         public override void Restart()
         {
-            if (_fullElapsed == 0)
-            {
+            if (_fullElapsed == 0) {
                 PlayForward();
-            }
-            else
-            {
+            } else {
                 Rewind(true);
             }
         }
@@ -361,17 +354,12 @@ namespace Holoville.HOTween
         /// </returns>
         public override bool IsLinkedTo(object p_target)
         {
-            if (items == null)
-            {
-                return false;
-            }
+            if (items == null) return false;
 
-            foreach (HOTSeqItem item in items)
-            {
-                if (item.twMember != null && item.twMember.IsLinkedTo(p_target))
-                {
-                    return true;
-                }
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i) {
+                HOTSeqItem item = items[i];
+                if (item.twMember != null && item.twMember.IsLinkedTo(p_target)) return true;
             }
 
             return false;
@@ -386,7 +374,9 @@ namespace Holoville.HOTween
             if (items == null) return null;
 
             List<object> targets = new List<object>();
-            foreach (HOTSeqItem item in items) {
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i) {
+                HOTSeqItem item = items[i];
                 if (item.twMember != null) targets.AddRange(item.twMember.GetTweenTargets());
             }
             return targets;
@@ -399,7 +389,9 @@ namespace Holoville.HOTween
         public List<Tweener> GetTweenersByTarget(object p_target)
         {
             List<Tweener> res = new List<Tweener>();
-            foreach (HOTSeqItem item in items) {
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i) {
+                HOTSeqItem item = items[i];
                 if (item.twMember == null) continue;
                 Tweener tweener = item.twMember as Tweener;
                 if (tweener != null) {
@@ -421,7 +413,9 @@ namespace Holoville.HOTween
         {
             List<IHOTweenComponent> res = new List<IHOTweenComponent>();
             if (id == p_id) res.Add(this);
-            foreach (HOTSeqItem item in items) {
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i) {
+                HOTSeqItem item = items[i];
                 if (item.twMember != null) res.AddRange(item.twMember.GetTweensById(p_id));
             }
             return res;

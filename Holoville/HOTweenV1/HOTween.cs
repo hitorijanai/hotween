@@ -40,7 +40,7 @@ namespace Holoville.HOTween
     /// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
     /// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
     /// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-    /// <para>Version: 1.1.380</para>
+    /// <para>Version: 1.1.400</para>
     /// </summary>
     public class HOTween : MonoBehaviour
     {
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.380";
+        public const string VERSION = "1.1.400";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1712,7 +1712,9 @@ namespace Holoville.HOTween
         {
             List<IHOTweenComponent> res = new List<IHOTweenComponent>();
             if (tweens == null) return res;
-            foreach (ABSTweenComponent tw in tweens) {
+            int tweensCount = tweens.Count;
+            for (int i = 0; i < tweensCount; ++i) {
+                ABSTweenComponent tw = tweens[i];
                 if (p_includeNestedTweens) {
                     res.AddRange(tw.GetTweensById(p_id));
                 } else {
@@ -1733,7 +1735,9 @@ namespace Holoville.HOTween
         {
             List<Tweener> res = new List<Tweener>();
             if (tweens == null) return res;
-            foreach (ABSTweenComponent tw in tweens) {
+            int tweensCount = tweens.Count;
+            for (int i = 0; i < tweensCount; ++i) {
+                ABSTweenComponent tw = tweens[i];
                 Tweener tweener = tw as Tweener;
                 if (tweener != null) {
                     // Tweener
@@ -1759,16 +1763,11 @@ namespace Holoville.HOTween
         /// </returns>
         public static bool IsTweening(object p_target)
         {
-            if (tweens == null)
-            {
-                return false;
-            }
+            if (tweens == null) return false;
 
-            foreach (ABSTweenComponent tw in tweens) {
-                if (tw.IsTweening(p_target))
-                {
-                    return true;
-                }
+            int tweensCount = tweens.Count;
+            for (int i = 0; i < tweensCount; ++i) {
+                if (tweens[i].IsTweening(p_target)) return true;
             }
 
             return false;
@@ -1785,20 +1784,13 @@ namespace Holoville.HOTween
         /// </returns>
         public static bool IsLinkedTo(object p_target)
         {
-            if (tweens == null)
-            {
-                return false;
-            }
+            if (tweens == null) return false;
 
             int tweensCount = tweens.Count;
 
-            for (int i = 0; i < tweensCount; ++i)
-            {
+            for (int i = 0; i < tweensCount; ++i) {
                 ABSTweenComponent tw = tweens[i];
-                if (tw.IsLinkedTo(p_target))
-                {
-                    return true;
-                }
+                if (tw.IsLinkedTo(p_target)) return true;
             }
 
             return false;

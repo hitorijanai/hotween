@@ -98,7 +98,9 @@ namespace Holoville.HOTween
             p_tweenObj.plugins = new List<ABSTweenPlugin>();
             Type targetType = p_target.GetType();
             FieldInfo fieldInfo = null;
-            foreach (HOTPropData data in propDatas) {
+            int propDatasCount = propDatas.Count;
+            for (int i = 0; i < propDatasCount; ++i) {
+                HOTPropData data = propDatas[i];
                 // Store propInfo and fieldInfo to see if they exist, and then pass them to plugin init.
                 PropertyInfo propInfo = targetType.GetProperty(data.propName);
                 if (propInfo == null) {

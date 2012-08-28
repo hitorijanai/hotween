@@ -585,7 +585,9 @@ namespace Holoville.HOTween
         private PlugVector3Path GetPlugVector3PathPlugin()
         {
             if (plugins == null) return null;
-            foreach (ABSTweenPlugin plug in plugins) {
+            int pluginsCount = plugins.Count;
+            for (int i = 0; i < pluginsCount; ++i) {
+                ABSTweenPlugin plug = plugins[i];
                 PlugVector3Path plugVector3Path = plug as PlugVector3Path;
                 if (plugVector3Path != null) return plugVector3Path;
             }
@@ -774,8 +776,9 @@ namespace Holoville.HOTween
         internal override void SetIncremental(int p_diffIncr)
         {
             if (plugins == null) return;
-            foreach (ABSTweenPlugin t in plugins) {
-                t.SetIncremental(p_diffIncr);
+            int pluginsCount = plugins.Count;
+            for (int i = 0; i < pluginsCount; ++i) {
+                plugins[i].SetIncremental(p_diffIncr);
             }
         }
 
@@ -786,24 +789,17 @@ namespace Holoville.HOTween
         /// </summary>
         internal void ForceSetSpeedBasedDuration()
         {
-            if (!_speedBased || plugins == null)
-            {
-                return;
-            }
+            if (!_speedBased || plugins == null) return;
 
             int pluginsCount = plugins.Count;
-            for (int i = 0; i < pluginsCount; ++i)
-            {
+            for (int i = 0; i < pluginsCount; ++i) {
                 plugins[i].ForceSetSpeedBasedDuration();
             }
 
             _duration = 0;
-            foreach (ABSTweenPlugin plug in plugins)
-            {
-                if (plug.duration > _duration)
-                {
-                    _duration = plug.duration;
-                }
+            for (int i = 0; i < pluginsCount; ++i) {
+                ABSTweenPlugin plug = plugins[i];
+                if (plug.duration > _duration) _duration = plug.duration;
             }
             SetFullDuration();
         }
@@ -918,21 +914,19 @@ namespace Holoville.HOTween
         {
             if (!p_force && startupDone) return;
 
-            foreach (ABSTweenPlugin t in plugins) {
-                if (!t.wasStarted) t.Startup();
+            int pluginsCount = plugins.Count;
+            for (int i = 0; i < pluginsCount; ++i) {
+                ABSTweenPlugin plug = plugins[i];
+                if (!plug.wasStarted) plug.Startup();
             }
-            if (_speedBased)
-            {
+            if (_speedBased) {
                 // Reset duration based on value changes and speed.
                 // Can't be done sooner because it needs to startup the plugins first.
                 _originalNonSpeedBasedDuration = _duration;
                 _duration = 0;
-                foreach (ABSTweenPlugin plug in plugins)
-                {
-                    if (plug.duration > _duration)
-                    {
-                        _duration = plug.duration;
-                    }
+                for (int i = 0; i < pluginsCount; ++i) {
+                    ABSTweenPlugin plug = plugins[i];
+                    if (plug.duration > _duration) _duration = plug.duration;
                 }
                 SetFullDuration();
             } else if (p_force) {
