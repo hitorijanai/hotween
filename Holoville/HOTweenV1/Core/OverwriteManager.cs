@@ -93,14 +93,12 @@ namespace Holoville.HOTween.Core
                                             TweenWarning.Log(t0 + " is overwriting " + t1 + " for " + tw.target + "." + plug.propName);
                                         }
                                         // Check if whole tween needs to be removed.
-                                        bool tweenKilled = false;
                                         if (twPluginsCount == 0) {
                                             if (tw.isSequenced) {
                                                 tw.contSequence.Remove(tw);
                                             }
                                             runningTweens.RemoveAt(i);
                                             tw.Kill(false);
-                                            tweenKilled = true;
                                         }
                                         // Dispatch eventual pluginOverwritten event
                                         if (tw.onPluginOverwritten != null) {
@@ -109,7 +107,7 @@ namespace Holoville.HOTween.Core
                                             tw.onPluginOverwrittenWParms(new TweenEvent(tw, tw.onPluginOverwrittenParms));
                                         }
                                         // If whole tween was killed jump to next tween
-                                        if (tweenKilled) goto NEXT_TWEEN;
+                                        if (tw.destroyed) goto NEXT_TWEEN;
                                     }
                                 }
                             }

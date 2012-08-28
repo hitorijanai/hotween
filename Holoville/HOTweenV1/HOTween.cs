@@ -1823,29 +1823,33 @@ namespace Holoville.HOTween
 
         static void DoUpdate(UpdateType p_updateType, float p_elapsed)
         {
-            int tweensCount = tweens.Count - 1;
-            for (int i = tweensCount; i > -1; --i)
-            {
+            List<int> tweensToRemoveIndexes = null;
+            int tweensCount = tweens.Count;
+            for (int i = 0; i < tweensCount; ++i ) {
                 ABSTweenComponent tw = tweens[i];
-                if (tw.updateType == p_updateType && tw.Update(p_elapsed*tw.timeScale))
-                {
+                if (tw.updateType == p_updateType && tw.Update(p_elapsed * tw.timeScale)) {
                     // Tween complete...
-                    if (tw.destroyed || tw.autoKillOnComplete)
-                    {
-                        // ...autoKill: remove it.
+                    if (tw.destroyed || tw.autoKillOnComplete) {
+                        // ...autoKill: store for out-of-loop removal
                         tw.Kill(false);
-                        tweens.RemoveAt(i);
+                        if (tweensToRemoveIndexes == null) tweensToRemoveIndexes = new List<int>();
+                        tweensToRemoveIndexes.Add(i);
                     }
+                }
+            }
+            if (tweensToRemoveIndexes != null) {
+                // Remove killed tweens
+                int tweensToRemoveCount = tweensToRemoveIndexes.Count;
+                for (int i = 0; i < tweensToRemoveCount; ++i) {
+                    tweens.RemoveAt(tweensToRemoveIndexes[i] - i);
                 }
             }
             
             int onCompletesCount = onCompletes.Count;
             
             // Dispatch eventual onCompletes.
-            if (onCompletesCount > 0)
-            {
-                for (int i = 0; i < onCompletesCount; ++i)
-                {
+            if (onCompletesCount > 0) {
+                for (int i = 0; i < onCompletesCount; ++i) {
                     onCompletes[i].OnCompleteDispatch();
                 }
                 onCompletes = new List<ABSTweenComponent>();
