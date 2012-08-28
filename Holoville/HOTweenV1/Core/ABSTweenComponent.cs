@@ -485,16 +485,10 @@ namespace Holoville.HOTween.Core
         /// </param>
         internal virtual void Kill(bool p_autoRemoveFromHOTween)
         {
-            if (_destroyed)
-            {
-                return;
-            }
+            if (_destroyed) return;
 
             _destroyed = _isEmpty = true;
-            if (p_autoRemoveFromHOTween)
-            {
-                HOTween.Kill(this);
-            }
+            if (p_autoRemoveFromHOTween) HOTween.Kill(this);
         }
 
         /// <summary>

@@ -185,16 +185,10 @@ namespace Holoville.HOTween
         /// </param>
         internal override void Kill(bool p_autoRemoveFromHOTween)
         {
-            if (_destroyed)
-            {
-                return;
-            }
+            if (_destroyed) return;
 
             // Remove tween from OverwriteManager if it was allowed on HOTween's initialization.
-            if (HOTween.overwriteManager != null)
-            {
-                HOTween.overwriteManager.RemoveTween(this);
-            }
+            if (HOTween.overwriteManager != null) HOTween.overwriteManager.RemoveTween(this);
 
             plugins = null;
             _target = null;

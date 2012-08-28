@@ -40,7 +40,7 @@ namespace Holoville.HOTween
     /// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
     /// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
     /// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-    /// <para>Version: 1.1.400</para>
+    /// <para>Version: 1.1.401</para>
     /// </summary>
     public class HOTween : MonoBehaviour
     {
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.400";
+        public const string VERSION = "1.1.401";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1850,6 +1850,7 @@ namespace Holoville.HOTween
 
         static void DoFilteredKill(int p_index, bool p_optionalBool)
         {
+            tweens[p_index].Kill(false);
             tweens.RemoveAt(p_index);
         }
 
