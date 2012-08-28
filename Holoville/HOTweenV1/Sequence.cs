@@ -131,7 +131,7 @@ namespace Holoville.HOTween
 
             if (p_twMember != null)
             {
-                HOTween.Kill(p_twMember);
+                HOTween.RemoveFromTweens(p_twMember);
                 ((ABSTweenComponent)p_twMember).contSequence = this;
                 CheckSpeedBasedTween(p_twMember);
             }
@@ -185,7 +185,7 @@ namespace Holoville.HOTween
 
             if (p_twMember != null)
             {
-                HOTween.Kill(p_twMember);
+                HOTween.RemoveFromTweens(p_twMember);
                 ((ABSTweenComponent)p_twMember).contSequence = this;
                 CheckSpeedBasedTween(p_twMember);
             }
@@ -227,7 +227,7 @@ namespace Holoville.HOTween
         {
             if (p_twMember != null)
             {
-                HOTween.Kill(p_twMember);
+                HOTween.RemoveFromTweens(p_twMember);
                 ((ABSTweenComponent)p_twMember).contSequence = this;
                 CheckSpeedBasedTween(p_twMember);
             }
