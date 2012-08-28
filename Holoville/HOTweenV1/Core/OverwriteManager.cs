@@ -59,42 +59,33 @@ namespace Holoville.HOTween.Core
 
         public void AddTween(Tweener p_tween)
         {
-            if (enabled)
-            {
+            if (enabled) {
                 // Check running tweens for eventual overwrite.
                 List<ABSTweenPlugin> addPlugs = p_tween.plugins;
 
                 int runningTweensCount = runningTweens.Count - 1;
                 int addPlugsCount = addPlugs.Count;
 
-                for (int i = runningTweensCount; i > -1; --i)
-                {
+                for (int i = runningTweensCount; i > -1; --i) {
                     Tweener tw = runningTweens[i];
                     List<ABSTweenPlugin> twPlugins = tw.plugins;
                     int twPluginsCount = twPlugins.Count;
 
-                    if (tw.target == p_tween.target)
-                    {
+                    if (tw.target == p_tween.target) {
                         // Check internal plugins.
-                        for (int n = 0; n < addPlugsCount; ++n)
-                        {
+                        for (int n = 0; n < addPlugsCount; ++n) {
                             ABSTweenPlugin addPlug = addPlugs[n];
-                            for (int c = twPluginsCount - 1; c > -1; --c)
-                            {
+                            for (int c = twPluginsCount - 1; c > -1; --c) {
                                 ABSTweenPlugin plug = twPlugins[c];
-                                if (plug.propName == addPlug.propName && (addPlug.pluginId == -1 || plug.pluginId == -1 || plug.pluginId == addPlug.pluginId))
-                                {
-                                    if (tw.isSequenced && p_tween.isSequenced && tw.contSequence == p_tween.contSequence)
-                                    {
+                                if (plug.propName == addPlug.propName && (addPlug.pluginId == -1 || plug.pluginId == -1 || plug.pluginId == addPlug.pluginId)) {
+                                    if (tw.isSequenced && p_tween.isSequenced && tw.contSequence == p_tween.contSequence) {
                                         goto NEXT_TWEEN;
                                     }
-                                    if (!tw.isSequenced || !tw.isComplete)
-                                    {
+                                    if (!tw.isSequenced || !tw.isComplete) {
                                         // Overwrite old plugin.
                                         twPlugins.RemoveAt(c);
                                         twPluginsCount--;
-                                        if (HOTween.isEditor && HOTween.warningLevel == WarningLevel.Verbose)
-                                        {
+                                        if (HOTween.isEditor && HOTween.warningLevel == WarningLevel.Verbose) {
                                             string t0 = addPlug.GetType().ToString();
                                             t0 = t0.Substring(t0.LastIndexOf(".") + 1);
                                             string t1 = plug.GetType().ToString();
@@ -102,16 +93,23 @@ namespace Holoville.HOTween.Core
                                             TweenWarning.Log(t0 + " is overwriting " + t1 + " for " + tw.target + "." + plug.propName);
                                         }
                                         // Check if whole tween needs to be removed.
-                                        if (twPluginsCount == 0)
-                                        {
-                                            if (tw.isSequenced)
-                                            {
+                                        bool tweenKilled = false;
+                                        if (twPluginsCount == 0) {
+                                            if (tw.isSequenced) {
                                                 tw.contSequence.Remove(tw);
                                             }
                                             runningTweens.RemoveAt(i);
                                             tw.Kill(false);
-                                            goto NEXT_TWEEN;
+                                            tweenKilled = true;
                                         }
+                                        // Dispatch eventual pluginOverwritten event
+                                        if (tw.onPluginOverwritten != null) {
+                                            tw.onPluginOverwritten();
+                                        } else if (tw.onPluginOverwrittenWParms != null) {
+                                            tw.onPluginOverwrittenWParms(new TweenEvent(tw, tw.onPluginOverwrittenParms));
+                                        }
+                                        // If whole tween was killed jump to next tween
+                                        if (tweenKilled) goto NEXT_TWEEN;
                                     }
                                 }
                             }
@@ -127,10 +125,8 @@ namespace Holoville.HOTween.Core
         public void RemoveTween(Tweener p_tween)
         {
             int runningTweensCount = runningTweens.Count;
-            for (int i = 0; i < runningTweensCount; ++i)
-            {
-                if (runningTweens[i] == p_tween)
-                {
+            for (int i = 0; i < runningTweensCount; ++i) {
+                if (runningTweens[i] == p_tween) {
                     runningTweens.RemoveAt(i);
                     break;
                 }

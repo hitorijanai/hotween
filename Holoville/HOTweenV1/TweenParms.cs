@@ -47,6 +47,9 @@ namespace Holoville.HOTween
         float delay;
         List<HOTPropData> propDatas;
         bool isFrom;
+        TweenDelegate.TweenCallback onPluginOverwritten;
+        TweenDelegate.TweenCallbackWParms onPluginOverwrittenWParms;
+        object[] onPluginOverwrittenParms;
 
         // READ-ONLY GETS /////////////////////////////////////////
 
@@ -87,6 +90,9 @@ namespace Holoville.HOTween
             p_tweenObj._easePeriod = easePeriod;
             p_tweenObj._delay = p_tweenObj.delayCount = delay;
             p_tweenObj.isFrom = isFrom;
+            p_tweenObj.onPluginOverwritten = onPluginOverwritten;
+            p_tweenObj.onPluginOverwrittenWParms = onPluginOverwrittenWParms;
+            p_tweenObj.onPluginOverwrittenParms = onPluginOverwrittenParms;
 
             // Parse properties and create/set plugins.
             p_tweenObj.plugins = new List<ABSTweenPlugin>();
@@ -728,6 +734,37 @@ namespace Holoville.HOTween
                 p_value,
                 p_options
             };
+            return this;
+        }
+
+        /// <summary>
+        /// Function to call when one of the plugins used in the tween gets overwritten
+        /// (available only if OverwriteManager is active).
+        /// </summary>
+        /// <param name="p_function">
+        /// The function to call, who must return <c>void</c> and accept no parameters.
+        /// </param>
+        public TweenParms OnPluginOverwritten(TweenDelegate.TweenCallback p_function)
+        {
+            onPluginOverwritten = p_function;
+            return this;
+        }
+
+        /// <summary>
+        /// Function to call when one of the plugins used in the tween gets overwritten
+        /// (available only if OverwriteManager is active).
+        /// </summary>
+        /// <param name="p_function">
+        /// The function to call.
+        /// It must return <c>void</c> and has to accept a single parameter of type <see cref="TweenEvent"/>.
+        /// </param>
+        /// <param name="p_funcParms">
+        /// Additional comma separated parameters to pass to the function.
+        /// </param>
+        public TweenParms OnPluginOverwritten(TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms)
+        {
+            onPluginOverwrittenWParms = p_function;
+            onPluginOverwrittenParms = p_funcParms;
             return this;
         }
 

@@ -52,6 +52,10 @@ namespace Holoville.HOTween
         internal bool isFrom; // Indicates whether this is a FROM or a TO tween.
         internal float delayCount;
 
+        internal TweenDelegate.TweenCallback onPluginOverwritten;
+        internal TweenDelegate.TweenCallbackWParms onPluginOverwrittenWParms;
+        internal object[] onPluginOverwrittenParms;
+
         // REFERENCES /////////////////////////////////////////////
 
         internal List<ABSTweenPlugin> plugins;
