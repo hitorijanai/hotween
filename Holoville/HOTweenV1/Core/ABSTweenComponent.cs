@@ -758,7 +758,11 @@ namespace Holoville.HOTween.Core
             };
             ApplyCallback(true, p_callbackType, null, cb, cbParms);
         }
-        void ApplyCallback(bool p_wParms, CallbackType p_callbackType, TweenDelegate.TweenCallback p_callback, TweenDelegate.TweenCallbackWParms p_callbackWParms, params object[] p_callbackParms)
+        /// <summary>
+        /// Assigns the given callback to this Tweener/Sequence,
+        /// overwriting any existing callbacks of the same type.
+        /// </summary>
+        protected virtual void ApplyCallback(bool p_wParms, CallbackType p_callbackType, TweenDelegate.TweenCallback p_callback, TweenDelegate.TweenCallbackWParms p_callbackWParms, params object[] p_callbackParms)
         {
             switch (p_callbackType) {
                 case CallbackType.OnStart:
@@ -795,6 +799,9 @@ namespace Holoville.HOTween.Core
                     onRewinded = p_callback;
                     onRewindedWParms = p_callbackWParms;
                     onRewindedParms = p_callbackParms;
+                    break;
+                case CallbackType.OnPluginOverwritten:
+                    TweenWarning.Log("ApplyCallback > OnPluginOverwritten type is available only with Tweeners and not with Sequences");
                     break;
             }
         }

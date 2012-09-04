@@ -56,6 +56,11 @@ namespace Holoville.HOTween
         /// <summary>
         /// Called when the tween is rewinded
         /// </summary>
-        OnRewinded
+        OnRewinded,
+        /// <summary>
+        /// Works only with Tweeners, and not with Sequences.
+        /// Called when a plugin of the Tweens is overwritten by the OverwriteManager.
+        /// </summary>
+        OnPluginOverwritten
     }
 }

@@ -347,6 +347,27 @@ namespace Holoville.HOTween
             _easeOvershootOrAmplitude = HOTween.defEaseOvershootOrAmplitude;
             _easePeriod = HOTween.defEasePeriod;
             _originalEaseType = HOTween.defEaseType;
+            onPluginOverwritten = null;
+            onStepCompleteWParms = null;
+            onPluginOverwrittenParms = null;
+        }
+
+        /// <summary>
+        /// Assigns the given callback to this Tweener/Sequence,
+        /// overwriting any existing callbacks of the same type.
+        /// </summary>
+        protected override void ApplyCallback(bool p_wParms, CallbackType p_callbackType, TweenDelegate.TweenCallback p_callback, TweenDelegate.TweenCallbackWParms p_callbackWParms, params object[] p_callbackParms)
+        {
+            switch (p_callbackType) {
+                case CallbackType.OnPluginOverwritten:
+                    onPluginOverwritten = p_callback;
+                    onPluginOverwrittenWParms = p_callbackWParms;
+                    onPluginOverwrittenParms = p_callbackParms;
+                    break;
+                default:
+                    base.ApplyCallback(p_wParms, p_callbackType, p_callback, p_callbackWParms, p_callbackParms);
+                    break;
+            }
         }
 
         /// <summary>
