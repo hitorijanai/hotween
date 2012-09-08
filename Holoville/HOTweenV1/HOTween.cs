@@ -133,6 +133,8 @@ namespace Holoville.HOTween
         static bool isPermanent; // If TRUE doesn't destroy HOTween when all tweens are killed.
         static bool renameInstToCountTw; // If TRUE renames HOTween's instance to show running tweens.
         static float time;
+        static bool isUpdateLoop; // TRUE while inside the DoUpdate loop
+        static List<int> tweensToRemoveIndexes = new List<int>(); // Used for removing tweens that were killed during an update 
 
         // REFERENCES /////////////////////////////////////////////
 
@@ -1832,7 +1834,8 @@ namespace Holoville.HOTween
 
         static void DoUpdate(UpdateType p_updateType, float p_elapsed)
         {
-            List<int> tweensToRemoveIndexes = null;
+            tweensToRemoveIndexes.Clear();
+            isUpdateLoop = true;
             int tweensCount = tweens.Count;
             for (int i = 0; i < tweensCount; ++i ) {
                 ABSTweenComponent tw = tweens[i];
@@ -1841,14 +1844,16 @@ namespace Holoville.HOTween
                     if (tw.destroyed || tw.autoKillOnComplete) {
                         // ...autoKill: store for out-of-loop removal
                         tw.Kill(false);
-                        if (tweensToRemoveIndexes == null) tweensToRemoveIndexes = new List<int>();
-                        tweensToRemoveIndexes.Add(i);
+                        if (tweensToRemoveIndexes.IndexOf(i) == -1) tweensToRemoveIndexes.Add(i);
                     }
                 }
             }
-            if (tweensToRemoveIndexes != null) {
-                // Remove killed tweens
-                int tweensToRemoveCount = tweensToRemoveIndexes.Count;
+            isUpdateLoop = false;
+
+            // Remove eventual killed tweens
+            int tweensToRemoveCount = tweensToRemoveIndexes.Count;
+            if (tweensToRemoveCount > 0) {
+                tweensToRemoveIndexes.Sort();
                 for (int i = 0; i < tweensToRemoveCount; ++i) {
                     tweens.RemoveAt(tweensToRemoveIndexes[i] - i);
                 }
@@ -1868,7 +1873,13 @@ namespace Holoville.HOTween
         static void DoFilteredKill(int p_index, bool p_optionalBool)
         {
             tweens[p_index].Kill(false);
-            tweens.RemoveAt(p_index);
+            if (isUpdateLoop) {
+                // We're inside the DoUpdate loop:
+                // add index to tweens to remove and let DoUpdate manage it in the correct order
+                if (tweensToRemoveIndexes.IndexOf(p_index) == -1) tweensToRemoveIndexes.Add(p_index);
+            } else {
+                tweens.RemoveAt(p_index);
+            }
         }
 
         static void DoFilteredPause(int p_index, bool p_optionalBool)
