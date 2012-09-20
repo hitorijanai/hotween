@@ -846,6 +846,12 @@ namespace Holoville.HOTween.Core
         internal abstract List<IHOTweenComponent> GetTweensById(string p_id);
 
         /// <summary>
+        /// Returns a list of the eventual existing tweens with the given intId within this ABSTweenComponent,
+        /// nested tweens included (or an empty list if no tweens were found).
+        /// </summary>
+        internal abstract List<IHOTweenComponent> GetTweensByIntId(int p_intId);
+
+        /// <summary>
         /// Used internally by HOTween, to avoid having the tween calling a kill while HOTween will already be killing it.
         /// </summary>
         internal abstract void Complete(bool p_doAutoKill);

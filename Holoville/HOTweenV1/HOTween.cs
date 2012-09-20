@@ -24,7 +24,7 @@
 // THE SOFTWARE.
 
 // Created: 2011/12/13
-// Last update: 2012/09/08
+// Last update: 2012/09/20
 
 using System.Collections;
 using System.Collections.Generic;
@@ -40,7 +40,7 @@ namespace Holoville.HOTween
     /// Controls all tween types (<see cref="Tweener"/> and <see cref="Sequence"/>),
     /// and is used to directly create Tweeners (to create Sequences, directly create a new <see cref="Sequence"/> instead).
     /// <para>Author: Daniele Giardini (http://www.holoville.com)</para>
-    /// <para>Version: 1.1.411</para>
+    /// <para>Version: 1.1.420</para>
     /// </summary>
     public class HOTween : MonoBehaviour
     {
@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.411";
+        public const string VERSION = "1.1.420";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1738,6 +1738,29 @@ namespace Holoville.HOTween
                     res.AddRange(tw.GetTweensById(p_id));
                 } else {
                     if (tw.id == p_id) res.Add(tw);
+                }
+            }
+            return res;
+        }
+
+        /// <summary>
+        /// Returns a list of the eventual existing tweens with the given intId,
+        /// (empty if no Tweener/Sequence was found).
+        /// </summary>
+        /// <param name="p_intId">IntId to look for</param>
+        /// <param name="p_includeNestedTweens">If TRUE also searches inside nested tweens</param>
+        /// <returns></returns>
+        public static List<IHOTweenComponent> GetTweensByIntId(int p_intId, bool p_includeNestedTweens)
+        {
+            List<IHOTweenComponent> res = new List<IHOTweenComponent>();
+            if (tweens == null) return res;
+            int tweensCount = tweens.Count;
+            for (int i = 0; i < tweensCount; ++i) {
+                ABSTweenComponent tw = tweens[i];
+                if (p_includeNestedTweens) {
+                    res.AddRange(tw.GetTweensByIntId(p_intId));
+                } else {
+                    if (tw.intId == p_intId) res.Add(tw);
                 }
             }
             return res;

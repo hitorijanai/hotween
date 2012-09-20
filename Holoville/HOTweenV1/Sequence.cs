@@ -421,6 +421,22 @@ namespace Holoville.HOTween
             return res;
         }
 
+        /// <summary>
+        /// Returns a list of the eventual existing tweens with the given Id within this Sequence,
+        /// nested tweens included (or an empty list if no tweens were found).
+        /// </summary>
+        internal override List<IHOTweenComponent> GetTweensByIntId(int p_intId)
+        {
+            List<IHOTweenComponent> res = new List<IHOTweenComponent>();
+            if (intId == p_intId) res.Add(this);
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i) {
+                HOTSeqItem item = items[i];
+                if (item.twMember != null) res.AddRange(item.twMember.GetTweensByIntId(p_intId));
+            }
+            return res;
+        }
+
         // ===================================================================================
         // INTERNAL METHODS ------------------------------------------------------------------
 

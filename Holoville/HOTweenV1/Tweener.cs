@@ -429,6 +429,17 @@ namespace Holoville.HOTween
             return res;
         }
 
+        /// <summary>
+        /// Returns a list containing this tween if the id is the same as the given one 
+        /// (or and empty list if no tweens were found).
+        /// </summary>
+        internal override List<IHOTweenComponent> GetTweensByIntId(int p_intId)
+        {
+            List<IHOTweenComponent> res = new List<IHOTweenComponent>();
+            if (intId == p_intId) res.Add(this);
+            return res;
+        }
+
         // ===================================================================================
         // PLUGINS SPECIFIC METHODS ----------------------------------------------------------
 
