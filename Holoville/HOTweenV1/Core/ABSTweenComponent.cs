@@ -729,7 +729,7 @@ namespace Holoville.HOTween.Core
         /// overwriting any existing callbacks of the same type.
         /// </summary>
         /// <param name="p_callbackType">The type of callback to apply</param>
-        /// <param name="p_callback">The function to call, who must return <c>void</c> and accept no parameters.
+        /// <param name="p_callback">The function to call.
         /// It must return <c>void</c> and has to accept a single parameter of type <see cref="TweenEvent"/></param>
         /// <param name="p_callbackParms">Additional comma separated parameters to pass to the function</param>
         public void ApplyCallback(CallbackType p_callbackType, TweenDelegate.TweenCallbackWParms p_callback, params object[] p_callbackParms)
@@ -750,7 +750,7 @@ namespace Holoville.HOTween.Core
         public void ApplyCallback(CallbackType p_callbackType, GameObject p_sendMessageTarget, string p_methodName, object p_value, SendMessageOptions p_options = SendMessageOptions.RequireReceiver)
         {
             TweenDelegate.TweenCallbackWParms cb = HOTween.DoSendMessage;
-            object[] cbParms = new object[4] {
+            object[] cbParms = new[] {
                 p_sendMessageTarget,
                 p_methodName,
                 p_value,
