@@ -169,8 +169,15 @@ namespace Holoville.HOTween.Core
 
         /// <summary>
         /// Used to determine if OnUpdate callbacks should be called.
+        /// Refreshed at the end of each update.
         /// </summary>
         protected float prevFullElapsed;
+
+        /// <summary>
+        /// Previously completed loops.
+        /// Refrehsed at the end of each update.
+        /// </summary>
+        protected int prevCompletedLoops;
 
         // GETS/SETS //////////////////////////////////////////////
 
@@ -496,16 +503,14 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void Play()
         {
-            if (_enabled)
-            {
+            if (_enabled) {
                 PlayIfPaused();
             }
         }
 
         void PlayIfPaused()
         {
-            if (_isPaused)
-            {
+            if (_isPaused) {
                 _isPaused = false;
                 OnPlay();
             }
@@ -516,8 +521,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void PlayForward()
         {
-            if (_enabled)
-            {
+            if (_enabled) {
                 _isReversed = false;
                 PlayIfPaused();
             }
@@ -528,8 +532,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void PlayBackwards()
         {
-            if (_enabled)
-            {
+            if (_enabled) {
                 _isReversed = true;
                 PlayIfPaused();
             }
@@ -540,8 +543,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void Pause()
         {
-            if (_enabled && !_isPaused)
-            {
+            if (_enabled && !_isPaused) {
                 _isPaused = true;
                 OnPause();
             }
@@ -563,8 +565,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void Reverse()
         {
-            if (_enabled)
-            {
+            if (_enabled) {
                 _isReversed = !_isReversed;
             }
         }
@@ -664,8 +665,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public IEnumerator WaitForCompletion()
         {
-            while (!_isComplete)
-            {
+            while (!_isComplete) {
                 yield return 0;
             }
             yield break;
@@ -969,12 +969,9 @@ namespace Holoville.HOTween.Core
             if (steadyIgnoreCallbacks || ignoreCallbacks) return;
 
             _hasStarted = true;
-            if (onStart != null)
-            {
+            if (onStart != null) {
                 onStart();
-            }
-            else if (onStartWParms != null)
-            {
+            } else if (onStartWParms != null) {
                 onStartWParms(new TweenEvent(this, onStartParms));
             }
         }
@@ -984,16 +981,12 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnUpdate()
         {
-            if (steadyIgnoreCallbacks || ignoreCallbacks)
-            {
+            if (steadyIgnoreCallbacks || ignoreCallbacks) {
                 return;
             }
-            if (onUpdate != null)
-            {
+            if (onUpdate != null) {
                 onUpdate();
-            }
-            else if (onUpdateWParms != null)
-            {
+            } else if (onUpdateWParms != null) {
                 onUpdateWParms(new TweenEvent(this, onUpdateParms));
             }
         }
@@ -1003,16 +996,12 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnPause()
         {
-            if (steadyIgnoreCallbacks || ignoreCallbacks)
-            {
+            if (steadyIgnoreCallbacks || ignoreCallbacks) {
                 return;
             }
-            if (onPause != null)
-            {
+            if (onPause != null) {
                 onPause();
-            }
-            else if (onPauseWParms != null)
-            {
+            } else if (onPauseWParms != null) {
                 onPauseWParms(new TweenEvent(this, onPauseParms));
             }
         }
@@ -1022,16 +1011,12 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnPlay()
         {
-            if (steadyIgnoreCallbacks || ignoreCallbacks)
-            {
+            if (steadyIgnoreCallbacks || ignoreCallbacks) {
                 return;
             }
-            if (onPlay != null)
-            {
+            if (onPlay != null) {
                 onPlay();
-            }
-            else if (onPlayWParms != null)
-            {
+            } else if (onPlayWParms != null) {
                 onPlayWParms(new TweenEvent(this, onPlayParms));
             }
         }
@@ -1041,16 +1026,12 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnRewinded()
         {
-            if (steadyIgnoreCallbacks || ignoreCallbacks)
-            {
+            if (steadyIgnoreCallbacks || ignoreCallbacks) {
                 return;
             }
-            if (onRewinded != null)
-            {
+            if (onRewinded != null) {
                 onRewinded();
-            }
-            else if (onRewindedWParms != null)
-            {
+            } else if (onRewindedWParms != null) {
                 onRewindedWParms(new TweenEvent(this, onRewindedParms));
             }
         }
@@ -1060,16 +1041,12 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnStepComplete()
         {
-            if (steadyIgnoreCallbacks || ignoreCallbacks)
-            {
+            if (steadyIgnoreCallbacks || ignoreCallbacks) {
                 return;
             }
-            if (onStepComplete != null)
-            {
+            if (onStepComplete != null) {
                 onStepComplete();
-            }
-            else if (onStepCompleteWParms != null)
-            {
+            } else if (onStepCompleteWParms != null) {
                 onStepCompleteWParms(new TweenEvent(this, onStepCompleteParms));
             }
         }
@@ -1106,7 +1083,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void SetFullDuration()
         {
-            _fullDuration = (_loops < 0 ? float.PositiveInfinity : _duration*_loops);
+            _fullDuration = (_loops < 0 ? float.PositiveInfinity : _duration * _loops);
         }
 
         /// <summary>
@@ -1115,17 +1092,12 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void SetElapsed()
         {
-            if (_duration == 0 || _loops >= 0 && _completedLoops >= _loops)
-            {
+            if (_duration == 0 || _loops >= 0 && _completedLoops >= _loops) {
                 _elapsed = _duration;
-            }
-            else if (_fullElapsed < _duration)
-            {
+            } else if (_fullElapsed < _duration) {
                 _elapsed = _fullElapsed;
-            }
-            else
-            {
-                _elapsed = _fullElapsed%_duration;
+            } else {
+                _elapsed = _fullElapsed % _duration;
             }
         }
 
@@ -1148,8 +1120,8 @@ namespace Holoville.HOTween.Core
                 }
             }
             _isLoopingBack = (_loopType != LoopType.Restart && _loopType != LoopType.Incremental &&
-                              (_loops > 0 && (_completedLoops < _loops && _completedLoops%2 != 0 || _completedLoops >= _loops && _completedLoops%2 == 0)
-                               || _loops < 0 && _completedLoops%2 != 0));
+                              (_loops > 0 && (_completedLoops < _loops && _completedLoops % 2 != 0 || _completedLoops >= _loops && _completedLoops % 2 == 0)
+                               || _loops < 0 && _completedLoops % 2 != 0));
         }
 
         // ===================================================================================

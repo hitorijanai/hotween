@@ -38,7 +38,9 @@ namespace Holoville.HOTween
     {
         // VARS ///////////////////////////////////////////////////
 
-        int prevCompletedLoops; // Stored only during Incremental loop type.
+        bool hasCallbacks; // TRUE if a callback was appended/inserted and needs to be taken care of
+        int prevIncrementalCompletedLoops; // Stored only during Incremental loop type
+        float prevElapsed; // Used to manage if a callback should be called
 
         // REFERENCES /////////////////////////////////////////////
 
@@ -143,8 +145,8 @@ namespace Holoville.HOTween
         }
         void InsertCallback(float p_time, TweenDelegate.TweenCallback p_callback, TweenDelegate.TweenCallbackWParms p_callbackWParms, params object[] p_callbackParms)
         {
+            hasCallbacks = true;
             HOTSeqItem newItem = new HOTSeqItem(p_time, p_callback, p_callbackWParms, p_callbackParms);
-
             if (items == null) {
                 items = new List<HOTSeqItem> { newItem };
             } else {
@@ -600,26 +602,63 @@ namespace Holoville.HOTween
                 // prevCompleteLoops is stored only during Incremental loops,
                 // so that if the loop type is changed while the tween is running,
                 // the tween will change and update correctly.
-                if (prevCompletedLoops != _completedLoops) {
+                if (prevIncrementalCompletedLoops != _completedLoops) {
                     int currLoops = _completedLoops;
                     if (_loops != -1 && currLoops >= _loops) {
                         --currLoops; // Avoid to calculate completion loop increment
                     }
-                    int diff = currLoops - prevCompletedLoops;
+                    int diff = currLoops - prevIncrementalCompletedLoops;
                     if (diff != 0) {
                         SetIncremental(diff);
-                        prevCompletedLoops = currLoops;
+                        prevIncrementalCompletedLoops = currLoops;
                     }
                 }
-            } else if (prevCompletedLoops != 0) {
+            } else if (prevIncrementalCompletedLoops != 0) {
                 // Readapt to non incremental loop type.
-                SetIncremental(-prevCompletedLoops);
-                prevCompletedLoops = 0;
+                SetIncremental(-prevIncrementalCompletedLoops);
+                prevIncrementalCompletedLoops = 0;
+            }
+
+            HOTSeqItem item;
+            int itemsCount = items.Count;
+
+            // Manage appended/inserted callbacks
+            if (hasCallbacks && !_isPaused) {
+                List<HOTSeqItem> execCallbackItems = null;
+                for (int i = 0; i < itemsCount; ++i) {
+                    item = items[i];
+                    if (item.seqItemType == SeqItemType.Callback) {
+                        bool executeCallback;
+                        bool loopChanged = prevCompletedLoops != _completedLoops;
+                        bool wasLoopingBack = (_loopType == LoopType.Yoyo || _loopType == LoopType.YoyoInverse) && (_isLoopingBack && !loopChanged || loopChanged && !_isLoopingBack);
+                        float cbElapsed = _isLoopingBack ? _duration - _elapsed : _elapsed;
+                        float cbPrevElapsed = _isLoopingBack ? _duration - prevElapsed : prevElapsed;
+                        if (_isLoopingBack) {
+                            executeCallback = wasLoopingBack && (item.startTime >= cbElapsed || _completedLoops != prevCompletedLoops) && item.startTime <= cbPrevElapsed
+                            || item.startTime >= cbElapsed && (!_isComplete && _completedLoops != prevCompletedLoops || item.startTime <= cbPrevElapsed);
+                        } else {
+                            executeCallback = !wasLoopingBack && (item.startTime <= cbElapsed || _completedLoops != prevCompletedLoops) && item.startTime >= cbPrevElapsed
+                            || item.startTime <= cbElapsed && (!_isComplete && _completedLoops != prevCompletedLoops || item.startTime >= cbPrevElapsed);
+                        }
+                        if (executeCallback) {
+                            if (execCallbackItems == null) execCallbackItems = new List<HOTSeqItem>();
+                            if (item.startTime > cbElapsed) execCallbackItems.Insert(0, item);
+                            else execCallbackItems.Add(item);
+                        }
+                    }
+                }
+                if (execCallbackItems != null) {
+                    foreach (HOTSeqItem execCallbackItem in execCallbackItems) {
+                        if (execCallbackItem.callback != null) {
+                            execCallbackItem.callback();
+                        } else if (execCallbackItem.callbackWParms != null) {
+                            execCallbackItem.callbackWParms(new TweenEvent(this, execCallbackItem.callbackParms));
+                        }
+                    }
+                }
             }
 
             // Update the elements...
-            HOTSeqItem item;
-            int itemsCount = items.Count;
             if (_duration > 0) {
                 float twElapsed = (!_isLoopingBack ? _elapsed : _duration - _elapsed);
                 for (int i = itemsCount - 1; i > -1; --i) {
@@ -662,7 +701,9 @@ namespace Holoville.HOTween
             }
 
             ignoreCallbacks = false;
+            prevElapsed = _elapsed;
             prevFullElapsed = _fullElapsed;
+            prevCompletedLoops = _completedLoops;
 
             return complete;
         }
