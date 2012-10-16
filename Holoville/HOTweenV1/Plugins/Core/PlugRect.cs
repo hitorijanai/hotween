@@ -197,7 +197,7 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_diffIncr">
         /// The difference from the previous loop increment.
         /// </param>
-        internal override void SetIncremental(int p_diffIncr)
+        protected override void SetIncremental(int p_diffIncr)
         {
             Rect diffR = new Rect(diffChangeVal.x, diffChangeVal.y, diffChangeVal.width, diffChangeVal.height);
             diffR.x *= p_diffIncr;

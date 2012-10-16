@@ -526,13 +526,20 @@ namespace Holoville.HOTween.Plugins.Core
         protected abstract void SetChangeVal();
 
         /// <summary>
+        /// Used by Tweeners to force SetIncremental
+        /// (SetIncremental can't be made internal since
+        /// it needs to be overridden outside of HOTweem for custom plugin).
+        /// </summary>
+        internal void ForceSetIncremental(int p_diffIncr)
+        { SetIncremental(p_diffIncr); }
+        /// <summary>
         /// Sets the correct values in case of Incremental loop type.
         /// Also called by Tweener.ApplySequenceIncrement (used by Sequences during Incremental loops).
         /// </summary>
         /// <param name="p_diffIncr">
         /// The difference from the previous loop increment.
         /// </param>
-        internal abstract void SetIncremental(int p_diffIncr);
+        protected abstract void SetIncremental(int p_diffIncr);
 
         /// <summary>
         /// Sets the value of the controlled property.

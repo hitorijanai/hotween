@@ -49,7 +49,6 @@ namespace Holoville.HOTween
         internal bool _speedBased;
         internal float _delay;
 
-        internal bool isFrom; // Indicates whether this is a FROM or a TO tween.
         internal float delayCount;
 
         internal TweenDelegate.TweenCallback onPluginOverwritten;
@@ -68,6 +67,11 @@ namespace Holoville.HOTween
         PlugVector3Path pv3Path; // Reference to eventual plugVector3Path plugin (used for partial paths)
 
         // GETS/SETS //////////////////////////////////////////////
+
+        /// <summary>
+        /// Indicates whether this is a FROM or a TO tween.
+        /// </summary>
+        public bool isFrom { get; internal set; }
 
         /// <summary>
         /// Ease type of this tweener
@@ -804,7 +808,7 @@ namespace Holoville.HOTween
             if (plugins == null) return;
             int pluginsCount = plugins.Count;
             for (int i = 0; i < pluginsCount; ++i) {
-                plugins[i].SetIncremental(p_diffIncr);
+                plugins[i].ForceSetIncremental(p_diffIncr);
             }
         }
 
