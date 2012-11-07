@@ -42,6 +42,7 @@ namespace Holoville.HOTween
 
         bool speedBased;
         EaseType easeType = HOTween.defEaseType;
+        AnimationCurve easeAnimCurve; // Can be assigned instead than regular easing
         float easeOvershootOrAmplitude = HOTween.defEaseOvershootOrAmplitude;
         float easePeriod = HOTween.defEasePeriod;
         float delay;
@@ -86,6 +87,7 @@ namespace Holoville.HOTween
             if (speedBased) easeType = EaseType.Linear;
             p_tweenObj._speedBased = speedBased;
             p_tweenObj._easeType = easeType;
+            p_tweenObj._easeAnimationCurve = easeAnimCurve;
             p_tweenObj._easeOvershootOrAmplitude = easeOvershootOrAmplitude;
             p_tweenObj._easePeriod = easePeriod;
             p_tweenObj._delay = p_tweenObj.delayCount = delay;
@@ -263,6 +265,21 @@ namespace Holoville.HOTween
             easeType = p_easeType;
             easeOvershootOrAmplitude = p_amplitude;
             easePeriod = p_period;
+
+            return this;
+        }
+        /// <summary>
+        /// Sets the ease to use the given AnimationCurve.
+        /// If you set this tween to use speed instead than time,
+        /// this parameter becomes useless, because it will be managed internally.
+        /// </summary>
+        /// <param name="p_easeAnimationCurve">
+        /// The <see cref="AnimationCurve"/> to use.
+        /// </param>
+        public TweenParms Ease(AnimationCurve p_easeAnimationCurve)
+        {
+            easeType = EaseType.AnimationCurve;
+            easeAnimCurve = p_easeAnimationCurve;
 
             return this;
         }

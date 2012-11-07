@@ -186,6 +186,11 @@ namespace Holoville.HOTween
         EaseInOutBounce,
 
         /// <summary>
+        /// Don't assign this! It's assigned internally when setting the ease to an AnimationCurve
+        /// </summary>
+        AnimationCurve,
+
+        /// <summary>
         /// Ease in strong.
         /// OBSOLETE: use EaseInQuint instead.
         /// </summary>

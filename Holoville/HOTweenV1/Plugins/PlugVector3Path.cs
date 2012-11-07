@@ -142,7 +142,8 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_path">
         /// The <see cref="Vector3"/> path to tween through.
         /// </param>
-        public PlugVector3Path(Vector3[] p_path) : base(p_path, false) {}
+        public PlugVector3Path(Vector3[] p_path)
+            : base(p_path, false) {}
         /// <summary>
         /// Creates a new instance of this plugin using an absolute path.
         /// </summary>
@@ -152,7 +153,8 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_easeType">
         /// The <see cref="EaseType"/> to use.
         /// </param>
-        public PlugVector3Path(Vector3[] p_path, EaseType p_easeType) : base(p_path, p_easeType, false) {}
+        public PlugVector3Path(Vector3[] p_path, EaseType p_easeType)
+            : base(p_path, p_easeType, false) {}
         /// <summary>
         /// Creates a new instance of this plugin using the main ease type.
         /// </summary>
@@ -163,7 +165,8 @@ namespace Holoville.HOTween.Plugins
         /// If <c>true</c>, the path is considered relative to the starting value of the property, instead than absolute.
         /// Not compatible with <c>HOTween.From</c>.
         /// </param>
-        public PlugVector3Path(Vector3[] p_path, bool p_isRelative) : base(p_path, p_isRelative) {}
+        public PlugVector3Path(Vector3[] p_path, bool p_isRelative)
+            : base(p_path, p_isRelative) {}
         /// <summary>
         /// Creates a new instance of this plugin.
         /// </summary>
@@ -177,7 +180,23 @@ namespace Holoville.HOTween.Plugins
         /// If <c>true</c>, the path is considered relative to the starting value of the property, instead than absolute.
         /// Not compatible with <c>HOTween.From</c>.
         /// </param>
-        public PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative) : base(p_path, p_easeType, p_isRelative) {}
+        public PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative)
+            : base(p_path, p_easeType, p_isRelative) {}
+
+        /// <summary>
+        /// Creates a new instance of this plugin.
+        /// </summary>
+        /// <param name="p_path">
+        /// The <see cref="Vector3"/> path to tween through.
+        /// </param>
+        /// <param name="p_easeAnimCurve">
+        /// The <see cref="AnimationCurve"/> to use for easing.
+        /// </param>
+        /// <param name="p_isRelative">
+        /// If <c>true</c>, the given end value is considered relative instead than absolute.
+        /// </param>
+        public PlugVector3Path(Vector3[] p_path, AnimationCurve p_easeAnimCurve, bool p_isRelative)
+            : base(p_path, p_easeAnimCurve, p_isRelative) {}
 
         /// <summary>
         /// Init override.

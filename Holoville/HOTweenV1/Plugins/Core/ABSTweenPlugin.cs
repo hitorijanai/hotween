@@ -29,6 +29,7 @@ using System.Reflection;
 using FastDynamicMemberAccessor;
 #endif
 using Holoville.HOTween.Core;
+using Holoville.HOTween.Core.Easing;
 using UnityEngine;
 
 namespace Holoville.HOTween.Plugins.Core
@@ -85,8 +86,9 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         protected bool ignoreAccessor;
 
-        EaseType easeType; // Store so instance can be cloned and ease can be changed while playing.
+        EaseType easeType; // Stored so instance can be cloned and ease can be changed while playing.
         EaseInfo easeInfo;
+        EaseCurve easeCurve; // Used when assigning an AnimationCurve to the ease
 #if !MICRO
         IMemberAccessor valAccessor;
 #endif
@@ -204,7 +206,6 @@ namespace Holoville.HOTween.Plugins.Core
             isRelative = p_isRelative;
             _endVal = p_endVal;
         }
-
         /// <summary>
         /// Creates a new instance of this plugin with the given options.
         /// </summary>
@@ -224,6 +225,27 @@ namespace Holoville.HOTween.Plugins.Core
             easeType = p_easeType;
             easeInfo = EaseInfo.GetEaseInfo(p_easeType);
             ease = easeInfo.ease;
+        }
+        /// <summary>
+        /// Creates a new instance of this plugin with the given options.
+        /// </summary>
+        /// <param name="p_endVal">
+        /// The <see cref="object"/> value to tween to.
+        /// </param>
+        /// <param name="p_easeAnimCurve">
+        /// The <see cref="AnimationCurve"/> to use for easing.
+        /// </param>
+        /// <param name="p_isRelative">
+        /// If <c>true</c>, the given end value is considered relative instead than absolute.
+        /// </param>
+        protected ABSTweenPlugin(object p_endVal, AnimationCurve p_easeAnimCurve, bool p_isRelative)
+        {
+            isRelative = p_isRelative;
+            _endVal = p_endVal;
+            easeType = EaseType.AnimationCurve;
+            easeCurve = new EaseCurve(p_easeAnimCurve);
+            easeInfo = null;
+            ease = easeCurve.Evaluate;
         }
 
         // ===================================================================================
@@ -259,7 +281,7 @@ namespace Holoville.HOTween.Plugins.Core
             tweenObj = p_tweenObj;
             _propName = p_propertyName;
             targetType = p_targetType;
-            if (easeInfo == null || tweenObj.speedBased)
+            if (easeType != EaseType.AnimationCurve && easeInfo == null || tweenObj.speedBased || easeType == EaseType.AnimationCurve && easeCurve == null)
             {
                 SetEase(p_easeType);
             }
@@ -475,12 +497,10 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         internal void ReverseEase()
         {
-            if (easeInfo.inverseEase == null)
-            {
-                return; // No inverse for this ease.
-            }
-
             _easeReversed = !_easeReversed;
+            if (easeType == EaseType.AnimationCurve) return; // No reverse ease allowed
+            if (easeInfo.inverseEase == null) return; // No inverse for this ease.
+
             ease = (_easeReversed ? easeInfo.inverseEase : easeInfo.ease);
         }
 
@@ -490,8 +510,20 @@ namespace Holoville.HOTween.Plugins.Core
         internal void SetEase(EaseType p_easeType)
         {
             easeType = p_easeType;
-            easeInfo = EaseInfo.GetEaseInfo(easeType);
-            ease = easeInfo.ease;
+            if (easeType == EaseType.AnimationCurve) {
+                if (tweenObj._easeAnimationCurve != null) {
+                    easeCurve = new EaseCurve(tweenObj._easeAnimationCurve);
+                    ease = easeCurve.Evaluate;
+                } else {
+                    // Missing animation curve: set to normal ease
+                    easeType = EaseType.EaseOutQuad;
+                    easeInfo = EaseInfo.GetEaseInfo(easeType);
+                    ease = easeInfo.ease;
+                }
+            } else {
+                easeInfo = EaseInfo.GetEaseInfo(easeType);
+                ease = easeInfo.ease;
+            }
 
             if (_easeReversed && easeInfo.inverseEase != null)
             {

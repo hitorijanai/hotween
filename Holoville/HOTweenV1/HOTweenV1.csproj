@@ -71,6 +71,7 @@
     <Compile Include="Core\ABSTweenComponent.cs" />
     <Compile Include="Core\ABSTweenComponentParms.cs" />
     <Compile Include="Core\EaseInfo.cs" />
+    <Compile Include="Core\Easing\EaseCurve.cs" />
     <Compile Include="Core\Easing\Back.cs" />
     <Compile Include="Core\Easing\Bounce.cs" />
     <Compile Include="Core\Easing\Circ.cs" />

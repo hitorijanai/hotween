@@ -180,6 +180,21 @@ namespace Holoville.HOTween.Plugins
         {
         }
 
+        /// <summary>
+        /// Creates a new instance of this plugin.
+        /// </summary>
+        /// <param name="p_endVal">
+        /// The <see cref="float"/> value to tween to.
+        /// </param>
+        /// <param name="p_easeAnimCurve">
+        /// The <see cref="AnimationCurve"/> to use for easing.
+        /// </param>
+        /// <param name="p_isRelative">
+        /// If <c>true</c>, the given end value is considered relative instead than absolute.
+        /// </param>
+        public PlugVector3X(float p_endVal, AnimationCurve p_easeAnimCurve, bool p_isRelative)
+            : base(p_endVal, p_easeAnimCurve, p_isRelative) {}
+
         // ===================================================================================
         // METHODS ---------------------------------------------------------------------------
 

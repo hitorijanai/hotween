@@ -43,6 +43,7 @@ namespace Holoville.HOTween
         float _elapsedDelay;
 
         internal EaseType _easeType = HOTween.defEaseType;
+        internal AnimationCurve _easeAnimationCurve; // Eventual animation curve to use instead of regular ease
         internal float _easeOvershootOrAmplitude = HOTween.defEaseOvershootOrAmplitude;
         internal float _easePeriod = HOTween.defEasePeriod;
 
@@ -86,6 +87,26 @@ namespace Holoville.HOTween
                 int pluginsCount = plugins.Count;
                 for (int i = 0; i < pluginsCount; ++i)
                 {
+                    plugins[i].SetEase(_easeType);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ease type of this tweener
+        /// (consider that the plugins you have set might have different ease types).
+        /// Setting it will change the ease of all the plugins used by this tweener.
+        /// </summary>
+        public AnimationCurve easeAnimationCurve
+        {
+            get { return _easeAnimationCurve; }
+            set
+            {
+                _easeAnimationCurve = value;
+                _easeType = EaseType.AnimationCurve;
+                // Change ease type of all existing plugins.
+                int pluginsCount = plugins.Count;
+                for (int i = 0; i < pluginsCount; ++i) {
                     plugins[i].SetEase(_easeType);
                 }
             }

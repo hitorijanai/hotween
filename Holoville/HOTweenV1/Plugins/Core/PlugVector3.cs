@@ -95,9 +95,7 @@ namespace Holoville.HOTween.Plugins.Core
         /// The <see cref="Vector3"/> value to tween to.
         /// </param>
         public PlugVector3(Vector3 p_endVal)
-            : base(p_endVal, false)
-        {
-        }
+            : base(p_endVal, false) {}
 
         /// <summary>
         /// Creates a new instance of this plugin.
@@ -109,9 +107,7 @@ namespace Holoville.HOTween.Plugins.Core
         /// The <see cref="EaseType"/> to use.
         /// </param>
         public PlugVector3(Vector3 p_endVal, EaseType p_easeType)
-            : base(p_endVal, p_easeType, false)
-        {
-        }
+            : base(p_endVal, p_easeType, false) {}
 
         /// <summary>
         /// Creates a new instance of this plugin using the main ease type.
@@ -123,9 +119,7 @@ namespace Holoville.HOTween.Plugins.Core
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
         public PlugVector3(Vector3 p_endVal, bool p_isRelative)
-            : base(p_endVal, p_isRelative)
-        {
-        }
+            : base(p_endVal, p_isRelative) {}
 
         /// <summary>
         /// Creates a new instance of this plugin.
@@ -140,9 +134,22 @@ namespace Holoville.HOTween.Plugins.Core
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
         public PlugVector3(Vector3 p_endVal, EaseType p_easeType, bool p_isRelative)
-            : base(p_endVal, p_easeType, p_isRelative)
-        {
-        }
+            : base(p_endVal, p_easeType, p_isRelative) {}
+
+        /// <summary>
+        /// Creates a new instance of this plugin.
+        /// </summary>
+        /// <param name="p_endVal">
+        /// The <see cref="Vector3"/> value to tween to.
+        /// </param>
+        /// <param name="p_easeAnimCurve">
+        /// The <see cref="AnimationCurve"/> to use for easing.
+        /// </param>
+        /// <param name="p_isRelative">
+        /// If <c>true</c>, the given end value is considered relative instead than absolute.
+        /// </param>
+        public PlugVector3(Vector3 p_endVal, AnimationCurve p_easeAnimCurve, bool p_isRelative)
+            : base(p_endVal, p_easeAnimCurve, p_isRelative) {}
 
         // ===================================================================================
         // METHODS ---------------------------------------------------------------------------
