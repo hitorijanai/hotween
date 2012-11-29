@@ -49,8 +49,8 @@ namespace Holoville.HOTween.Plugins
 
         // VARS ///////////////////////////////////////////////////
 
-        internal static Type[] validPropTypes = {typeof(Vector3)};
-        internal static Type[] validValueTypes = {typeof(Vector3[])};
+        internal static Type[] validPropTypes = { typeof(Vector3) };
+        internal static Type[] validValueTypes = { typeof(Vector3[]) };
 
         internal Path path; // Internal so that HOTween OnDrawGizmo can find it and draw the paths.
         internal float pathPerc; // Stores the current percentage of the path, so that HOTween's OnDrawGizmo can show its velocity.
@@ -84,22 +84,16 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override object startVal
         {
-            get
-            {
-                return _startVal;
-            }
+            get { return _startVal; }
             set
             {
-                if (tweenObj.isFrom)
-                {
+                if (tweenObj.isFrom) {
                     _endVal = value;
                     Vector3[] ps = (Vector3[])value;
                     points = new Vector3[ps.Length];
                     Array.Copy(ps, points, ps.Length);
                     Array.Reverse(points);
-                }
-                else
-                {
+                } else {
                     _startVal = typedStartVal = (Vector3)value;
                 }
             }
@@ -111,18 +105,12 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override object endVal
         {
-            get
-            {
-                return _endVal;
-            }
+            get { return _endVal; }
             set
             {
-                if (tweenObj.isFrom)
-                {
+                if (tweenObj.isFrom) {
                     _startVal = typedStartVal = (Vector3)value;
-                }
-                else
-                {
+                } else {
                     _endVal = value;
                     Vector3[] ps = (Vector3[])value;
                     points = new Vector3[ps.Length];
@@ -143,7 +131,7 @@ namespace Holoville.HOTween.Plugins
         /// The <see cref="Vector3"/> path to tween through.
         /// </param>
         public PlugVector3Path(Vector3[] p_path)
-            : base(p_path, false) {}
+            : base(p_path, false) { }
         /// <summary>
         /// Creates a new instance of this plugin using an absolute path.
         /// </summary>
@@ -154,7 +142,7 @@ namespace Holoville.HOTween.Plugins
         /// The <see cref="EaseType"/> to use.
         /// </param>
         public PlugVector3Path(Vector3[] p_path, EaseType p_easeType)
-            : base(p_path, p_easeType, false) {}
+            : base(p_path, p_easeType, false) { }
         /// <summary>
         /// Creates a new instance of this plugin using the main ease type.
         /// </summary>
@@ -166,7 +154,7 @@ namespace Holoville.HOTween.Plugins
         /// Not compatible with <c>HOTween.From</c>.
         /// </param>
         public PlugVector3Path(Vector3[] p_path, bool p_isRelative)
-            : base(p_path, p_isRelative) {}
+            : base(p_path, p_isRelative) { }
         /// <summary>
         /// Creates a new instance of this plugin.
         /// </summary>
@@ -181,7 +169,7 @@ namespace Holoville.HOTween.Plugins
         /// Not compatible with <c>HOTween.From</c>.
         /// </param>
         public PlugVector3Path(Vector3[] p_path, EaseType p_easeType, bool p_isRelative)
-            : base(p_path, p_easeType, p_isRelative) {}
+            : base(p_path, p_easeType, p_isRelative) { }
 
         /// <summary>
         /// Creates a new instance of this plugin.
@@ -196,7 +184,7 @@ namespace Holoville.HOTween.Plugins
         /// If <c>true</c>, the given end value is considered relative instead than absolute.
         /// </param>
         public PlugVector3Path(Vector3[] p_path, AnimationCurve p_easeAnimCurve, bool p_isRelative)
-            : base(p_path, p_easeAnimCurve, p_isRelative) {}
+            : base(p_path, p_easeAnimCurve, p_isRelative) { }
 
         /// <summary>
         /// Init override.
@@ -205,8 +193,7 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         internal override void Init(Tweener p_tweenObj, string p_propertyName, EaseType p_easeType, Type p_targetType, PropertyInfo p_propertyInfo, FieldInfo p_fieldInfo)
         {
-            if (isRelative && p_tweenObj.isFrom)
-            {
+            if (isRelative && p_tweenObj.isFrom) {
                 isRelative = false;
                 TweenWarning.Log("\"" + p_tweenObj.target + "." + p_propertyName + "\": PlugVector3Path \"isRelative\" parameter is incompatible with HOTween.From. The tween will be treated as absolute.");
             }
@@ -317,8 +304,7 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         public PlugVector3Path OrientToPath(bool p_orient, float p_lookAhead, Axis p_lockRotationAxis)
         {
-            if (p_orient)
-            {
+            if (p_orient) {
                 orientType = OrientType.ToPath;
             }
             lookAheadVal = p_lookAhead;
@@ -339,8 +325,7 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         public PlugVector3Path LookAt(Transform p_transform)
         {
-            if (p_transform != null)
-            {
+            if (p_transform != null) {
                 orientType = OrientType.LookAtTransform;
                 lookTrans = p_transform;
             }
@@ -381,7 +366,7 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override float GetSpeedBasedDuration(float p_speed)
         {
-            return path.pathLength/p_speed;
+            return path.pathLength / p_speed;
         }
 
         /// <summary>
@@ -389,11 +374,9 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override void SetChangeVal()
         {
-            if (orientType != OrientType.None)
-            {
+            if (orientType != OrientType.None) {
                 // Store orient transform.
-                if (orientTrans == null)
-                {
+                if (orientTrans == null) {
                     orientTrans = tweenObj.target as Transform;
                 }
             }
@@ -480,8 +463,7 @@ namespace Holoville.HOTween.Plugins
             // Store arc lengths tables for constant speed.
             path.StoreTimeToArcLenTables(path.path.Length * SUBDIVISIONS_MULTIPLIER);
 
-            if (!isClosedPath)
-            {
+            if (!isClosedPath) {
                 // Store the changeVal used for Incremental loops.
                 diffChangeVal = pts[pointsLength - 2] - pts[1];
             }
@@ -495,16 +477,14 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void SetIncremental(int p_diffIncr)
         {
-            if (isClosedPath)
-            {
+            if (isClosedPath) {
                 return;
             }
 
             Vector3[] pathPs = path.path;
             int pathPsLength = pathPs.Length;
-            for (int i = 0; i < pathPsLength; ++i)
-            {
-                pathPs[i] += (diffChangeVal*p_diffIncr);
+            for (int i = 0; i < pathPsLength; ++i) {
+                pathPs[i] += (diffChangeVal * p_diffIncr);
             }
             path.changed = true;
         }
@@ -526,8 +506,7 @@ namespace Holoville.HOTween.Plugins
                     orientTrans.LookAt(lookPos, Vector3.up);
                     break;
                 case OrientType.LookAtTransform:
-                    if (orientTrans != null && !orientTrans.Equals(null))
-                    {
+                    if (orientTrans != null && !orientTrans.Equals(null)) {
                         orientTrans.LookAt(lookTrans.position, Vector3.up);
                     }
                     break;
