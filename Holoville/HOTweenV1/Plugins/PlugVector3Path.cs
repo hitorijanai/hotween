@@ -52,7 +52,7 @@ namespace Holoville.HOTween.Plugins
         internal static Type[] validPropTypes = { typeof(Vector3) };
         internal static Type[] validValueTypes = { typeof(Vector3[]) };
 
-        internal Path path; // Internal so that HOTween OnDrawGizmo can find it and draw the paths.
+        internal CurvedPath curvedPath; // Internal so that HOTween OnDrawGizmo can find it and draw the paths.
         internal float pathPerc; // Stores the current percentage of the path, so that HOTween's OnDrawGizmo can show its velocity.
         internal bool hasAdditionalStartingP; // True if the path was created with an additional starting point
 
@@ -366,7 +366,7 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override float GetSpeedBasedDuration(float p_speed)
         {
-            return path.pathLength / p_speed;
+            return curvedPath.pathLength / p_speed;
         }
 
         /// <summary>
@@ -458,10 +458,10 @@ namespace Holoville.HOTween.Plugins
             }
 
             // Create the path.
-            path = new Path(pts);
+            curvedPath = new CurvedPath(pts);
 
             // Store arc lengths tables for constant speed.
-            path.StoreTimeToArcLenTables(path.path.Length * SUBDIVISIONS_MULTIPLIER);
+            curvedPath.StoreTimeToArcLenTables(curvedPath.path.Length * SUBDIVISIONS_MULTIPLIER);
 
             if (!isClosedPath) {
                 // Store the changeVal used for Incremental loops.
@@ -481,12 +481,12 @@ namespace Holoville.HOTween.Plugins
                 return;
             }
 
-            Vector3[] pathPs = path.path;
+            Vector3[] pathPs = curvedPath.path;
             int pathPsLength = pathPs.Length;
             for (int i = 0; i < pathPsLength; ++i) {
                 pathPs[i] += (diffChangeVal * p_diffIncr);
             }
-            path.changed = true;
+            curvedPath.changed = true;
         }
 
         /// <summary>
@@ -498,7 +498,7 @@ namespace Holoville.HOTween.Plugins
         protected override void DoUpdate(float p_totElapsed)
         {
             pathPerc = ease(p_totElapsed, startPerc, changePerc, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
-            SetValue(GetConstPointOnPath(pathPerc, true, path));
+            SetValue(GetConstPointOnPath(pathPerc, true, curvedPath));
 
             if (orientType != OrientType.None && orientTrans != null && !orientTrans.Equals(null)) {
                 switch (orientType) {
@@ -513,7 +513,7 @@ namespace Holoville.HOTween.Plugins
                 case OrientType.ToPath:
                     float nextT = pathPerc + lookAheadVal;
                     if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
-                    Vector3 lookAtP = path.GetPoint(nextT);
+                    Vector3 lookAtP = curvedPath.GetPoint(nextT);
                     Vector3 transUp = orientTrans.up;
                     if (lockRotationAxis != Axis.None && orientTrans != null) {
                         if ((lockRotationAxis & Axis.X) == Axis.X) {
@@ -578,7 +578,7 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_path">
         /// IF not NULL uses the given path instead than the default one.
         /// </param>
-        internal Vector3 GetConstPointOnPath(float t, bool p_updatePathPerc, Path p_path)
+        internal Vector3 GetConstPointOnPath(float t, bool p_updatePathPerc, CurvedPath p_path)
         {
             if (p_updatePathPerc) return p_path.GetConstPoint(t, out pathPerc);
             return p_path.GetConstPoint(t);
@@ -589,12 +589,12 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         internal float GetWaypointsLengthPercentage(int p_pathWaypointId0, int p_pathWaypointId1)
         {
-            if (path.waypointsLength == null) path.StoreWaypointsLengths(SUBDIVISIONS_MULTIPLIER);
+            if (curvedPath.waypointsLength == null) curvedPath.StoreWaypointsLengths(SUBDIVISIONS_MULTIPLIER);
             float partialLen = 0;
             for (int i = p_pathWaypointId0; i < p_pathWaypointId1; ++i) {
-                partialLen += path.waypointsLength[i];
+                partialLen += curvedPath.waypointsLength[i];
             }
-            float perc = partialLen / path.pathLength;
+            float perc = partialLen / curvedPath.pathLength;
             if (perc > 1) perc = 1; // Limit in case of near errors (because full path length is calculated differently then sum of waypoints)
             return perc;
         }

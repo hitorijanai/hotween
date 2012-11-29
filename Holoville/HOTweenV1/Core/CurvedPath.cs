@@ -1,5 +1,5 @@
 //
-// Path.cs
+// CurvedPath.cs
 //
 // Author: Daniele Giardini
 //
@@ -34,7 +34,7 @@ namespace Holoville.HOTween.Core
     /// Used to manage movement on a Cardinal spline (of Catmull-Rom type).
     /// Contains code from Andeeee's CRSpline (http://forum.unity3d.com/threads/32954-Waypoints-and-constant-variable-speed-problems).
     /// </summary>
-    internal class Path
+    internal class CurvedPath
     {
         // VARS ///////////////////////////////////////////////////
 
@@ -55,12 +55,12 @@ namespace Holoville.HOTween.Core
         // ***********************************************************************************
 
         /// <summary>
-        /// Creates a new <see cref="Path"/> based on the given array of <see cref="Vector3"/> points.
+        /// Creates a new <see cref="CurvedPath"/> based on the given array of <see cref="Vector3"/> points.
         /// </summary>
         /// <param name="p_path">
         /// The <see cref="Vector3"/> array used to create the path.
         /// </param>
-        public Path(params Vector3[] p_path)
+        public CurvedPath(params Vector3[] p_path)
         {
             path = new Vector3[p_path.Length];
             Array.Copy(p_path, path, path.Length);
@@ -282,7 +282,7 @@ namespace Holoville.HOTween.Core
             int len = path.Length - 2;
             waypointsLength = new float[len];
             waypointsLength[0] = 0;
-            Path partialPath = null;
+            CurvedPath partialPath = null;
             for (int i = 2; i < len + 1; ++i) {
                 // Create partial path
                 Vector3[] pts = new Vector3[4];
@@ -291,7 +291,7 @@ namespace Holoville.HOTween.Core
                 pts[2] = path[i];
                 pts[3] = path[i + 1];
                 if (i == 2) {
-                    partialPath = new Path(pts);
+                    partialPath = new CurvedPath(pts);
                 } else {
                     partialPath.path = pts;
                 }

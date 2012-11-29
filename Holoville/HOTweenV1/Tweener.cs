@@ -1037,7 +1037,7 @@ namespace Holoville.HOTween
         /// <returns></returns>
         static int ConvertWaypointIdToPathId(PlugVector3Path p_plugVector3Path, int p_waypointId, bool p_isStartingWp)
         {
-            if (p_waypointId == -1) return p_isStartingWp ? 1 : p_plugVector3Path.path.path.Length - 2;
+            if (p_waypointId == -1) return p_isStartingWp ? 1 : p_plugVector3Path.curvedPath.path.Length - 2;
             if (p_plugVector3Path.hasAdditionalStartingP)
                 return p_waypointId + 2;
             else
