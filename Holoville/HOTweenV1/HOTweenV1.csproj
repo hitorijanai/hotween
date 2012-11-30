@@ -91,7 +91,7 @@
     <Compile Include="Core\FastDynamicMemberAccessor\MemberAccessorException.cs" />
     <Compile Include="Core\FastDynamicMemberAccessor\PropertyAccessor.cs" />
     <Compile Include="Core\OverwriteManager.cs" />
-    <Compile Include="Core\CurvedPath.cs" />
+    <Compile Include="Core\Path.cs" />
     <Compile Include="Core\TweenDelegate.cs" />
     <Compile Include="Core\TweenException.cs" />
     <Compile Include="Core\TweenInfo.cs" />
@@ -101,6 +101,7 @@
     <Compile Include="HOTween.cs" />
     <Compile Include="IHOTweenComponent.cs" />
     <Compile Include="LoopType.cs" />
+    <Compile Include="PathType.cs" />
     <Compile Include="Plugins\Core\ABSTweenPlugin.cs" />
     <Compile Include="Plugins\Core\PlugColor.cs" />
     <Compile Include="Plugins\Core\PlugFloat.cs" />

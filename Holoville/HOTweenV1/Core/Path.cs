@@ -1,5 +1,5 @@
 //
-// CurvedPath.cs
+// Path.cs
 //
 // Author: Daniele Giardini
 //
@@ -34,20 +34,21 @@ namespace Holoville.HOTween.Core
     /// Used to manage movement on a Cardinal spline (of Catmull-Rom type).
     /// Contains code from Andeeee's CRSpline (http://forum.unity3d.com/threads/32954-Waypoints-and-constant-variable-speed-problems).
     /// </summary>
-    internal class CurvedPath
+    internal class Path
     {
         // VARS ///////////////////////////////////////////////////
 
         public float pathLength; // Stored when storing time and length tables.
         public float[] waypointsLength; // Length of each waypoint, excluding control points
 
-        float[] timesTable; // Connected to lengthsTable, used for constant speed calculations
+        public float[] timesTable; // Connected to lengthsTable, used for constant speed calculations
         float[] lengthsTable; // Connected to timesTable, used for constant speed calculations
 
         internal Vector3[] path;
         internal bool changed; // Used by incremental loops to tell that drawPs should be recalculated.
 
         Vector3[] drawPs; // Used by GizmoDraw to store point only once.
+        PathType pathType;
 
 
         // ***********************************************************************************
@@ -55,13 +56,15 @@ namespace Holoville.HOTween.Core
         // ***********************************************************************************
 
         /// <summary>
-        /// Creates a new <see cref="CurvedPath"/> based on the given array of <see cref="Vector3"/> points.
+        /// Creates a new <see cref="Path"/> based on the given array of <see cref="Vector3"/> points.
         /// </summary>
+        /// <param name="p_type">Type of path</param>
         /// <param name="p_path">
         /// The <see cref="Vector3"/> array used to create the path.
         /// </param>
-        public CurvedPath(params Vector3[] p_path)
+        public Path(PathType p_type, params Vector3[] p_path)
         {
+            pathType = p_type;
             path = new Vector3[p_path.Length];
             Array.Copy(p_path, path, path.Length);
         }
@@ -70,33 +73,57 @@ namespace Holoville.HOTween.Core
         // METHODS ---------------------------------------------------------------------------
 
         /// <summary>
-        /// Gets the point on the curve at the given percentage (0 to 1).
+        /// Gets the point on the path at the given percentage (0 to 1).
         /// </summary>
         /// <param name="t">
         /// The percentage (0 to 1) at which to get the point.
         /// </param>
         public Vector3 GetPoint(float t)
         {
-            int numSections = path.Length - 3;
-            int tSec = (int)Math.Floor(t*numSections);
-            int currPt = numSections - 1;
-            if (currPt > tSec)
-            {
-                currPt = tSec;
+            switch (pathType) {
+            case PathType.Linear:
+                if (t <= 0) {
+                    return path[0];
+                } else {
+                    int startPIndex = 0;
+                    int endPIndex = 0;
+                    int len = timesTable.Length;
+                    for (int i = 0; i < len; i++) {
+                        if (timesTable[i] > t) {
+                            startPIndex = i - 1;
+                            endPIndex = i;
+                            break;
+                        }
+                    }
+                    float startPPerc = timesTable[startPIndex];
+                    float partialPerc = timesTable[endPIndex] - timesTable[startPIndex];
+                    partialPerc = t - startPPerc;
+                    float partialLen = pathLength * partialPerc;
+                    Vector3 wp0 = path[startPIndex];
+                    Vector3 wp1 = path[endPIndex];
+                    return wp0 + Vector3.ClampMagnitude(wp1 - wp0, partialLen);
+                }
+            default: // Curved
+                int numSections = path.Length - 3;
+                int tSec = (int)Math.Floor(t * numSections);
+                int currPt = numSections - 1;
+                if (currPt > tSec) {
+                    currPt = tSec;
+                }
+                float u = t * numSections - currPt;
+
+                Vector3 a = path[currPt];
+                Vector3 b = path[currPt + 1];
+                Vector3 c = path[currPt + 2];
+                Vector3 d = path[currPt + 3];
+
+                return .5f * (
+                    (-a + 3f * b - 3f * c + d) * (u * u * u)
+                    + (2f * a - 5f * b + 4f * c - d) * (u * u)
+                    + (-a + c) * u
+                    + 2f * b
+                );
             }
-            float u = t*numSections - currPt;
-
-            Vector3 a = path[currPt];
-            Vector3 b = path[currPt + 1];
-            Vector3 c = path[currPt + 2];
-            Vector3 d = path[currPt + 3];
-
-            return .5f*(
-                           (-a + 3f*b - 3f*c + d)*(u*u*u)
-                           + (2f*a - 5f*b + 4f*c - d)*(u*u)
-                           + (-a + c)*u
-                           + 2f*b
-                       );
         }
 
         /// <summary>
@@ -106,22 +133,21 @@ namespace Holoville.HOTween.Core
         public Vector3 Velocity(float t)
         {
             int numSections = path.Length - 3;
-            int tSec = (int)Math.Floor(t*numSections);
+            int tSec = (int)Math.Floor(t * numSections);
             int currPt = numSections - 1;
-            if (currPt > tSec)
-            {
+            if (currPt > tSec) {
                 currPt = tSec;
             }
-            float u = t*numSections - currPt;
+            float u = t * numSections - currPt;
 
             Vector3 a = path[currPt];
             Vector3 b = path[currPt + 1];
             Vector3 c = path[currPt + 2];
             Vector3 d = path[currPt + 3];
 
-            return 1.5f*(-a + 3f*b - 3f*c + d)*(u*u)
-                   + (2f*a - 5f*b + 4f*c - d)*u
-                   + .5f*c - .5f*a;
+            return 1.5f * (-a + 3f * b - 3f * c + d) * (u * u)
+                   + (2f * a - 5f * b + 4f * c - d) * u
+                   + .5f * c - .5f * a;
         }
 
         /// <summary>
@@ -146,60 +172,65 @@ namespace Holoville.HOTween.Core
             Gizmos.color = new Color(0.6f, 0.6f, 0.6f, 0.6f);
 
             Vector3 currPt;
-            if (changed || drawPs == null)
-            {
+            if (changed || pathType == PathType.Curved && drawPs == null) {
                 changed = false;
-                // Store draw points.
-                int subdivisions = path.Length*10;
-                drawPs = new Vector3[subdivisions + 1];
-                for (int i = 0; i <= subdivisions; ++i)
-                {
-                    float pm = i/(float)subdivisions;
-                    currPt = GetPoint(pm);
-                    drawPs[i] = currPt;
+                if (pathType == PathType.Curved) {
+                    // Store draw points.
+                    int subdivisions = path.Length * 10;
+                    drawPs = new Vector3[subdivisions + 1];
+                    for (int i = 0; i <= subdivisions; ++i) {
+                        float pm = i / (float)subdivisions;
+                        currPt = GetPoint(pm);
+                        drawPs[i] = currPt;
+                    }
                 }
             }
             // Draw path.
-            Vector3 prevPt = drawPs[0];
-            int drawPsLength = drawPs.Length;
-            for (int i = 1; i < drawPsLength; ++i)
-            {
-                currPt = drawPs[i];
-                Gizmos.DrawLine(currPt, prevPt);
-                prevPt = currPt;
+            Vector3 prevPt;
+            switch (pathType) {
+            case PathType.Linear:
+                prevPt = path[0];
+                int len = path.Length;
+                for (int i = 0; i < len; ++i ) {
+                    currPt = path[i];
+                    Gizmos.DrawLine(currPt, prevPt);
+                    prevPt = currPt;
+                }
+                break;
+            default: // Curved
+                prevPt = drawPs[0];
+                int drawPsLength = drawPs.Length;
+                for (int i = 1; i < drawPsLength; ++i) {
+                    currPt = drawPs[i];
+                    Gizmos.DrawLine(currPt, prevPt);
+                    prevPt = currPt;
+                }
+                break;
             }
             // Draw path control points.
             Gizmos.color = Color.white;
             int pathLength = path.Length - 1;
-            for (int i = 1; i < pathLength; ++i)
-            {
+            for (int i = 1; i < pathLength; ++i) {
                 Gizmos.DrawSphere(path[i], 0.1f);
             }
 
-            if (p_drawTrig && t != -1)
-            {
+            if (p_drawTrig && t != -1) {
                 Vector3 pos = GetPoint(t);
                 Vector3 prevP;
                 Vector3 p = pos;
                 Vector3 nextP;
                 float nextT = t + 0.0001f;
-                if (nextT > 1)
-                {
+                if (nextT > 1) {
                     nextP = pos;
                     p = GetPoint(t - 0.0001f);
                     prevP = GetPoint(t - 0.0002f);
-                }
-                else
-                {
+                } else {
                     float prevT = t - 0.0001f;
-                    if (prevT < 0)
-                    {
+                    if (prevT < 0) {
                         prevP = pos;
                         p = GetPoint(t + 0.0001f);
                         nextP = GetPoint(t + 0.0002f);
-                    }
-                    else
-                    {
+                    } else {
                         prevP = GetPoint(prevT);
                         nextP = GetPoint(nextT);
                     }
@@ -232,10 +263,14 @@ namespace Holoville.HOTween.Core
         /// <param name="t">The time percentage (0 to 1) at which to get the point </param>
         internal Vector3 GetConstPoint(float t)
         {
-            // Convert time percentage to constant path percentage
-            float pathPerc = GetConstPathPercFromTimePerc(t);
-
-            return GetPoint(pathPerc);
+            switch (pathType) {
+            case PathType.Linear:
+                return GetPoint(t);
+            default: // Curved
+                // Convert time percentage to constant path percentage
+                float pathPerc = GetConstPathPercFromTimePerc(t);
+                return GetPoint(pathPerc);
+            }
         }
         /// <summary>
         /// Returns the point at the given time percentage (0 to 1),
@@ -246,35 +281,66 @@ namespace Holoville.HOTween.Core
         /// <returns></returns>
         internal Vector3 GetConstPoint(float t, out float out_pathPerc)
         {
-            // Convert time percentage to constant path percentage
-            float pathPerc = GetConstPathPercFromTimePerc(t);
-            // Update pathPerc.
-            out_pathPerc = pathPerc;
-
-            return GetPoint(pathPerc);
-        }
-
-        internal void StoreTimeToArcLenTables(int p_subdivisions)
-        {
-            pathLength = 0;
-            float incr = 1f / p_subdivisions;
-            timesTable = new float[p_subdivisions];
-            lengthsTable = new float[p_subdivisions];
-
-            Vector3 prevP = GetPoint(0);
-
-            for (int i = 1; i < p_subdivisions + 1; ++i) {
-                float perc = incr * i;
-
-                Vector3 currP = GetPoint(perc);
-                pathLength += Vector3.Distance(currP, prevP);
-                prevP = currP;
-
-                timesTable[i - 1] = perc;
-                lengthsTable[i - 1] = pathLength;
+            switch (pathType) {
+            case PathType.Linear:
+                out_pathPerc = t;
+                return GetPoint(t);
+            default: // Curved
+                // Convert time percentage to constant path percentage
+                float pathPerc = GetConstPathPercFromTimePerc(t);
+                // Update pathPerc.
+                out_pathPerc = pathPerc;
+                return GetPoint(pathPerc);
             }
         }
 
+        // If path is linear, p_subdivisions is ignored,
+        // and waypointsLength are stored here instead than when calling StoreWaypointsLengths
+        internal void StoreTimeToLenTables(int p_subdivisions)
+        {
+            Vector3 prevP;
+            Vector3 currP;
+            float incr;
+            switch (pathType) {
+            case PathType.Linear:
+                pathLength = 0;
+                int pathCount = path.Length;
+                waypointsLength = new float[pathCount];
+                timesTable = new float[pathCount];
+                prevP = path[0];
+                for (int i = 0; i < pathCount; i++) {
+                    currP = path[i];
+                    float dist = Vector3.Distance(currP, prevP);
+                    pathLength += dist;
+                    prevP = currP;
+                    waypointsLength[i] = dist;
+                }
+                timesTable[0] = 0;
+                float tmpLen = 0;
+                for (int i = 1; i < pathCount; i++) {
+                    tmpLen += waypointsLength[i];
+                    timesTable[i] = tmpLen / pathLength;
+                }
+                break;
+            default: // Curved
+                pathLength = 0;
+                incr = 1f / p_subdivisions;
+                timesTable = new float[p_subdivisions];
+                lengthsTable = new float[p_subdivisions];
+                prevP = GetPoint(0);
+                for (int i = 1; i < p_subdivisions + 1; ++i) {
+                    float perc = incr * i;
+                    currP = GetPoint(perc);
+                    pathLength += Vector3.Distance(currP, prevP);
+                    prevP = currP;
+                    timesTable[i - 1] = perc;
+                    lengthsTable[i - 1] = pathLength;
+                }
+                break;
+            }
+        }
+
+        // If path is lineas, waypointsLengths were stored when calling StoreTimeToLenTables
         internal void StoreWaypointsLengths(int p_subdivisions)
         {
             // Create a relative path between each waypoint,
@@ -282,7 +348,7 @@ namespace Holoville.HOTween.Core
             int len = path.Length - 2;
             waypointsLength = new float[len];
             waypointsLength[0] = 0;
-            CurvedPath partialPath = null;
+            Path partialPath = null;
             for (int i = 2; i < len + 1; ++i) {
                 // Create partial path
                 Vector3[] pts = new Vector3[4];
@@ -291,7 +357,7 @@ namespace Holoville.HOTween.Core
                 pts[2] = path[i];
                 pts[3] = path[i + 1];
                 if (i == 2) {
-                    partialPath = new CurvedPath(pts);
+                    partialPath = new Path(pathType, pts);
                 } else {
                     partialPath.path = pts;
                 }

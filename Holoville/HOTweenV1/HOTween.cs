@@ -263,9 +263,9 @@ namespace Holoville.HOTween
             for (int i = 0; i < pluginsCount; ++i)
             {
                 PlugVector3Path pathPlug = plugs[i] as PlugVector3Path;
-                if (pathPlug != null && pathPlug.curvedPath != null)
+                if (pathPlug != null && pathPlug.path != null)
                 {
-                    pathPlug.curvedPath.GizmoDraw(pathPlug.pathPerc, false);
+                    pathPlug.path.GizmoDraw(pathPlug.pathPerc, false);
                 }
             }
         }
