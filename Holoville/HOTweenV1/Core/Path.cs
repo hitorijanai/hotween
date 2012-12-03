@@ -89,7 +89,7 @@ namespace Holoville.HOTween.Core
                     int endPIndex = 0;
                     int len = timesTable.Length;
                     for (int i = 0; i < len; i++) {
-                        if (timesTable[i] > t) {
+                        if (timesTable[i] >= t) {
                             startPIndex = i - 1;
                             endPIndex = i;
                             break;

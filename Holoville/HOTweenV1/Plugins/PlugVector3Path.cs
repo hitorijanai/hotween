@@ -400,7 +400,7 @@ namespace Holoville.HOTween.Plugins
                 Vector3 diff = points[0] - typedStartVal;
                 switch (pathType) {
                 case PathType.Linear:
-                    pts = new Vector3[pointsLength];
+                    pts = new Vector3[pointsLength + pAdd];
                     for (int i = 0; i < pointsLength; ++i) pts[i] = points[i] - diff;
                     break;
                 default: // Curved
@@ -542,7 +542,7 @@ namespace Holoville.HOTween.Plugins
                     break;
                 case OrientType.ToPath:
                     float nextT = pathPerc + lookAheadVal;
-                    if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
+                    if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : pathType == PathType.Linear ? 1 : 1.000001f);
                     Vector3 lookAtP = path.GetPoint(nextT);
                     Vector3 transUp = orientTrans.up;
                     if (lockRotationAxis != Axis.None && orientTrans != null) {
