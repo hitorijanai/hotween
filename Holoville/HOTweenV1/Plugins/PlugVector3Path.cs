@@ -380,8 +380,6 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override void SetChangeVal()
         {
-            bool isCurvedPath = pathType == PathType.Curved;
-            
             if (orientType != OrientType.None) {
                 // Store orient transform.
                 if (orientTrans == null) {
@@ -391,24 +389,16 @@ namespace Holoville.HOTween.Plugins
 
             // Create path.
             Vector3[] pts;
-            int indMod = isCurvedPath ? 1 : 0;
+            int indMod = 1;
             int pAdd = (isClosedPath ? 1 : 0);
             int pointsLength = points.Length;
 
             if (isRelative) {
                 hasAdditionalStartingP = false;
                 Vector3 diff = points[0] - typedStartVal;
-                switch (pathType) {
-                case PathType.Linear:
-                    pts = new Vector3[pointsLength + pAdd];
-                    for (int i = 0; i < pointsLength; ++i) pts[i] = points[i] - diff;
-                    break;
-                default: // Curved
-                    // Path length is the same (plus control points).
-                    pts = new Vector3[pointsLength + 2 + pAdd];
-                    for (int i = 0; i < pointsLength; ++i) pts[i + indMod] = points[i] - diff;
-                    break;
-                }
+                // Path length is the same (plus control points).
+                pts = new Vector3[pointsLength + 2 + pAdd];
+                for (int i = 0; i < pointsLength; ++i) pts[i + indMod] = points[i] - diff;
             } else {
                 Vector3 currVal = (Vector3)GetValue();
                 // Calculate if currVal and start point are equal,
@@ -420,29 +410,16 @@ namespace Holoville.HOTween.Plugins
                 if (diff.x < EPSILON && diff.y < EPSILON && diff.z < EPSILON) {
                     // Path length is the same (plus control points).
                     hasAdditionalStartingP = false;
-                    pts = new Vector3[pointsLength + (isCurvedPath ? 2 : 0) + pAdd];
+                    pts = new Vector3[pointsLength + 2 + pAdd];
                 } else {
                     // Path needs additional point for current value as starting point (plus control points).
                     hasAdditionalStartingP = true;
-                    switch (pathType) {
-                    case PathType.Linear:
-                        pts = new Vector3[pointsLength + 1 + pAdd];
-                        if (tweenObj.isFrom) {
-                            pts[pts.Length - 1] = currVal;
-                        } else {
-                            pts[0] = currVal;
-                            indMod = 1;
-                        }
-                        break;
-                    default: // Curved
-                        pts = new Vector3[pointsLength + 3 + pAdd];
-                        if (tweenObj.isFrom) {
-                            pts[pts.Length - 2] = currVal;
-                        } else {
-                            pts[1] = currVal;
-                            indMod = 2;
-                        }
-                        break;
+                    pts = new Vector3[pointsLength + 3 + pAdd];
+                    if (tweenObj.isFrom) {
+                        pts[pts.Length - 2] = currVal;
+                    } else {
+                        pts[1] = currVal;
+                        indMod = 2;
                     }
                 }
                 for (int i = 0; i < pointsLength; ++i) {
@@ -454,21 +431,18 @@ namespace Holoville.HOTween.Plugins
 
             if (isClosedPath) {
                 // Close path.
-                if (isCurvedPath) pts[pointsLength - 2] = pts[1];
-                else pts[pointsLength - 1] = pts[0];
+                pts[pointsLength - 2] = pts[1];
             }
 
-            if (isCurvedPath) {
-                // Add control points.
-                if (isClosedPath) {
-                    pts[0] = pts[pointsLength - 3];
-                    pts[pointsLength - 1] = pts[2];
-                } else {
-                    pts[0] = pts[1];
-                    Vector3 lastP = pts[pointsLength - 2];
-                    Vector3 diffV = lastP - pts[pointsLength - 3];
-                    pts[pointsLength - 1] = lastP + diffV;
-                }
+            // Add control points.
+            if (isClosedPath) {
+                pts[0] = pts[pointsLength - 3];
+                pts[pointsLength - 1] = pts[2];
+            } else {
+                pts[0] = pts[1];
+                Vector3 lastP = pts[pointsLength - 2];
+                Vector3 diffV = lastP - pts[pointsLength - 3];
+                pts[pointsLength - 1] = lastP + diffV;
             }
 
             // Manage eventual lockPositionAxis.
@@ -495,7 +469,7 @@ namespace Holoville.HOTween.Plugins
 
             if (!isClosedPath) {
                 // Store the changeVal used for Incremental loops
-                diffChangeVal = isCurvedPath ? (pts[pointsLength - 2] - pts[1]) : (pts[pointsLength - 1] - pts[0]);
+                diffChangeVal = pts[pointsLength - 2] - pts[1];
             }
         }
 
@@ -542,7 +516,7 @@ namespace Holoville.HOTween.Plugins
                     break;
                 case OrientType.ToPath:
                     float nextT = pathPerc + lookAheadVal;
-                    if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : pathType == PathType.Linear ? 1 : 1.000001f);
+                    if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
                     Vector3 lookAtP = path.GetPoint(nextT);
                     Vector3 transUp = orientTrans.up;
                     if (lockRotationAxis != Axis.None && orientTrans != null) {

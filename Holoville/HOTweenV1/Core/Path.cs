@@ -83,12 +83,12 @@ namespace Holoville.HOTween.Core
             switch (pathType) {
             case PathType.Linear:
                 if (t <= 0) {
-                    return path[0];
+                    return path[1];
                 } else {
                     int startPIndex = 0;
                     int endPIndex = 0;
                     int len = timesTable.Length;
-                    for (int i = 0; i < len; i++) {
+                    for (int i = 1; i < len; i++) {
                         if (timesTable[i] >= t) {
                             startPIndex = i - 1;
                             endPIndex = i;
@@ -189,9 +189,9 @@ namespace Holoville.HOTween.Core
             Vector3 prevPt;
             switch (pathType) {
             case PathType.Linear:
-                prevPt = path[0];
+                prevPt = path[1];
                 int len = path.Length;
-                for (int i = 0; i < len; ++i ) {
+                for (int i = 1; i < len - 1; ++i ) {
                     currPt = path[i];
                     Gizmos.DrawLine(currPt, prevPt);
                     prevPt = currPt;
@@ -303,21 +303,38 @@ namespace Holoville.HOTween.Core
             float incr;
             switch (pathType) {
             case PathType.Linear:
+//                pathLength = 0;
+//                int pathCount = path.Length;
+//                waypointsLength = new float[pathCount];
+//                prevP = path[0];
+//                for (int i = 0; i < pathCount; i++) {
+//                    currP = path[i];
+//                    float dist = Vector3.Distance(currP, prevP);
+//                    pathLength += dist;
+//                    prevP = currP;
+//                    waypointsLength[i] = dist;
+//                }
+//                timesTable = new float[pathCount];
+//                timesTable[0] = 0;
+//                float tmpLen = 0;
+//                for (int i = 1; i < pathCount; i++) {
+//                    tmpLen += waypointsLength[i];
+//                    timesTable[i] = tmpLen / pathLength;
+//                }
                 pathLength = 0;
                 int pathCount = path.Length;
                 waypointsLength = new float[pathCount];
-                timesTable = new float[pathCount];
-                prevP = path[0];
-                for (int i = 0; i < pathCount; i++) {
+                prevP = path[1];
+                for (int i = 1; i < pathCount; i++) {
                     currP = path[i];
                     float dist = Vector3.Distance(currP, prevP);
                     pathLength += dist;
                     prevP = currP;
                     waypointsLength[i] = dist;
                 }
-                timesTable[0] = 0;
+                timesTable = new float[pathCount];
                 float tmpLen = 0;
-                for (int i = 1; i < pathCount; i++) {
+                for (int i = 2; i < pathCount; i++) {
                     tmpLen += waypointsLength[i];
                     timesTable[i] = tmpLen / pathLength;
                 }
