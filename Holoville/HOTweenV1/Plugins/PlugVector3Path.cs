@@ -507,6 +507,7 @@ namespace Holoville.HOTween.Plugins
             SetValue(GetConstPointOnPath(pathPerc, true, path));
 
             if (orientType != OrientType.None && orientTrans != null && !orientTrans.Equals(null)) {
+                Transform parentTrans = usesLocalPosition ? orientTrans.parent : null;
                 switch (orientType) {
                 case OrientType.LookAtPosition:
                     orientTrans.LookAt(lookPos, Vector3.up);
@@ -521,17 +522,15 @@ namespace Holoville.HOTween.Plugins
                     if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
                     Vector3 lookAtP = path.GetPoint(nextT);
                     Vector3 transUp = orientTrans.up;
-                    if (usesLocalPosition) {
-                        // Apply modification for local position movement
-                        lookAtP += orientTrans.position - orientTrans.localPosition;
-                    }
-
+                    // Apply basic modification for local position movement
+                    if (usesLocalPosition && parentTrans != null) lookAtP = parentTrans.TransformPoint(lookAtP);
+                    
                     if (lockRotationAxis != Axis.None && orientTrans != null) {
                         if ((lockRotationAxis & Axis.X) == Axis.X) {
                             Vector3 v0 = orientTrans.InverseTransformPoint(lookAtP);
                             v0.y = 0;
                             lookAtP = orientTrans.TransformPoint(v0);
-                            transUp = Vector3.up;
+                            transUp = usesLocalPosition && parentTrans != null ? parentTrans.up : Vector3.up;
                         }
                         if ((lockRotationAxis & Axis.Y) == Axis.Y) {
                             Vector3 v0 = orientTrans.InverseTransformPoint(lookAtP);
@@ -539,7 +538,7 @@ namespace Holoville.HOTween.Plugins
                             v0.x = 0;
                             lookAtP = orientTrans.TransformPoint(v0);
                         }
-                        if ((lockRotationAxis & Axis.Z) == Axis.Z) transUp = Vector3.up;
+                        if ((lockRotationAxis & Axis.Z) == Axis.Z) transUp = usesLocalPosition && parentTrans != null ? parentTrans.up : Vector3.up;
                     }
                     orientTrans.LookAt(lookAtP, transUp);
                     break;
