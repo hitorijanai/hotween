@@ -68,6 +68,7 @@ namespace Holoville.HOTween.Plugins
         Axis lockPositionAxis = Axis.None;
         Axis lockRotationAxis = Axis.None;
         bool isPartialPath;
+        bool usesLocalPosition; // Used to apply mods when calculating orientToPath lookAt
         float startPerc = 0; // Implemented to allow partial paths
         float changePerc = 1; // Implemented to allow partial paths
 
@@ -203,6 +204,7 @@ namespace Holoville.HOTween.Plugins
                 isRelative = false;
                 TweenWarning.Log("\"" + p_tweenObj.target + "." + p_propertyName + "\": PlugVector3Path \"isRelative\" parameter is incompatible with HOTween.From. The tween will be treated as absolute.");
             }
+            usesLocalPosition = p_propertyName == "localPosition";
 
             base.Init(p_tweenObj, p_propertyName, p_easeType, p_targetType, p_propertyInfo, p_fieldInfo);
         }
@@ -519,6 +521,11 @@ namespace Holoville.HOTween.Plugins
                     if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
                     Vector3 lookAtP = path.GetPoint(nextT);
                     Vector3 transUp = orientTrans.up;
+                    if (usesLocalPosition) {
+                        // Apply modification for local position movement
+                        lookAtP += orientTrans.position - orientTrans.localPosition;
+                    }
+
                     if (lockRotationAxis != Axis.None && orientTrans != null) {
                         if ((lockRotationAxis & Axis.X) == Axis.X) {
                             Vector3 v0 = orientTrans.InverseTransformPoint(lookAtP);
