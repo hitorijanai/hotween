@@ -591,7 +591,7 @@ namespace Holoville.HOTween.Plugins
         internal Vector3 GetConstPointOnPath(float t, bool p_updatePathPerc, Path p_path)
         {
             if (p_updatePathPerc) return p_path.GetConstPoint(t, out pathPerc);
-            return p_path.GetConstPoint(t);
+            return path.GetConstPoint(t);
         }
 
         /// <summary>
