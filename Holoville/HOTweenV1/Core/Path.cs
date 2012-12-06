@@ -80,9 +80,25 @@ namespace Holoville.HOTween.Core
         /// </param>
         public Vector3 GetPoint(float t)
         {
+            int tmp;
+            return GetPoint(t, out tmp);
+        }
+
+        /// <summary>
+        /// Gets the point on the path at the given percentage (0 to 1).
+        /// </summary>
+        /// <param name="t">
+        /// The percentage (0 to 1) at which to get the point.
+        /// </param>
+        /// <param name="out_waypointIndex">
+        /// Index of waypoint we're moving to (or where we are). Only used for Linear paths.
+        /// </param>
+        internal Vector3 GetPoint(float t, out int out_waypointIndex)
+        {
             switch (pathType) {
             case PathType.Linear:
                 if (t <= 0) {
+                    out_waypointIndex = 1;
                     return path[1];
                 } else {
                     int startPIndex = 0;
@@ -101,6 +117,7 @@ namespace Holoville.HOTween.Core
                     float partialLen = pathLength * partialPerc;
                     Vector3 wp0 = path[startPIndex];
                     Vector3 wp1 = path[endPIndex];
+                    out_waypointIndex = endPIndex;
                     return wp0 + Vector3.ClampMagnitude(wp1 - wp0, partialLen);
                 }
             default: // Curved
@@ -117,6 +134,7 @@ namespace Holoville.HOTween.Core
                 Vector3 c = path[currPt + 2];
                 Vector3 d = path[currPt + 3];
 
+                out_waypointIndex = -1;
                 return .5f * (
                     (-a + 3f * b - 3f * c + d) * (u * u * u)
                     + (2f * a - 5f * b + 4f * c - d) * (u * u)
@@ -278,18 +296,21 @@ namespace Holoville.HOTween.Core
         /// </summary>
         /// <param name="t">The time percentage (0 to 1) at which to get the point </param>
         /// <param name="out_pathPerc">Outputs the calculated path percentage value</param>
-        /// <returns></returns>
-        internal Vector3 GetConstPoint(float t, out float out_pathPerc)
+        /// <param name="out_waypointIndex">
+        /// Index of waypoint we're moving to (or where we are). Only used for Linear paths.
+        /// </param>
+        internal Vector3 GetConstPoint(float t, out float out_pathPerc, out int out_waypointIndex)
         {
             switch (pathType) {
             case PathType.Linear:
                 out_pathPerc = t;
-                return GetPoint(t);
+                return GetPoint(t, out out_waypointIndex);
             default: // Curved
                 // Convert time percentage to constant path percentage
                 float pathPerc = GetConstPathPercFromTimePerc(t);
                 // Update pathPerc.
                 out_pathPerc = pathPerc;
+                out_waypointIndex = -1;
                 return GetPoint(pathPerc);
             }
         }

@@ -59,12 +59,14 @@ namespace Holoville.HOTween.Plugins
 
         const int SUBDIVISIONS_MULTIPLIER = 16;
         const float EPSILON = 0.001f; // Used for floating points comparison
+        const float MIN_LOOKAHEAD = 0.0001f;
+        const float MAX_LOOKAHED = 0.9999f;
         Vector3 typedStartVal;
         Vector3[] points;
         Vector3 diffChangeVal; // Used for incremental loops.
         internal bool isClosedPath;
         OrientType orientType = OrientType.None;
-        float lookAheadVal = 0.0001f;
+        float lookAheadVal = MIN_LOOKAHEAD;
         Axis lockPositionAxis = Axis.None;
         Axis lockRotationAxis = Axis.None;
         bool isPartialPath;
@@ -254,7 +256,7 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         public PlugVector3Path OrientToPath(bool p_orient)
         {
-            return OrientToPath(p_orient, 0.0001f, Axis.None);
+            return OrientToPath(p_orient, MIN_LOOKAHEAD, Axis.None);
         }
 
         /// <summary>
@@ -279,7 +281,7 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         public PlugVector3Path OrientToPath(Axis p_lockRotationAxis)
         {
-            return OrientToPath(true, 0.0001f, p_lockRotationAxis);
+            return OrientToPath(true, MIN_LOOKAHEAD, p_lockRotationAxis);
         }
 
         /// <summary>
@@ -316,10 +318,10 @@ namespace Holoville.HOTween.Plugins
                 orientType = OrientType.ToPath;
             }
             lookAheadVal = p_lookAhead;
-            if (lookAheadVal < 0.0001f) {
-                lookAheadVal = 0.0001f;
-            } else if (lookAheadVal > 0.9999f) {
-                lookAheadVal = 0.9999f;
+            if (lookAheadVal < MIN_LOOKAHEAD) {
+                lookAheadVal = MIN_LOOKAHEAD;
+            } else if (lookAheadVal > MAX_LOOKAHED) {
+                lookAheadVal = MAX_LOOKAHED;
             }
             lockRotationAxis = p_lockRotationAxis;
             return this;
@@ -503,8 +505,10 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
+            int linearWaypointIndex;
             pathPerc = ease(p_totElapsed, startPerc, changePerc, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
-            SetValue(GetConstPointOnPath(pathPerc, true, path));
+            Vector3 newPos = GetConstPointOnPath(pathPerc, true, path, out linearWaypointIndex);
+            SetValue(newPos);
 
             if (orientType != OrientType.None && orientTrans != null && !orientTrans.Equals(null)) {
                 Transform parentTrans = usesLocalPosition ? orientTrans.parent : null;
@@ -518,9 +522,15 @@ namespace Holoville.HOTween.Plugins
                     }
                     break;
                 case OrientType.ToPath:
-                    float nextT = pathPerc + lookAheadVal;
-                    if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
-                    Vector3 lookAtP = path.GetPoint(nextT);
+                    Vector3 lookAtP;
+                    if (pathType == PathType.Linear && lookAheadVal <= MIN_LOOKAHEAD) {
+                        // Calculate lookAhead so that it doesn't turn until it starts moving on next waypoint
+                        lookAtP = newPos + path.path[linearWaypointIndex] - path.path[linearWaypointIndex - 1];
+                    } else {
+                        float nextT = pathPerc + lookAheadVal;
+                        if (nextT > 1) nextT = (isClosedPath ? nextT - 1 : 1.000001f);
+                        lookAtP = path.GetPoint(nextT);
+                    }
                     Vector3 transUp = orientTrans.up;
                     // Apply basic modification for local position movement
                     if (usesLocalPosition && parentTrans != null) lookAtP = parentTrans.TransformPoint(lookAtP);
@@ -572,7 +582,11 @@ namespace Holoville.HOTween.Plugins
         /// <param name="t">
         /// The percentage (0 to 1) at which to get the point.
         /// </param>
-        internal Vector3 GetConstPointOnPath(float t) { return GetConstPointOnPath(t, false, null); }
+        internal Vector3 GetConstPointOnPath(float t)
+        {
+            int tmp;
+            return GetConstPointOnPath(t, false, null, out tmp);
+        }
         /// <summary>
         /// Returns the point at the given percentage (0 to 1),
         /// considering the path at constant speed.
@@ -588,9 +602,13 @@ namespace Holoville.HOTween.Plugins
         /// <param name="p_path">
         /// IF not NULL uses the given path instead than the default one.
         /// </param>
-        internal Vector3 GetConstPointOnPath(float t, bool p_updatePathPerc, Path p_path)
+        /// <param name="out_waypointIndex">
+        /// Index of waypoint we're moving to (or where we are). Only used for Linear paths.
+        /// </param>
+        internal Vector3 GetConstPointOnPath(float t, bool p_updatePathPerc, Path p_path, out int out_waypointIndex)
         {
-            if (p_updatePathPerc) return p_path.GetConstPoint(t, out pathPerc);
+            if (p_updatePathPerc) return p_path.GetConstPoint(t, out pathPerc, out out_waypointIndex);
+            out_waypointIndex = -1;
             return path.GetConstPoint(t);
         }
 
@@ -613,6 +631,25 @@ namespace Holoville.HOTween.Plugins
                 if (perc > 1) perc = 1; // Limit in case of near errors (because full path length is calculated differently then sum of waypoints)
                 return perc;
             }
+        }
+
+        bool IsWaypoint(Vector3 position, out int waypointIndex)
+        {
+            int pathLen = path.path.Length;
+            for (int i = 0; i < pathLen; ++i) {
+                float diffX = path.path[i].x - position.x;
+                float diffY = path.path[i].y - position.y;
+                float diffZ = path.path[i].z - position.z;
+                if (diffX < 0) diffX = 0;
+                if (diffY < 0) diffY = 0;
+                if (diffZ < 0) diffZ = 0;
+                if (diffX < EPSILON && diffY < EPSILON && diffZ < EPSILON) {
+                    waypointIndex = i;
+                    return true;
+                }
+            }
+            waypointIndex = -1;
+            return false;
         }
 
         // ===================================================================================
