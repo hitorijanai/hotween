@@ -324,24 +324,6 @@ namespace Holoville.HOTween.Core
             float incr;
             switch (pathType) {
             case PathType.Linear:
-//                pathLength = 0;
-//                int pathCount = path.Length;
-//                waypointsLength = new float[pathCount];
-//                prevP = path[0];
-//                for (int i = 0; i < pathCount; i++) {
-//                    currP = path[i];
-//                    float dist = Vector3.Distance(currP, prevP);
-//                    pathLength += dist;
-//                    prevP = currP;
-//                    waypointsLength[i] = dist;
-//                }
-//                timesTable = new float[pathCount];
-//                timesTable[0] = 0;
-//                float tmpLen = 0;
-//                for (int i = 1; i < pathCount; i++) {
-//                    tmpLen += waypointsLength[i];
-//                    timesTable[i] = tmpLen / pathLength;
-//                }
                 pathLength = 0;
                 int pathCount = path.Length;
                 waypointsLength = new float[pathCount];
@@ -349,7 +331,7 @@ namespace Holoville.HOTween.Core
                 for (int i = 1; i < pathCount; i++) {
                     currP = path[i];
                     float dist = Vector3.Distance(currP, prevP);
-                    pathLength += dist;
+                    if (i < pathCount - 1) pathLength += dist;
                     prevP = currP;
                     waypointsLength[i] = dist;
                 }
