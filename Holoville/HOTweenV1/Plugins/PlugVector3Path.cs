@@ -475,8 +475,6 @@ namespace Holoville.HOTween.Plugins
                 // Store the changeVal used for Incremental loops
                 diffChangeVal = pts[pointsLength - 2] - pts[1];
             }
-
-            Debug.Log(path.path.Length);
         }
 
         /// <summary>
