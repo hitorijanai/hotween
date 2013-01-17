@@ -136,6 +136,11 @@ set DestinationDir=$(SolutionDir)..\%25BinDir%25
 echo Deleting TMPs...
 DEL $(TargetDir)\*.tmp
 
+CD $(TargetDir)
+echo Converting PDB to MDB and deleting PDB...
+"c:\Program Files\_Design\Unity 4\Editor\Data\MonoBleedingEdge\lib\mono\4.5\pdb2mdb.exe" $(TargetFileName)
+DEL $(TargetName).pdb
+
 echo Exporting Assembly to %25DestinationDir%25
 echo Copying files to Destination...
 echo f | xcopy "$(ProjectDir)..\bin.HOTweenV1" %25DestinationDir%25 /Y /I /E</PostBuildEvent>

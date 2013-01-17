@@ -660,12 +660,25 @@ namespace Holoville.HOTween.Core
 
         /// <summary>
         /// A coroutine that waits until the Tweener/Sequence is complete (delays and loops included).
-        /// You can use it inside a coroutin as a yield. Ex:
+        /// You can use it inside a coroutine as a yield. Ex:
         /// yield return StartCoroutine( myTweenComponent.WaitForCompletion() );
         /// </summary>
         public IEnumerator WaitForCompletion()
         {
             while (!_isComplete) {
+                yield return 0;
+            }
+            yield break;
+        }
+
+        /// <summary>
+        /// A coroutine that waits until the Tweener/Sequence is rewinded (loops included).
+        /// You can use it inside a coroutine as a yield. Ex:
+        /// yield return StartCoroutine( myTweenComponent.WaitForRewind() );
+        /// </summary>
+        public IEnumerator WaitForRewind()
+        {
+            while (_fullElapsed > 0) {
                 yield return 0;
             }
             yield break;
