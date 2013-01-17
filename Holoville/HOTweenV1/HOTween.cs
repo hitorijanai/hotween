@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.724";
+        public const string VERSION = "1.1.726";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -134,6 +134,7 @@ namespace Holoville.HOTween
         static bool renameInstToCountTw; // If TRUE renames HOTween's instance to show running tweens.
         static float time;
         static bool isUpdateLoop; // TRUE while inside the DoUpdate loop
+        static bool isQuitting;
         static List<int> tweensToRemoveIndexes = new List<int>(); // Used for removing tweens that were killed during an update 
 
         // REFERENCES /////////////////////////////////////////////
@@ -158,8 +159,7 @@ namespace Holoville.HOTween
         {
             get
             {
-                if (tweens == null)
-                {
+                if (tweens == null) {
                     return 0;
                 }
                 return tweens.Count;
@@ -221,8 +221,7 @@ namespace Holoville.HOTween
         /// </param>
         public static void Init(bool p_permanentInstance, bool p_renameInstanceToCountTweens, bool p_allowOverwriteManager)
         {
-            if (initialized)
-            {
+            if (initialized) {
                 return;
             }
 
@@ -233,13 +232,11 @@ namespace Holoville.HOTween
             isPermanent = p_permanentInstance;
             renameInstToCountTw = p_renameInstanceToCountTweens;
 
-            if (p_allowOverwriteManager)
-            {
+            if (p_allowOverwriteManager) {
                 overwriteManager = new OverwriteManager();
             }
 
-            if (isPermanent && tweenGOInstance == null)
-            {
+            if (isPermanent && tweenGOInstance == null) {
                 NewTweenInstance();
                 SetGOName();
             }
@@ -248,10 +245,15 @@ namespace Holoville.HOTween
         // ===================================================================================
         // UNITY METHODS ---------------------------------------------------------------------
 
+        void OnApplicationQuit()
+        {
+            isQuitting = true;
+            Clear();
+        }
+
         void OnDrawGizmos()
         {
-            if (tweens == null || !showPathGizmos)
-            {
+            if (tweens == null || !showPathGizmos) {
                 return;
             }
 
@@ -260,11 +262,9 @@ namespace Holoville.HOTween
             int pluginsCount = plugs.Count;
 
             // Find path plugins and draw paths.
-            for (int i = 0; i < pluginsCount; ++i)
-            {
+            for (int i = 0; i < pluginsCount; ++i) {
                 PlugVector3Path pathPlug = plugs[i] as PlugVector3Path;
-                if (pathPlug != null && pathPlug.path != null)
-                {
+                if (pathPlug != null && pathPlug.path != null) {
                     pathPlug.path.GizmoDraw(pathPlug.pathPerc, false);
                 }
             }
@@ -276,10 +276,7 @@ namespace Holoville.HOTween
             // HINT I can use OnDestroy also to check for scene changes, and instantiate another HOTween instance if I need to keep it running.
             // TODO For now HOTween is NOT destroyed when a scene is loaded, - add option to set it as destroyable?
             // (consider also isPermanent option if doing that).
-            if (this == it)
-            {
-                Clear();
-            }
+            if (!isQuitting && this == it) Clear();
         }
 
         // ===================================================================================
@@ -294,8 +291,7 @@ namespace Holoville.HOTween
         /// </param>
         internal static void AddSequence(Sequence p_sequence)
         {
-            if (!initialized)
-            {
+            if (!initialized) {
                 Init();
             }
 
@@ -376,16 +372,14 @@ namespace Holoville.HOTween
         /// </returns>
         public static Tweener To(object p_target, float p_duration, TweenParms p_parms)
         {
-            if (!initialized)
-            {
+            if (!initialized) {
                 Init();
             }
 
             Tweener tw = new Tweener(p_target, p_duration, p_parms);
 
             // Check if tween is valid.
-            if (tw.isEmpty)
-            {
+            if (tw.isEmpty) {
                 return null;
             }
 
@@ -467,8 +461,7 @@ namespace Holoville.HOTween
         /// </returns>
         public static Tweener From(object p_target, float p_duration, TweenParms p_parms)
         {
-            if (!initialized)
-            {
+            if (!initialized) {
                 Init();
             }
 
@@ -476,16 +469,14 @@ namespace Holoville.HOTween
             Tweener tw = new Tweener(p_target, p_duration, p_parms);
 
             // Check if tween is valid.
-            if (tw.isEmpty)
-            {
+            if (tw.isEmpty) {
                 return null;
             }
 
             AddTween(tw);
             // Immediately jump to position 0 to avoid flickering of objects before they're punched to FROM position.
             // p_isStartupIteration is set to FALSE to ignore callbacks.
-            if (!tw._isPaused)
-            {
+            if (!tw._isPaused) {
                 tw.Update(0, true, true, false, true);
             }
             return tw;
@@ -499,10 +490,7 @@ namespace Holoville.HOTween
         /// </summary>
         void Update()
         {
-            if (tweens == null)
-            {
-                return;
-            }
+            if (tweens == null) return;
 
             // Update tweens.
             DoUpdate(UpdateType.Update, Time.deltaTime);
@@ -515,8 +503,7 @@ namespace Holoville.HOTween
         /// </summary>
         void LateUpdate()
         {
-            if (tweens == null)
-            {
+            if (tweens == null) {
                 return;
             }
 
@@ -531,8 +518,7 @@ namespace Holoville.HOTween
         /// </summary>
         void FixedUpdate()
         {
-            if (tweens == null)
-            {
+            if (tweens == null) {
                 return;
             }
 
@@ -547,16 +533,14 @@ namespace Holoville.HOTween
         /// </summary>
         static IEnumerator TimeScaleIndependentUpdate()
         {
-            while (tweens != null)
-            {
+            while (tweens != null) {
                 float elapsed = Time.realtimeSinceStartup - time;
                 time = Time.realtimeSinceStartup;
 
                 // Update tweens.
                 DoUpdate(UpdateType.TimeScaleIndependentUpdate, elapsed);
 
-                if (CheckClear())
-                {
+                if (CheckClear()) {
                     yield break;
                 }
 
@@ -572,8 +556,7 @@ namespace Holoville.HOTween
         /// </summary>
         public static void EnableOverwriteManager()
         {
-            if (overwriteManager != null)
-            {
+            if (overwriteManager != null) {
                 overwriteManager.enabled = true;
             }
         }
@@ -583,8 +566,7 @@ namespace Holoville.HOTween
         /// </summary>
         public static void DisableOverwriteManager()
         {
-            if (overwriteManager != null)
-            {
+            if (overwriteManager != null) {
                 overwriteManager.enabled = false;
             }
         }
@@ -1860,7 +1842,7 @@ namespace Holoville.HOTween
             tweensToRemoveIndexes.Clear();
             isUpdateLoop = true;
             int tweensCount = tweens.Count;
-            for (int i = 0; i < tweensCount; ++i ) {
+            for (int i = 0; i < tweensCount; ++i) {
                 ABSTweenComponent tw = tweens[i];
                 if (tw.updateType == p_updateType && tw.Update(p_elapsed * tw.timeScale)) {
                     // Tween complete...
@@ -1881,9 +1863,9 @@ namespace Holoville.HOTween
                     tweens.RemoveAt(tweensToRemoveIndexes[i] - i);
                 }
             }
-            
+
             int onCompletesCount = onCompletes.Count;
-            
+
             // Dispatch eventual onCompletes.
             if (onCompletesCount > 0) {
                 for (int i = 0; i < onCompletesCount; ++i) {
@@ -1914,12 +1896,9 @@ namespace Holoville.HOTween
         {
             ABSTweenComponent tw = tweens[p_index];
             Tweener tweener = tw as Tweener;
-            if (tweener != null)
-            {
+            if (tweener != null) {
                 tweener.Play(p_skipDelay);
-            }
-            else
-            {
+            } else {
                 tw.Play();
             }
         }
@@ -1928,12 +1907,9 @@ namespace Holoville.HOTween
         {
             ABSTweenComponent tw = tweens[p_index];
             Tweener tweener = tw as Tweener;
-            if (tweener != null)
-            {
+            if (tweener != null) {
                 tweener.PlayForward(p_skipDelay);
-            }
-            else
-            {
+            } else {
                 tw.PlayForward();
             }
         }
@@ -1942,12 +1918,9 @@ namespace Holoville.HOTween
         {
             ABSTweenComponent tw = tweens[p_index];
             Tweener tweener = tw as Tweener;
-            if (tweener != null)
-            {
+            if (tweener != null) {
                 tweener.PlayBackwards();
-            }
-            else
-            {
+            } else {
                 tw.PlayBackwards();
             }
         }
@@ -1956,12 +1929,9 @@ namespace Holoville.HOTween
         {
             ABSTweenComponent tw = tweens[p_index];
             Tweener tweener = tw as Tweener;
-            if (tweener != null)
-            {
+            if (tweener != null) {
                 tweener.Rewind(p_skipDelay);
-            }
-            else
-            {
+            } else {
                 tw.Rewind();
             }
         }
@@ -1970,12 +1940,9 @@ namespace Holoville.HOTween
         {
             ABSTweenComponent tw = tweens[p_index];
             Tweener tweener = tw as Tweener;
-            if (tweener != null)
-            {
+            if (tweener != null) {
                 tweener.Restart(p_skipDelay);
-            }
-            else
-            {
+            } else {
                 tw.Restart();
             }
         }
@@ -2010,12 +1977,10 @@ namespace Holoville.HOTween
 
         static void AddTween(ABSTweenComponent p_tween)
         {
-            if (tweenGOInstance == null)
-            {
+            if (tweenGOInstance == null) {
                 NewTweenInstance();
             }
-            if (tweens == null)
-            {
+            if (tweens == null) {
                 tweens = new List<ABSTweenComponent>();
                 it.StartCoroutines();
             }
@@ -2047,8 +2012,7 @@ namespace Holoville.HOTween
 
         static void SetGOName()
         {
-            if (!isEditor || !renameInstToCountTw)
-            {
+            if (!isEditor || !renameInstToCountTw) {
                 return;
             }
             tweenGOInstance.name = GAMEOBJNAME + " : " + totTweens;
@@ -2056,11 +2020,9 @@ namespace Holoville.HOTween
 
         static bool CheckClear()
         {
-            if (tweens == null || tweens.Count == 0)
-            {
+            if (tweens == null || tweens.Count == 0) {
                 Clear();
-                if (isPermanent)
-                {
+                if (isPermanent) {
                     SetGOName();
                 }
                 return true;
@@ -2072,19 +2034,12 @@ namespace Holoville.HOTween
 
         static void Clear()
         {
-            if (it != null)
-            {
-                it.StopAllCoroutines();
-            }
+            if (it != null) it.StopAllCoroutines();
 
             tweens = null;
 
-            if (!isPermanent)
-            {
-                if (tweenGOInstance != null)
-                {
-                    Destroy(tweenGOInstance);
-                }
+            if (!isPermanent || isQuitting) {
+                if (tweenGOInstance != null) Destroy(tweenGOInstance);
                 tweenGOInstance = null;
                 it = null;
             }
@@ -2108,91 +2063,67 @@ namespace Holoville.HOTween
 
         static int DoFilteredIteration(object p_filter, TweenDelegate.FilterFunc p_operation, bool p_collectionChanger, bool p_optionalBool)
         {
-            if (tweens == null)
-            {
+            if (tweens == null) {
                 return 0;
             }
 
             int opCount = 0;
             int tweensCount = tweens.Count - 1;
 
-            if (p_filter == null)
-            {
+            if (p_filter == null) {
                 // All
-                for (int i = tweensCount; i > -1; --i)
-                {
+                for (int i = tweensCount; i > -1; --i) {
                     p_operation(i, p_optionalBool);
                     ++opCount;
                 }
-            }
-            else if (p_filter is int)
-            {
+            } else if (p_filter is int) {
                 // Int ID
                 int f = (int)p_filter;
-                for (int i = tweensCount; i > -1; --i)
-                {
-                    if (tweens[i].intId == f)
-                    {
+                for (int i = tweensCount; i > -1; --i) {
+                    if (tweens[i].intId == f) {
                         p_operation(i, p_optionalBool);
                         ++opCount;
                     }
                 }
-            }
-            else if (p_filter is string)
-            {
+            } else if (p_filter is string) {
                 // ID
                 string f = (string)p_filter;
-                for (int i = tweensCount; i > -1; --i)
-                {
-                    if (tweens[i].id == f)
-                    {
+                for (int i = tweensCount; i > -1; --i) {
+                    if (tweens[i].id == f) {
                         p_operation(i, p_optionalBool);
                         ++opCount;
                     }
                 }
-            }
-            else if (p_filter is Tweener)
-            {
+            } else if (p_filter is Tweener) {
                 // Tweener
                 Tweener f = p_filter as Tweener;
-                for (int i = tweensCount; i > -1; --i)
-                {
-                    if (tweens[i] == f)
-                    {
+                for (int i = tweensCount; i > -1; --i) {
+                    if (tweens[i] == f) {
                         p_operation(i, p_optionalBool);
                         ++opCount;
                     }
                 }
-            }
-            else if (p_filter is Sequence)
-            {
+            } else if (p_filter is Sequence) {
                 // Sequence
                 Sequence f = p_filter as Sequence;
-                for (int i = tweensCount; i > -1; --i)
-                {
-                    if (tweens[i] == f)
-                    {
+                for (int i = tweensCount; i > -1; --i) {
+                    if (tweens[i] == f) {
                         p_operation(i, p_optionalBool);
                         ++opCount;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 // Target
-                for (int i = tweensCount; i > -1; --i)
-                {
+                for (int i = tweensCount; i > -1; --i) {
                     Tweener tw = tweens[i] as Tweener;
-                    if (tw != null && tw.target == p_filter)
-                    {
+                    if (tw != null && tw.target == p_filter) {
                         p_operation(i, p_optionalBool);
                         ++opCount;
                     }
                 }
             }
 
-            if (p_collectionChanger)
-            {
+            if (p_collectionChanger) {
                 CheckClear();
             }
 
@@ -2205,15 +2136,13 @@ namespace Holoville.HOTween
         /// </summary>
         static List<ABSTweenPlugin> GetPlugins()
         {
-            if (tweens == null)
-            {
+            if (tweens == null) {
                 return null;
             }
 
             List<ABSTweenPlugin> plugs = new List<ABSTweenPlugin>();
             int tweensCount = tweens.Count;
-            for (int i = 0; i < tweensCount; ++i)
-            {
+            for (int i = 0; i < tweensCount; ++i) {
                 tweens[i].FillPluginsList(plugs);
             }
 
