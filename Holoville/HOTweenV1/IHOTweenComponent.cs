@@ -242,6 +242,13 @@ namespace Holoville.HOTween
         IEnumerator WaitForCompletion();
 
         /// <summary>
+        /// A coroutine that waits until the Tweener/Sequence is rewinded (loops included).
+        /// You can use it inside a coroutine as a yield. Ex:
+        /// yield return StartCoroutine( myTweenComponent.WaitForRewind() );
+        /// </summary>
+        IEnumerator WaitForRewind();
+
+        /// <summary>
         /// Assigns the given callback to this Tweener/Sequence,
         /// overwriting any existing callbacks of the same type.
         /// </summary>
