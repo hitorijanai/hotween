@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.728";
+        public const string VERSION = "1.1.732";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -248,7 +248,6 @@ namespace Holoville.HOTween
         void OnApplicationQuit()
         {
             isQuitting = true;
-            Clear();
         }
 
         void OnDrawGizmos()
@@ -276,7 +275,7 @@ namespace Holoville.HOTween
             // HINT I can use OnDestroy also to check for scene changes, and instantiate another HOTween instance if I need to keep it running.
             // TODO For now HOTween is NOT destroyed when a scene is loaded, - add option to set it as destroyable?
             // (consider also isPermanent option if doing that).
-            if (!isQuitting && this == it) Clear();
+            if (this == it && !isQuitting) Clear();
         }
 
         // ===================================================================================
@@ -372,9 +371,7 @@ namespace Holoville.HOTween
         /// </returns>
         public static Tweener To(object p_target, float p_duration, TweenParms p_parms)
         {
-            if (!initialized) {
-                Init();
-            }
+            if (!initialized) Init();
 
             Tweener tw = new Tweener(p_target, p_duration, p_parms);
 
@@ -461,9 +458,7 @@ namespace Holoville.HOTween
         /// </returns>
         public static Tweener From(object p_target, float p_duration, TweenParms p_parms)
         {
-            if (!initialized) {
-                Init();
-            }
+            if (!initialized) Init();
 
             p_parms = p_parms.IsFrom();
             Tweener tw = new Tweener(p_target, p_duration, p_parms);
@@ -2012,10 +2007,8 @@ namespace Holoville.HOTween
 
         static void SetGOName()
         {
-            if (!isEditor || !renameInstToCountTw) {
-                return;
-            }
-            tweenGOInstance.name = GAMEOBJNAME + " : " + totTweens;
+            if (!isEditor || !renameInstToCountTw || isQuitting) return;
+            if (tweenGOInstance != null) tweenGOInstance.name = GAMEOBJNAME + " : " + totTweens;
         }
 
         static bool CheckClear()
@@ -2038,7 +2031,7 @@ namespace Holoville.HOTween
 
             tweens = null;
 
-            if (!isPermanent || isQuitting) {
+            if (!isPermanent) {
                 if (tweenGOInstance != null) Destroy(tweenGOInstance);
                 tweenGOInstance = null;
                 it = null;
