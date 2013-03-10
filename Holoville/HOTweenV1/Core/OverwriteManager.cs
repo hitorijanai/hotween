@@ -37,6 +37,7 @@ namespace Holoville.HOTween.Core
         // VARS ///////////////////////////////////////////////////
 
         internal bool enabled;
+        internal bool logWarnings;
 
         /// <summary>
         /// List of currently running Tweeners
@@ -90,7 +91,7 @@ namespace Holoville.HOTween.Core
                                             t0 = t0.Substring(t0.LastIndexOf(".") + 1);
                                             string t1 = plug.GetType().ToString();
                                             t1 = t1.Substring(t1.LastIndexOf(".") + 1);
-                                            TweenWarning.Log(t0 + " is overwriting " + t1 + " for " + tw.target + "." + plug.propName);
+                                            if (logWarnings) TweenWarning.Log(t0 + " is overwriting " + t1 + " for " + tw.target + "." + plug.propName);
                                         }
                                         // Check if whole tween needs to be removed.
                                         if (twPluginsCount == 0) {

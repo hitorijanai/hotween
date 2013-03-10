@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.733";
+        public const string VERSION = "1.1.740";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -549,10 +549,12 @@ namespace Holoville.HOTween
         /// <summary>
         /// Enables the overwrite manager (disabled by default).
         /// </summary>
-        public static void EnableOverwriteManager()
+        /// <param name="logWarnings">If TRUE, the overwriteManager will log a warning each time a tween is overwritten</param>
+        public static void EnableOverwriteManager(bool logWarnings=true)
         {
             if (overwriteManager != null) {
                 overwriteManager.enabled = true;
+                overwriteManager.logWarnings = logWarnings;
             }
         }
 
