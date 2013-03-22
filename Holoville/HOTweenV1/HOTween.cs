@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.740";
+        public const string VERSION = "1.1.750";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -275,7 +275,7 @@ namespace Holoville.HOTween
             // HINT I can use OnDestroy also to check for scene changes, and instantiate another HOTween instance if I need to keep it running.
             // TODO For now HOTween is NOT destroyed when a scene is loaded, - add option to set it as destroyable?
             // (consider also isPermanent option if doing that).
-            if (this == it && !isQuitting) Clear();
+            if (!isQuitting && this == it) Clear();
         }
 
         // ===================================================================================
@@ -474,6 +474,178 @@ namespace Holoville.HOTween
             if (!tw._isPaused) {
                 tw.Update(0, true, true, false, true);
             }
+            return tw;
+        }
+
+        /// <summary>
+        /// Creates a new absolute PUNCH tween, and returns the <see cref="Tweener"/> representing it,
+        /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+        /// </summary>
+        /// <param name="p_target">
+        /// The tweening target (must be the object containing the properties or fields to tween).
+        /// </param>
+        /// <param name="p_duration">The duration in seconds of the tween.</param>
+        /// <param name="p_propName">The name of the property or field to tween.</param>
+        /// <param name="p_fromVal">The end value the property should reach with the tween.</param>
+        /// <param name="p_punchAmplitude">Default: 0.5f - amplitude of the punch effect</param>
+        /// <param name="p_punchPeriod">Default: 0.1f - oscillation period of punch effect</param>
+        /// <returns>
+        /// The newly created <see cref="Tweener"/>,
+        /// or <c>null</c> if the parameters were invalid.
+        /// </returns>
+        public static Tweener Punch(object p_target, float p_duration, string p_propName, object p_fromVal, float p_punchAmplitude = 0.5f, float p_punchPeriod = 0.1f)
+        {
+            TweenParms parms = new TweenParms()
+                .Prop(p_propName, p_fromVal)
+                .Ease(EaseType.EaseOutElastic, p_punchAmplitude, p_punchPeriod);
+            return To(p_target, p_duration, parms);
+        }
+
+        /// <summary>
+        /// Creates a new PUNCH tween, and returns the <see cref="Tweener"/> representing it,
+        /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+        /// </summary>
+        /// <param name="p_target">
+        /// The tweening target (must be the object containing the properties or fields to tween).
+        /// </param>
+        /// <param name="p_duration">The duration in seconds of the tween.</param>
+        /// <param name="p_propName">The name of the property or field to tween.</param>
+        /// <param name="p_fromVal">The end value the property should reach with the tween.</param>
+        /// <param name="p_isRelative">
+        /// If <c>true</c> treats the end value as relative (tween BY instead than tween TO), otherwise as absolute.
+        /// </param>
+        /// <param name="p_punchAmplitude">Default: 0.5f - amplitude of the punch effect</param>
+        /// <param name="p_punchPeriod">Default: 0.1f - oscillation period of punch effect</param>
+        /// <returns>
+        /// The newly created <see cref="Tweener"/>,
+        /// or <c>null</c> if the parameters were invalid.
+        /// </returns>
+        public static Tweener Punch(object p_target, float p_duration, string p_propName, object p_fromVal, bool p_isRelative, float p_punchAmplitude = 0.5f, float p_punchPeriod = 0.1f)
+        {
+            TweenParms parms = new TweenParms()
+                .Prop(p_propName, p_fromVal, p_isRelative)
+                .Ease(EaseType.EaseOutElastic, p_punchAmplitude, p_punchPeriod);
+            return To(p_target, p_duration, parms);
+        }
+
+        /// <summary>
+        /// Creates a new PUNCH tween and returns the <see cref="Tweener"/> representing it,
+        /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+        /// Any ease type passed won't be considered, since punch uses its own one.
+        /// </summary>
+        /// <param name="p_target">
+        /// The tweening target (must be the object containing the properties or fields to tween).
+        /// </param>
+        /// <param name="p_duration">The duration in seconds of the tween.</param>
+        /// <param name="p_parms">
+        /// A <see cref="TweenParms"/> representing the tween parameters.
+        /// You can pass an existing one, or create a new one inline via method chaining,
+        /// like <c>new TweenParms().Prop("x",10).Loops(2).OnComplete(myFunction)</c>
+        /// </param>
+        /// <param name="p_punchAmplitude">Default: 0.5f - amplitude of the punch effect</param>
+        /// <param name="p_punchPeriod">Default: 0.1f - oscillation period of punch effect</param>
+        /// <returns>
+        /// The newly created <see cref="Tweener"/>,
+        /// or <c>null</c> if the parameters were invalid.
+        /// </returns>
+        public static Tweener Punch(object p_target, float p_duration, TweenParms p_parms, float p_punchAmplitude = 0.5f, float p_punchPeriod = 0.1f)
+        {
+            if (!initialized) Init();
+
+            p_parms.Ease(EaseType.EaseOutElastic, p_punchAmplitude, p_punchPeriod);
+            Tweener tw = new Tweener(p_target, p_duration, p_parms);
+
+            // Check if tween is valid.
+            if (tw.isEmpty) return null;
+
+            AddTween(tw);
+            return tw;
+        }
+
+        /// <summary>
+        /// Creates a new absolute SHAKE tween, and returns the <see cref="Tweener"/> representing it,
+        /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+        /// </summary>
+        /// <param name="p_target">
+        /// The tweening target (must be the object containing the properties or fields to tween).
+        /// </param>
+        /// <param name="p_duration">The duration in seconds of the tween.</param>
+        /// <param name="p_propName">The name of the property or field to tween.</param>
+        /// <param name="p_fromVal">The amount of shaking to apply.</param>
+        /// <param name="p_shakeAmplitude">Default: 0.1f - amplitude of the shake effect</param>
+        /// <param name="p_shakePeriod">Default: 0.12f - oscillation period of shake effect</param>
+        /// <returns>
+        /// The newly created <see cref="Tweener"/>,
+        /// or <c>null</c> if the parameters were invalid.
+        /// </returns>
+        public static Tweener Shake(object p_target, float p_duration, string p_propName, object p_fromVal, float p_shakeAmplitude = 0.1f, float p_shakePeriod = 0.12f)
+        {
+            TweenParms parms = new TweenParms()
+                .Prop(p_propName, p_fromVal)
+                .Ease(EaseType.EaseOutElastic, p_shakeAmplitude, p_shakePeriod);
+            return From(p_target, p_duration, parms);
+        }
+
+        /// <summary>
+        /// Creates a new SHAKE tween, and returns the <see cref="Tweener"/> representing it,
+        /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+        /// </summary>
+        /// <param name="p_target">
+        /// The tweening target (must be the object containing the properties or fields to tween).
+        /// </param>
+        /// <param name="p_duration">The duration in seconds of the tween.</param>
+        /// <param name="p_propName">The name of the property or field to tween.</param>
+        /// <param name="p_fromVal">The amount of shaking to apply.</param>
+        /// <param name="p_isRelative">
+        /// If <c>true</c> treats the end value as relative (tween BY instead than tween TO), otherwise as absolute.
+        /// </param>
+        /// <param name="p_shakeAmplitude">Default: 0.1f - amplitude of the shake effect</param>
+        /// <param name="p_shakePeriod">Default: 0.12f - oscillation period of shake effect</param>
+        /// <returns>
+        /// The newly created <see cref="Tweener"/>,
+        /// or <c>null</c> if the parameters were invalid.
+        /// </returns>
+        public static Tweener Shake(object p_target, float p_duration, string p_propName, object p_fromVal, bool p_isRelative, float p_shakeAmplitude = 0.1f, float p_shakePeriod = 0.12f)
+        {
+            TweenParms parms = new TweenParms()
+                .Prop(p_propName, p_fromVal, p_isRelative)
+                .Ease(EaseType.EaseOutElastic, p_shakeAmplitude, p_shakePeriod);
+            return From(p_target, p_duration, parms);
+        }
+
+        /// <summary>
+        /// Creates a new SHAKE tween and returns the <see cref="Tweener"/> representing it,
+        /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+        /// Any ease type passed won't be considered, since shake uses its own one.
+        /// </summary>
+        /// <param name="p_target">
+        /// The tweening target (must be the object containing the properties or fields to tween).
+        /// </param>
+        /// <param name="p_duration">The duration in seconds of the tween.</param>
+        /// <param name="p_parms">
+        /// A <see cref="TweenParms"/> representing the tween parameters.
+        /// You can pass an existing one, or create a new one inline via method chaining,
+        /// like <c>new TweenParms().Prop("x",10).Loops(2).OnComplete(myFunction)</c>
+        /// </param>
+        /// <param name="p_shakeAmplitude">Default: 0.1f - amplitude of the shake effect</param>
+        /// <param name="p_shakePeriod">Default: 0.12f - oscillation period of shake effect</param>
+        /// <returns>
+        /// The newly created <see cref="Tweener"/>,
+        /// or <c>null</c> if the parameters were invalid.
+        /// </returns>
+        public static Tweener Shake(object p_target, float p_duration, TweenParms p_parms, float p_shakeAmplitude = 0.1f, float p_shakePeriod = 0.12f)
+        {
+            if (!initialized) Init();
+
+            p_parms
+                .Ease(EaseType.EaseOutElastic, p_shakeAmplitude, p_shakePeriod)
+                .IsFrom();
+            Tweener tw = new Tweener(p_target, p_duration, p_parms);
+
+            // Check if tween is valid.
+            if (tw.isEmpty) return null;
+
+            AddTween(tw);
             return tw;
         }
 
