@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.750";
+        public const string VERSION = "1.1.760";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1687,12 +1687,13 @@ namespace Holoville.HOTween
         /// <param name="p_target">
         /// The target whose tweens to complete.
         /// </param>
+        /// <param name="p_dispatchEvents">If true dispatches the OnComplete event, otherwise ignores it</param>
         /// <returns>
         /// The total number of completed Tweeners.
         /// </returns>
-        public static int Complete(object p_target)
+        public static int Complete(object p_target, bool p_dispatchEvents = true)
         {
-            return DoFilteredIteration(p_target, DoFilteredComplete, true);
+            return DoFilteredIteration(p_target, DoFilteredComplete, true, p_dispatchEvents);
         }
 
         /// <summary>
@@ -1703,12 +1704,13 @@ namespace Holoville.HOTween
         /// <param name="p_id">
         /// The ID of the Tweeners/Sequences to complete.
         /// </param>
+        /// <param name="p_dispatchEvents">If true dispatches the OnComplete event, otherwise ignores it</param>
         /// <returns>
         /// The total number of completed Tweeners/Sequences.
         /// </returns>
-        public static int Complete(string p_id)
+        public static int Complete(string p_id, bool p_dispatchEvents = true)
         {
-            return DoFilteredIteration(p_id, DoFilteredComplete, true);
+            return DoFilteredIteration(p_id, DoFilteredComplete, true, p_dispatchEvents);
         }
 
         /// <summary>
@@ -1719,12 +1721,13 @@ namespace Holoville.HOTween
         /// <param name="p_intId">
         /// The intId of the Tweeners/Sequences to complete.
         /// </param>
+        /// <param name="p_dispatchEvents">If true dispatches the OnComplete event, otherwise ignores it</param>
         /// <returns>
         /// The total number of completed Tweeners/Sequences.
         /// </returns>
-        public static int Complete(int p_intId)
+        public static int Complete(int p_intId, bool p_dispatchEvents = true)
         {
-            return DoFilteredIteration(p_intId, DoFilteredComplete, true);
+            return DoFilteredIteration(p_intId, DoFilteredComplete, true, p_dispatchEvents);
         }
 
         /// <summary>
@@ -1735,12 +1738,13 @@ namespace Holoville.HOTween
         /// <param name="p_tweener">
         /// The Tweener to complete.
         /// </param>
+        /// <param name="p_dispatchEvents">If true dispatches the OnComplete event, otherwise ignores it</param>
         /// <returns>
         /// The total number of completed Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        public static int Complete(Tweener p_tweener)
+        public static int Complete(Tweener p_tweener, bool p_dispatchEvents = true)
         {
-            return DoFilteredIteration(p_tweener, DoFilteredComplete, true);
+            return DoFilteredIteration(p_tweener, DoFilteredComplete, true, p_dispatchEvents);
         }
 
         /// <summary>
@@ -1751,12 +1755,13 @@ namespace Holoville.HOTween
         /// <param name="p_sequence">
         /// The Sequence to complete.
         /// </param>
+        /// <param name="p_dispatchEvents">If true dispatches the OnComplete event, otherwise ignores it</param>
         /// <returns>
         /// The total number of completed Sequences (1 if the Sequence existed, otherwise 0).
         /// </returns>
-        public static int Complete(Sequence p_sequence)
+        public static int Complete(Sequence p_sequence, bool p_dispatchEvents = true)
         {
-            return DoFilteredIteration(p_sequence, DoFilteredComplete, true);
+            return DoFilteredIteration(p_sequence, DoFilteredComplete, true, p_dispatchEvents);
         }
 
         /// <summary>
@@ -1764,12 +1769,13 @@ namespace Holoville.HOTween
         /// Where a loop was involved and not infinite, the relative Tweener/Sequence completes at the position where it would actually be after the set number of loops.
         /// If there were infinite loops, this method will have no effect.
         /// </summary>
+        /// <param name="p_dispatchEvents">If true dispatches the OnComplete event, otherwise ignores it</param>
         /// <returns>
         /// The total number of completed Tweeners/Sequences.
         /// </returns>
-        public static int Complete()
+        public static int Complete(bool p_dispatchEvents = true)
         {
-            return DoFilteredIteration(null, DoFilteredComplete, true);
+            return DoFilteredIteration(null, DoFilteredComplete, true, p_dispatchEvents);
         }
 
         /// <summary>
@@ -2121,9 +2127,9 @@ namespace Holoville.HOTween
             tweens[p_index].Reverse();
         }
 
-        static void DoFilteredComplete(int p_index, bool p_optionalBool)
+        static void DoFilteredComplete(int p_index, bool p_dispatchEvents)
         {
-            tweens[p_index].Complete(false);
+            tweens[p_index].Complete(false, p_dispatchEvents);
         }
 
         /// <summary>

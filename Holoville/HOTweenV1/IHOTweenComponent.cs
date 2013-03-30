@@ -208,7 +208,8 @@ namespace Holoville.HOTween
         /// Where a loop was involved and not infinite, the Tweener/Sequence completes at the position where it would actually be after the set number of loops.
         /// If there were infinite loops, this method will have no effect.
         /// </summary>
-        void Complete();
+        /// <param name="p_dispatchEvents">If true dispatches the OnComplete event, otherwise ignores it</param>
+        void Complete(bool p_dispatchEvents = true);
 
         /// <summary>
         /// Sends the Tweener/Sequence to the given time (taking also loops into account).
