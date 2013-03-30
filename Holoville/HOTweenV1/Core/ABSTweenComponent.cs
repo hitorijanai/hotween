@@ -577,17 +577,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public void Complete()
         {
-            Complete(true, true);
-        }
-        /// <summary>
-        /// Completes this Tweener/Sequence.
-        /// Where a loop was involved, the Tweener/Sequence completes at the position where it would actually be after the set number of loops.
-        /// If there were infinite loops, this method will have no effect.
-        /// </summary>
-        /// <param name="p_dispatchEvents">If true dispatches the OnComplete event, otherwise ignores it</param>
-        public void Complete(bool p_dispatchEvents)
-        {
-            Complete(true, p_dispatchEvents);
+            Complete(true);
         }
 
         /// <summary>
@@ -877,7 +867,7 @@ namespace Holoville.HOTween.Core
         /// <summary>
         /// Used internally by HOTween, to avoid having the tween calling a kill while HOTween will already be killing it.
         /// </summary>
-        internal abstract void Complete(bool p_doAutoKill, bool p_dispatchEvents);
+        internal abstract void Complete(bool p_doAutoKill);
 
         /// <summary>
         /// Updates the Tweener/Sequence by the given elapsed time,

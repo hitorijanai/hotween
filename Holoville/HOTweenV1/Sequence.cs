@@ -528,13 +528,13 @@ namespace Holoville.HOTween
         /// Where a loop was involved, the Sequence completes at the position where it would actually be after the set number of loops.
         /// If there were infinite loops, this method will have no effect.
         /// </summary>
-        internal override void Complete(bool p_autoRemoveFromHOTween, bool p_dispatchEvents)
+        internal override void Complete(bool p_autoRemoveFromHOTween)
         {
             if (!_enabled) return;
             if (items == null || _loops < 0) return;
 
             _fullElapsed = _fullDuration;
-            Update(0, true, false, !p_dispatchEvents);
+            Update(0, true);
             if (_autoKillOnComplete) Kill(p_autoRemoveFromHOTween);
         }
 
