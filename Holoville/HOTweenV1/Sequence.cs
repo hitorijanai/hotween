@@ -327,6 +327,25 @@ namespace Holoville.HOTween
             return _duration;
         }
 
+        /// <summary>
+        /// Clears this sequence and resets its parameters, so it can be re-used.
+        /// You can check if a Sequence is clean by querying its isEmpty property.
+        /// </summary>
+        /// <param name="p_parms">
+        /// New parameters for the Sequence
+        /// (if NULL, note that the dafult ones will be used, and not the previous ones)
+        /// </param>
+        public void Clear(SequenceParms p_parms = null)
+        {
+            Reset();
+            hasCallbacks = false;
+            prevIncrementalCompletedLoops = prevIncrementalCompletedLoops = 0;
+            _destroyed = false;
+            // Apply new parms
+            if (p_parms != null) p_parms.InitializeSequence(this);
+            _isPaused = true;
+        }
+
         // ===================================================================================
         // METHODS ---------------------------------------------------------------------------
 
