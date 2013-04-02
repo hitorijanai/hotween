@@ -161,6 +161,7 @@ namespace Holoville.HOTween
                 }
                 if (!placed) items.Add(newItem);
             }
+            _isEmpty = false;
         }
 
         /// <summary>
@@ -211,6 +212,7 @@ namespace Holoville.HOTween
             _duration += newItem.duration;
 
             SetFullDuration();
+            _isEmpty = false;
             return _duration;
         }
 
@@ -268,6 +270,7 @@ namespace Holoville.HOTween
             _duration += itemDur;
 
             SetFullDuration();
+            _isEmpty = false;
             return _duration;
         }
 
@@ -306,6 +309,7 @@ namespace Holoville.HOTween
                     };
                 _duration = newItem.startTime + newItem.duration;
                 SetFullDuration();
+                _isEmpty = false;
                 return _duration;
             }
 
@@ -324,6 +328,7 @@ namespace Holoville.HOTween
             _duration = Mathf.Max(newItem.startTime + newItem.duration, _duration);
 
             SetFullDuration();
+            _isEmpty = false;
             return _duration;
         }
 
@@ -337,6 +342,7 @@ namespace Holoville.HOTween
         /// </param>
         public void Clear(SequenceParms p_parms = null)
         {
+            Kill(false);
             Reset();
             hasCallbacks = false;
             prevIncrementalCompletedLoops = prevIncrementalCompletedLoops = 0;

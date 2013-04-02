@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.760";
+        public const string VERSION = "1.1.761";
 
         /// <summary>
         /// HOTween author - me! :P
