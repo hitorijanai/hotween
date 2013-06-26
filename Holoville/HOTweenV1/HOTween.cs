@@ -49,7 +49,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.770";
+        public const string VERSION = "1.1.780";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -129,11 +129,15 @@ namespace Holoville.HOTween
         /// </summary>
         internal static List<ABSTweenComponent> onCompletes = new List<ABSTweenComponent>();
 
+        /// <summary>
+        /// TRUE while inside the update loop
+        /// </summary>
+        internal static bool isUpdateLoop { get; private set; }
+
         static bool initialized;
         static bool isPermanent; // If TRUE doesn't destroy HOTween when all tweens are killed.
         static bool renameInstToCountTw; // If TRUE renames HOTween's instance to show running tweens.
         static float time;
-        static bool isUpdateLoop; // TRUE while inside the DoUpdate loop
         static bool isQuitting;
         static List<int> tweensToRemoveIndexes = new List<int>(); // Used for removing tweens that were killed during an update 
 
@@ -670,9 +674,7 @@ namespace Holoville.HOTween
         /// </summary>
         void LateUpdate()
         {
-            if (tweens == null) {
-                return;
-            }
+            if (tweens == null) return;
 
             // Update tweens.
             DoUpdate(UpdateType.LateUpdate, Time.deltaTime);
@@ -685,9 +687,7 @@ namespace Holoville.HOTween
         /// </summary>
         void FixedUpdate()
         {
-            if (tweens == null) {
-                return;
-            }
+            if (tweens == null) return;
 
             // Update tweens.
             DoUpdate(UpdateType.FixedUpdate, Time.fixedDeltaTime);

@@ -1074,7 +1074,13 @@ namespace Holoville.HOTween.Core
             if (steadyIgnoreCallbacks || ignoreCallbacks) return;
 
             if (onComplete != null || onCompleteWParms != null) {
-                HOTween.onCompletes.Add(this); // delegate to HOTween which will call OnCompleteDispatch after this tween is eventually destroyed.
+                if (HOTween.isUpdateLoop) {
+                    // delegate to HOTween which will call OnCompleteDispatch after this tween is eventually destroyed.
+                    HOTween.onCompletes.Add(this);
+                } else {
+                    // Call onComplete immediately
+                    OnCompleteDispatch();
+                }
             }
         }
 
