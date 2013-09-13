@@ -45,7 +45,7 @@ namespace Holoville.HOTween.Core.Easing
 
         public float Evaluate(float time, float startValue, float changeValue, float duration, float unusedOvershoot, float unusedPeriod)
         {
-            float curveLen = animCurve.keys[animCurve.length - 1].time;
+            float curveLen = animCurve[animCurve.length - 1].time;
             float timePerc = time / duration;
             float eval = animCurve.Evaluate(timePerc * curveLen);
             return changeValue * eval + startValue;

@@ -38,6 +38,17 @@ namespace Holoville.HOTween
     /// </summary>
     public class TweenParms : ABSTweenComponentParms
     {
+        static readonly Dictionary<Type, string> _TypeToShortString = new Dictionary<Type, string>(8) {
+            { typeof(Vector2), "Vector2" },
+            { typeof(Vector3), "Vector3" },
+            { typeof(Vector4), "Vector4" },
+            { typeof(Quaternion), "Quaternion" },
+            { typeof(Color), "Color" },
+            { typeof(Rect), "Rect" },
+            { typeof(String), "String" },
+            { typeof(Int32), "Int32" }
+        };
+
         // VARS ///////////////////////////////////////////////////
 
         bool speedBased;
@@ -58,13 +69,7 @@ namespace Holoville.HOTween
         /// Returns <c>true</c> if at least one property tween was added to these parameters,
         /// either via <c>Prop()</c> or <c>NewProp()</c>.
         /// </summary>
-        public bool hasProps
-        {
-            get
-            {
-                return propDatas != null;
-            }
-        }
+        public bool hasProps { get { return propDatas != null; } }
 
 
         // ***********************************************************************************
@@ -132,8 +137,11 @@ namespace Holoville.HOTween
                 } else {
                     // Parse value to find correct plugin to use.
                     plug = null;
-                    string propType = (propInfo != null ? propInfo.PropertyType.ToString() : fieldInfo.FieldType.ToString());
-                    string shortPropType = propType.Substring(propType.IndexOf(".") + 1);
+//                    string propType = (propInfo != null ? propInfo.PropertyType.ToString() : fieldInfo.FieldType.ToString());
+//                    string shortPropType = propType.Substring(propType.IndexOf(".") + 1);
+                    string shortPropType = propInfo != null
+                        ? _TypeToShortString.ContainsKey(propInfo.PropertyType) ? _TypeToShortString[propInfo.PropertyType] : ""
+                        : _TypeToShortString.ContainsKey(fieldInfo.FieldType) ? _TypeToShortString[fieldInfo.FieldType] : "";
                     switch (shortPropType) {
                         case "Vector2":
                             if (!ValidateValue(data.endValOrPlugin, PlugVector2.validValueTypes)) break;
@@ -175,7 +183,7 @@ namespace Holoville.HOTween
                             try {
                                 plug = new PlugFloat(Convert.ToSingle(data.endValOrPlugin), data.isRelative);
                             } catch (Exception) {
-                                TweenWarning.Log("No valid plugin for animating \"" + p_target + "." + data.propName + "\" (of type " + propType + "). The tween for this property will not be created.");
+                                TweenWarning.Log("No valid plugin for animating \"" + p_target + "." + data.propName + "\" (of type " + (propInfo != null ? propInfo.PropertyType : fieldInfo.FieldType) + "). The tween for this property will not be created.");
                                 continue;
                             }
                             break;
