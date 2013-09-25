@@ -63,6 +63,41 @@ namespace Holoville.HOTween.Core
             ease = p_ease;
             inverseEase = p_inverseEase;
         }
+		
+		 static EaseInfo easeInSineInfo = new EaseInfo(Sine.EaseIn, Sine.EaseOut);
+		 static EaseInfo easeOutSineInfo = new EaseInfo(Sine.EaseOut, Sine.EaseIn);
+		 static EaseInfo easeInOutSineInfo = new EaseInfo(Sine.EaseInOut, null);
+		 static EaseInfo easeInQuadInfo = new EaseInfo(Quad.EaseIn, Quad.EaseOut);
+		 static EaseInfo easeOutQuadInfo = new EaseInfo(Quad.EaseOut, Quad.EaseIn);
+		 static EaseInfo easeInOutQuadInfo = new EaseInfo(Quad.EaseInOut, null);
+		 static EaseInfo easeInCubicInfo = new EaseInfo(Cubic.EaseIn, Cubic.EaseOut);
+		 static EaseInfo easeOutCubicInfo = new EaseInfo(Cubic.EaseOut, Cubic.EaseIn);
+		 static EaseInfo easeInOutCubicInfo = new EaseInfo(Cubic.EaseInOut, null);
+		 static EaseInfo easeInQuartInfo = new EaseInfo(Quart.EaseIn, Quart.EaseOut);
+		 static EaseInfo easeOutQuartInfo = new EaseInfo(Quart.EaseOut, Quart.EaseIn);
+		 static EaseInfo easeInOutQuartInfo = new EaseInfo(Quart.EaseInOut, null);
+		 static EaseInfo easeInQuintInfo = new EaseInfo(Quint.EaseIn, Quint.EaseOut);
+		 static EaseInfo easeOutQuintInfo = new EaseInfo(Quint.EaseOut, Quint.EaseIn);
+		 static EaseInfo easeInOutQuintInfo = new EaseInfo(Quint.EaseInOut, null);
+		 static EaseInfo easeInExpoInfo = new EaseInfo(Expo.EaseIn, Expo.EaseOut);
+		 static EaseInfo easeOutExpoInfo = new EaseInfo(Expo.EaseOut, Expo.EaseIn);
+		 static EaseInfo easeInOutExpoInfo = new EaseInfo(Expo.EaseInOut, null);
+		 static EaseInfo easeInCircInfo = new EaseInfo(Circ.EaseIn, Circ.EaseOut);
+		 static EaseInfo easeOutCircInfo = new EaseInfo(Circ.EaseOut, Circ.EaseIn);
+		 static EaseInfo easeInOutCircInfo = new EaseInfo(Circ.EaseInOut, null);
+		 static EaseInfo easeInElasticInfo = new EaseInfo(Elastic.EaseIn, Elastic.EaseOut);
+		 static EaseInfo easeOutElasticInfo = new EaseInfo(Elastic.EaseOut, Elastic.EaseIn);
+		 static EaseInfo easeInOutElasticInfo = new EaseInfo(Elastic.EaseInOut, null);
+		 static EaseInfo easeInBackInfo = new EaseInfo(Back.EaseIn, Back.EaseOut);
+		 static EaseInfo easeOutBackInfo = new EaseInfo(Back.EaseOut, Back.EaseIn);
+		 static EaseInfo easeInOutBackInfo = new EaseInfo(Back.EaseInOut, null);
+		 static EaseInfo easeInBounceInfo = new EaseInfo(Bounce.EaseIn, Bounce.EaseOut);
+		 static EaseInfo easeOutBounceInfo = new EaseInfo(Bounce.EaseOut, Bounce.EaseIn);
+		 static EaseInfo easeInOutBounceInfo = new EaseInfo(Bounce.EaseInOut, null);
+		 static EaseInfo easeInStrongInfo = new EaseInfo(Strong.EaseIn, Strong.EaseOut);
+		 static EaseInfo easeOutStrongInfo = new EaseInfo(Strong.EaseOut, Strong.EaseIn);
+		 static EaseInfo easeInOutStrongInfo = new EaseInfo(Strong.EaseInOut, null);
+		 static EaseInfo defaultEaseInfo = new EaseInfo(Linear.EaseNone, null);
 
         // ===================================================================================
         // STATIC METHODS --------------------------------------------------------------------
@@ -78,84 +113,84 @@ namespace Holoville.HOTween.Core
             switch (p_easeType)
             {
                 case EaseType.EaseInSine:
-                    return new EaseInfo(Sine.EaseIn, Sine.EaseOut);
+                    return easeInSineInfo;
                 case EaseType.EaseOutSine:
-                    return new EaseInfo(Sine.EaseOut, Sine.EaseIn);
+                    return easeOutSineInfo;
                 case EaseType.EaseInOutSine:
-                    return new EaseInfo(Sine.EaseInOut, null);
-
+                    return easeInOutSineInfo;
+ 
                 case EaseType.EaseInQuad:
-                    return new EaseInfo(Quad.EaseIn, Quad.EaseOut);
+					return easeInQuadInfo;
                 case EaseType.EaseOutQuad:
-                    return new EaseInfo(Quad.EaseOut, Quad.EaseIn);
+                    return easeOutQuadInfo;
                 case EaseType.EaseInOutQuad:
-                    return new EaseInfo(Quad.EaseInOut, null);
+                    return easeInOutQuadInfo;
 
                 case EaseType.EaseInCubic:
-                    return new EaseInfo(Cubic.EaseIn, Cubic.EaseOut);
+                    return easeInCubicInfo;
                 case EaseType.EaseOutCubic:
-                    return new EaseInfo(Cubic.EaseOut, Cubic.EaseIn);
+                    return easeOutCubicInfo;
                 case EaseType.EaseInOutCubic:
-                    return new EaseInfo(Cubic.EaseInOut, null);
+                    return easeInOutCubicInfo;
 
                 case EaseType.EaseInQuart:
-                    return new EaseInfo(Quart.EaseIn, Quart.EaseOut);
+                    return easeInQuartInfo;
                 case EaseType.EaseOutQuart:
-                    return new EaseInfo(Quart.EaseOut, Quart.EaseIn);
+                    return easeOutQuartInfo;
                 case EaseType.EaseInOutQuart:
-                    return new EaseInfo(Quart.EaseInOut, null);
+                    return easeInOutQuartInfo;
 
                 case EaseType.EaseInQuint:
-                    return new EaseInfo(Quint.EaseIn, Quint.EaseOut);
+                    return easeInQuintInfo;
                 case EaseType.EaseOutQuint:
-                    return new EaseInfo(Quint.EaseOut, Quint.EaseIn);
+                    return easeOutQuintInfo;
                 case EaseType.EaseInOutQuint:
-                    return new EaseInfo(Quint.EaseInOut, null);
+                    return easeInOutQuintInfo;
 
                 case EaseType.EaseInExpo:
-                    return new EaseInfo(Expo.EaseIn, Expo.EaseOut);
+                    return easeInExpoInfo;
                 case EaseType.EaseOutExpo:
-                    return new EaseInfo(Expo.EaseOut, Expo.EaseIn);
+                    return easeOutExpoInfo;
                 case EaseType.EaseInOutExpo:
-                    return new EaseInfo(Expo.EaseInOut, null);
+                    return easeInOutExpoInfo;
 
                 case EaseType.EaseInCirc:
-                    return new EaseInfo(Circ.EaseIn, Circ.EaseOut);
+                    return easeInCircInfo;
                 case EaseType.EaseOutCirc:
-                    return new EaseInfo(Circ.EaseOut, Circ.EaseIn);
+                    return easeOutCircInfo;
                 case EaseType.EaseInOutCirc:
-                    return new EaseInfo(Circ.EaseInOut, null);
+                    return easeInOutCircInfo;
 
                 case EaseType.EaseInElastic:
-                    return new EaseInfo(Elastic.EaseIn, Elastic.EaseOut);
+                    return easeInElasticInfo;
                 case EaseType.EaseOutElastic:
-                    return new EaseInfo(Elastic.EaseOut, Elastic.EaseIn);
+                    return easeOutElasticInfo;
                 case EaseType.EaseInOutElastic:
-                    return new EaseInfo(Elastic.EaseInOut, null);
+                    return easeInOutElasticInfo;
 
                 case EaseType.EaseInBack:
-                    return new EaseInfo(Back.EaseIn, Back.EaseOut);
+                    return easeInBackInfo;
                 case EaseType.EaseOutBack:
-                    return new EaseInfo(Back.EaseOut, Back.EaseIn);
+                    return easeOutBackInfo;
                 case EaseType.EaseInOutBack:
-                    return new EaseInfo(Back.EaseInOut, null);
+                    return easeInOutBackInfo;
 
                 case EaseType.EaseInBounce:
-                    return new EaseInfo(Bounce.EaseIn, Bounce.EaseOut);
+                    return easeInBounceInfo;
                 case EaseType.EaseOutBounce:
-                    return new EaseInfo(Bounce.EaseOut, Bounce.EaseIn);
+                    return easeOutBounceInfo;
                 case EaseType.EaseInOutBounce:
-                    return new EaseInfo(Bounce.EaseInOut, null);
+                    return easeInOutBounceInfo;
 
                 case EaseType.EaseInStrong:
-                    return new EaseInfo(Strong.EaseIn, Strong.EaseOut);
+                    return easeInStrongInfo;
                 case EaseType.EaseOutStrong:
-                    return new EaseInfo(Strong.EaseOut, Strong.EaseIn);
+                    return easeOutStrongInfo;
                 case EaseType.EaseInOutStrong:
-                    return new EaseInfo(Strong.EaseInOut, null);
+                    return easeInOutStrongInfo;
 
                 default:
-                    return new EaseInfo(Linear.EaseNone, null);
+                    return defaultEaseInfo;
             }
         }
     }
