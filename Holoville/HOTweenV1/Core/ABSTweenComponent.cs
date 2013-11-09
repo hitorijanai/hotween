@@ -82,6 +82,10 @@ namespace Holoville.HOTween.Core
         internal TweenDelegate.TweenCallbackWParms onUpdateWParms;
         internal object[] onUpdateParms;
 
+        internal TweenDelegate.TweenCallback onPluginUpdated;
+        internal TweenDelegate.TweenCallbackWParms onPluginUpdatedWParms;
+        internal object[] onPluginUpdatedParms;
+
         internal TweenDelegate.TweenCallback onPause;
         internal TweenDelegate.TweenCallbackWParms onPauseWParms;
         internal object[] onPauseParms;
@@ -710,6 +714,9 @@ namespace Holoville.HOTween.Core
             onUpdate = null;
             onUpdateWParms = null;
             onUpdateParms = null;
+            onPluginUpdated = null;
+            onPluginUpdatedWParms = null;
+            onPluginUpdatedParms = null;
             onStepComplete = null;
             onStepCompleteWParms = null;
             onStepCompleteParms = null;
@@ -1001,6 +1008,21 @@ namespace Holoville.HOTween.Core
                 onUpdate();
             } else if (onUpdateWParms != null) {
                 onUpdateWParms(new TweenEvent(this, onUpdateParms));
+            }
+        }
+
+        /// <summary>
+        /// Manages on plugin results behaviour.
+        /// </summary>
+        protected void OnPluginUpdated(ABSTweenPlugin p_plugin)
+        {
+            if (steadyIgnoreCallbacks || ignoreCallbacks) {
+                return;
+            }
+            if (onPluginUpdated != null) {
+                onPluginUpdated();
+            } else if (onPluginUpdatedWParms != null) {
+                onPluginUpdatedWParms(new TweenEvent(this, onPluginUpdatedParms, p_plugin));
             }
         }
 

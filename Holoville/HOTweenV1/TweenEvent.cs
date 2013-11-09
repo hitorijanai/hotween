@@ -25,6 +25,8 @@
 
 namespace Holoville.HOTween
 {
+    using Holoville.HOTween.Plugins.Core;
+
     /// <summary>
     /// This object is passed as the only parameter of all HOTween's callbacks.
     /// </summary>
@@ -34,6 +36,7 @@ namespace Holoville.HOTween
 
         readonly IHOTweenComponent _tween;
         readonly object[] _parms;
+        readonly ABSTweenPlugin _plugin;
 
         // READ-ONLY GETS /////////////////////////////////////////
 
@@ -42,8 +45,7 @@ namespace Holoville.HOTween
         /// </summary>
         public IHOTweenComponent tween
         {
-            get
-            {
+            get {
                 return _tween;
             }
         }
@@ -53,9 +55,18 @@ namespace Holoville.HOTween
         /// </summary>
         public object[] parms
         {
-            get
-            {
+            get {
                 return _parms;
+            }
+        }
+
+        /// <summary>
+        /// The plugin (if any) that triggered the callback.
+        /// </summary>
+        public ABSTweenPlugin plugin
+        {
+            get {
+                return _plugin;
             }
         }
 
@@ -68,6 +79,14 @@ namespace Holoville.HOTween
         {
             _tween = p_tween;
             _parms = p_parms;
+            _plugin = null;
+        }
+
+        internal TweenEvent(IHOTweenComponent p_tween, object[] p_parms, ABSTweenPlugin p_plugin)
+        {
+            _tween = p_tween;
+            _parms = p_parms;
+            _plugin = p_plugin;
         }
     }
 }

@@ -785,9 +785,11 @@ namespace Holoville.HOTween
                 }
                 if (_duration > 0) {
                     plug.Update(plugElapsed);
+                    OnPluginUpdated(plug);  // do callback
                 }
                 else {
                     // 0 duration tweens
+                    OnPluginUpdated(plug);  // do callback
                     plug.Complete();
                     if (!wasComplete) complete = true;
                 }

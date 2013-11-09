@@ -596,6 +596,23 @@ namespace Holoville.HOTween
         }
 
         /// <summary>
+        /// Function to call each time a plugin is updated.
+        /// </summary>
+        /// <param name="p_function">
+        /// The function to call.
+        /// It must return <c>void</c> and has to accept a single parameter of type <see cref="TweenEvent"/>.
+        /// </param>
+        /// <param name="p_funcParms">
+        /// Additional comma separated parameters to pass to the function.
+        /// </param>
+        public TweenParms OnPluginUpdated(TweenDelegate.TweenCallbackWParms p_function, params object[] p_funcParms)
+        {
+            onPluginUpdatedWParms = p_function;
+            onPluginUpdatedParms = p_funcParms;
+            return this;
+        }
+
+        /// <summary>
         /// Function to call when the Tweener switches from a playing state to a paused state.
         /// </summary>
         /// <param name="p_function">

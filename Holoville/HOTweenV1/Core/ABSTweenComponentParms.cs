@@ -103,6 +103,21 @@ namespace Holoville.HOTween.Core
         protected object[] onUpdateParms;
 
         /// <summary>
+        /// On plugin results.
+        /// </summary>
+        protected TweenDelegate.TweenCallback onPluginUpdated;
+
+        /// <summary>
+        /// On plugin results with parms.
+        /// </summary>
+        protected TweenDelegate.TweenCallbackWParms onPluginUpdatedWParms;
+
+        /// <summary>
+        /// On plugin results parameters.
+        /// </summary>
+        protected object[] onPluginUpdatedParms;
+
+        /// <summary>
         /// On pause.
         /// </summary>
         protected TweenDelegate.TweenCallback onPause;
@@ -205,6 +220,9 @@ namespace Holoville.HOTween.Core
             p_owner.onUpdate = onUpdate;
             p_owner.onUpdateWParms = onUpdateWParms;
             p_owner.onUpdateParms = onUpdateParms;
+            p_owner.onPluginUpdated = onPluginUpdated;
+            p_owner.onPluginUpdatedWParms = onPluginUpdatedWParms;
+            p_owner.onPluginUpdatedParms = onPluginUpdatedParms;
             p_owner.onPause = onPause;
             p_owner.onPauseWParms = onPauseWParms;
             p_owner.onPauseParms = onPauseParms;
