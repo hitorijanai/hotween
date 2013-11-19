@@ -403,19 +403,36 @@ namespace Holoville.HOTween
         /// <param name="p_target">
         /// The target to check.
         /// </param>
-        /// <returns>
-        /// A value of <c>true</c> if the given target and this Tweener target are the same, and this Tweener is running.
-        /// </returns>
         public override bool IsTweening(object p_target)
         {
-            if (!_enabled)
-            {
-                return false;
-            }
-            if (p_target == _target)
-            {
-                return !_isPaused;
-            }
+            if (!_enabled) return false;
+            if (p_target == _target) return !_isPaused;
+            return false;
+        }
+        /// <summary>
+        /// Returns <c>true</c> if the tween with the given string id is currently involved in a running tween or sequence.
+        /// This method is here to uniform <see cref="Tweener"/> with <see cref="Sequence"/>.
+        /// </summary>
+        /// <param name="p_id">
+        /// The id to check for.
+        /// </param>
+        public override bool IsTweening(string p_id)
+        {
+            if (!_enabled) return false;
+            if (id == p_id) return !_isPaused;
+            return false;
+        }
+        /// <summary>
+        /// Returns <c>true</c> if the tween with the given int id is currently involved in a running tween or sequence.
+        /// This method is here to uniform <see cref="Tweener"/> with <see cref="Sequence"/>.
+        /// </summary>
+        /// <param name="p_id">
+        /// The id to check for.
+        /// </param>
+        public override bool IsTweening(int p_id)
+        {
+            if (!_enabled) return false;
+            if (intId == p_id) return !_isPaused;
             return false;
         }
 

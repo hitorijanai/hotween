@@ -838,6 +838,20 @@ namespace Holoville.HOTween.Core
         /// A value of <c>true</c> if the given target is currently involved in a running tween or sequence.
         /// </returns>
         public abstract bool IsTweening(object p_target);
+        /// <summary>
+        /// Returns <c>true</c> if the tween with the given string id is currently involved in a running tween or sequence.
+        /// </summary>
+        /// <param name="p_id">
+        /// The id to check for.
+        /// </param>
+        public abstract bool IsTweening(string p_id);
+        /// <summary>
+        /// Returns <c>true</c> if the tween with the given int id is currently involved in a running tween or sequence.
+        /// </summary>
+        /// <param name="p_id">
+        /// The id to check for.
+        /// </param>
+        public abstract bool IsTweening(int p_id);
 
         /// <summary>
         /// Returns <c>true</c> if the given target is linked to a tween or sequence (running or not).

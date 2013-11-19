@@ -406,14 +406,9 @@ namespace Holoville.HOTween
         /// <param name="p_target">
         /// The target to check.
         /// </param>
-        /// <returns>
-        /// A value of <c>true</c> if the given target is currently involved in a running tween of this Sequence (taking into account also nested tweens).
-        /// </returns>
         public override bool IsTweening(object p_target)
         {
-            if (!_enabled || items == null) {
-                return false;
-            }
+            if (!_enabled || items == null) return false;
 
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i) {
@@ -423,6 +418,44 @@ namespace Holoville.HOTween
                 }
             }
 
+            return false;
+        }
+        /// <summary>
+        /// Returns <c>true</c> if the tween with the given string id is currently involved in a running tween or sequence.
+        /// </summary>
+        /// <param name="p_id">
+        /// The id to check for.
+        /// </param>
+        public override bool IsTweening(string p_id)
+        {
+            if (!_enabled || items == null) return false;
+
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i) {
+                HOTSeqItem item = items[i];
+                if (item.seqItemType == SeqItemType.Tween && item.twMember.IsTweening(p_id)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        /// <summary>
+        /// Returns <c>true</c> if the tween with the given int id is currently involved in a running tween or sequence.
+        /// </summary>
+        /// <param name="p_id">
+        /// The id to check for.
+        /// </param>
+        public override bool IsTweening(int p_id)
+        {
+            if (!_enabled || items == null) return false;
+
+            int itemsCount = items.Count;
+            for (int i = 0; i < itemsCount; ++i) {
+                HOTSeqItem item = items[i];
+                if (item.seqItemType == SeqItemType.Tween && item.twMember.IsTweening(p_id)) {
+                    return true;
+                }
+            }
             return false;
         }
 

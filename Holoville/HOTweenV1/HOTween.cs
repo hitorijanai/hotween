@@ -48,7 +48,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.820";
+        public const string VERSION = "1.1.850";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1960,6 +1960,40 @@ namespace Holoville.HOTween
             int tweensCount = tweens.Count;
             for (int i = 0; i < tweensCount; ++i) {
                 if (tweens[i].IsTweening(p_target)) return true;
+            }
+
+            return false;
+        }
+        /// <summary>
+        /// Returns <c>true</c> if the given id is involved in any running Tweener or Sequence (taking into account also nested tweens).
+        /// </summary>
+        /// <param name="p_id">
+        /// The target to check.
+        /// </param>
+        public static bool IsTweening(string p_id)
+        {
+            if (tweens == null) return false;
+
+            int tweensCount = tweens.Count;
+            for (int i = 0; i < tweensCount; ++i) {
+                if (tweens[i].IsTweening(p_id)) return true;
+            }
+
+            return false;
+        }
+        /// <summary>
+        /// Returns <c>true</c> if the given id is involved in any running Tweener or Sequence (taking into account also nested tweens).
+        /// </summary>
+        /// <param name="p_id">
+        /// The target to check.
+        /// </param>
+        public static bool IsTweening(int p_id)
+        {
+            if (tweens == null) return false;
+
+            int tweensCount = tweens.Count;
+            for (int i = 0; i < tweensCount; ++i) {
+                if (tweens[i].IsTweening(p_id)) return true;
             }
 
             return false;
