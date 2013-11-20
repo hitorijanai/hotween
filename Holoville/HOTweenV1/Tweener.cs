@@ -818,11 +818,18 @@ namespace Holoville.HOTween
                 OnUpdate();
                 if (_fullElapsed == 0)
                 {
+                    if (!_isPaused) {
+                        _isPaused = true;
+                        OnPause();
+                    }
                     OnRewinded();
                 }
             }
-            if (complete)
-            {
+            if (complete) {
+                if (!_isPaused) {
+                    _isPaused = true;
+                    OnPause();
+                }
                 OnComplete();
             }
             else if (stepComplete)

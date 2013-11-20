@@ -750,9 +750,19 @@ namespace Holoville.HOTween
             // Manage eventual pause, complete, update, and stepComplete.
             if (_fullElapsed != prevFullElapsed) {
                 OnUpdate();
-                if (_fullElapsed == 0) OnRewinded();
+                if (_fullElapsed == 0) {
+                    if (!_isPaused) {
+                        _isPaused = true;
+                        OnPause();
+                    }
+                    OnRewinded();
+                }
             }
             if (complete) {
+                if (!_isPaused) {
+                    _isPaused = true;
+                    OnPause();
+                }
                 OnComplete();
             } else if (stepComplete) {
                 OnStepComplete();

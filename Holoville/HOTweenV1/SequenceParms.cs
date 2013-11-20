@@ -401,5 +401,95 @@ namespace Holoville.HOTween
             };
             return this;
         }
+
+        // ===================================================================================
+        // BEHAVIOURS/GAMEOBJECT MANAGEMENT METHODS ------------------------------------------
+
+        /// <summary>
+        /// Keeps the given component enabled while the tween is playing
+        /// </summary>
+        public SequenceParms KeepEnabled(Behaviour p_target)
+        {
+            if (p_target == null) {
+                manageBehaviours = false;
+                return this;
+            }
+            return KeepEnabled(new[] { p_target }, true);
+        }
+        /// <summary>
+        /// Keeps the given gameObject activated while the tween is playing
+        /// </summary>
+        public SequenceParms KeepEnabled(GameObject p_target)
+        {
+            if (p_target == null) {
+                manageGameObjects = false;
+                return this;
+            }
+            return KeepEnabled(new[] { p_target }, true);
+        }
+        /// <summary>
+        /// Keeps the given components enabled while the tween is playing
+        /// </summary>
+        public SequenceParms KeepEnabled(Behaviour[] p_targets)
+        {
+            return KeepEnabled(p_targets, true);
+        }
+        /// <summary>
+        /// Keeps the given GameObject activated while the tween is playing
+        /// </summary>
+        public SequenceParms KeepEnabled(GameObject[] p_targets)
+        {
+            return KeepEnabled(p_targets, true);
+        }
+        /// <summary>
+        /// Keeps the given component disabled while the tween is playing
+        /// </summary>
+        public SequenceParms KeepDisabled(Behaviour p_target)
+        {
+            if (p_target == null) {
+                manageBehaviours = false;
+                return this;
+            }
+            return KeepEnabled(new[] { p_target }, false);
+        }
+        /// <summary>
+        /// Keeps the given GameObject disabled while the tween is playing
+        /// </summary>
+        public SequenceParms KeepDisabled(GameObject p_target)
+        {
+            if (p_target == null) {
+                manageGameObjects = false;
+                return this;
+            }
+            return KeepEnabled(new[] { p_target }, false);
+        }
+        /// <summary>
+        /// Keeps the given components disabled while the tween is playing
+        /// </summary>
+        public SequenceParms KeepDisabled(Behaviour[] p_targets)
+        {
+            return KeepEnabled(p_targets, false);
+        }
+        /// <summary>
+        /// Keeps the given GameObject disabled while the tween is playing
+        /// </summary>
+        public SequenceParms KeepDisabled(GameObject[] p_targets)
+        {
+            return KeepEnabled(p_targets, false);
+        }
+        SequenceParms KeepEnabled(Behaviour[] p_targets, bool p_enabled)
+        {
+            manageBehaviours = true;
+            if (p_enabled) managedBehavioursOn = p_targets;
+            else managedBehavioursOff = p_targets;
+            return this;
+        }
+        SequenceParms KeepEnabled(GameObject[] p_targets, bool p_enabled)
+        {
+            manageGameObjects = true;
+            if (p_enabled) managedGameObjectsOn = p_targets;
+            else managedGameObjectsOff = p_targets;
+            return this;
+        }
     }
 }

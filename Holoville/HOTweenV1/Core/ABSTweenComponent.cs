@@ -183,6 +183,41 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected int prevCompletedLoops;
 
+        // BEHAVIOURS/GAMEOBJECT MANAGEMENT PARMS
+
+        /// <summary>
+        /// True if there are behaviours to manage
+        /// </summary>
+        internal bool manageBehaviours;
+        /// <summary>
+        /// True if there are gameObject to manage
+        /// </summary>
+        internal bool manageGameObjects;
+        /// <summary>
+        /// Behaviours to activate
+        /// </summary>
+        internal Behaviour[] managedBehavioursOn;
+        /// <summary>
+        /// Behaviours to deactivate
+        /// </summary>
+        internal Behaviour[] managedBehavioursOff;
+        /// <summary>
+        /// GameObjects to activate
+        /// </summary>
+        internal GameObject[] managedGameObjectsOn;
+        /// <summary>
+        /// GameObejcts to deactivate
+        /// </summary>
+        internal GameObject[] managedGameObjectsOff;
+        /// <summary>
+        /// True = enabled, False = disabled
+        /// </summary>
+        internal bool[] managedBehavioursOriginalState;
+        /// <summary>
+        /// True = active, False = inactive
+        /// </summary>
+        internal bool[] managedGameObjectsOriginalState;
+
         // GETS/SETS //////////////////////////////////////////////
 
         /// <summary>
@@ -514,7 +549,7 @@ namespace Holoville.HOTween.Core
 
         void PlayIfPaused()
         {
-            if (_isPaused) {
+            if (_isPaused && (!_isReversed && !_isComplete || _isReversed && _fullElapsed > 0)) {
                 _isPaused = false;
                 OnPlay();
             }
@@ -1008,6 +1043,7 @@ namespace Holoville.HOTween.Core
             } else if (onStartWParms != null) {
                 onStartWParms(new TweenEvent(this, onStartParms));
             }
+            OnPlay();
         }
 
         /// <summary>
@@ -1045,9 +1081,9 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnPause()
         {
-            if (steadyIgnoreCallbacks || ignoreCallbacks) {
-                return;
-            }
+            if (steadyIgnoreCallbacks || ignoreCallbacks) return;
+
+            ManageObjects(false);
             if (onPause != null) {
                 onPause();
             } else if (onPauseWParms != null) {
@@ -1056,13 +1092,13 @@ namespace Holoville.HOTween.Core
         }
 
         /// <summary>
-        /// Manages on resume behaviour.
+        /// Manages on resume behaviour (also called when the tween starts).
         /// </summary>
         protected void OnPlay()
         {
-            if (steadyIgnoreCallbacks || ignoreCallbacks) {
-                return;
-            }
+            if (steadyIgnoreCallbacks || ignoreCallbacks) return;
+
+            ManageObjects(true);
             if (onPlay != null) {
                 onPlay();
             } else if (onPlayWParms != null) {
@@ -1075,9 +1111,8 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected void OnRewinded()
         {
-            if (steadyIgnoreCallbacks || ignoreCallbacks) {
-                return;
-            }
+            if (steadyIgnoreCallbacks || ignoreCallbacks) return;
+
             if (onRewinded != null) {
                 onRewinded();
             } else if (onRewindedWParms != null) {
@@ -1177,6 +1212,62 @@ namespace Holoville.HOTween.Core
             _isLoopingBack = (_loopType != LoopType.Restart && _loopType != LoopType.Incremental &&
                               (_loops > 0 && (_completedLoops < _loops && _completedLoops % 2 != 0 || _completedLoops >= _loops && _completedLoops % 2 == 0)
                                || _loops < 0 && _completedLoops % 2 != 0));
+        }
+
+        /// <summary>
+        /// Manages the components/gameObjects that should be activated/deactivated.
+        /// </summary>
+        protected void ManageObjects(bool isPlay)
+        {
+            // Behaviours/GameObjects management
+            if (manageBehaviours) {
+                int offLen = 0;
+                if (managedBehavioursOn != null) {
+                    offLen = managedBehavioursOn.Length;
+                    for (int i = 0; i < managedBehavioursOn.Length; ++i) {
+                        Behaviour behaviour = managedBehavioursOn[i];
+                        if (behaviour == null) continue;
+                        if (isPlay) {
+                            managedBehavioursOriginalState[i] = behaviour.enabled;
+                            behaviour.enabled = true;
+                        } else behaviour.enabled = managedBehavioursOriginalState[i];
+                    }
+                }
+                if (managedBehavioursOff != null) {
+                    for (int i = 0; i < managedBehavioursOff.Length; ++i) {
+                        Behaviour behaviour = managedBehavioursOff[i];
+                        if (behaviour == null) continue;
+                        if (isPlay) {
+                            managedBehavioursOriginalState[offLen + i] = behaviour.enabled;
+                            behaviour.enabled = false;
+                        } else behaviour.enabled = managedBehavioursOriginalState[i + offLen];
+                    }
+                }
+            }
+            if (manageGameObjects) {
+                int offLen = 0;
+                if (managedGameObjectsOn != null) {
+                    offLen = managedGameObjectsOn.Length;
+                    for (int i = 0; i < managedGameObjectsOn.Length; ++i) {
+                        GameObject go = managedGameObjectsOn[i];
+                        if (go == null) continue;
+                        if (isPlay) {
+                            managedGameObjectsOriginalState[i] = go.active;
+                            go.active = true;
+                        } else go.active = managedGameObjectsOriginalState[i];
+                    }
+                }
+                if (managedGameObjectsOff != null) {
+                    for (int i = 0; i < managedGameObjectsOff.Length; ++i) {
+                        GameObject go = managedGameObjectsOff[i];
+                        if (go == null) continue;
+                        if (isPlay) {
+                            managedGameObjectsOriginalState[offLen + i] = go.active;
+                            go.active = false;
+                        } else go.active = managedGameObjectsOriginalState[i + offLen];
+                    }
+                }
+            }
         }
 
         // ===================================================================================

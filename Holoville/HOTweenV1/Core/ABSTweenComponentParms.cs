@@ -23,6 +23,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using UnityEngine;
+
 namespace Holoville.HOTween.Core
 {
     /// <summary>
@@ -192,6 +194,33 @@ namespace Holoville.HOTween.Core
         /// </summary>
         protected object[] onCompleteParms;
 
+        // BEHAVIOURS/GAMEOBJECT MANAGEMENT PARMS
+
+        /// <summary>
+        /// True if there are behaviours to manage
+        /// </summary>
+        protected bool manageBehaviours;
+        /// <summary>
+        /// True if there are gameObject to manage
+        /// </summary>
+        protected bool manageGameObjects;
+        /// <summary>
+        /// Behaviours to activate
+        /// </summary>
+        protected Behaviour[] managedBehavioursOn;
+        /// <summary>
+        /// Behaviours to deactivate
+        /// </summary>
+        protected Behaviour[] managedBehavioursOff;
+        /// <summary>
+        /// GameObjects to activate
+        /// </summary>
+        protected GameObject[] managedGameObjectsOn;
+        /// <summary>
+        /// GameObejcts to deactivate
+        /// </summary>
+        protected GameObject[] managedGameObjectsOff;
+
 
         // ***********************************************************************************
         // INIT
@@ -238,6 +267,21 @@ namespace Holoville.HOTween.Core
             p_owner.onComplete = onComplete;
             p_owner.onCompleteWParms = onCompleteWParms;
             p_owner.onCompleteParms = onCompleteParms;
+
+            p_owner.manageBehaviours = manageBehaviours;
+            p_owner.manageGameObjects = manageGameObjects;
+            p_owner.managedBehavioursOn = managedBehavioursOn;
+            p_owner.managedBehavioursOff = managedBehavioursOff;
+            p_owner.managedGameObjectsOn = managedGameObjectsOn;
+            p_owner.managedGameObjectsOff = managedGameObjectsOff;
+            if (manageBehaviours) {
+                int len = (managedBehavioursOn != null ? managedBehavioursOn.Length : 0) + (managedBehavioursOff != null ? managedBehavioursOff.Length : 0);
+                p_owner.managedBehavioursOriginalState = new bool[len];
+            }
+            if (manageGameObjects) {
+                int len = (managedGameObjectsOn != null ? managedGameObjectsOn.Length : 0) + (managedGameObjectsOff != null ? managedGameObjectsOff.Length : 0);
+                p_owner.managedGameObjectsOriginalState = new bool[len];
+            }
         }
     }
 }
