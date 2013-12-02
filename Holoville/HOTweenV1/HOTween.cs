@@ -48,7 +48,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.1.860";
+        public const string VERSION = "1.1.870";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1595,12 +1595,16 @@ namespace Holoville.HOTween
         /// <param name="p_target">
         /// The target whose tweens to reverse.
         /// </param>
+        /// <param name="p_forcePlay">
+        /// If TRUE, the tween will also start playing in case it was paused,
+        /// otherwise it will maintain its current play/pause state (default).
+        /// </param>
         /// <returns>
         /// The total number of reversed Tweeners.
         /// </returns>
-        public static int Reverse(object p_target)
+        public static int Reverse(object p_target, bool p_forcePlay = false)
         {
-            return DoFilteredIteration(p_target, DoFilteredReverse, false);
+            return DoFilteredIteration(p_target, DoFilteredReverse, p_forcePlay);
         }
 
         /// <summary>
@@ -1611,12 +1615,16 @@ namespace Holoville.HOTween
         /// <param name="p_id">
         /// The ID of the Tweeners/Sequences to reverse.
         /// </param>
+        /// <param name="p_forcePlay">
+        /// If TRUE, the tween will also start playing in case it was paused,
+        /// otherwise it will maintain its current play/pause state (default).
+        /// </param>
         /// <returns>
         /// The total number of reversed Tweeners/Sequences.
         /// </returns>
-        public static int Reverse(string p_id)
+        public static int Reverse(string p_id, bool p_forcePlay = false)
         {
-            return DoFilteredIteration(p_id, DoFilteredReverse, false);
+            return DoFilteredIteration(p_id, DoFilteredReverse, p_forcePlay);
         }
 
         /// <summary>
@@ -1627,12 +1635,16 @@ namespace Holoville.HOTween
         /// <param name="p_intId">
         /// The intId of the Tweeners/Sequences to reverse.
         /// </param>
+        /// <param name="p_forcePlay">
+        /// If TRUE, the tween will also start playing in case it was paused,
+        /// otherwise it will maintain its current play/pause state (default).
+        /// </param>
         /// <returns>
         /// The total number of reversed Tweeners/Sequences.
         /// </returns>
-        public static int Reverse(int p_intId)
+        public static int Reverse(int p_intId, bool p_forcePlay = false)
         {
-            return DoFilteredIteration(p_intId, DoFilteredReverse, false);
+            return DoFilteredIteration(p_intId, DoFilteredReverse, p_forcePlay);
         }
 
         /// <summary>
@@ -1643,12 +1655,16 @@ namespace Holoville.HOTween
         /// <param name="p_tweener">
         /// The Tweener to reverse.
         /// </param>
+        /// <param name="p_forcePlay">
+        /// If TRUE, the tween will also start playing in case it was paused,
+        /// otherwise it will maintain its current play/pause state (default).
+        /// </param>
         /// <returns>
         /// The total number of reversed Tweeners (1 if the Tweener existed, otherwise 0).
         /// </returns>
-        public static int Reverse(Tweener p_tweener)
+        public static int Reverse(Tweener p_tweener, bool p_forcePlay = false)
         {
-            return DoFilteredIteration(p_tweener, DoFilteredReverse, false);
+            return DoFilteredIteration(p_tweener, DoFilteredReverse, p_forcePlay);
         }
 
         /// <summary>
@@ -1657,12 +1673,16 @@ namespace Holoville.HOTween
         /// <param name="p_sequence">
         /// The Sequence to reverse.
         /// </param>
+        /// <param name="p_forcePlay">
+        /// If TRUE, the tween will also start playing in case it was paused,
+        /// otherwise it will maintain its current play/pause state (default).
+        /// </param>
         /// <returns>
         /// The total number of reversed Sequences (1 if the Sequence existed, otherwise 0).
         /// </returns>
-        public static int Reverse(Sequence p_sequence)
+        public static int Reverse(Sequence p_sequence, bool p_forcePlay = false)
         {
-            return DoFilteredIteration(p_sequence, DoFilteredReverse, false);
+            return DoFilteredIteration(p_sequence, DoFilteredReverse, p_forcePlay);
         }
 
         /// <summary>
@@ -1670,12 +1690,16 @@ namespace Holoville.HOTween
         /// animating them from their current value back to the starting one,
         /// and returns the total number of reversed Tweeners/Sequences.
         /// </summary>
+        /// <param name="p_forcePlay">
+        /// If TRUE, the tween will also start playing in case it was paused,
+        /// otherwise it will maintain its current play/pause state (default).
+        /// </param>
         /// <returns>
         /// The total number of reversed Tweeners/Sequences.
         /// </returns>
-        public static int Reverse()
+        public static int Reverse(bool p_forcePlay = false)
         {
-            return DoFilteredIteration(null, DoFilteredReverse, false);
+            return DoFilteredIteration(null, DoFilteredReverse, p_forcePlay);
         }
 
         /// <summary>
@@ -2149,9 +2173,9 @@ namespace Holoville.HOTween
             }
         }
 
-        static void DoFilteredReverse(int p_index, bool p_optionalBool)
+        static void DoFilteredReverse(int p_index, bool p_forcePlay = false)
         {
-            tweens[p_index].Reverse();
+            tweens[p_index].Reverse(p_forcePlay);
         }
 
         static void DoFilteredComplete(int p_index, bool p_optionalBool)

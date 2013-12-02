@@ -602,10 +602,15 @@ namespace Holoville.HOTween.Core
         /// Reverses this Tweener/Sequence,
         /// animating it backwards from its curren position.
         /// </summary>
-        public void Reverse()
+        /// <param name="p_forcePlay">
+        /// If TRUE, the tween will also start playing in case it was paused,
+        /// otherwise it will maintain its current play/pause state (default).
+        /// </param>
+        public void Reverse(bool p_forcePlay = false)
         {
             if (_enabled) {
                 _isReversed = !_isReversed;
+                if (p_forcePlay) Play();
             }
         }
 
