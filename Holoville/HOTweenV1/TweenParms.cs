@@ -44,6 +44,7 @@ namespace Holoville.HOTween
             { typeof(Vector4), "Vector4" },
             { typeof(Quaternion), "Quaternion" },
             { typeof(Color), "Color" },
+            { typeof(Color32), "Color32" },
             { typeof(Rect), "Rect" },
             { typeof(String), "String" },
             { typeof(Int32), "Int32" }
@@ -166,6 +167,10 @@ namespace Holoville.HOTween
                         case "Color":
                             if (!ValidateValue(data.endValOrPlugin, PlugColor.validValueTypes)) break;
                             plug = new PlugColor((Color)data.endValOrPlugin, data.isRelative);
+                            break;
+                        case "Color32":
+                            if (!ValidateValue(data.endValOrPlugin, PlugColor32.validValueTypes)) break;
+                            plug = new PlugColor32((Color32)data.endValOrPlugin, data.isRelative);
                             break;
                         case "Rect":
                             if (!ValidateValue(data.endValOrPlugin, PlugRect.validValueTypes)) break;

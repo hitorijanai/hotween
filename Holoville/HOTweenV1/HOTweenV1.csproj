@@ -104,6 +104,7 @@
     <Compile Include="PathType.cs" />
     <Compile Include="Plugins\Core\ABSTweenPlugin.cs" />
     <Compile Include="Plugins\Core\PlugColor.cs" />
+    <Compile Include="Plugins\Core\PlugColor32.cs" />
     <Compile Include="Plugins\Core\PlugFloat.cs" />
     <Compile Include="Plugins\Core\PlugRect.cs" />
     <Compile Include="Plugins\Core\PlugVector2.cs" />

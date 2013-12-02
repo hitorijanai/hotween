@@ -772,6 +772,15 @@ namespace Holoville.HOTween.Core
             onRewinded = null;
             onRewindedWParms = null;
             onRewindedParms = null;
+
+            manageBehaviours = false;
+            managedBehavioursOff = null;
+            managedBehavioursOn = null;
+            managedBehavioursOriginalState = null;
+            manageGameObjects = false;
+            managedGameObjectsOff = null;
+            managedGameObjectsOn = null;
+            managedGameObjectsOriginalState = null;
         }
 
         /// <summary>
