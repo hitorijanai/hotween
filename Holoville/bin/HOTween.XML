@@ -6308,6 +6308,107 @@
             The eased value.
             </returns>
         </member>
+        <member name="T:Holoville.HOTween.Plugins.Core.PlugColor32">
+            <summary>
+            Default plugin for the tweening of Color32 objects.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.#ctor(UnityEngine.Color32)">
+            <summary>
+            Creates a new instance of this plugin using the main ease type.
+            </summary>
+            <param name="p_endVal">
+            The <see cref="T:UnityEngine.Color32"/> value to tween to.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.#ctor(UnityEngine.Color32,Holoville.HOTween.EaseType)">
+            <summary>
+            Creates a new instance of this plugin.
+            </summary>
+            <param name="p_endVal">
+            The <see cref="T:UnityEngine.Color32"/> value to tween to.
+            </param>
+            <param name="p_easeType">
+            The <see cref="T:Holoville.HOTween.EaseType"/> to use.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.#ctor(UnityEngine.Color32,System.Boolean)">
+            <summary>
+            Creates a new instance of this plugin using the main ease type.
+            </summary>
+            <param name="p_endVal">
+            The <see cref="T:UnityEngine.Color32"/> value to tween to.
+            </param>
+            <param name="p_isRelative">
+            If <c>true</c>, the given end value is considered relative instead than absolute.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.#ctor(UnityEngine.Color32,Holoville.HOTween.EaseType,System.Boolean)">
+            <summary>
+            Creates a new instance of this plugin.
+            </summary>
+            <param name="p_endVal">
+            The <see cref="T:UnityEngine.Color32"/> value to tween to.
+            </param>
+            <param name="p_easeType">
+            The <see cref="T:Holoville.HOTween.EaseType"/> to use.
+            </param>
+            <param name="p_isRelative">
+            If <c>true</c>, the given end value is considered relative instead than absolute.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.#ctor(UnityEngine.Color32,UnityEngine.AnimationCurve,System.Boolean)">
+            <summary>
+            Creates a new instance of this plugin.
+            </summary>
+            <param name="p_endVal">
+            The <see cref="T:UnityEngine.Color32"/> value to tween to.
+            </param>
+            <param name="p_easeAnimCurve">
+            The <see cref="T:UnityEngine.AnimationCurve"/> to use for easing.
+            </param>
+            <param name="p_isRelative">
+            If <c>true</c>, the given end value is considered relative instead than absolute.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.GetSpeedBasedDuration(System.Single)">
+            <summary>
+            Returns the speed-based duration based on the given speed x second.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.SetChangeVal">
+            <summary>
+            Sets the typed changeVal based on the current startVal and endVal.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.SetIncremental(System.Int32)">
+            <summary>
+            Sets the correct values in case of Incremental loop type.
+            </summary>
+            <param name="p_diffIncr">
+            The difference from the previous loop increment.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.DoUpdate(System.Single)">
+            <summary>
+            Updates the tween.
+            </summary>
+            <param name="p_totElapsed">
+            The total elapsed time since startup.
+            </param>
+        </member>
+        <member name="P:Holoville.HOTween.Plugins.Core.PlugColor32.startVal">
+            <summary>
+            Gets the untyped start value,
+            sets both the untyped and the typed start value.
+            </summary>
+        </member>
+        <member name="P:Holoville.HOTween.Plugins.Core.PlugColor32.endVal">
+            <summary>
+            Gets the untyped end value,
+            sets both the untyped and the typed end value.
+            </summary>
+        </member>
         <member name="T:Holoville.HOTween.Core.TweenWarning">
             <summary>
             Used internally to generate warnings that are managed without throwing exceptions.
@@ -7964,107 +8065,6 @@
             </summary>
         </member>
         <member name="P:Holoville.HOTween.Plugins.PlugInt.endVal">
-            <summary>
-            Gets the untyped end value,
-            sets both the untyped and the typed end value.
-            </summary>
-        </member>
-        <member name="T:Holoville.HOTween.Plugins.Core.PlugColor32">
-            <summary>
-            Default plugin for the tweening of Color32 objects.
-            </summary>
-        </member>
-        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.#ctor(UnityEngine.Color32)">
-            <summary>
-            Creates a new instance of this plugin using the main ease type.
-            </summary>
-            <param name="p_endVal">
-            The <see cref="T:UnityEngine.Color32"/> value to tween to.
-            </param>
-        </member>
-        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.#ctor(UnityEngine.Color32,Holoville.HOTween.EaseType)">
-            <summary>
-            Creates a new instance of this plugin.
-            </summary>
-            <param name="p_endVal">
-            The <see cref="T:UnityEngine.Color32"/> value to tween to.
-            </param>
-            <param name="p_easeType">
-            The <see cref="T:Holoville.HOTween.EaseType"/> to use.
-            </param>
-        </member>
-        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.#ctor(UnityEngine.Color32,System.Boolean)">
-            <summary>
-            Creates a new instance of this plugin using the main ease type.
-            </summary>
-            <param name="p_endVal">
-            The <see cref="T:UnityEngine.Color32"/> value to tween to.
-            </param>
-            <param name="p_isRelative">
-            If <c>true</c>, the given end value is considered relative instead than absolute.
-            </param>
-        </member>
-        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.#ctor(UnityEngine.Color32,Holoville.HOTween.EaseType,System.Boolean)">
-            <summary>
-            Creates a new instance of this plugin.
-            </summary>
-            <param name="p_endVal">
-            The <see cref="T:UnityEngine.Color32"/> value to tween to.
-            </param>
-            <param name="p_easeType">
-            The <see cref="T:Holoville.HOTween.EaseType"/> to use.
-            </param>
-            <param name="p_isRelative">
-            If <c>true</c>, the given end value is considered relative instead than absolute.
-            </param>
-        </member>
-        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.#ctor(UnityEngine.Color32,UnityEngine.AnimationCurve,System.Boolean)">
-            <summary>
-            Creates a new instance of this plugin.
-            </summary>
-            <param name="p_endVal">
-            The <see cref="T:UnityEngine.Color32"/> value to tween to.
-            </param>
-            <param name="p_easeAnimCurve">
-            The <see cref="T:UnityEngine.AnimationCurve"/> to use for easing.
-            </param>
-            <param name="p_isRelative">
-            If <c>true</c>, the given end value is considered relative instead than absolute.
-            </param>
-        </member>
-        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.GetSpeedBasedDuration(System.Single)">
-            <summary>
-            Returns the speed-based duration based on the given speed x second.
-            </summary>
-        </member>
-        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.SetChangeVal">
-            <summary>
-            Sets the typed changeVal based on the current startVal and endVal.
-            </summary>
-        </member>
-        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.SetIncremental(System.Int32)">
-            <summary>
-            Sets the correct values in case of Incremental loop type.
-            </summary>
-            <param name="p_diffIncr">
-            The difference from the previous loop increment.
-            </param>
-        </member>
-        <member name="M:Holoville.HOTween.Plugins.Core.PlugColor32.DoUpdate(System.Single)">
-            <summary>
-            Updates the tween.
-            </summary>
-            <param name="p_totElapsed">
-            The total elapsed time since startup.
-            </param>
-        </member>
-        <member name="P:Holoville.HOTween.Plugins.Core.PlugColor32.startVal">
-            <summary>
-            Gets the untyped start value,
-            sets both the untyped and the typed start value.
-            </summary>
-        </member>
-        <member name="P:Holoville.HOTween.Plugins.Core.PlugColor32.endVal">
             <summary>
             Gets the untyped end value,
             sets both the untyped and the typed end value.
