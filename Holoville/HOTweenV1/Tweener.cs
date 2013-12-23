@@ -900,7 +900,10 @@ namespace Holoville.HOTween
             } else if (p_time < 0) {
                 p_time = 0;
             }
-            if (!p_forceUpdate && _fullElapsed == p_time) return _isComplete;
+            if (!p_forceUpdate && _fullElapsed == p_time) {
+                if (!_isComplete && p_play) Play();
+                return _isComplete;
+            }
 
             _fullElapsed = p_time;
             delayCount = 0;

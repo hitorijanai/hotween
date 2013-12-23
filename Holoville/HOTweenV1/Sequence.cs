@@ -812,7 +812,10 @@ namespace Holoville.HOTween
             } else if (p_time < 0) {
                 p_time = 0;
             }
-            if (_fullElapsed == p_time && !p_forceUpdate) return _isComplete;
+            if (_fullElapsed == p_time && !p_forceUpdate) {
+                if (!_isComplete && p_play) Play();
+                return _isComplete;
+            }
 
             _fullElapsed = p_time;
             Update(0, true, false, p_ignoreCallbacks);
