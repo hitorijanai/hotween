@@ -82,7 +82,7 @@ namespace Holoville.HOTween.Core
                                     if (tw.isSequenced && p_tween.isSequenced && tw.contSequence == p_tween.contSequence) {
                                         goto NEXT_TWEEN;
                                     }
-                                    if (!tw.isSequenced || !tw.isComplete) {
+                                    if (!tw._isPaused && (!tw.isSequenced || !tw.isComplete)) {
                                         // Overwrite old plugin.
                                         twPlugins.RemoveAt(c);
                                         twPluginsCount--;
