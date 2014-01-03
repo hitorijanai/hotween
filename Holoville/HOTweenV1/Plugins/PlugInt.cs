@@ -184,6 +184,7 @@ namespace Holoville.HOTween.Plugins
             if (isRelative && !tweenObj.isFrom)
             {
                 changeVal = typedEndVal;
+                endVal = typedStartVal + typedEndVal;
             }
             else
             {
