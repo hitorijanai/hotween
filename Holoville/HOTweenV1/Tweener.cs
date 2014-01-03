@@ -216,7 +216,7 @@ namespace Holoville.HOTween
             if (HOTween.overwriteManager != null) HOTween.overwriteManager.RemoveTween(this);
 
             plugins = null;
-            _target = null;
+//            _target = null; // Commented so onComplete can be used to determine the target of a tween
 
             base.Kill(p_autoRemoveFromHOTween);
         }
