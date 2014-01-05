@@ -1217,7 +1217,8 @@ namespace Holoville.HOTween.Core
             } else {
                 float div = _fullElapsed / _duration;
                 int ceil = (int)Math.Ceiling(div);
-                if (ceil - div < 0.000001f) {
+                if (ceil - div < 0.0000001f) {
+//                if (ceil - div < 0.000001f) {
                     _completedLoops = ceil;
                 } else {
                     _completedLoops = ceil - 1;
