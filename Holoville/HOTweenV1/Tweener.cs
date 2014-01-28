@@ -618,7 +618,7 @@ namespace Holoville.HOTween
             if (!_isPaused)
                 Restart(true);
             else {
-                Rewind(true);
+                Rewind(true, true);
             }
 
             return this; // Returns this so it can be directly used with WaitForCompletion coroutines

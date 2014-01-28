@@ -134,6 +134,8 @@
   <PropertyGroup>
     <PostBuildEvent>set BinDir=bin.Global\HOTween
 set DestinationDir=$(SolutionDir)..\%25BinDir%25
+set BinDirNoMeta=bin.Global_no_meta\HOTween
+set DestinationDirNoMeta=$(SolutionDir)..\%25BinDirNoMeta%25
 
 echo Deleting TMPs...
 DEL $(TargetDir)\*.tmp
@@ -145,7 +147,10 @@ DEL $(TargetName).pdb
 
 echo Exporting Assembly to %25DestinationDir%25
 echo Copying files to Destination...
-echo f | xcopy "$(ProjectDir)..\bin.HOTweenV1" %25DestinationDir%25 /Y /I /E</PostBuildEvent>
+echo f | xcopy "$(ProjectDir)..\bin.HOTweenV1" %25DestinationDir%25 /Y /I /E
+
+echo Exporting Assembly to %25DestinationDirNoMeta%25
+echo f | xcopy "$(ProjectDir)..\bin.HOTweenV1" %25DestinationDirNoMeta%25 /Y /I /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
