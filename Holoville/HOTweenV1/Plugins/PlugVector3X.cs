@@ -272,6 +272,7 @@ namespace Holoville.HOTween.Plugins
         {
             Vector3 curV = (Vector3)(GetValue());
             curV.x = ease(p_totElapsed, typedStartVal, changeVal, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
+            if (tweenObj.pixelPerfect) curV.x = (int)(curV.x);
 
             SetValue(curV);
         }

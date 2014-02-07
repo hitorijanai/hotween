@@ -210,7 +210,9 @@ namespace Holoville.HOTween.Plugins.Core
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            SetValue(ease(p_totElapsed, typedStartVal, changeVal, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod));
+            float val = ease(p_totElapsed, typedStartVal, changeVal, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
+            if (tweenObj.pixelPerfect) val = (int)(val);
+            SetValue(val);
         }
     }
 }

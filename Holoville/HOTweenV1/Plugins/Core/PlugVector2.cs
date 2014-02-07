@@ -212,9 +212,17 @@ namespace Holoville.HOTween.Plugins.Core
         {
             float time = ease(p_totElapsed, 0f, 1f, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
 
-            SetValue(new Vector2(
-                typedStartVal.x + changeVal.x * time,
-                typedStartVal.y + changeVal.y * time));
+            if (tweenObj.pixelPerfect) {
+                SetValue(new Vector2(
+                    (int)(typedStartVal.x + changeVal.x * time),
+                    (int)(typedStartVal.y + changeVal.y * time)
+                ));
+            } else {
+                SetValue(new Vector2(
+                    typedStartVal.x + changeVal.x * time,
+                    typedStartVal.y + changeVal.y * time
+                ));
+            }
         }
     }
 }

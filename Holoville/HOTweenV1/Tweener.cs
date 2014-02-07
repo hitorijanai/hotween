@@ -47,6 +47,7 @@ namespace Holoville.HOTween
         internal float _easeOvershootOrAmplitude = HOTween.defEaseOvershootOrAmplitude;
         internal float _easePeriod = HOTween.defEasePeriod;
 
+        internal bool _pixelPerfect;
         internal bool _speedBased;
         internal float _delay;
 
@@ -139,6 +140,17 @@ namespace Holoville.HOTween
             get
             {
                 return _target;
+            }
+        }
+
+        /// <summary>
+        /// <c>true</c> if this tween is animated via integers values only.
+        /// </summary>
+        public bool pixelPerfect
+        {
+            get
+            {
+                return _pixelPerfect;
             }
         }
 
@@ -367,6 +379,7 @@ namespace Holoville.HOTween
             isPartialled = false;
             pv3Path = null;
             _delay = _elapsedDelay = delayCount = 0;
+            _pixelPerfect = false;
             _speedBased = false;
             _easeType = HOTween.defEaseType;
             _easeOvershootOrAmplitude = HOTween.defEaseOvershootOrAmplitude;

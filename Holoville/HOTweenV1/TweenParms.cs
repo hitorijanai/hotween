@@ -52,6 +52,7 @@ namespace Holoville.HOTween
 
         // VARS ///////////////////////////////////////////////////
 
+        bool pixelPerfect;
         bool speedBased;
         EaseType easeType = HOTween.defEaseType;
         AnimationCurve easeAnimCurve; // Can be assigned instead than regular easing
@@ -91,6 +92,7 @@ namespace Holoville.HOTween
             InitializeOwner(p_tweenObj);
 
             if (speedBased) easeType = EaseType.Linear;
+            p_tweenObj._pixelPerfect = pixelPerfect;
             p_tweenObj._speedBased = speedBased;
             p_tweenObj._easeType = easeType;
             p_tweenObj._easeAnimationCurve = easeAnimCurve;
@@ -205,6 +207,19 @@ namespace Holoville.HOTween
 
         // ===================================================================================
         // METHODS ---------------------------------------------------------------------------
+
+        /// <summary>
+        /// Sets this tween so that it works with pixel perfect values.
+        /// Only works with <see cref="Vector3"/>, <see cref="Vector2"/>, <see cref="Single"/>,
+        /// <see cref="PlugVector3X"/>, <see cref="PlugVector3Y"/>, <see cref="PlugVector3Z"/>
+        /// plugins.
+        /// </summary>
+        /// <returns></returns>
+        public TweenParms PixelPerfect()
+        {
+            pixelPerfect = true;
+            return this;
+        }
 
         /// <summary>
         /// Sets this tween to work by speed instead than time.
