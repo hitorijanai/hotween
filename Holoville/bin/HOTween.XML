@@ -3957,6 +3957,11 @@
             Target of this tween.
             </summary>
         </member>
+        <member name="P:Holoville.HOTween.Tweener.pixelPerfect">
+            <summary>
+            <c>true</c> if this tween is animated via integers values only.
+            </summary>
+        </member>
         <member name="P:Holoville.HOTween.Tweener.speedBased">
             <summary>
             <c>true</c> if this tween is animated by speed instead than by duration.
@@ -6208,11 +6213,6 @@
             Returns the percentage of the path length occupied by the given path waypoints interval.
             </summary>
         </member>
-        <member name="P:Holoville.HOTween.Plugins.PlugVector3Path.waypointIndex">
-            <summary>
-            Gets the current Waypoint index value,
-            </summary>
-        </member>
         <member name="P:Holoville.HOTween.Plugins.PlugVector3Path.startVal">
             <summary>
             Gets the untyped start value,
@@ -6511,6 +6511,15 @@
             <param name="p_target">
             The <see cref="T:Holoville.HOTween.Tweener"/> target.
             </param>
+        </member>
+        <member name="M:Holoville.HOTween.TweenParms.PixelPerfect">
+            <summary>
+            Sets this tween so that it works with pixel perfect values.
+            Only works with <see cref="T:UnityEngine.Vector3"/>, <see cref="T:UnityEngine.Vector2"/>, <see cref="T:System.Single"/>,
+            <see cref="T:Holoville.HOTween.Plugins.PlugVector3X"/>, <see cref="T:Holoville.HOTween.Plugins.PlugVector3Y"/>, <see cref="T:Holoville.HOTween.Plugins.PlugVector3Z"/>
+            plugins.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Holoville.HOTween.TweenParms.SpeedBased">
             <summary>
