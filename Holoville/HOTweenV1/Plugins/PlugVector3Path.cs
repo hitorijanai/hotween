@@ -73,7 +73,6 @@ namespace Holoville.HOTween.Plugins
         bool usesLocalPosition; // Used to apply mods when calculating orientToPath lookAt
         float startPerc = 0; // Implemented to allow partial paths
         float changePerc = 1; // Implemented to allow partial paths
-        int linearWaypointIndex = -1;
 
         // REFERENCES /////////////////////////////////////////////
 
@@ -82,14 +81,6 @@ namespace Holoville.HOTween.Plugins
         Transform orientTrans;
 
         // GETS/SETS //////////////////////////////////////////////
-
-        /// <summary>
-        /// Gets the current Waypoint index value,
-        /// </summary>
-        public int waypointIndex
-        {
-            get { return linearWaypointIndex; }
-        }
 
         /// <summary>
         /// Gets the untyped start value,
@@ -514,7 +505,7 @@ namespace Holoville.HOTween.Plugins
         /// </param>
         protected override void DoUpdate(float p_totElapsed)
         {
-            //int linearWaypointIndex;  -- obsolete - ak
+            int linearWaypointIndex;
             pathPerc = ease(p_totElapsed, startPerc, changePerc, _duration, tweenObj.easeOvershootOrAmplitude, tweenObj.easePeriod);
             Vector3 newPos = GetConstPointOnPath(pathPerc, true, path, out linearWaypointIndex);
             SetValue(newPos);

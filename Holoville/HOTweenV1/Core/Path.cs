@@ -134,8 +134,8 @@ namespace Holoville.HOTween.Core
                 Vector3 c = path[currPt + 2];
                 Vector3 d = path[currPt + 3];
 
-//                out_waypointIndex = -1;
-                out_waypointIndex = 0 + currPt; // -- ak mod so that we always know the index point
+                out_waypointIndex = -1;
+//                out_waypointIndex = 0 + currPt; // -- ak mod so that we always know the index point // BREAKS constant curved path
                 return .5f * (
                     (-a + 3f * b - 3f * c + d) * (u * u * u)
                     + (2f * a - 5f * b + 4f * c - d) * (u * u)
@@ -311,9 +311,9 @@ namespace Holoville.HOTween.Core
                 float pathPerc = GetConstPathPercFromTimePerc(t);
                 // Update pathPerc.
                 out_pathPerc = pathPerc;
-//                out_waypointIndex = -1;
-//                return GetPoint(pathPerc);
-                return GetPoint(t, out out_waypointIndex); // -- ak mod so that we always know the index point
+                out_waypointIndex = -1;
+                return GetPoint(pathPerc);
+//                return GetPoint(t, out out_waypointIndex); // -- ak mod so that we always know the index point // BREAKS constant curved path
             }
         }
 
