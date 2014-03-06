@@ -48,7 +48,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.2.010";
+        public const string VERSION = "1.2.020";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1892,6 +1892,38 @@ namespace Holoville.HOTween
                     break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns all existing Tweeners (excluding nested ones) and Sequences, paused or not
+        /// </summary>
+        public static List<IHOTweenComponent> GetAllTweens()
+        {
+            List<IHOTweenComponent> tws = new List<IHOTweenComponent>(tweens.Count);
+            foreach (ABSTweenComponent tween in tweens) tws.Add(tween);
+            return tws;
+        }
+        /// <summary>
+        /// Returns all existing Tweeners (excluding nested ones) and Sequences that are currently playing
+        /// </summary>
+        public static List<IHOTweenComponent> GetAllPlayingTweens()
+        {
+            List<IHOTweenComponent> tws = new List<IHOTweenComponent>(tweens.Count);
+            foreach (ABSTweenComponent tween in tweens) {
+                if (!tween.isPaused) tws.Add(tween);
+            }
+            return tws;
+        }
+        /// <summary>
+        /// Returns all existing Tweeners (excluding nested ones) and Sequences that are currently paused
+        /// </summary>
+        public static List<IHOTweenComponent> GetAllPausedTweens()
+        {
+            List<IHOTweenComponent> tws = new List<IHOTweenComponent>(tweens.Count);
+            foreach (ABSTweenComponent tween in tweens) {
+                if (tween.isPaused) tws.Add(tween);
+            }
+            return tws;
         }
 
         /// <summary>

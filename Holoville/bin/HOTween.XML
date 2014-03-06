@@ -5447,6 +5447,21 @@
             </summary>
             <param name="p_tween"></param>
         </member>
+        <member name="M:Holoville.HOTween.HOTween.GetAllTweens">
+            <summary>
+            Returns all existing Tweeners (excluding nested ones) and Sequences, paused or not
+            </summary>
+        </member>
+        <member name="M:Holoville.HOTween.HOTween.GetAllPlayingTweens">
+            <summary>
+            Returns all existing Tweeners (excluding nested ones) and Sequences that are currently playing
+            </summary>
+        </member>
+        <member name="M:Holoville.HOTween.HOTween.GetAllPausedTweens">
+            <summary>
+            Returns all existing Tweeners (excluding nested ones) and Sequences that are currently paused
+            </summary>
+        </member>
         <member name="M:Holoville.HOTween.HOTween.GetTweensById(System.String,System.Boolean)">
             <summary>
             Returns a list of the eventual existing tweens with the given Id,
