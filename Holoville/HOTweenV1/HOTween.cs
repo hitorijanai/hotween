@@ -48,7 +48,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.2.020";
+        public const string VERSION = "1.2.030";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -324,7 +324,6 @@ namespace Holoville.HOTween
         {
             return To(p_target, p_duration, new TweenParms().Prop(p_propName, p_endVal));
         }
-
         /// <summary>
         /// Creates a new tween with default values, and returns the <see cref="Tweener"/> representing it,
         /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
@@ -352,7 +351,39 @@ namespace Holoville.HOTween
         {
             return To(p_target, p_duration, new TweenParms().Prop(p_propName, p_endVal, p_isRelative));
         }
-
+        /// <summary>
+        /// Creates a new tween with default values, and returns the <see cref="Tweener"/> representing it,
+        /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+        /// </summary>
+        /// <param name="p_target">
+        /// The tweening target (must be the object containing the properties or fields to tween).
+        /// </param>
+        /// <param name="p_duration">
+        /// The duration in seconds of the tween.
+        /// </param>
+        /// <param name="p_propName">
+        /// The name of the property or field to tween.
+        /// </param>
+        /// <param name="p_endVal">
+        /// The end value the property should reach with the tween.
+        /// </param>
+        /// <param name="p_isRelative">
+        /// If <c>true</c> treats the end value as relative (tween BY instead than tween TO), otherwise as absolute.
+        /// </param>
+        /// <param name="p_easeType">
+        /// The ease to use.
+        /// </param>
+        /// <param name="p_delay">
+        /// The eventual delay to apply.
+        /// </param>
+        /// <returns>
+        /// The newly created <see cref="Tweener"/>,
+        /// or <c>null</c> if the parameters were invalid.
+        /// </returns>
+        public static Tweener To(object p_target, float p_duration, string p_propName, object p_endVal, bool p_isRelative, EaseType p_easeType, float p_delay)
+        {
+            return To(p_target, p_duration, new TweenParms().Prop(p_propName, p_endVal, p_isRelative).Delay(p_delay).Ease(p_easeType));
+        }
         /// <summary>
         /// Creates a new tween and returns the <see cref="Tweener"/> representing it,
         /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
@@ -411,7 +442,6 @@ namespace Holoville.HOTween
         {
             return From(p_target, p_duration, new TweenParms().Prop(p_propName, p_fromVal));
         }
-
         /// <summary>
         /// Creates a new FROM tween with default values, and returns the <see cref="Tweener"/> representing it,
         /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
@@ -439,7 +469,39 @@ namespace Holoville.HOTween
         {
             return From(p_target, p_duration, new TweenParms().Prop(p_propName, p_fromVal, p_isRelative));
         }
-
+        /// <summary>
+        /// Creates a new FROM tween with default values, and returns the <see cref="Tweener"/> representing it,
+        /// or <c>null</c> if the tween was invalid (no valid property to tween was given).
+        /// </summary>
+        /// <param name="p_target">
+        /// The tweening target (must be the object containing the properties or fields to tween).
+        /// </param>
+        /// <param name="p_duration">
+        /// The duration in seconds of the tween.
+        /// </param>
+        /// <param name="p_propName">
+        /// The name of the property or field to tween.
+        /// </param>
+        /// <param name="p_fromVal">
+        /// The end value the property should reach with the tween.
+        /// </param>
+        /// <param name="p_isRelative">
+        /// If <c>true</c> treats the end value as relative (tween BY instead than tween TO), otherwise as absolute.
+        /// </param>
+        /// <param name="p_easeType">
+        /// The ease to use.
+        /// </param>
+        /// <param name="p_delay">
+        /// The eventual delay to apply.
+        /// </param>
+        /// <returns>
+        /// The newly created <see cref="Tweener"/>,
+        /// or <c>null</c> if the parameters were invalid.
+        /// </returns>
+        public static Tweener From(object p_target, float p_duration, string p_propName, object p_fromVal, bool p_isRelative, EaseType p_easeType, float p_delay)
+        {
+            return From(p_target, p_duration, new TweenParms().Prop(p_propName, p_fromVal, p_isRelative).Delay(p_delay).Ease(p_easeType));
+        }
         /// <summary>
         /// Creates a new FROM tween and returns the <see cref="Tweener"/> representing it,
         /// or <c>null</c> if the tween was invalid (no valid property to tween was given).

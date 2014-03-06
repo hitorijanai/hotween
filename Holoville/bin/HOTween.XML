@@ -4283,6 +4283,37 @@
             or <c>null</c> if the parameters were invalid.
             </returns>
         </member>
+        <member name="M:Holoville.HOTween.HOTween.To(System.Object,System.Single,System.String,System.Object,System.Boolean,Holoville.HOTween.EaseType,System.Single)">
+            <summary>
+            Creates a new tween with default values, and returns the <see cref="T:Holoville.HOTween.Tweener"/> representing it,
+            or <c>null</c> if the tween was invalid (no valid property to tween was given).
+            </summary>
+            <param name="p_target">
+            The tweening target (must be the object containing the properties or fields to tween).
+            </param>
+            <param name="p_duration">
+            The duration in seconds of the tween.
+            </param>
+            <param name="p_propName">
+            The name of the property or field to tween.
+            </param>
+            <param name="p_endVal">
+            The end value the property should reach with the tween.
+            </param>
+            <param name="p_isRelative">
+            If <c>true</c> treats the end value as relative (tween BY instead than tween TO), otherwise as absolute.
+            </param>
+            <param name="p_easeType">
+            The ease to use.
+            </param>
+            <param name="p_delay">
+            The eventual delay to apply.
+            </param>
+            <returns>
+            The newly created <see cref="T:Holoville.HOTween.Tweener"/>,
+            or <c>null</c> if the parameters were invalid.
+            </returns>
+        </member>
         <member name="M:Holoville.HOTween.HOTween.To(System.Object,System.Single,Holoville.HOTween.TweenParms)">
             <summary>
             Creates a new tween and returns the <see cref="T:Holoville.HOTween.Tweener"/> representing it,
@@ -4345,6 +4376,37 @@
             </param>
             <param name="p_isRelative">
             If <c>true</c> treats the end value as relative (tween BY instead than tween TO), otherwise as absolute.
+            </param>
+            <returns>
+            The newly created <see cref="T:Holoville.HOTween.Tweener"/>,
+            or <c>null</c> if the parameters were invalid.
+            </returns>
+        </member>
+        <member name="M:Holoville.HOTween.HOTween.From(System.Object,System.Single,System.String,System.Object,System.Boolean,Holoville.HOTween.EaseType,System.Single)">
+            <summary>
+            Creates a new FROM tween with default values, and returns the <see cref="T:Holoville.HOTween.Tweener"/> representing it,
+            or <c>null</c> if the tween was invalid (no valid property to tween was given).
+            </summary>
+            <param name="p_target">
+            The tweening target (must be the object containing the properties or fields to tween).
+            </param>
+            <param name="p_duration">
+            The duration in seconds of the tween.
+            </param>
+            <param name="p_propName">
+            The name of the property or field to tween.
+            </param>
+            <param name="p_fromVal">
+            The end value the property should reach with the tween.
+            </param>
+            <param name="p_isRelative">
+            If <c>true</c> treats the end value as relative (tween BY instead than tween TO), otherwise as absolute.
+            </param>
+            <param name="p_easeType">
+            The ease to use.
+            </param>
+            <param name="p_delay">
+            The eventual delay to apply.
             </param>
             <returns>
             The newly created <see cref="T:Holoville.HOTween.Tweener"/>,
