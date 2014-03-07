@@ -48,7 +48,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public const string VERSION = "1.2.030";
+        public const string VERSION = "1.2.031";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1957,19 +1957,23 @@ namespace Holoville.HOTween
         }
 
         /// <summary>
-        /// Returns all existing Tweeners (excluding nested ones) and Sequences, paused or not
+        /// Returns all existing Tweeners (excluding nested ones) and Sequences, paused or not.
         /// </summary>
         public static List<IHOTweenComponent> GetAllTweens()
         {
+            if (tweens == null) return new List<IHOTweenComponent>(1);
+
             List<IHOTweenComponent> tws = new List<IHOTweenComponent>(tweens.Count);
             foreach (ABSTweenComponent tween in tweens) tws.Add(tween);
             return tws;
         }
         /// <summary>
-        /// Returns all existing Tweeners (excluding nested ones) and Sequences that are currently playing
+        /// Returns all existing Tweeners (excluding nested ones) and Sequences that are currently playing.
         /// </summary>
         public static List<IHOTweenComponent> GetAllPlayingTweens()
         {
+            if (tweens == null) return new List<IHOTweenComponent>(1);
+
             List<IHOTweenComponent> tws = new List<IHOTweenComponent>(tweens.Count);
             foreach (ABSTweenComponent tween in tweens) {
                 if (!tween.isPaused) tws.Add(tween);
@@ -1977,10 +1981,12 @@ namespace Holoville.HOTween
             return tws;
         }
         /// <summary>
-        /// Returns all existing Tweeners (excluding nested ones) and Sequences that are currently paused
+        /// Returns all existing Tweeners (excluding nested ones) and Sequences that are currently paused.
         /// </summary>
         public static List<IHOTweenComponent> GetAllPausedTweens()
         {
+            if (tweens == null) return new List<IHOTweenComponent>(1);
+
             List<IHOTweenComponent> tws = new List<IHOTweenComponent>(tweens.Count);
             foreach (ABSTweenComponent tween in tweens) {
                 if (tween.isPaused) tws.Add(tween);
