@@ -2799,6 +2799,103 @@
             Is enabled.
             </summary>
         </member>
+        <member name="T:FastDynamicMemberAccessor.MemberAccessorException">
+            <summary>
+            PropertyAccessorException class.
+            </summary>
+        </member>
+        <member name="T:FastDynamicMemberAccessor.IMemberAccessor">
+            <summary>
+            The IMemberAccessor interface defines a member
+            accessor.
+            </summary>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.IMemberAccessor.Get(System.Object)">
+            <summary>
+            Gets the value stored in the member for
+            the specified target.
+            </summary>
+            <param name="target">Object to retrieve
+            the member from.</param>
+            <returns>Member value.</returns>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.IMemberAccessor.Set(System.Object,System.Object)">
+            <summary>
+            Sets the value for the member of
+            the specified target.
+            </summary>
+            <param name="target">Object to set the
+            member on.</param>
+            <param name="value">Member value.</param>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.MemberAccessor.#ctor(System.Reflection.MemberInfo)">
+            <summary>
+            Creates a new member accessor.
+            </summary>
+            <param name="member">Member</param>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.MemberAccessor.Make(System.Reflection.PropertyInfo,System.Reflection.FieldInfo)">
+            <summary>
+            Added by Daniele Giardini for HOTween,
+            because if a Make is called we already know that a PropertyInfo or FieldInfo exist,
+            and we can directly pass them as parameters.
+            </summary>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.MemberAccessor.#cctor">
+             <summary>
+             Thanks to Ben Ratzlaff for this snippet of code
+             http://www.codeproject.com/cs/miscctrl/CustomPropGrid.asp
+            
+             "Initialize a private hashtable with type-opCode pairs
+             so i dont have to write a long if/else statement when outputting msil"
+             </summary>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.MemberAccessor.Get(System.Object)">
+            <summary>
+            Gets the member value from the specified target.
+            </summary>
+            <param name="target">Target object.</param>
+            <returns>Member value.</returns>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.MemberAccessor.Set(System.Object,System.Object)">
+            <summary>
+            Sets the member for the specified target.
+            </summary>
+            <param name="target">Target object.</param>
+            <param name="value">Value to set.</param>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.MemberAccessor.EnsureInit">
+            <summary>
+            This method generates creates a new assembly containing
+            the Type that will provide dynamic access.
+            </summary>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.MemberAccessor.EmitAssembly">
+            <summary>
+            Create an assembly that will provide the get and set methods.
+            </summary>
+        </member>
+        <member name="P:FastDynamicMemberAccessor.MemberAccessor.CanRead">
+            <summary>
+            Whether or not the Member supports read access.
+            </summary>
+        </member>
+        <member name="P:FastDynamicMemberAccessor.MemberAccessor.CanWrite">
+            <summary>
+            Whether or not the Member supports write access.
+            </summary>
+        </member>
+        <member name="P:FastDynamicMemberAccessor.MemberAccessor.TargetType">
+            <summary>
+            The Type of object this member accessor was
+            created for.
+            </summary>
+        </member>
+        <member name="P:FastDynamicMemberAccessor.MemberAccessor.MemberType">
+            <summary>
+            The Type of the Member being accessed.
+            </summary>
+        </member>
         <member name="T:Holoville.HOTween.Core.Easing.EaseCurve">
             <summary>
             Used to interpret AnimationCurves as eases.
@@ -3472,6 +3569,32 @@
             <param name="p_message">
             The exception message.
             </param>
+        </member>
+        <member name="T:FastDynamicMemberAccessor.PropertyAccessor">
+            <summary>
+            The PropertyAccessor class provides fast dynamic access
+            to a property of a specified target class.
+            </summary>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.PropertyAccessor.#ctor(System.Reflection.PropertyInfo)">
+            <summary>
+            Creates a new property accessor.
+            </summary>
+        </member>
+        <member name="P:FastDynamicMemberAccessor.PropertyAccessor.MemberType">
+            <summary>
+            The Type of the Property being accessed.
+            </summary>
+        </member>
+        <member name="P:FastDynamicMemberAccessor.PropertyAccessor.CanRead">
+            <summary>
+            Whether or not the Property supports read access.
+            </summary>
+        </member>
+        <member name="P:FastDynamicMemberAccessor.PropertyAccessor.CanWrite">
+            <summary>
+            Whether or not the Property supports write access.
+            </summary>
         </member>
         <member name="T:Holoville.HOTween.Tweener">
             <summary>
@@ -5853,6 +5976,48 @@
             <summary>
             Works only with Tweeners, and not with Sequences.
             Called when a plugin of the Tweens is overwritten by the OverwriteManager.
+            </summary>
+        </member>
+        <member name="T:FastDynamicMemberAccessor.MemberAccessorCacher">
+            <summary>
+            Cache manager for James Nies' MemberAccessor classes
+            </summary>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.MemberAccessorCacher.Make(System.Type,System.String,System.Reflection.PropertyInfo,System.Reflection.FieldInfo)">
+            <summary>
+            Returns the cached memberAccessor if it alread exists,
+            or calls MemberAccessor.Make and caches and returns the newly created MemberAccessor.
+            </summary>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.MemberAccessorCacher.Clear">
+            <summary>
+            Clears the cache.
+            </summary>
+        </member>
+        <member name="T:FastDynamicMemberAccessor.FieldAccessor">
+            <summary>
+            The PropertyAccessor class provides fast dynamic access
+            to a property of a specified target class.
+            </summary>
+        </member>
+        <member name="M:FastDynamicMemberAccessor.FieldAccessor.#ctor(System.Reflection.FieldInfo)">
+            <summary>
+            Creates a new property accessor.
+            </summary>
+        </member>
+        <member name="P:FastDynamicMemberAccessor.FieldAccessor.MemberType">
+            <summary>
+            The Type of the Property being accessed.
+            </summary>
+        </member>
+        <member name="P:FastDynamicMemberAccessor.FieldAccessor.CanRead">
+            <summary>
+            Whether or not the Property supports read access.
+            </summary>
+        </member>
+        <member name="P:FastDynamicMemberAccessor.FieldAccessor.CanWrite">
+            <summary>
+            Whether or not the Property supports write access.
             </summary>
         </member>
         <member name="T:Holoville.HOTween.Axis">
