@@ -34,11 +34,11 @@
     <DocumentationFile>..\bin.HOTweenV1\HOTween.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Micro_Debug|AnyCPU'">
-    <AssemblyName>HOTweenMicro</AssemblyName>
+    <AssemblyName>HOTween</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin.HOTweenV1\</OutputPath>
     <DefineConstants>TRACE;DEBUG;MICRO</DefineConstants>
-    <DocumentationFile>..\bin.HOTweenV1\HOTweenMicro.XML</DocumentationFile>
+    <DocumentationFile>..\bin.HOTweenV1\HOTween.XML</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -46,10 +46,10 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Micro_Release|AnyCPU'">
-    <AssemblyName>HOTweenMicro</AssemblyName>
+    <AssemblyName>HOTween</AssemblyName>
     <OutputPath>..\bin.HOTweenV1\</OutputPath>
     <DefineConstants>TRACE;MICRO</DefineConstants>
-    <DocumentationFile>..\bin.HOTweenV1\HOTweenMicro.XML</DocumentationFile>
+    <DocumentationFile>..\bin.HOTweenV1\HOTween.XML</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>

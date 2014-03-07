@@ -56,6 +56,12 @@ namespace Holoville.HOTween.Editor
             EditorGUIUtility.LookLikeControls(_labelsWidth, _fieldsWidth);
 
             GUILayout.Space(4);
+#if MICRO
+            GUILayout.Label("HOTweenMicro v" + HOTween.VERSION);
+#else
+            GUILayout.Label("HOTween v" + HOTween.VERSION);
+#endif
+            GUILayout.Space(4);
 
             TweenInfo[] twInfos = HOTween.GetTweenInfos();
             if (twInfos == null) {
@@ -82,7 +88,7 @@ namespace Holoville.HOTween.Editor
             }
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            GUILayout.Label("Tweens (tot - running/paused/completed/disabled): " + totTweens + " - " + runningTweens.Count + "/" + "/" + pausedTweens.Count + "/" + completedTweens.Count + "/" + disabledTweens.Count, HOGUIStyle.LabelCentered);
+            GUILayout.Label("Tweens (tot - running/paused/completed/disabled):\n" + totTweens + " - " + runningTweens.Count + "/" + "/" + pausedTweens.Count + "/" + completedTweens.Count + "/" + disabledTweens.Count);
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
@@ -111,26 +117,26 @@ namespace Holoville.HOTween.Editor
                 List<TweenInfo> targetInfos;
                 string groupLabel;
                 switch (i) {
-                    case 0:
-                        twGroup = TweenGroup.Running;
-                        targetInfos = runningTweens;
-                        groupLabel = "Running";
-                        break;
-                    case 1:
-                        twGroup = TweenGroup.Paused;
-                        targetInfos = pausedTweens;
-                        groupLabel = "Paused";
-                        break;
-                    case 2:
-                        twGroup = TweenGroup.Completed;
-                        targetInfos = completedTweens;
-                        groupLabel = "Completed but not killed";
-                        break;
-                    default:
-                        twGroup = TweenGroup.Disabled;
-                        targetInfos = disabledTweens;
-                        groupLabel = "Disabled";
-                        break;
+                case 0:
+                    twGroup = TweenGroup.Running;
+                    targetInfos = runningTweens;
+                    groupLabel = "Running";
+                    break;
+                case 1:
+                    twGroup = TweenGroup.Paused;
+                    targetInfos = pausedTweens;
+                    groupLabel = "Paused";
+                    break;
+                case 2:
+                    twGroup = TweenGroup.Completed;
+                    targetInfos = completedTweens;
+                    groupLabel = "Completed but not killed";
+                    break;
+                default:
+                    twGroup = TweenGroup.Disabled;
+                    targetInfos = disabledTweens;
+                    groupLabel = "Disabled";
+                    break;
                 }
 
                 if (targetInfos.Count == 0) continue;
@@ -199,7 +205,7 @@ namespace Holoville.HOTween.Editor
             }
             if (GUILayout.Button("Kill", HOGUIStyle.BtTinyStyle, GUILayout.Width(32))) {
                 twInfo.tween.Kill();
-            } 
+            }
         }
 
         /// <summary>
