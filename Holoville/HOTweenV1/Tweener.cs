@@ -1048,6 +1048,11 @@ namespace Holoville.HOTween
             base.OnStart();
         }
 
+        protected override void OnPlay()
+        {
+            if (_delay > 0 && _elapsedDelay <= 0) Update(0, true, true, false, true);
+        }
+
         // ===================================================================================
         // HELPERS ---------------------------------------------------------------------------
 

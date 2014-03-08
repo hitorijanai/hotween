@@ -1108,7 +1108,7 @@ namespace Holoville.HOTween.Core
         /// <summary>
         /// Manages on resume behaviour (also called when the tween starts).
         /// </summary>
-        protected void OnPlay()
+        protected virtual void OnPlay()
         {
             if (steadyIgnoreCallbacks || ignoreCallbacks) return;
 

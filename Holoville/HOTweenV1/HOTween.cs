@@ -48,7 +48,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public static readonly string VERSION = "1.3.000";
+        public static readonly string VERSION = "1.3.010";
 
         /// <summary>
         /// HOTween author - me! :P
