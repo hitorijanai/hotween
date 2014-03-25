@@ -419,7 +419,7 @@ namespace Holoville.HOTween
         public override bool IsTweening(object p_target)
         {
             if (!_enabled) return false;
-            if (p_target == _target) return !_isPaused;
+            if (p_target == _target) return isSequenced ? !contSequence.isPaused : !_isPaused;
             return false;
         }
         /// <summary>
@@ -432,7 +432,7 @@ namespace Holoville.HOTween
         public override bool IsTweening(string p_id)
         {
             if (!_enabled) return false;
-            if (id == p_id) return !_isPaused;
+            if (id == p_id) return isSequenced ? !contSequence.isPaused : !_isPaused;
             return false;
         }
         /// <summary>
@@ -445,7 +445,7 @@ namespace Holoville.HOTween
         public override bool IsTweening(int p_id)
         {
             if (!_enabled) return false;
-            if (intId == p_id) return !_isPaused;
+            if (intId == p_id) return isSequenced ? !contSequence.isPaused : !_isPaused;
             return false;
         }
 

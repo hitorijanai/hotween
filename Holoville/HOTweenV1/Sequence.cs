@@ -430,6 +430,8 @@ namespace Holoville.HOTween
         {
             if (!_enabled || items == null) return false;
 
+            if (!_isPaused && _id == p_id) return true;
+
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i) {
                 HOTSeqItem item = items[i];
@@ -448,6 +450,8 @@ namespace Holoville.HOTween
         public override bool IsTweening(int p_id)
         {
             if (!_enabled || items == null) return false;
+
+            if (!_isPaused && _intId == p_id) return true;
 
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i) {
