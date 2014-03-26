@@ -54,6 +54,7 @@ namespace Holoville.HOTween
 
         bool pixelPerfect;
         bool speedBased;
+        bool easeSet; // used to apply Linear ease to SpeedBased tweens, in case ease was not set
         EaseType easeType = HOTween.defEaseType;
         AnimationCurve easeAnimCurve; // Can be assigned instead than regular easing
         float easeOvershootOrAmplitude = HOTween.defEaseOvershootOrAmplitude;
@@ -91,7 +92,7 @@ namespace Holoville.HOTween
         {
             InitializeOwner(p_tweenObj);
 
-            if (speedBased) easeType = EaseType.Linear;
+            if (speedBased && !easeSet) easeType = EaseType.Linear;
             p_tweenObj._pixelPerfect = pixelPerfect;
             p_tweenObj._speedBased = speedBased;
             p_tweenObj._easeType = easeType;
@@ -290,6 +291,7 @@ namespace Holoville.HOTween
         /// </param>
         public TweenParms Ease(EaseType p_easeType, float p_amplitude, float p_period)
         {
+            easeSet = true; 
             easeType = p_easeType;
             easeOvershootOrAmplitude = p_amplitude;
             easePeriod = p_period;
@@ -306,6 +308,7 @@ namespace Holoville.HOTween
         /// </param>
         public TweenParms Ease(AnimationCurve p_easeAnimationCurve)
         {
+            easeSet = true; 
             easeType = EaseType.AnimationCurve;
             easeAnimCurve = p_easeAnimationCurve;
 
