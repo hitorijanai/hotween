@@ -374,6 +374,7 @@ namespace Holoville.HOTween
         {
             base.Reset();
 
+            if (HOTween.overwriteManager != null) HOTween.overwriteManager.RemoveTween(this);
             isFrom = false;
             plugins = null;
             isPartialled = false;
