@@ -227,6 +227,24 @@
             The difference from the previous loop increment.
             </param>
         </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.ABSTweenPlugin.SetValue(UnityEngine.Vector3)">
+            <summary>
+            Sets the value of the controlled property.
+            Some plugins (like PlugSetColor or PlugQuaterion) might override this to get values from different properties.
+            </summary>
+            <param name="p_value">
+            The new value.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.ABSTweenPlugin.SetValue(UnityEngine.Quaternion)">
+            <summary>
+            Sets the value of the controlled property.
+            Some plugins (like PlugSetColor or PlugQuaterion) might override this to get values from different properties.
+            </summary>
+            <param name="p_value">
+            The new value.
+            </param>
+        </member>
         <member name="M:Holoville.HOTween.Plugins.Core.ABSTweenPlugin.SetValue(System.Object)">
             <summary>
             Sets the value of the controlled property.

@@ -580,86 +580,114 @@ namespace Holoville.HOTween.Plugins.Core
         /// <param name="p_value">
         /// The new value.
         /// </param>
-        protected virtual void SetValue(object p_value)
+        protected virtual void SetValue(Vector3 p_value)
         {
             if (_useSpeedTransformAccessors) {
                 // Use specific accessors
-                if (_setTransformVector3 != null)
-                    _setTransformVector3((Vector3)p_value);
-                else
-                    _setTransformQuaternion((Quaternion)p_value);
-            } else {
+                if (_setTransformVector3 != null) _setTransformVector3(p_value);
+            } else SetUndefinedValue(p_value);
+        }
+
+
+        /// <summary>
+        /// Sets the value of the controlled property.
+        /// Some plugins (like PlugSetColor or PlugQuaterion) might override this to get values from different properties.
+        /// </summary>
+        /// <param name="p_value">
+        /// The new value.
+        /// </param>
+        protected virtual void SetValue(Quaternion p_value)
+        {
+            if (_useSpeedTransformAccessors) {
+                // Use specific accessors
+                if (_setTransformQuaternion != null) _setTransformQuaternion(p_value);
+            } else SetUndefinedValue(p_value);
+        }
+
+        /// <summary>
+        /// Sets the value of the controlled property.
+        /// Some plugins (like PlugSetColor or PlugQuaterion) might override this to get values from different properties.
+        /// </summary>
+        /// <param name="p_value">
+        /// The new value.
+        /// </param>
+        protected virtual void SetValue(object p_value)
+        {
+            SetUndefinedValue(p_value);
+        }
+
+        void SetUndefinedValue(object p_value)
+        {
 #if MICRO
-                if (propInfo != null)
+            if (propInfo != null)
+            {
+                try
                 {
-                    try
-                    {
-                        propInfo.SetValue(tweenObj.target, p_value, null);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        // This happens only if a float is being assigned to an int.
-                        propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
-                    }
-                    catch (ArgumentException)
-                    {
-                        // This happens only on iOS if a float is being assigned to an int.
-                        propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
-                    }
+                    propInfo.SetValue(tweenObj.target, p_value, null);
                 }
-                else
+                catch (InvalidCastException)
                 {
-                    try
-                    {
-                        fieldInfo.SetValue(tweenObj.target, p_value);
-                    }
-                    catch (InvalidCastException)
-                    {
-                        // This happens only if a float is being assigned to an int.
-                        fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
-                    }
-                    catch (ArgumentException)
-                    {
-                        // This happens only on iOS if a float is being assigned to an int.
-                        fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
-                    }
+                    // This happens only if a float is being assigned to an int.
+                    propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
                 }
+                catch (ArgumentException)
+                {
+                    // This happens only on iOS if a float is being assigned to an int.
+                    propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
+                }
+            }
+            else
+            {
+                try
+                {
+                    fieldInfo.SetValue(tweenObj.target, p_value);
+                }
+                catch (InvalidCastException)
+                {
+                    // This happens only if a float is being assigned to an int.
+                    fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
+                }
+                catch (ArgumentException)
+                {
+                    // This happens only on iOS if a float is being assigned to an int.
+                    fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
+                }
+            }
 #else
-                if (HOTween.isIOS) {
-                    if (propInfo != null) {
-                        try {
-                            propInfo.SetValue(tweenObj.target, p_value, null);
-                        } catch (InvalidCastException) {
-                            // This happens only if a float is being assigned to an int.
-                            propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
-                        } catch (ArgumentException) {
-                            // This happens only on iOS if a float is being assigned to an int.
-                            propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
-                        }
-                    } else {
-                        try {
-                            fieldInfo.SetValue(tweenObj.target, p_value);
-                        } catch (InvalidCastException) {
-                            // This happens only if a float is being assigned to an int.
-                            fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
-                        } catch (ArgumentException) {
-                            // This happens only on iOS if a float is being assigned to an int.
-                            fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
-                        }
+            if (HOTween.isIOS) {
+                if (propInfo != null) {
+                    try {
+                        propInfo.SetValue(tweenObj.target, p_value, null);
+                    } catch (InvalidCastException) {
+                        // This happens only if a float is being assigned to an int.
+                        propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
+                    } catch (ArgumentException) {
+                        // This happens only on iOS if a float is being assigned to an int.
+                        propInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value), null);
                     }
                 } else {
                     try {
-                        valAccessor.Set(tweenObj.target, p_value);
+                        fieldInfo.SetValue(tweenObj.target, p_value);
                     } catch (InvalidCastException) {
                         // This happens only if a float is being assigned to an int.
-                        valAccessor.Set(tweenObj.target, (int)Math.Floor((double)(float)p_value)); // OPTIMIZE store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
+                        fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
                     } catch (ArgumentException) {
-                        // This happens only on iOS if a float is being assigned to an int, but is also here just to be sure.
-                        valAccessor.Set(tweenObj.target, (int)Math.Floor((double)(float)p_value));
+                        // This happens only on iOS if a float is being assigned to an int.
+                        fieldInfo.SetValue(tweenObj.target, (int)Math.Floor((double)(float)p_value));
                     }
                 }
-#endif
+            } else {
+                try {
+                    valAccessor.Set(tweenObj.target, p_value);
+                } catch (InvalidCastException) {
+                    // This happens only if a float is being assigned to an int.
+                    valAccessor.Set(tweenObj.target, (int)Math.Floor((double)(float)p_value)); // OPTIMIZE store if it's int prior to this, so valAccessor doesn't even have to run to catch the error?
+                } catch (ArgumentException) {
+                    // This happens only on iOS if a float is being assigned to an int, but is also here just to be sure.
+                    valAccessor.Set(tweenObj.target, (int)Math.Floor((double)(float)p_value));
+                }
             }
+#endif
         }
 
         /// <summary>
