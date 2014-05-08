@@ -115,6 +115,7 @@
     <Compile Include="Plugins\PlugSetColor.cs" />
     <Compile Include="Plugins\PlugSetFloat.cs" />
     <Compile Include="Plugins\PlugString.cs" />
+    <Compile Include="Plugins\Core\PlugUint.cs" />
     <Compile Include="Plugins\PlugVector3Path.cs" />
     <Compile Include="Plugins\PlugVector3X.cs" />
     <Compile Include="Plugins\PlugVector3Y.cs" />

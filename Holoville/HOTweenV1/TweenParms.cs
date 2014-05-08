@@ -47,7 +47,8 @@ namespace Holoville.HOTween
             { typeof(Color32), "Color32" },
             { typeof(Rect), "Rect" },
             { typeof(String), "String" },
-            { typeof(Int32), "Int32" }
+            { typeof(Int32), "Int32" },
+            { typeof(UInt32), "UInt32" }
         };
 
         // VARS ///////////////////////////////////////////////////
@@ -186,6 +187,10 @@ namespace Holoville.HOTween
                         case "Int32":
                             if (!ValidateValue(data.endValOrPlugin, PlugInt.validValueTypes)) break;
                             plug = new PlugInt((int)data.endValOrPlugin, data.isRelative);
+                            break;
+                        case "UInt32":
+                            if (!ValidateValue(data.endValOrPlugin, PlugUInt.validValueTypes)) break;
+                            plug = new PlugUInt(Convert.ToUInt32(data.endValOrPlugin), data.isRelative);
                             break;
                         default:
                             try {

@@ -3925,6 +3925,11 @@
             Manages on first start behaviour.
             </summary>
         </member>
+        <member name="M:Holoville.HOTween.Tweener.OnPlay">
+            <summary>
+            Manages on play behaviour
+            </summary>
+        </member>
         <member name="M:Holoville.HOTween.Tweener.FillPluginsList(System.Collections.Generic.List{Holoville.HOTween.Plugins.Core.ABSTweenPlugin})">
             <summary>
             Fills the given list with all the plugins inside this tween.
@@ -8169,6 +8174,107 @@
             </summary>
         </member>
         <member name="P:Holoville.HOTween.Plugins.PlugInt.endVal">
+            <summary>
+            Gets the untyped end value,
+            sets both the untyped and the typed end value.
+            </summary>
+        </member>
+        <member name="T:Holoville.HOTween.Plugins.PlugUInt">
+            <summary>
+            Plugin for uint values
+            </summary>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.PlugUInt.#ctor(System.UInt32)">
+            <summary>
+            Creates a new instance of this plugin using the main ease type.
+            </summary>
+            <param name="p_endVal">
+            The <see cref="T:System.Single"/> value to tween to.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.PlugUInt.#ctor(System.UInt32,Holoville.HOTween.EaseType)">
+            <summary>
+            Creates a new instance of this plugin.
+            </summary>
+            <param name="p_endVal">
+            The <see cref="T:System.Single"/> value to tween to.
+            </param>
+            <param name="p_easeType">
+            The <see cref="T:Holoville.HOTween.EaseType"/> to use.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.PlugUInt.#ctor(System.UInt32,System.Boolean)">
+            <summary>
+            Creates a new instance of this plugin using the main ease type.
+            </summary>
+            <param name="p_endVal">
+            The <see cref="T:System.Single"/> value to tween to.
+            </param>
+            <param name="p_isRelative">
+            If <c>true</c>, the given end value is considered relative instead than absolute.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.PlugUInt.#ctor(System.UInt32,Holoville.HOTween.EaseType,System.Boolean)">
+            <summary>
+            Creates a new instance of this plugin.
+            </summary>
+            <param name="p_endVal">
+            The <see cref="T:System.Single"/> value to tween to.
+            </param>
+            <param name="p_easeType">
+            The <see cref="T:Holoville.HOTween.EaseType"/> to use.
+            </param>
+            <param name="p_isRelative">
+            If <c>true</c>, the given end value is considered relative instead than absolute.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.PlugUInt.#ctor(System.UInt32,UnityEngine.AnimationCurve,System.Boolean)">
+            <summary>
+            Creates a new instance of this plugin.
+            </summary>
+            <param name="p_endVal">
+            The <see cref="T:System.Single"/> value to tween to.
+            </param>
+            <param name="p_easeAnimCurve">
+            The <see cref="T:UnityEngine.AnimationCurve"/> to use for easing.
+            </param>
+            <param name="p_isRelative">
+            If <c>true</c>, the given end value is considered relative instead than absolute.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.PlugUInt.GetSpeedBasedDuration(System.Single)">
+            <summary>
+            Returns the speed-based duration based on the given speed x second.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.PlugUInt.SetChangeVal">
+            <summary>
+            Sets the typed changeVal based on the current startVal and endVal.
+            </summary>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.PlugUInt.SetIncremental(System.Int32)">
+            <summary>
+            Sets the correct values in case of Incremental loop type.
+            </summary>
+            <param name="p_diffIncr">
+            The difference from the previous loop increment.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.PlugUInt.DoUpdate(System.Single)">
+            <summary>
+            Updates the tween.
+            </summary>
+            <param name="p_totElapsed">
+            The total elapsed time since startup.
+            </param>
+        </member>
+        <member name="P:Holoville.HOTween.Plugins.PlugUInt.startVal">
+            <summary>
+            Gets the untyped start value,
+            sets both the untyped and the typed start value.
+            </summary>
+        </member>
+        <member name="P:Holoville.HOTween.Plugins.PlugUInt.endVal">
             <summary>
             Gets the untyped end value,
             sets both the untyped and the typed end value.
