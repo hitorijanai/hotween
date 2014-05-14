@@ -201,6 +201,17 @@ namespace Holoville.HOTween.Plugins
         }
 
         /// <summary>
+        /// Sets the correct values in case of RestartIncremental.
+        /// </summary>
+        protected override void SetIncrementalRestart()
+        {
+            uint newStartVal = Convert.ToUInt32(GetValue());
+            uint diff = newStartVal - typedStartVal;
+            typedStartVal = newStartVal;
+            typedEndVal = typedStartVal + diff;
+        }
+
+        /// <summary>
         /// Updates the tween.
         /// </summary>
         /// <param name="p_totElapsed">

@@ -48,7 +48,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public static readonly string VERSION = "1.3.060";
+        public static readonly string VERSION = "1.3.070";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -1625,7 +1625,7 @@ namespace Holoville.HOTween
         }
 
         /// <summary>
-        /// Restarts all Tweeners (delay included) and Sequences, and returns the total number of restarted Tweeners/Sequences.
+        /// Restarts all Tweeners/Sequences (delay included) and Sequences, and returns the total number of restarted Tweeners/Sequences.
         /// </summary>
         /// <returns>
         /// The total number of restarted Tweeners/Sequences.
@@ -1647,6 +1647,78 @@ namespace Holoville.HOTween
         public static int Restart(bool p_skipDelay)
         {
             return DoFilteredIteration(null, DoFilteredRestart, false, p_skipDelay);
+        }
+
+        /// <summary>
+        /// Restarts all tweens from position 0, but recalculating them by taking their current targets values as start values,
+        /// and the currently changed value to determine the end values.
+        /// </summary>
+        /// <param name="p_target">
+        /// The target whose tweens to restart.
+        /// </param>
+        /// <returns>
+        /// The total number of restarted Tweeners.
+        /// </returns>
+        public static int RestartIncremental(object p_target)
+        {
+            return DoFilteredIteration(p_target, DoFilteredRestartIncremental, false);
+        }
+
+        /// <summary>
+        /// Restarts all the Tweeners from position 0, but recalculating them by taking their current targets values as start values,
+        /// and the currently changed value to determine the end values.
+        /// </summary>
+        /// <param name="p_id">
+        /// The ID of the Tweeners/Sequences to restart.
+        /// </param>
+        /// <returns>
+        /// The total number of restarted Tweeners/Sequences.
+        /// </returns>
+        public static int RestartIncremental(string p_id)
+        {
+            return DoFilteredIteration(p_id, DoFilteredRestartIncremental, false);
+        }
+
+        /// <summary>
+        /// Restarts all the Tweeners from position 0, but recalculating them by taking their current targets values as start values,
+        /// and the currently changed value to determine the end values.
+        /// </summary>
+        /// <param name="p_intId">
+        /// The intId of the Tweeners/Sequences to restart.
+        /// </param>
+        /// <returns>
+        /// The total number of restarted Tweeners/Sequences.
+        /// </returns>
+        public static int RestartIncremental(int p_intId)
+        {
+            return DoFilteredIteration(p_intId, DoFilteredRestartIncremental, false);
+        }
+
+        /// <summary>
+        /// Restarts the given Tweener from position 0, but recalculating them by taking their current targets values as start values,
+        /// and the currently changed value to determine the end values.
+        /// </summary>
+        /// <param name="p_tweener">
+        /// The Tweener to restart.
+        /// </param>
+        /// <returns>
+        /// The total number of restarted Tweeners (1 if the Tweener existed, otherwise 0).
+        /// </returns>
+        public static int RestartIncremental(Tweener p_tweener)
+        {
+            return DoFilteredIteration(p_tweener, DoFilteredRestartIncremental, false);
+        }
+
+        /// <summary>
+        /// Restarts all Tweeners/Sequences from position 0, but recalculating them by taking their current targets values as start values,
+        /// and the currently changed value to determine the end values.
+        /// </summary>
+        /// <returns>
+        /// The total number of restarted Tweeners/Sequences.
+        /// </returns>
+        public static int RestartIncremental()
+        {
+            return DoFilteredIteration(null, DoFilteredRestartIncremental, false);
         }
 
         /// <summary>
@@ -2268,6 +2340,17 @@ namespace Holoville.HOTween
             Tweener tweener = tw as Tweener;
             if (tweener != null) {
                 tweener.Restart(p_skipDelay);
+            } else {
+                tw.Restart();
+            }
+        }
+
+        static void DoFilteredRestartIncremental(int p_index, bool p_skipDelay)
+        {
+            ABSTweenComponent tw = tweens[p_index];
+            Tweener tweener = tweens[p_index] as Tweener;
+            if (tweener != null) {
+                tweener.RestartIncremental();
             } else {
                 tw.Restart();
             }

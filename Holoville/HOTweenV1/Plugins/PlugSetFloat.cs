@@ -244,6 +244,17 @@ namespace Holoville.HOTween.Plugins
         }
 
         /// <summary>
+        /// Sets the correct values in case of RestartIncremental.
+        /// </summary>
+        protected override void SetIncrementalRestart()
+        {
+            float newStartVal = Convert.ToSingle(GetValue());
+            float diff = newStartVal - typedStartVal;
+            typedStartVal = newStartVal;
+            typedEndVal = typedStartVal + diff;
+        }
+
+        /// <summary>
         /// Sets the value of the controlled property.
         /// Some plugins (like PlugSetColor) might override this to get values from different properties.
         /// </summary>

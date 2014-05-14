@@ -573,6 +573,13 @@ namespace Holoville.HOTween.Plugins.Core
         /// </param>
         protected abstract void SetIncremental(int p_diffIncr);
 
+        internal void ForceSetIncrementalRestart()
+        { SetIncrementalRestart(); }
+        /// <summary>
+        /// Sets the correct values in case of RestartIncremental.
+        /// </summary>
+        protected abstract void SetIncrementalRestart();
+
         /// <summary>
         /// Sets the value of the controlled property.
         /// Some plugins (like PlugSetColor or PlugQuaterion) might override this to get values from different properties.

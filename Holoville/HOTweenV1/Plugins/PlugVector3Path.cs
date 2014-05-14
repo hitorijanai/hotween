@@ -498,6 +498,22 @@ namespace Holoville.HOTween.Plugins
         }
 
         /// <summary>
+        /// Sets the correct values in case of RestartIncremental.
+        /// </summary>
+        protected override void SetIncrementalRestart()
+        {
+            Vector3 newStartVal = (Vector3)GetValue();
+            Vector3 diff = newStartVal - typedStartVal;
+            typedStartVal = newStartVal;
+            Vector3[] pathPs = path.path;
+            int pathPsLength = pathPs.Length;
+            for (int i = 0; i < pathPsLength; ++i) {
+                pathPs[i] += diff;
+            }
+            path.changed = true;
+        }
+
+        /// <summary>
         /// Updates the tween.
         /// </summary>
         /// <param name="p_totElapsed">

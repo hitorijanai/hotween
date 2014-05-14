@@ -317,6 +317,20 @@ namespace Holoville.HOTween
         }
 
         /// <summary>
+        /// Restarts the tween from position 0, but takes the current target value as start value,
+        /// and diffs to find the change value (as if it was a relative tween).
+        /// </summary>
+        public void RestartIncremental()
+        {
+            if (plugins == null) return;
+            int pluginsCount = plugins.Count;
+            for (int i = 0; i < pluginsCount; ++i) {
+                plugins[i].ForceSetIncrementalRestart();
+            }
+            Restart();
+        }
+
+        /// <summary>
         /// Completes this Tweener.
         /// Where a loop was involved, the Tweener completes at the position where it would actually be after the set number of loops.
         /// If there were infinite loops, this method will have no effect.
