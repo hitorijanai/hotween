@@ -24,6 +24,8 @@
 // THE SOFTWARE.
 
 using Holoville.HOTween.Core;
+using Holoville.HOTween.Core.Easing;
+using UnityEngine;
 
 namespace Holoville.HOTween
 {
@@ -46,6 +48,8 @@ namespace Holoville.HOTween
         float _startVal;
         float _endVal;
         EaseType _easeType;
+        EaseCurve _easeCurve;
+        AnimationCurve _easeAnimationCurve;
         float _elapsed;
 
         float changeVal;
@@ -98,6 +102,23 @@ namespace Holoville.HOTween
             {
                 _easeType = value;
                 ease = EaseInfo.GetEaseInfo(_easeType).ease;
+            }
+        }
+
+        /// <summary>
+        /// Ease type as AnimationCurve.
+        /// </summary>
+        public AnimationCurve easeCurve
+        {
+            get
+            {
+                return _easeAnimationCurve;
+            }
+            set
+            {
+                _easeAnimationCurve = value;
+                _easeCurve = new EaseCurve(_easeAnimationCurve);
+                ease = _easeCurve.Evaluate;
             }
         }
 
@@ -170,6 +191,30 @@ namespace Holoville.HOTween
             endVal = p_endVal;
             duration = p_duration;
             easeType = p_easeType;
+        }
+
+        /// <summary>
+        /// Creates a new TweenVar instance.
+        /// </summary>
+        /// <param name="p_startVal">
+        /// Start value (FROM).
+        /// </param>
+        /// <param name="p_endVal">
+        /// End value (TO).
+        /// </param>
+        /// <param name="p_duration">
+        /// Virtual duration.
+        /// (you could also set it to 1 or 100 to treat it as a percentage).
+        /// </param>
+        /// <param name="p_easeCurve">
+        /// AnimationCurve used for ease.
+        /// </param>
+        public TweenVar(float p_startVal, float p_endVal, float p_duration, AnimationCurve p_easeCurve)
+        {
+            startVal = _value = p_startVal;
+            endVal = p_endVal;
+            duration = p_duration;
+            easeCurve = p_easeCurve;
         }
 
         // ===================================================================================

@@ -7982,6 +7982,24 @@
             Ease type.
             </param>
         </member>
+        <member name="M:Holoville.HOTween.TweenVar.#ctor(System.Single,System.Single,System.Single,UnityEngine.AnimationCurve)">
+            <summary>
+            Creates a new TweenVar instance.
+            </summary>
+            <param name="p_startVal">
+            Start value (FROM).
+            </param>
+            <param name="p_endVal">
+            End value (TO).
+            </param>
+            <param name="p_duration">
+            Virtual duration.
+            (you could also set it to 1 or 100 to treat it as a percentage).
+            </param>
+            <param name="p_easeCurve">
+            AnimationCurve used for ease.
+            </param>
+        </member>
         <member name="M:Holoville.HOTween.TweenVar.Update(System.Single)">
             <summary>
             Sets and returns the value at which this <see cref="T:Holoville.HOTween.TweenVar"/>
@@ -8018,6 +8036,11 @@
         <member name="P:Holoville.HOTween.TweenVar.easeType">
             <summary>
             Ease type.
+            </summary>
+        </member>
+        <member name="P:Holoville.HOTween.TweenVar.easeCurve">
+            <summary>
+            Ease type as AnimationCurve.
             </summary>
         </member>
         <member name="P:Holoville.HOTween.TweenVar.value">
