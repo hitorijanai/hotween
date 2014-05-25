@@ -342,7 +342,7 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override void SetIncrementalRestart()
         {
-            Vector3 newStartVal = (Vector3)GetValue();
+            Vector3 newStartVal = ((Quaternion)GetValue()).eulerAngles;
             Vector3 diff = newStartVal - typedStartVal;
             typedStartVal = newStartVal;
             typedEndVal = typedStartVal + diff;
