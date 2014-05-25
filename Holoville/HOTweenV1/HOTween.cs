@@ -762,6 +762,7 @@ namespace Holoville.HOTween
         static IEnumerator TimeScaleIndependentUpdate()
         {
             while (tweens != null) {
+                if (time > Time.realtimeSinceStartup) time = Time.realtimeSinceStartup;
                 float elapsed = Time.realtimeSinceStartup - time;
                 time = Time.realtimeSinceStartup;
 
