@@ -207,9 +207,9 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         protected override void SetIncrementalRestart()
         {
-            float newStartVal = Convert.ToSingle(GetValue());
-            float diff = newStartVal - typedStartVal;
-            typedStartVal = newStartVal;
+            float prevStartVal = typedStartVal;
+            startVal = GetValue();
+            float diff = typedStartVal - prevStartVal;
             typedEndVal = typedStartVal + diff;
         }
 

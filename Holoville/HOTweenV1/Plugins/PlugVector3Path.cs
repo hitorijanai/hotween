@@ -502,9 +502,9 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override void SetIncrementalRestart()
         {
-            Vector3 newStartVal = (Vector3)GetValue();
-            Vector3 diff = newStartVal - typedStartVal;
-            typedStartVal = newStartVal;
+            Vector3 prevStartVal = typedStartVal;
+            startVal = GetValue();
+            Vector3 diff = typedStartVal - prevStartVal;
             Vector3[] pathPs = path.path;
             int pathPsLength = pathPs.Length;
             for (int i = 0; i < pathPsLength; ++i) {

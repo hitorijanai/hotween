@@ -298,9 +298,9 @@ namespace Holoville.HOTween.Plugins
         /// </summary>
         protected override void SetIncrementalRestart()
         {
-            Color newStartVal = (Color)GetValue();
-            Color diff = newStartVal - typedStartVal;
-            typedStartVal = newStartVal;
+            Color prevStartVal = typedStartVal;
+            startVal = GetValue();
+            Color diff = typedStartVal - prevStartVal;
             typedEndVal = typedStartVal + diff;
         }
 

@@ -236,13 +236,13 @@ namespace Holoville.HOTween.Plugins.Core
         /// </summary>
         protected override void SetIncrementalRestart()
         {
-            Rect newStartVal = (Rect)GetValue();
-            Rect diff = newStartVal;
-            diff.x -= typedStartVal.x;
-            diff.y -= typedStartVal.y;
-            diff.width -= typedStartVal.width;
-            diff.height -= typedStartVal.height;
-            typedStartVal = newStartVal;
+            Rect prevStartVal = typedStartVal;
+            startVal = GetValue();
+            Rect diff = typedStartVal;
+            diff.x -= prevStartVal.x;
+            diff.y -= prevStartVal.y;
+            diff.width -= prevStartVal.width;
+            diff.height -= prevStartVal.height;
             typedEndVal.x = typedStartVal.x + diff.x;
             typedEndVal.y = typedStartVal.y + diff.y;
             typedEndVal.width = typedStartVal.width + diff.width;
