@@ -90,5 +90,19 @@ namespace Holoville.HOTween.Core
             string s = p_class.ToString();
             return s.Substring(s.LastIndexOf('.') + 1);
         }
+
+        /// <summary>
+        /// Returns the 2D angle between two vectors
+        /// </summary>
+        public static float GetAngle2D(Vector3 p_from, Vector3 p_to)
+        {
+            Vector2 from = Vector2.right;
+            Vector3 to = p_to - p_from;
+            float ang = Vector2.Angle(from, to);
+            Vector3 cross = Vector3.Cross(from, to);
+            if (cross.z > 0) ang = 360 - ang;
+            ang *= -1f;
+            return ang;
+        }
     }
 }

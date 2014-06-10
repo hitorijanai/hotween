@@ -65,6 +65,7 @@ namespace Holoville.HOTween.Plugins
         Vector3[] points;
         Vector3 diffChangeVal; // Used for incremental loops.
         internal bool isClosedPath;
+        bool is2D = false; // TRUE in case of Unity 2D path
         OrientType orientType = OrientType.None;
         float lookAheadVal = MIN_LOOKAHEAD;
         Axis lockPositionAxis = Axis.None;
@@ -368,6 +369,15 @@ namespace Holoville.HOTween.Plugins
             return this;
         }
 
+        /// <summary>
+        /// Indicates that the path works must be calculated in 2D
+        /// </summary>
+        public PlugVector3Path Is2D(bool p_is2D = true)
+        {
+            is2D = p_is2D;
+            return this;
+        }
+
         // ===================================================================================
         // PRIVATE METHODS -------------------------------------------------------------------
 
@@ -566,7 +576,12 @@ namespace Holoville.HOTween.Plugins
                         }
                         if ((lockRotationAxis & Axis.Z) == Axis.Z) transUp = usesLocalPosition && parentTrans != null ? parentTrans.up : Vector3.up;
                     }
-                    orientTrans.LookAt(lookAtP, transUp);
+                    if (is2D) {
+                        // Rotates only around Z axis
+                        orientTrans.rotation = Quaternion.Euler(0, 0, Utils.GetAngle2D(orientTrans.position, lookAtP));
+                    } else {
+                        orientTrans.LookAt(lookAtP, transUp);
+                    }
                     break;
                 }
             }

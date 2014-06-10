@@ -2917,6 +2917,11 @@
             (like Single instead than System.Single).
             </summary>
         </member>
+        <member name="M:Holoville.HOTween.Core.Utils.GetAngle2D(UnityEngine.Vector3,UnityEngine.Vector3)">
+            <summary>
+            Returns the 2D angle between two vectors
+            </summary>
+        </member>
         <member name="T:Holoville.HOTween.Core.TweenInfo">
             <summary>
             Used by <see cref="M:Holoville.HOTween.HOTween.GetTweenInfos"/> and HOTweenInspector,
@@ -6470,6 +6475,11 @@
             <param name="p_lockAxis">Sets one or more axis to lock.
             To lock more than one axis, use the bitwise OR operator (ex: <c>Axis.X | Axis.Y</c>)</param>
             <returns></returns>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.PlugVector3Path.Is2D(System.Boolean)">
+            <summary>
+            Indicates that the path works must be calculated in 2D
+            </summary>
         </member>
         <member name="M:Holoville.HOTween.Plugins.PlugVector3Path.GetSpeedBasedDuration(System.Single)">
             <summary>
