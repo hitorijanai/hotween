@@ -391,7 +391,7 @@ namespace Holoville.HOTween
         /// </summary>
         public override void Restart()
         {
-            if (_fullElapsed == 0) {
+            if (_fullElapsed <= 0 && _duration > 0) {
                 PlayForward();
             } else {
                 Rewind(true);
@@ -627,7 +627,7 @@ namespace Holoville.HOTween
             if (items == null) return true;
             if (!_enabled) return false;
             if (_isComplete && !_isReversed && !p_forceUpdate) return true;
-            if (_fullElapsed == 0 && _isReversed && !p_forceUpdate) return false;
+            if (_fullElapsed <= 0 && _isReversed && !p_forceUpdate) return false;
             if (_isPaused && !p_forceUpdate) return false;
 
             ignoreCallbacks = p_isStartupIteration || p_ignoreCallbacks;
@@ -817,6 +817,7 @@ namespace Holoville.HOTween
                 p_time = 0;
             }
             if (_fullElapsed == p_time && !p_forceUpdate) {
+                if (_isComplete && duration <= 0) _isComplete = false;
                 if (!_isComplete && p_play) Play();
                 return _isComplete;
             }
@@ -839,7 +840,7 @@ namespace Holoville.HOTween
             _isComplete = false;
             _isLoopingBack = false;
             _completedLoops = 0;
-            _fullElapsed = _elapsed = 0;
+            _fullElapsed = _elapsed = prevElapsed = 0;
 
             int itemsCount = items.Count - 1;
             for (int i = itemsCount; i > -1; --i) {
@@ -850,7 +851,7 @@ namespace Holoville.HOTween
             // Manage OnUpdate and OnRewinded.
             if (_fullElapsed != prevFullElapsed) {
                 OnUpdate();
-                if (_fullElapsed == 0) OnRewinded();
+                if (_fullElapsed <= 0) OnRewinded();
             }
             prevFullElapsed = _fullElapsed;
 
