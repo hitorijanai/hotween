@@ -80,6 +80,7 @@ namespace Holoville.HOTween.Plugins
         Vector3 lookPos;
         Transform lookTrans;
         Transform orientTrans;
+        float orZ; // Used to store Z value in case of lock Z, in order to rotate things differently
 
         // GETS/SETS //////////////////////////////////////////////
 
@@ -398,6 +399,7 @@ namespace Holoville.HOTween.Plugins
                 // Store orient transform.
                 if (orientTrans == null) {
                     orientTrans = tweenObj.target as Transform;
+                    orZ = orientTrans.eulerAngles.z;
                 }
             }
 
@@ -574,7 +576,13 @@ namespace Holoville.HOTween.Plugins
                             v0.x = 0;
                             lookAtP = orientTrans.TransformPoint(v0);
                         }
-                        if ((lockRotationAxis & Axis.Z) == Axis.Z) transUp = usesLocalPosition && parentTrans != null ? parentTrans.up : Vector3.up;
+                        if ((lockRotationAxis & Axis.Z) == Axis.Z) {
+//                            transUp = usesLocalPosition && parentTrans != null ? parentTrans.up : Vector3.up;
+                            // Fix to allow racing loops to keep cars straight and not flip it
+                            if (usesLocalPosition && parentTrans != null) transUp = parentTrans.TransformDirection(Vector3.up);
+                            else transUp = orientTrans.TransformDirection(Vector3.up);
+                            transUp.z = orZ;
+                        }
                     }
                     if (is2D) {
                         // Rotates only around Z axis
