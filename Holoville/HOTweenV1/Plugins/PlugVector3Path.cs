@@ -66,6 +66,7 @@ namespace Holoville.HOTween.Plugins
         Vector3 diffChangeVal; // Used for incremental loops.
         internal bool isClosedPath;
         bool is2D = false; // TRUE in case of Unity 2D path
+        bool is2DsideScroller;
         OrientType orientType = OrientType.None;
         float lookAheadVal = MIN_LOOKAHEAD;
         Axis lockPositionAxis = Axis.None;
@@ -373,9 +374,13 @@ namespace Holoville.HOTween.Plugins
         /// <summary>
         /// Indicates that the path works must be calculated in 2D
         /// </summary>
-        public PlugVector3Path Is2D(bool p_is2D = true)
+        /// <param name="isTopDown">If TRUE the target will be considered as moving from a side-scrolling perspective,
+        /// if FALSE (default) the target will be considered as moving from a top-down perspective</param>
+        /// <returns></returns>
+        public PlugVector3Path Is2D(bool p_isSideScroller = false)
         {
-            is2D = p_is2D;
+            is2D = true;
+            is2DsideScroller = !p_isSideScroller;
             return this;
         }
 
@@ -585,8 +590,17 @@ namespace Holoville.HOTween.Plugins
                         }
                     }
                     if (is2D) {
-                        // Rotates only around Z axis
-                        orientTrans.rotation = Quaternion.Euler(0, 0, Utils.GetAngle2D(orientTrans.position, lookAtP));
+                        float rotY = 0;
+                        float rotZ = Utils.GetAngle2D(orientTrans.position, lookAtP);
+                        if (rotZ < 0) rotZ = 360 + rotZ;
+                        if (is2DsideScroller) {
+                            // Manage Y and modified Z rotation
+                            rotY = lookAtP.x < orientTrans.position.x ? 180 : 0;
+                            if (rotZ > 90 && rotZ < 270) rotZ = 180 - rotZ;
+                            Debug.Log(orientTrans.gameObject + ", " + rotZ);
+                        }
+                        // Top-down, rotate Z axis
+                        orientTrans.rotation = Quaternion.Euler(0, rotY, rotZ);
                     } else {
                         orientTrans.LookAt(lookAtP, transUp);
                     }

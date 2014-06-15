@@ -48,7 +48,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public static readonly string VERSION = "1.3.250";
+        public static readonly string VERSION = "1.3.300";
 
         /// <summary>
         /// HOTween author - me! :P
@@ -2243,7 +2243,7 @@ namespace Holoville.HOTween
             int tweensCount = tweens.Count;
             for (int i = 0; i < tweensCount; ++i) {
                 ABSTweenComponent tw = tweens[i];
-                if (tw.updateType == p_updateType && tw.Update(p_elapsed * tw.timeScale)) {
+                if (tw.updateType == p_updateType && !tw._isPaused && tw.Update(p_elapsed * tw.timeScale)) {
                     // Tween complete...
                     if (tw.destroyed || tw.autoKillOnComplete) {
                         // ...autoKill: store for out-of-loop removal

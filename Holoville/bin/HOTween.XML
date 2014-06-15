@@ -6480,6 +6480,9 @@
             <summary>
             Indicates that the path works must be calculated in 2D
             </summary>
+            <param name="isTopDown">If TRUE the target will be considered as moving from a side-scrolling perspective,
+            if FALSE (default) the target will be considered as moving from a top-down perspective</param>
+            <returns></returns>
         </member>
         <member name="M:Holoville.HOTween.Plugins.PlugVector3Path.GetSpeedBasedDuration(System.Single)">
             <summary>
