@@ -720,6 +720,9 @@ namespace Holoville.HOTween
                 }
             }
 
+            // Exit if sequences was killed after callbacks
+            if (_destroyed) return false;
+
             // Update the elements...
             if (_duration > 0) {
                 float twElapsed = (!_isLoopingBack ? _elapsed : _duration - _elapsed);
