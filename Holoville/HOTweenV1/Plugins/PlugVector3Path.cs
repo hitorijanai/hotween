@@ -65,7 +65,7 @@ namespace Holoville.HOTween.Plugins
         Vector3[] points;
         Vector3 diffChangeVal; // Used for incremental loops.
         internal bool isClosedPath;
-        bool is2D = false; // TRUE in case of Unity 2D path
+        bool is2D; // TRUE in case of Unity 2D path
         bool is2DsideScroller;
         OrientType orientType = OrientType.None;
         float lookAheadVal = MIN_LOOKAHEAD;
@@ -374,13 +374,13 @@ namespace Holoville.HOTween.Plugins
         /// <summary>
         /// Indicates that the path works must be calculated in 2D
         /// </summary>
-        /// <param name="isTopDown">If TRUE the target will be considered as moving from a side-scrolling perspective,
+        /// <param name="p_isSideScroller">If TRUE the target will be considered as moving from a side-scrolling perspective,
         /// if FALSE (default) the target will be considered as moving from a top-down perspective</param>
         /// <returns></returns>
         public PlugVector3Path Is2D(bool p_isSideScroller = false)
         {
             is2D = true;
-            is2DsideScroller = !p_isSideScroller;
+            is2DsideScroller = p_isSideScroller;
             return this;
         }
 
