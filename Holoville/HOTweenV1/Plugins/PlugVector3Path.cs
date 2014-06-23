@@ -597,7 +597,6 @@ namespace Holoville.HOTween.Plugins
                             // Manage Y and modified Z rotation
                             rotY = lookAtP.x < orientTrans.position.x ? 180 : 0;
                             if (rotZ > 90 && rotZ < 270) rotZ = 180 - rotZ;
-                            Debug.Log(orientTrans.gameObject + ", " + rotZ);
                         }
                         // Top-down, rotate Z axis
                         orientTrans.rotation = Quaternion.Euler(0, rotY, rotZ);
