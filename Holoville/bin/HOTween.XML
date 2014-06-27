@@ -259,6 +259,24 @@
             The new value.
             </param>
         </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.ABSTweenPlugin.SetValue(UnityEngine.Vector2)">
+            <summary>
+            Sets the value of the controlled property.
+            Some plugins (like PlugSetColor or PlugQuaterion) might override this to get values from different properties.
+            </summary>
+            <param name="p_value">
+            The new value.
+            </param>
+        </member>
+        <member name="M:Holoville.HOTween.Plugins.Core.ABSTweenPlugin.SetValue(UnityEngine.Vector4)">
+            <summary>
+            Sets the value of the controlled property.
+            Some plugins (like PlugSetColor or PlugQuaterion) might override this to get values from different properties.
+            </summary>
+            <param name="p_value">
+            The new value.
+            </param>
+        </member>
         <member name="M:Holoville.HOTween.Plugins.Core.ABSTweenPlugin.GetValue">
             <summary>
             Gets the current value of the controlled property.

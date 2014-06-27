@@ -623,6 +623,30 @@ namespace Holoville.HOTween.Plugins.Core
             SetUndefinedValue(p_value);
         }
 
+        /// <summary>
+        /// Sets the value of the controlled property.
+        /// Some plugins (like PlugSetColor or PlugQuaterion) might override this to get values from different properties.
+        /// </summary>
+        /// <param name="p_value">
+        /// The new value.
+        /// </param>
+        protected virtual void SetValue(Vector2 p_value)
+        {
+            SetUndefinedValue(p_value);
+        }
+
+        /// <summary>
+        /// Sets the value of the controlled property.
+        /// Some plugins (like PlugSetColor or PlugQuaterion) might override this to get values from different properties.
+        /// </summary>
+        /// <param name="p_value">
+        /// The new value.
+        /// </param>
+        protected virtual void SetValue(Vector4 p_value)
+        {
+            SetUndefinedValue(p_value);
+        }
+
         void SetUndefinedValue(object p_value)
         {
             if (_useSpeedTransformAccessors) {
