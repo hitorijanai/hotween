@@ -3915,6 +3915,11 @@
             </summary>
             <param name="t">The percentage (0 to 1) at which to get the point</param>
         </member>
+        <member name="M:Holoville.HOTween.Tweener.GetPathLength">
+            <summary>
+            If this Tweener contains a <see cref="T:Holoville.HOTween.Plugins.PlugVector3Path"/> tween returns the length of the path,
+            otherwise returns -1</summary>
+        </member>
         <member name="M:Holoville.HOTween.Tweener.UsePartialPath(System.Int32,System.Int32)">
             <summary>
             If this Tweener contains a <see cref="T:Holoville.HOTween.Plugins.PlugVector3Path"/> tween,

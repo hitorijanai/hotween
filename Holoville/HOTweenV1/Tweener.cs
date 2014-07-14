@@ -531,6 +531,18 @@ namespace Holoville.HOTween
         }
 
         /// <summary>
+        /// If this Tweener contains a <see cref="PlugVector3Path"/> tween returns the length of the path,
+        /// otherwise returns -1</summary>
+        public float GetPathLength()
+        {
+            PlugVector3Path plugVector3Path = GetPlugVector3PathPlugin();
+            if (plugVector3Path == null) return -1;
+
+            Startup(); // Ensure startup - if not already executed - to store the path data.
+            return plugVector3Path.path.pathLength;
+        }
+
+        /// <summary>
         /// If this Tweener contains a <see cref="PlugVector3Path"/> tween,
         /// defines a portion of that path to use and re-adapt to (easing included),
         /// also re-adapting the duration to the correct partial,
