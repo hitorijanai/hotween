@@ -709,8 +709,8 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public IEnumerator WaitForCompletion()
         {
-            while (!_isComplete) {
-                yield return 0;
+            while (!_destroyed && !_isComplete) {
+                yield return null;
             }
             yield break;
         }
