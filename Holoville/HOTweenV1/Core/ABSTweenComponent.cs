@@ -722,7 +722,7 @@ namespace Holoville.HOTween.Core
         /// </summary>
         public IEnumerator WaitForRewind()
         {
-            while (_fullElapsed > 0) {
+            while (!destroyed && _fullElapsed > 0) {
                 yield return 0;
             }
             yield break;
