@@ -48,7 +48,7 @@ namespace Holoville.HOTween
         /// <summary>
         /// HOTween version.
         /// </summary>
-        public static readonly string VERSION = "1.3.355";
+        public static readonly string VERSION = "1.3.360";
 
 #if MICRO
         public static readonly bool IS_MICRO = true;
@@ -2531,8 +2531,16 @@ namespace Holoville.HOTween
                 for (int i = tweensCount; i > -1; --i) {
                     Tweener tw = tweens[i] as Tweener;
                     if (tw != null && tw.target == p_filter) {
+                        // Tweener
                         p_operation(i, p_optionalBool);
                         ++opCount;
+                    } else {
+                        // Sequence
+                        Sequence seq = tweens[i] as Sequence;
+                        if (seq != null && seq.IsLinkedTo(p_filter)) {
+                            p_operation(i, p_optionalBool);
+                            ++opCount;
+                        }
                     }
                 }
             }

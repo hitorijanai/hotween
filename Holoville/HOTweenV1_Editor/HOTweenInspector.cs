@@ -156,8 +156,10 @@ namespace Holoville.HOTween.Editor
                         if (twGroup != TweenGroup.Disabled) DrawTargetButtons(twInfo, twGroup);
                         GUILayout.EndHorizontal();
                         DrawInfo(twInfo);
-                        foreach (object twTarget in twInfo.targets) {
-                            DrawTarget(twInfo, twTarget, twGroup, true);
+                        if (twInfo.targets != null) {
+                            foreach (object twTarget in twInfo.targets) {
+                                DrawTarget(twInfo, twTarget, twGroup, true);
+                            }
                         }
                     } else {
                         DrawTarget(twInfo, twInfo.targets[0], twGroup, false);

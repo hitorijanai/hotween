@@ -509,6 +509,8 @@ namespace Holoville.HOTween
         public List<Tweener> GetTweenersByTarget(object p_target)
         {
             List<Tweener> res = new List<Tweener>();
+            if (items == null) return res;
+
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i) {
                 HOTSeqItem item = items[i];
