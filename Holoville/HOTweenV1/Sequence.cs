@@ -474,7 +474,7 @@ namespace Holoville.HOTween
         /// </returns>
         public override bool IsLinkedTo(object p_target)
         {
-            if (items == null) return false;
+            if (destroyed || items == null) return false;
 
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i) {
@@ -491,7 +491,7 @@ namespace Holoville.HOTween
         /// <returns>A list of all the targets of this Sequence, or NULL if there are none.</returns>
         public override List<object> GetTweenTargets()
         {
-            if (items == null) return null;
+            if (destroyed || items == null) return null;
 
             List<object> targets = new List<object>();
             int itemsCount = items.Count;
@@ -509,7 +509,7 @@ namespace Holoville.HOTween
         public List<Tweener> GetTweenersByTarget(object p_target)
         {
             List<Tweener> res = new List<Tweener>();
-            if (items == null) return res;
+            if (destroyed || items == null) return res;
 
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i) {
@@ -534,6 +534,8 @@ namespace Holoville.HOTween
         internal override List<IHOTweenComponent> GetTweensById(string p_id)
         {
             List<IHOTweenComponent> res = new List<IHOTweenComponent>();
+            if (destroyed) return res;
+
             if (id == p_id) res.Add(this);
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i) {
@@ -550,6 +552,8 @@ namespace Holoville.HOTween
         internal override List<IHOTweenComponent> GetTweensByIntId(int p_intId)
         {
             List<IHOTweenComponent> res = new List<IHOTweenComponent>();
+            if (destroyed) return res;
+
             if (intId == p_intId) res.Add(this);
             int itemsCount = items.Count;
             for (int i = 0; i < itemsCount; ++i) {

@@ -476,7 +476,7 @@ namespace Holoville.HOTween
         /// </returns>
         public override bool IsLinkedTo(object p_target)
         {
-            return (p_target == _target);
+            return (!_destroyed && p_target == _target);
         }
 
         /// <summary>
@@ -495,7 +495,7 @@ namespace Holoville.HOTween
         internal override List<IHOTweenComponent> GetTweensById(string p_id)
         {
             List<IHOTweenComponent> res = new List<IHOTweenComponent>();
-            if (id == p_id) res.Add(this);
+            if (!_destroyed && id == p_id) res.Add(this);
             return res;
         }
 
@@ -506,7 +506,7 @@ namespace Holoville.HOTween
         internal override List<IHOTweenComponent> GetTweensByIntId(int p_intId)
         {
             List<IHOTweenComponent> res = new List<IHOTweenComponent>();
-            if (intId == p_intId) res.Add(this);
+            if (!_destroyed && intId == p_intId) res.Add(this);
             return res;
         }
 
@@ -958,7 +958,7 @@ namespace Holoville.HOTween
 
         void Rewind(bool p_play, bool p_skipDelay)
         {
-            if (!_enabled)
+            if (!_enabled || _destroyed)
             {
                 return;
             }
@@ -968,6 +968,8 @@ namespace Holoville.HOTween
             {
                 OnStart();
             }
+
+            if (!_enabled || _destroyed) return; // Killed in the OnStart callback
 
             _isComplete = false;
             _isLoopingBack = false;
@@ -1032,7 +1034,7 @@ namespace Holoville.HOTween
         /// <param name="p_force">If TRUE forces startup even if it had already been executed</param>
         void Startup(bool p_force)
         {
-            if (!p_force && startupDone) return;
+            if (!p_force && startupDone || plugins == null) return;
 
             int pluginsCount = plugins.Count;
             for (int i = 0; i < pluginsCount; ++i) {

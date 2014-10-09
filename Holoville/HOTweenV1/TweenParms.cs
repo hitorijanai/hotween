@@ -193,11 +193,13 @@ namespace Holoville.HOTween
                             plug = new PlugUInt(Convert.ToUInt32(data.endValOrPlugin), data.isRelative);
                             break;
                         default:
-                            try {
-                                plug = new PlugFloat(Convert.ToSingle(data.endValOrPlugin), data.isRelative);
-                            } catch (Exception) {
-                                TweenWarning.Log("No valid plugin for animating \"" + p_target + "." + data.propName + "\" (of type " + (propInfo != null ? propInfo.PropertyType : fieldInfo.FieldType) + "). The tween for this property will not be created.");
-                                continue;
+                            if (data.endValOrPlugin.GetType() != typeof(Boolean)) {
+                                try {
+                                    plug = new PlugFloat(Convert.ToSingle(data.endValOrPlugin), data.isRelative);
+                                } catch (Exception) {
+                                    TweenWarning.Log("No valid plugin for animating \"" + p_target + "." + data.propName + "\" (of type " + (propInfo != null ? propInfo.PropertyType : fieldInfo.FieldType) + "). The tween for this property will not be created.");
+                                    continue;
+                                }
                             }
                             break;
                     }
